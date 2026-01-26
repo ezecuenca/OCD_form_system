@@ -63710,9 +63710,26 @@ function Sidebar() {
           children: "ADR Reports"
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.NavLink, {
-        to: "/archived-reports",
+        to: "/schedule",
         className: function className(_ref2) {
           var isActive = _ref2.isActive;
+          return "sidebar__link ".concat(isActive ? 'sidebar__link--active' : '');
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          className: "sidebar__link-icon",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+            src: "/images/calendar_icon.svg",
+            alt: "Schedule",
+            className: "sidebar__link-icon-img"
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          className: "sidebar__link-text",
+          children: "Schedule"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.NavLink, {
+        to: "/archived-reports",
+        className: function className(_ref3) {
+          var isActive = _ref3.isActive;
           return "sidebar__link ".concat(isActive ? 'sidebar__link--active' : '');
         },
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
@@ -63731,8 +63748,8 @@ function Sidebar() {
       className: "sidebar__settings",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.NavLink, {
         to: "/settings",
-        className: function className(_ref3) {
-          var isActive = _ref3.isActive;
+        className: function className(_ref4) {
+          var isActive = _ref4.isActive;
           return "sidebar__link ".concat(isActive ? 'sidebar__link--active' : '');
         },
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {

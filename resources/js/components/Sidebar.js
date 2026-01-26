@@ -19,6 +19,16 @@ function Sidebar() {
                     <span className="sidebar__link-text">ADR Reports</span>
                 </NavLink>
 
+                <NavLink
+                    to="/schedule" 
+                    className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
+                >
+                    <span className="sidebar__link-icon">
+                        <img src="/images/calendar_icon.svg" alt="Schedule" className="sidebar__link-icon-img" />
+                    </span>
+                    <span className="sidebar__link-text">Schedule</span>
+                </NavLink>
+
                 <NavLink 
                     to="/archived-reports" 
                     className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
