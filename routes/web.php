@@ -15,4 +15,28 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('dashboard');
+
+Route::get('/dashboard', function () {
+    return redirect()->route('adr-reports.index');
+})->name('dashboard.index');
+
+// Placeholder routes for sidebar navigation
+Route::get('/adr-reports', function () {
+    return view('welcome');
+})->name('adr-reports.index');
+
+Route::get('/archived-reports', function () {
+    return view('welcome');
+})->name('archived-reports.index');
+
+Route::get('/settings', function () {
+    return view('welcome');
+})->name('settings.index');
+
+// Catch-all route for client-side routing
+// This ensures that refreshing on any client-side route (like /adr-reports/create) 
+// will return the main view instead of a 404
+Route::get('/{any}', function () {
+    return view('welcome');
+})->where('any', '.*');

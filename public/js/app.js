@@ -19511,6 +19511,313 @@ process.umask = function() { return 0; };
 
 /***/ },
 
+/***/ "./resources/js/adr-form.js"
+/*!**********************************!*\
+  !*** ./resources/js/adr-form.js ***!
+  \**********************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   renderADRForm: () => (/* binding */ renderADRForm)
+/* harmony export */ });
+/* harmony import */ var _routers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./routers */ "./resources/js/routers.js");
+
+function renderADRForm(container) {
+  if (!container) return;
+  container.innerHTML = "\n        <div class=\"adr-form\">\n            <div class=\"adr-form__header\">\n                <div class=\"adr-form__header-left\">\n                    <h1 class=\"adr-form__title\">ADR Form</h1>\n                    <button class=\"adr-form__header-btn\">\n                        <img src=\"".concat(window.location.origin, "/images/create_icon.svg\" alt=\"Create\">\n                        Create\n                    </button>\n                    <button class=\"adr-form__header-btn\">\n                        <img src=\"").concat(window.location.origin, "/images/view_icon.svg\" alt=\"PDF\">\n                        PDF\n                    </button>\n                </div>\n                <button class=\"adr-form__header-btn adr-form__header-btn--return\" data-route=\"/adr-reports\">\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                        <path d=\"M19 12H5M5 12L12 19M5 12L12 5\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                    </svg>\n                    Return\n                </button>\n            </div>\n\n            <div class=\"adr-form__content\">\n                <div class=\"adr-form__top-fields\">\n                    <div class=\"adr-form__field\">\n                        <label>For:</label>\n                        <input type=\"text\">\n                    </div>\n                    <div class=\"adr-form__field\">\n                        <label>Thru:</label>\n                        <input type=\"text\">\n                    </div>\n                    <div class=\"adr-form__field\">\n                        <label>From:</label>\n                        <input type=\"text\">\n                    </div>\n                    <div class=\"adr-form__field\">\n                        <label>Subject:</label>\n                        <input type=\"text\">\n                    </div>\n                </div>\n\n                <div class=\"adr-form__section\">\n                    <label class=\"adr-form__section-label\">1. Status</label>\n                    <select class=\"adr-form__select\">\n                        <option>WHITE ALERT</option>\n                        <option>BLUE ALERT</option>\n                        <option>RED ALERT</option>\n                    </select>\n                </div>\n\n                <div class=\"adr-form__section adr-form__section--grey adr-form__section--reports\">\n                    <label class=\"adr-form__section-label\">3. Reports and Advisories</label>\n                    <div class=\"adr-form__reports-list\">\n                        <div class=\"adr-form__reports-item\">\n                            <div class=\"adr-form__field\">\n                                <label>Reports and Advisories released:</label>\n                                <textarea rows=\"3\"></textarea>\n                            </div>\n                            <div class=\"adr-form__field\">\n                                <label>Remarks:</label>\n                                <input type=\"text\">\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"adr-form__add-line\">\n                        <hr>\n                        <button class=\"adr-form__add-btn adr-form__add-btn--reports\" type=\"button\">\n                            <img src=\"").concat(window.location.origin, "/images/create_icon.svg\" alt=\"Add\">\n                        </button>\n                    </div>\n                </div>\n\n                <div class=\"adr-form__section adr-form__section--grey adr-form__section--attendance\">\n                    <label class=\"adr-form__section-label\">2. Attendance</label>\n                    <div class=\"adr-form__attendance-list\">\n                        <div class=\"adr-form__attendance-item\">\n                            <div class=\"adr-form__field\">\n                                <label>Name:</label>\n                                <input type=\"text\">\n                            </div>\n                            <div class=\"adr-form__field\">\n                                <label>Task:</label>\n                                <textarea rows=\"2\"></textarea>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"adr-form__add-line\">\n                        <hr>\n                        <button class=\"adr-form__add-btn adr-form__add-btn--attendance\" type=\"button\">\n                            <img src=\"").concat(window.location.origin, "/images/create_icon.svg\" alt=\"Add\">\n                        </button>\n                    </div>\n                </div>\n\n                <div class=\"adr-form__section\">\n                    <label class=\"adr-form__section-label\">4. Administrative</label>\n                    <div class=\"adr-form__customize-group\">\n                        <label>Status of Communication Lines</label>\n                        <button class=\"adr-form__customize-btn\" data-modal=\"communication-lines\">CUSTOMIZE</button>\n                    </div>\n                    <div class=\"adr-form__customize-group\">\n                        <label>Status of Other Items</label>\n                        <button class=\"adr-form__customize-btn\" data-modal=\"other-items\">CUSTOMIZE</button>\n                    </div>\n                </div>\n            </div>\n            \n            <div class=\"adr-form__modal\" id=\"communication-lines-modal\">\n                <div class=\"adr-form__modal-content\">\n                    <div class=\"adr-form__modal-header\">\n                        <h2>Status of Communication Lines</h2>\n                        <button class=\"adr-form__modal-close\" type=\"button\">&times;</button>\n                    </div>\n                    <div class=\"adr-form__modal-body\">\n                        <table class=\"adr-form__modal-table\">\n                            <thead>\n                                <tr>\n                                    <th>Particulars</th>\n                                    <th>No. of Items</th>\n                                    <th>Contact No. / Freq / Channel</th>\n                                    <th>Status / Remarks</th>\n                                    <th>Actions</th>\n                                </tr>\n                            </thead>\n                            <tbody class=\"adr-form__modal-table-body\">\n                                <tr class=\"adr-form__modal-table-row\">\n                                    <td>\n                                        <input type=\"text\" class=\"adr-form__modal-input\" placeholder=\"Enter particulars\">\n                                    </td>\n                                    <td>\n                                        <div class=\"adr-form__counter\">\n                                            <button class=\"adr-form__counter-btn\" type=\"button\" data-action=\"decrease\">\u2212</button>\n                                            <input type=\"number\" class=\"adr-form__counter-input\" value=\"0\" min=\"0\">\n                                            <button class=\"adr-form__counter-btn\" type=\"button\" data-action=\"increase\">+</button>\n                                        </div>\n                                    </td>\n                                    <td>\n                                        <input type=\"text\" class=\"adr-form__modal-input\" placeholder=\"Enter contact/freq/channel\">\n                                    </td>\n                                    <td>\n                                        <input type=\"text\" class=\"adr-form__modal-input\" placeholder=\"Enter status/remarks\">\n                                    </td>\n                                    <td>\n                                        <button class=\"adr-form__modal-action-btn\" type=\"button\" data-action=\"delete\">\n                                            <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\">\n                                                <path d=\"M3 6H5H21\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                                                <path d=\"M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                                            </svg>\n                                        </button>\n                                    </td>\n                                </tr>\n                            </tbody>\n                        </table>\n                        <button class=\"adr-form__modal-add-row\" type=\"button\">Add Row</button>\n                    </div>\n                    <div class=\"adr-form__modal-footer\">\n                        <button class=\"adr-form__modal-confirm\" type=\"button\">Confirm</button>\n                    </div>\n                </div>\n            </div>\n            \n            <div class=\"adr-form__signature-fields\">\n                <div class=\"adr-form__signature-item\">\n                    <div class=\"adr-form__field\">\n                        <label>Prepared By:</label>\n                        <input type=\"text\">\n                    </div>\n                    <div class=\"adr-form__field\">\n                        <label>Position:</label>\n                        <input type=\"text\" class=\"adr-form__position-line\">\n                    </div>\n                </div>\n                <div class=\"adr-form__signature-item\">\n                    <div class=\"adr-form__field\">\n                        <label>Received By:</label>\n                        <input type=\"text\">\n                    </div>\n                    <div class=\"adr-form__field\">\n                        <label>Position:</label>\n                        <input type=\"text\" class=\"adr-form__position-line\">\n                    </div>\n                </div>\n                <div class=\"adr-form__signature-item\">\n                    <div class=\"adr-form__field\">\n                        <label>Noted By:</label>\n                        <input type=\"text\">\n                    </div>\n                    <div class=\"adr-form__field\">\n                        <label>Position:</label>\n                        <input type=\"text\" class=\"adr-form__position-line\">\n                    </div>\n                </div>\n                <div class=\"adr-form__signature-item\">\n                    <div class=\"adr-form__field\">\n                        <label>Approved By:</label>\n                        <input type=\"text\">\n                    </div>\n                    <div class=\"adr-form__field\">\n                        <label>Position:</label>\n                        <input type=\"text\" class=\"adr-form__position-line\">\n                    </div>\n                </div>\n            </div>\n        </div>\n    ");
+  var returnBtn = container.querySelector('.adr-form__header-btn--return');
+  if (returnBtn) {
+    returnBtn.addEventListener('click', function () {
+      var route = this.getAttribute('data-route');
+      if (route) {
+        _routers__WEBPACK_IMPORTED_MODULE_0__["default"].navigate(route);
+      }
+    });
+  }
+  var attendanceSection = container.querySelector('.adr-form__section--attendance');
+  var attendanceList = attendanceSection ? attendanceSection.querySelector('.adr-form__attendance-list') : null;
+  var attendanceAddBtn = attendanceSection ? attendanceSection.querySelector('.adr-form__add-btn--attendance') : null;
+  var reportsSection = container.querySelector('.adr-form__section--reports');
+  var reportsList = reportsSection ? reportsSection.querySelector('.adr-form__reports-list') : null;
+  var reportsAddBtn = reportsSection ? reportsSection.querySelector('.adr-form__add-btn--reports') : null;
+  function addAttendanceItem() {
+    if (!attendanceList) return;
+    var attendanceItem = document.createElement('div');
+    attendanceItem.className = 'adr-form__attendance-item';
+    var itemCount = attendanceList.children.length;
+    var showRemoveBtn = itemCount > 0;
+    attendanceItem.innerHTML = "\n            ".concat(showRemoveBtn ? '<button class="adr-form__remove-btn" type="button">−</button>' : '', "\n            <div class=\"adr-form__field\">\n                <label>Name:</label>\n                <input type=\"text\">\n            </div>\n            <div class=\"adr-form__field\">\n                <label>Task:</label>\n                <textarea rows=\"2\"></textarea>\n            </div>\n        ");
+    attendanceList.appendChild(attendanceItem);
+    if (showRemoveBtn) {
+      var removeBtn = attendanceItem.querySelector('.adr-form__remove-btn');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function () {
+          attendanceItem.remove();
+          updateAttendanceRemoveButtons();
+        });
+      }
+    }
+    updateAttendanceRemoveButtons();
+  }
+  function updateAttendanceRemoveButtons() {
+    if (!attendanceList) return;
+    var items = attendanceList.querySelectorAll('.adr-form__attendance-item');
+    items.forEach(function (item, index) {
+      var removeBtn = item.querySelector('.adr-form__remove-btn');
+      if (items.length > 1) {
+        if (!removeBtn) {
+          removeBtn = document.createElement('button');
+          removeBtn.className = 'adr-form__remove-btn';
+          removeBtn.type = 'button';
+          removeBtn.textContent = '−';
+          item.insertBefore(removeBtn, item.firstChild);
+          removeBtn.addEventListener('click', function () {
+            item.remove();
+            updateAttendanceRemoveButtons();
+          });
+        }
+      } else {
+        if (removeBtn) {
+          removeBtn.remove();
+        }
+      }
+    });
+  }
+  function addReportsItem() {
+    if (!reportsList) return;
+    var reportsItem = document.createElement('div');
+    reportsItem.className = 'adr-form__reports-item';
+    var itemCount = reportsList.children.length;
+    var showRemoveBtn = itemCount > 0;
+    reportsItem.innerHTML = "\n            ".concat(showRemoveBtn ? '<button class="adr-form__remove-btn" type="button">−</button>' : '', "\n            <div class=\"adr-form__field\">\n                <label>Reports and Advisories released:</label>\n                <textarea rows=\"3\"></textarea>\n            </div>\n            <div class=\"adr-form__field\">\n                <label>Remarks:</label>\n                <input type=\"text\">\n            </div>\n        ");
+    reportsList.appendChild(reportsItem);
+    if (showRemoveBtn) {
+      var removeBtn = reportsItem.querySelector('.adr-form__remove-btn');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function () {
+          reportsItem.remove();
+          updateReportsRemoveButtons();
+        });
+      }
+    }
+    updateReportsRemoveButtons();
+  }
+  function updateReportsRemoveButtons() {
+    if (!reportsList) return;
+    var items = reportsList.querySelectorAll('.adr-form__reports-item');
+    items.forEach(function (item, index) {
+      var removeBtn = item.querySelector('.adr-form__remove-btn');
+      if (items.length > 1) {
+        if (!removeBtn) {
+          removeBtn = document.createElement('button');
+          removeBtn.className = 'adr-form__remove-btn';
+          removeBtn.type = 'button';
+          removeBtn.textContent = '−';
+          item.insertBefore(removeBtn, item.firstChild);
+          removeBtn.addEventListener('click', function () {
+            item.remove();
+            updateReportsRemoveButtons();
+          });
+        }
+      } else {
+        if (removeBtn) {
+          removeBtn.remove();
+        }
+      }
+    });
+  }
+  if (attendanceAddBtn) {
+    attendanceAddBtn.addEventListener('click', addAttendanceItem);
+    updateAttendanceRemoveButtons();
+  }
+  if (reportsAddBtn) {
+    reportsAddBtn.addEventListener('click', addReportsItem);
+    updateReportsRemoveButtons();
+  }
+  var customizeBtns = container.querySelectorAll('.adr-form__customize-btn');
+  var communicationModal = container.querySelector('#communication-lines-modal');
+  var modalClose = communicationModal ? communicationModal.querySelector('.adr-form__modal-close') : null;
+  var modalTableBody = communicationModal ? communicationModal.querySelector('.adr-form__modal-table-body') : null;
+  var modalAddRowBtn = communicationModal ? communicationModal.querySelector('.adr-form__modal-add-row') : null;
+  var modalConfirmBtn = communicationModal ? communicationModal.querySelector('.adr-form__modal-confirm') : null;
+  customizeBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var modalId = this.getAttribute('data-modal');
+      if (modalId === 'communication-lines' && communicationModal) {
+        communicationModal.classList.add('adr-form__modal--active');
+      }
+    });
+  });
+  if (modalClose) {
+    modalClose.addEventListener('click', function () {
+      if (communicationModal) {
+        communicationModal.classList.remove('adr-form__modal--active');
+      }
+    });
+  }
+  if (communicationModal) {
+    communicationModal.addEventListener('click', function (e) {
+      if (e.target === communicationModal) {
+        communicationModal.classList.remove('adr-form__modal--active');
+      }
+    });
+  }
+  function addModalRow() {
+    if (!modalTableBody) return;
+    var row = document.createElement('tr');
+    row.className = 'adr-form__modal-table-row';
+    row.innerHTML = "\n            <td>\n                <input type=\"text\" class=\"adr-form__modal-input\" placeholder=\"Enter particulars\">\n            </td>\n            <td>\n                <div class=\"adr-form__counter\">\n                    <button class=\"adr-form__counter-btn\" type=\"button\" data-action=\"decrease\">\u2212</button>\n                    <input type=\"number\" class=\"adr-form__counter-input\" value=\"0\" min=\"0\">\n                    <button class=\"adr-form__counter-btn\" type=\"button\" data-action=\"increase\">+</button>\n                </div>\n            </td>\n            <td>\n                <input type=\"text\" class=\"adr-form__modal-input\" placeholder=\"Enter contact/freq/channel\">\n            </td>\n            <td>\n                <input type=\"text\" class=\"adr-form__modal-input\" placeholder=\"Enter status/remarks\">\n            </td>\n            <td>\n                <button class=\"adr-form__modal-action-btn\" type=\"button\" data-action=\"delete\">\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\">\n                        <path d=\"M3 6H5H21\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                        <path d=\"M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                    </svg>\n                </button>\n            </td>\n        ";
+    modalTableBody.appendChild(row);
+    var deleteBtn = row.querySelector('button[data-action="delete"]');
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', function () {
+        row.remove();
+      });
+    }
+    var counterBtns = row.querySelectorAll('.adr-form__counter-btn');
+    counterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var counterInput = row.querySelector('.adr-form__counter-input');
+        var value = parseInt(counterInput.value) || 1;
+        if (this.getAttribute('data-action') === 'increase') {
+          value++;
+        } else if (this.getAttribute('data-action') === 'decrease' && value > 0) {
+          value--;
+        }
+        counterInput.value = value;
+      });
+    });
+  }
+  if (modalAddRowBtn) {
+    modalAddRowBtn.addEventListener('click', addModalRow);
+  }
+  if (modalTableBody) {
+    var existingRows = modalTableBody.querySelectorAll('.adr-form__modal-table-row');
+    existingRows.forEach(function (row) {
+      var deleteBtn = row.querySelector('button[data-action="delete"]');
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', function () {
+          row.remove();
+        });
+      }
+      var counterBtns = row.querySelectorAll('.adr-form__counter-btn');
+      counterBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var counterInput = row.querySelector('.adr-form__counter-input');
+          var value = parseInt(counterInput.value) || 1;
+          if (this.getAttribute('data-action') === 'increase') {
+            value++;
+          } else if (this.getAttribute('data-action') === 'decrease' && value > 1) {
+            value--;
+          }
+          counterInput.value = value;
+        });
+      });
+    });
+  }
+  if (modalConfirmBtn) {
+    modalConfirmBtn.addEventListener('click', function () {
+      if (communicationModal) {
+        communicationModal.classList.remove('adr-form__modal--active');
+      }
+    });
+  }
+}
+_routers__WEBPACK_IMPORTED_MODULE_0__["default"].route('/adr-reports/create', renderADRForm);
+
+
+/***/ },
+
+/***/ "./resources/js/adr-reports.js"
+/*!*************************************!*\
+  !*** ./resources/js/adr-reports.js ***!
+  \*************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   renderADRReports: () => (/* binding */ renderADRReports)
+/* harmony export */ });
+/* harmony import */ var _routers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./routers */ "./resources/js/routers.js");
+
+function renderADRReports(container) {
+  if (!container) return;
+  container.innerHTML = "\n        <div class=\"adr-reports\">\n            <div class=\"adr-reports__search-bar\">\n                <div class=\"adr-reports__search-bar-input\">\n                    <img src=\"".concat(window.location.origin, "/images/search_icon.svg\" alt=\"Search\">\n                    <input type=\"text\" placeholder=\"Search...\">\n                </div>\n                <div class=\"adr-reports__search-bar-filters\">\n                    <button>\n                        Year\n                        <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                            <path d=\"M6 9L12 15L18 9\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                        </svg>\n                    </button>\n                    <button>\n                        Month\n                        <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                            <path d=\"M6 9L12 15L18 9\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                        </svg>\n                    </button>\n                    <button class=\"adr-reports__create-btn\" data-route=\"/adr-reports/create\">\n                        <img src=\"").concat(window.location.origin, "/images/create_icon.svg\" alt=\"Create\">\n                        Create New\n                    </button>\n                </div>\n            </div>\n\n            <div class=\"adr-reports__actions\">\n                <button>\n                    <img src=\"").concat(window.location.origin, "/images/delete_icon.svg\" alt=\"Delete\">\n                    Delete\n                </button>\n            </div>\n\n            <div class=\"adr-reports__table\">\n                <table>\n                    <thead>\n                        <tr>\n                            <th>Actions</th>\n                            <th>Documents</th>\n                            <th>Date/Time</th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                    </tbody>\n                </table>\n            </div>\n\n            <div class=\"adr-reports__pagination\">\n                <button>\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                        <path d=\"M11 17L6 12L11 7M18 17L13 12L18 7\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                    </svg>\n                </button>\n                <button>\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                        <path d=\"M15 18L9 12L15 6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                    </svg>\n                </button>\n                <button>\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                        <path d=\"M9 18L15 12L9 6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                    </svg>\n                </button>\n                <button>\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                        <path d=\"M13 17L18 12L13 7M6 17L11 12L6 7\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                    </svg>\n                </button>\n            </div>\n        </div>\n    ");
+  var createBtn = container.querySelector('.adr-reports__create-btn');
+  if (createBtn) {
+    createBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      var route = this.getAttribute('data-route');
+      if (route) {
+        _routers__WEBPACK_IMPORTED_MODULE_0__["default"].navigate(route);
+      }
+    });
+  }
+}
+_routers__WEBPACK_IMPORTED_MODULE_0__["default"].route('/adr-reports', renderADRReports);
+
+
+/***/ },
+
+/***/ "./resources/js/app.js"
+/*!*****************************!*\
+  !*** ./resources/js/app.js ***!
+  \*****************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _routers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./routers */ "./resources/js/routers.js");
+/* harmony import */ var _dashboard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dashboard */ "./resources/js/dashboard.js");
+/* harmony import */ var _adr_reports__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./adr-reports */ "./resources/js/adr-reports.js");
+/* harmony import */ var _adr_form__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./adr-form */ "./resources/js/adr-form.js");
+/* harmony import */ var _archived_reports__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./archived-reports */ "./resources/js/archived-reports.js");
+/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./settings */ "./resources/js/settings.js");
+/* harmony import */ var _sidebar__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./sidebar */ "./resources/js/sidebar.js");
+/* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./header */ "./resources/js/header.js");
+/* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_header__WEBPACK_IMPORTED_MODULE_8__);
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  _routers__WEBPACK_IMPORTED_MODULE_1__["default"].init();
+});
+
+/***/ },
+
+/***/ "./resources/js/archived-reports.js"
+/*!******************************************!*\
+  !*** ./resources/js/archived-reports.js ***!
+  \******************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   renderArchivedReports: () => (/* binding */ renderArchivedReports)
+/* harmony export */ });
+/* harmony import */ var _routers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./routers */ "./resources/js/routers.js");
+
+function renderArchivedReports(container) {
+  if (!container) return;
+  container.innerHTML = "\n        <div class=\"archived-reports\">\n            <div class=\"archived-reports__search-bar\">\n                <div class=\"archived-reports__search-bar-input\">\n                    <img src=\"".concat(window.location.origin, "/images/search_icon.svg\" alt=\"Search\">\n                    <input type=\"text\" placeholder=\"Search...\">\n                </div>\n                <div class=\"archived-reports__search-bar-filters\">\n                    <div style=\"width: 143px;\"></div>\n                    <button>\n                        Year\n                        <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                            <path d=\"M6 9L12 15L18 9\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                        </svg>\n                    </button>\n                    <button>\n                        Month\n                        <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                            <path d=\"M6 9L12 15L18 9\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                        </svg>\n                    </button>\n                </div>\n            </div>\n\n            <div class=\"archived-reports__actions\">\n                <button>\n                    <img src=\"").concat(window.location.origin, "/images/restore_icon.svg\" alt=\"Restore\">\n                    Restore\n                </button>\n            </div>\n\n            <div class=\"archived-reports__table\">\n                <table>\n                    <thead>\n                        <tr>\n                            <th>Actions</th>\n                            <th>Documents</th>\n                            <th>Date/Time</th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                    </tbody>\n                </table>\n            </div>\n\n            <div class=\"archived-reports__pagination\">\n                <button>\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                        <path d=\"M11 17L6 12L11 7M18 17L13 12L18 7\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                    </svg>\n                </button>\n                <button>\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                        <path d=\"M15 18L9 12L15 6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                    </svg>\n                </button>\n                <button>\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                        <path d=\"M9 18L15 12L9 6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                    </svg>\n                </button>\n                <button>\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                        <path d=\"M13 17L18 12L13 7M6 17L11 12L6 7\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                    </svg>\n                </button>\n            </div>\n        </div>\n    ");
+}
+_routers__WEBPACK_IMPORTED_MODULE_0__["default"].route('/archived-reports', renderArchivedReports);
+
+
+/***/ },
+
 /***/ "./resources/js/bootstrap.js"
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
@@ -19518,32 +19825,314 @@ process.umask = function() { return 0; };
 (__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
-
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
+/***/ },
 
-// import Echo from 'laravel-echo';
+/***/ "./resources/js/dashboard.js"
+/*!***********************************!*\
+  !*** ./resources/js/dashboard.js ***!
+  \***********************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-// window.Pusher = require('pusher-js');
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Dashboard: () => (/* binding */ Dashboard),
+/* harmony export */   renderDashboard: () => (/* binding */ renderDashboard)
+/* harmony export */ });
+/* harmony import */ var _routers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./routers */ "./resources/js/routers.js");
+/* harmony import */ var _adr_reports__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./adr-reports */ "./resources/js/adr-reports.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     forceTLS: true
-// });
+var Dashboard = /*#__PURE__*/function () {
+  function Dashboard() {
+    _classCallCheck(this, Dashboard);
+    this.container = null;
+  }
+  return _createClass(Dashboard, [{
+    key: "init",
+    value: function init(container) {
+      this.container = container;
+      this.render();
+      this.attachEventListeners();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (!this.container) return;
+      this.container.innerHTML = "\n            <div class=\"dashboard\">\n                <div class=\"dashboard__header\">\n                    <h1 class=\"dashboard__title\">Dashboard</h1>\n                    <p class=\"dashboard__subtitle\">After Duty Report System</p>\n                </div>\n                \n                <div class=\"dashboard__content\">\n                    <div class=\"dashboard__cards\">\n                        <div class=\"dashboard__card\">\n                            <div class=\"dashboard__card-icon\">\n                                <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                                    <path d=\"M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                                    <path d=\"M14 2V8H20\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                                </svg>\n                            </div>\n                            <div class=\"dashboard__card-content\">\n                                <h3 class=\"dashboard__card-title\">ADR Reports</h3>\n                                <p class=\"dashboard__card-description\">View and manage After Duty Reports</p>\n                            </div>\n                        </div>\n\n                        <div class=\"dashboard__card\">\n                            <div class=\"dashboard__card-icon\">\n                                <svg viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                                    <path d=\"M3 9V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V9\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                                    <path d=\"M7 5L12 2L17 5V9H7V5Z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                                </svg>\n                            </div>\n                            <div class=\"dashboard__card-content\">\n                                <h3 class=\"dashboard__card-title\">Archived Reports</h3>\n                                <p class=\"dashboard__card-description\">Access archived duty reports</p>\n                            </div>\n                        </div>\n                    </div>\n\n                    <div class=\"dashboard__section\">\n                        <h2 class=\"dashboard__section-title\">Recent Activity</h2>\n                        <div class=\"dashboard__activity\">\n                            <p>No recent activity to display.</p>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        ";
+    }
+  }, {
+    key: "attachEventListeners",
+    value: function attachEventListeners() {
+      var cards = this.container.querySelectorAll('.dashboard__card');
+      cards.forEach(function (card) {
+        card.addEventListener('click', function (e) {
+          console.log('Card clicked');
+        });
+      });
+    }
+  }, {
+    key: "loadData",
+    value: function () {
+      var _loadData = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.n) {
+            case 0:
+              try {} catch (error) {
+                console.error('Error loading dashboard data:', error);
+              }
+            case 1:
+              return _context.a(2);
+          }
+        }, _callee);
+      }));
+      function loadData() {
+        return _loadData.apply(this, arguments);
+      }
+      return loadData;
+    }()
+  }, {
+    key: "updateDashboard",
+    value: function updateDashboard(data) {
+      console.log('Updating dashboard with data:', data);
+    }
+  }]);
+}();
+function renderDashboard(container) {
+  var dashboard = new Dashboard();
+  dashboard.init(container);
+}
+
+_routers__WEBPACK_IMPORTED_MODULE_0__["default"].route('/dashboard', _adr_reports__WEBPACK_IMPORTED_MODULE_1__.renderADRReports);
+_routers__WEBPACK_IMPORTED_MODULE_0__["default"].route('/', _adr_reports__WEBPACK_IMPORTED_MODULE_1__.renderADRReports);
+
+
+/***/ },
+
+/***/ "./resources/js/header.js"
+/*!********************************!*\
+  !*** ./resources/js/header.js ***!
+  \********************************/
+() {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var userIcon = document.querySelector('.header__user');
+  if (userIcon) {
+    userIcon.addEventListener('click', function () {
+      console.log('User icon clicked');
+    });
+  }
+});
+
+/***/ },
+
+/***/ "./resources/js/routers.js"
+/*!*********************************!*\
+  !*** ./resources/js/routers.js ***!
+  \*********************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+var Router = /*#__PURE__*/function () {
+  function Router() {
+    _classCallCheck(this, Router);
+    this.routes = {};
+    this.currentRoute = null;
+    this.contentContainer = null;
+  }
+  return _createClass(Router, [{
+    key: "init",
+    value: function init() {
+      var _this = this;
+      this.contentContainer = document.getElementById('app-content') || document.querySelector('.main-content');
+      if (!this.contentContainer) {
+        console.error('Content container not found');
+        return;
+      }
+      document.addEventListener('click', function (e) {
+        var link = e.target.closest('a[data-route]');
+        if (link) {
+          e.preventDefault();
+          var route = link.getAttribute('data-route');
+          _this.navigate(route);
+        }
+      });
+      window.addEventListener('popstate', function (e) {
+        var path = window.location.pathname;
+        _this.handleRoute(path);
+      });
+      this.handleRoute(window.location.pathname);
+    }
+  }, {
+    key: "route",
+    value: function route(path, handler) {
+      this.routes[path] = handler;
+    }
+  }, {
+    key: "navigate",
+    value: function navigate(path) {
+      window.history.pushState({}, '', path);
+      this.handleRoute(path);
+    }
+  }, {
+    key: "handleRoute",
+    value: function handleRoute(path) {
+      var normalizedPath = path === '/' ? '/dashboard' : path;
+      var matchedRoute = null;
+      var matchedHandler = null;
+      if (this.routes[normalizedPath]) {
+        matchedRoute = normalizedPath;
+        matchedHandler = this.routes[normalizedPath];
+      } else {
+        for (var routePath in this.routes) {
+          var pattern = routePath.replace(/:\w+/g, '([^/]+)');
+          var regex = new RegExp("^".concat(pattern, "$"));
+          if (regex.test(normalizedPath)) {
+            matchedRoute = routePath;
+            matchedHandler = this.routes[routePath];
+            break;
+          }
+        }
+      }
+      if (matchedHandler) {
+        this.currentRoute = matchedRoute;
+        matchedHandler(this.contentContainer);
+      } else {
+        if (this.routes['/dashboard']) {
+          this.navigate('/dashboard');
+        } else {
+          console.warn("Route not found: ".concat(normalizedPath));
+        }
+      }
+    }
+  }, {
+    key: "getCurrentRoute",
+    value: function getCurrentRoute() {
+      return this.currentRoute;
+    }
+  }]);
+}();
+var router = new Router();
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (router);
+
+/***/ },
+
+/***/ "./resources/js/settings.js"
+/*!**********************************!*\
+  !*** ./resources/js/settings.js ***!
+  \**********************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   renderSettings: () => (/* binding */ renderSettings)
+/* harmony export */ });
+/* harmony import */ var _routers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./routers */ "./resources/js/routers.js");
+
+function renderSettings(container) {
+  if (!container) return;
+  container.innerHTML = "\n        <div class=\"settings\">\n            <div class=\"settings__header\">\n                <h1 class=\"settings__title\">Settings</h1>\n            </div>\n            \n            <div class=\"settings__content\">\n                <p>Settings content will go here.</p>\n            </div>\n        </div>\n    ";
+}
+_routers__WEBPACK_IMPORTED_MODULE_0__["default"].route('/settings', renderSettings);
+
+
+/***/ },
+
+/***/ "./resources/js/sidebar.js"
+/*!*********************************!*\
+  !*** ./resources/js/sidebar.js ***!
+  \*********************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   updateActiveLink: () => (/* binding */ updateActiveLink)
+/* harmony export */ });
+/* harmony import */ var _routers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./routers */ "./resources/js/routers.js");
+
+function updateActiveLink() {
+  var sidebarLinks = document.querySelectorAll('.sidebar__link');
+  var currentPath = window.location.pathname;
+  sidebarLinks.forEach(function (link) {
+    link.classList.remove('sidebar__link--active');
+  });
+  sidebarLinks.forEach(function (link) {
+    var route = link.getAttribute('data-route') || link.getAttribute('href');
+    if (route) {
+      var normalizedRoute = route.replace(/^\//, '');
+      var normalizedPath = currentPath.replace(/^\//, '');
+      if (normalizedPath === normalizedRoute || normalizedPath === '' && normalizedRoute === 'dashboard' || normalizedPath === '' && normalizedRoute === '/') {
+        link.classList.add('sidebar__link--active');
+      }
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded', function () {
+  updateActiveLink();
+  var originalNavigate = _routers__WEBPACK_IMPORTED_MODULE_0__["default"].navigate;
+  _routers__WEBPACK_IMPORTED_MODULE_0__["default"].navigate = function (path) {
+    originalNavigate.call(this, path);
+    setTimeout(updateActiveLink, 0);
+  };
+  var sidebarLinks = document.querySelectorAll('.sidebar__link');
+  sidebarLinks.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      if (this.hasAttribute('data-route')) {
+        setTimeout(updateActiveLink, 100);
+      } else {
+        sidebarLinks.forEach(function (l) {
+          return l.classList.remove('sidebar__link--active');
+        });
+        this.classList.add('sidebar__link--active');
+      }
+    });
+  });
+  var mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+  if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', function () {
+      var sidebar = document.querySelector('.sidebar');
+      sidebar.classList.toggle('sidebar--open');
+    });
+  }
+});
+
+
+/***/ },
+
+/***/ "./resources/scss/app.scss"
+/*!*********************************!*\
+  !*** ./resources/scss/app.scss ***!
+  \*********************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
 
 /***/ }
 
@@ -19582,7 +20171,66 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	(() => {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var [chunkIds, fn, priority] = deferred[i];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					var r = fn();
+/******/ 					if (r !== undefined) result = r;
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/global */
 /******/ 	(() => {
 /******/ 		__webpack_require__.g = (function() {
@@ -19595,6 +20243,22 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /******/ 		})();
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/node module decorator */
 /******/ 	(() => {
 /******/ 		__webpack_require__.nmd = (module) => {
@@ -19604,15 +20268,68 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"/js/app": 0,
+/******/ 			"css/app": 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkId] = 0;
+/******/ 			}
+/******/ 			return __webpack_require__.O(result);
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	})();
+/******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
-(() => {
-/*!*****************************!*\
-  !*** ./resources/js/app.js ***!
-  \*****************************/
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-})();
-
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/scss/app.scss")))
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+/******/ 	
 /******/ })()
 ;
