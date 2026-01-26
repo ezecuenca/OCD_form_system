@@ -893,3 +893,182 @@ body {
 .adr-form__counter-input:focus {
   border-color: #290081;
 }
+
+.archived-reports {
+  padding: 2rem;
+  width: 100%;
+}
+.archived-reports__search-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.archived-reports__search-bar-input {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 2px solid #290081;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  gap: 0.5rem;
+}
+.archived-reports__search-bar-input img {
+  width: 20px;
+  height: 20px;
+}
+.archived-reports__search-bar-input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+.archived-reports__search-bar-filters {
+  display: flex;
+  gap: 0.75rem;
+}
+.archived-reports__search-bar-filters button {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 20px;
+  background: #f0f0f0;
+  color: #333;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s;
+}
+.archived-reports__search-bar-filters button:hover {
+  background: #e0e0e0;
+}
+.archived-reports__search-bar-filters button svg {
+  width: 16px;
+  height: 16px;
+}
+.archived-reports__actions {
+  margin-bottom: 1rem;
+}
+.archived-reports__actions button {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #1071ef;
+  border-radius: 8px;
+  background: transparent;
+  color: #1071ef;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+.archived-reports__actions button:hover {
+  background: #1071ef;
+  color: white;
+}
+.archived-reports__actions button img {
+  width: 18px;
+  height: 18px;
+}
+.archived-reports__table {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.archived-reports__table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.archived-reports__table table thead {
+  background: #f5f5f5;
+}
+.archived-reports__table table thead th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #333;
+  border-bottom: 1px solid #e0e0e0;
+}
+.archived-reports__table table tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+  transition: background 0.2s;
+}
+.archived-reports__table table tbody tr:hover {
+  background: #f9f9f9;
+}
+.archived-reports__table table tbody tr:last-child {
+  border-bottom: none;
+}
+.archived-reports__table table tbody td {
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: #333;
+}
+.archived-reports__table-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.archived-reports__table-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+.archived-reports__table-actions button:hover {
+  opacity: 0.7;
+}
+.archived-reports__table-actions button img {
+  width: 20px;
+  height: 20px;
+}
+.archived-reports__table-document {
+  font-weight: 500;
+}
+.archived-reports__table-datetime {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.archived-reports__table-datetime .date {
+  font-weight: 500;
+}
+.archived-reports__table-datetime .time {
+  font-size: 0.75rem;
+  color: #666;
+}
+.archived-reports__pagination {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.archived-reports__pagination button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  color: #333;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.archived-reports__pagination button:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #999;
+}
+.archived-reports__pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.archived-reports__pagination button svg {
+  width: 16px;
+  height: 16px;
+}
