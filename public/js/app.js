@@ -64137,7 +64137,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ADRForm__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ADRForm */ "./resources/js/components/ADRForm.js");
 /* harmony import */ var _ArchivedReports__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ArchivedReports */ "./resources/js/components/ArchivedReports.js");
 /* harmony import */ var _Settings__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Settings */ "./resources/js/components/Settings.js");
-Object(function webpackMissingModule() { var e = new Error("Cannot find module './DocumentViewer'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _ViewDocument__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./ViewDocument */ "./resources/js/components/ViewDocument.js");
+/* harmony import */ var _ViewDocument__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_ViewDocument__WEBPACK_IMPORTED_MODULE_10__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
@@ -64177,7 +64178,7 @@ function App() {
             element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_ADRForm__WEBPACK_IMPORTED_MODULE_7__["default"], {})
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
             path: "/adr-reports/view/:id",
-            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Object(function webpackMissingModule() { var e = new Error("Cannot find module './DocumentViewer'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()), {})
+            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)((_ViewDocument__WEBPACK_IMPORTED_MODULE_10___default()), {})
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
             path: "/archived-reports",
             element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_ArchivedReports__WEBPACK_IMPORTED_MODULE_8__["default"], {})
@@ -64547,6 +64548,16 @@ function Sidebar() {
   });
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Sidebar);
+
+/***/ },
+
+/***/ "./resources/js/components/ViewDocument.js"
+/*!*************************************************!*\
+  !*** ./resources/js/components/ViewDocument.js ***!
+  \*************************************************/
+() {
+
+
 
 /***/ },
 

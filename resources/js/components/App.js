@@ -7,7 +7,7 @@ import ADRReports from './ADRReports';
 import ADRForm from './ADRForm';
 import ArchivedReports from './ArchivedReports';
 import Settings from './Settings';
-import DocumentViewer from './DocumentViewer';
+import DocumentViewer from './ViewDocument';
 
 function App() {
     return (
