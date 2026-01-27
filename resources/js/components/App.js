@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import Header from './Header';
 import ADRReports from './ADRReports';
 import ADRForm from './ADRForm';
+import Schedule from './Schedule';
 import ArchivedReports from './ArchivedReports';
 import Settings from './Settings';
 
@@ -18,6 +19,7 @@ function App() {
                     <Route path="/dashboard" element={<Navigate to="/adr-reports" replace />} />
                     <Route path="/adr-reports" element={<ADRReports />} />
                     <Route path="/adr-reports/create" element={<ADRForm />} />
+                    <Route path="/schedule" element={<Schedule />} />
                     <Route path="/archived-reports" element={<ArchivedReports />} />
                     <Route path="/settings" element={<Settings />} />
                 </Routes>
