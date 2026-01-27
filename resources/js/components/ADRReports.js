@@ -21,8 +21,8 @@ function ADRReports() {
     };
     
     const handleDeleteSingle = (id) => {
-        if (confirm('Are you sure you want to delete this report?')) {
-            deleteReport(id);
+        if (confirm('Are you sure you want to archive this report?')) {
+            archiveReport(id);
         }
     };
     
@@ -38,12 +38,12 @@ function ADRReports() {
     
     const handleDelete = () => {
         if (selectedReports.length === 0) {
-            alert('Please select reports to delete');
+            alert('Please select reports to archive');
             return;
         }
         
-        if (confirm(`Are you sure you want to delete ${selectedReports.length} report(s)?`)) {
-            selectedReports.forEach(id => deleteReport(id));
+        if (confirm(`Are you sure you want to archive ${selectedReports.length} report(s)?`)) {
+            selectedReports.forEach(id => archiveReport(id));
             setSelectedReports([]);
         }
     };
@@ -73,8 +73,8 @@ function ADRReports() {
             <div className="adr-reports__controls">
                 <div className="adr-reports__actions">
                     <button onClick={handleDelete} disabled={selectedReports.length === 0}>
-                        <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Delete" />
-                        Delete
+                        <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Archive" />
+                        Archive
                     </button>
                 </div>
                 <div className="adr-reports__filters">
@@ -155,9 +155,9 @@ function ADRReports() {
                                             <button 
                                                 className="adr-reports__action-btn adr-reports__action-btn--delete"
                                                 onClick={() => handleDeleteSingle(report.id)}
-                                                title="Delete"
+                                                title="Archive"
                                             >
-                                                <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Delete" />
+                                                <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Archive" />
                                             </button>
                                         </div>
                                     </td>

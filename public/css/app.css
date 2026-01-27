@@ -1406,6 +1406,34 @@ body {
   width: 15px;
   height: 15px;
 }
+.archived-reports__action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: -1.5rem;
+}
+.archived-reports__action-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.archived-reports__action-btn img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+.archived-reports__action-btn:hover {
+  opacity: 0.7;
+}
 .archived-reports__table {
   background: white;
   border-radius: 8px;
@@ -1441,28 +1469,6 @@ body {
   padding: 1rem;
   font-size: 0.875rem;
   color: #333;
-}
-.archived-reports__table-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.archived-reports__table-actions button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.2s;
-}
-.archived-reports__table-actions button:hover {
-  opacity: 0.7;
-}
-.archived-reports__table-actions button img {
-  width: 20px;
-  height: 20px;
 }
 .archived-reports__table-document {
   font-weight: 500;

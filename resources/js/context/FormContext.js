@@ -34,8 +34,14 @@ export const FormProvider = ({ children }) => {
         ));
     };
 
+    const restoreReport = (id) => {
+        setReports(prev => prev.map(report => 
+            report.id === id ? { ...report, status: 'Active' } : report
+        ));
+    };
+
     return (
-        <FormContext.Provider value={{ reports, addReport, deleteReport, archiveReport }}>
+        <FormContext.Provider value={{ reports, addReport, deleteReport, archiveReport, restoreReport }}>
             {children}
         </FormContext.Provider>
     );
