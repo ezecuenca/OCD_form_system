@@ -15,7 +15,16 @@ function ADRReports() {
                     <img src={`${window.location.origin}/images/search_icon.svg`} alt="Search" />
                     <input type="text" placeholder="Search..." />
                 </div>
-                <div className="adr-reports__search-bar-filters">
+            </div>
+
+            <div className="adr-reports__controls">
+                <div className="adr-reports__actions">
+                    <button>
+                        <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Delete" />
+                        Delete
+                    </button>
+                </div>
+                <div className="adr-reports__filters">
                     <button>
                         Year
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -33,13 +42,6 @@ function ADRReports() {
                         Create New
                     </button>
                 </div>
-            </div>
-
-            <div className="adr-reports__actions">
-                <button>
-                    <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Delete" />
-                    Delete
-                </button>
             </div>
 
             <div className="adr-reports__table">

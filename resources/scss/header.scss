@@ -12,10 +12,29 @@ $header-height: 50px;
     background: linear-gradient(135deg, $header-color-start 0%, $header-color-end 100%);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 0 1.5rem;
     z-index: 999;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &__title {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+
+        &-main {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+
+        &-sub {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #FFE3C2;
+        }
+    }
 
     &__user {
         display: flex;
