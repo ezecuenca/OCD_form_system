@@ -62638,58 +62638,66 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 function ADRForm() {
+  var _location$state;
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
+  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useLocation)();
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
-    addReport = _useFormContext.addReport;
+    addReport = _useFormContext.addReport,
+    updateReport = _useFormContext.updateReport,
+    getReport = _useFormContext.getReport;
+
+  // Check if we're editing an existing report
+  var reportToEdit = (_location$state = location.state) === null || _location$state === void 0 ? void 0 : _location$state.report;
+  var isEditing = !!reportToEdit;
 
   // Document name
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.documentName) || ''),
     _useState2 = _slicedToArray(_useState, 2),
     documentName = _useState2[0],
     setDocumentName = _useState2[1];
 
   // Top fields
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.forName) || ''),
     _useState4 = _slicedToArray(_useState3, 2),
     forName = _useState4[0],
     setForName = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.forPosition) || ''),
     _useState6 = _slicedToArray(_useState5, 2),
     forPosition = _useState6[0],
     setForPosition = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.thruName) || ''),
     _useState8 = _slicedToArray(_useState7, 2),
     thruName = _useState8[0],
     setThruName = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.thruPosition) || ''),
     _useState0 = _slicedToArray(_useState9, 2),
     thruPosition = _useState0[0],
     setThruPosition = _useState0[1];
-  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.fromName) || ''),
     _useState10 = _slicedToArray(_useState1, 2),
     fromName = _useState10[0],
     setFromName = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.fromPosition) || ''),
     _useState12 = _slicedToArray(_useState11, 2),
     fromPosition = _useState12[0],
     setFromPosition = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.subject) || ''),
     _useState14 = _slicedToArray(_useState13, 2),
     subject = _useState14[0],
     setSubject = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.dateTime) || ''),
     _useState16 = _slicedToArray(_useState15, 2),
     dateTime = _useState16[0],
     setDateTime = _useState16[1];
 
   // Status
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('WHITE ALERT'),
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) || 'WHITE ALERT'),
     _useState18 = _slicedToArray(_useState17, 2),
     status = _useState18[0],
     setStatus = _useState18[1];
 
   // Attendance and Reports
-  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.attendanceItems) || [{
       id: 1,
       name: '',
       task: ''
@@ -62697,7 +62705,7 @@ function ADRForm() {
     _useState20 = _slicedToArray(_useState19, 2),
     attendanceItems = _useState20[0],
     setAttendanceItems = _useState20[1];
-  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.reportsItems) || [{
       id: 1,
       report: '',
       remarks: ''
@@ -62725,7 +62733,7 @@ function ADRForm() {
     setShowOtherItemsModal = _useState30[1];
 
   // Communication and Other Items
-  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.communicationRows) || [{
       id: 1,
       particulars: '',
       noOfItems: 0,
@@ -62735,7 +62743,7 @@ function ADRForm() {
     _useState32 = _slicedToArray(_useState31, 2),
     communicationRows = _useState32[0],
     setCommunicationRows = _useState32[1];
-  var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+  var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherItemsRows) || [{
       id: 1,
       particulars: '',
       noOfItems: 0,
@@ -62746,35 +62754,35 @@ function ADRForm() {
     setOtherItemsRows = _useState34[1];
 
   // Signatures
-  var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedBy) || ''),
     _useState36 = _slicedToArray(_useState35, 2),
     preparedBy = _useState36[0],
     setPreparedBy = _useState36[1];
-  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedPosition) || ''),
     _useState38 = _slicedToArray(_useState37, 2),
     preparedPosition = _useState38[0],
     setPreparedPosition = _useState38[1];
-  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedBy) || ''),
     _useState40 = _slicedToArray(_useState39, 2),
     receivedBy = _useState40[0],
     setReceivedBy = _useState40[1];
-  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedPosition) || ''),
     _useState42 = _slicedToArray(_useState41, 2),
     receivedPosition = _useState42[0],
     setReceivedPosition = _useState42[1];
-  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedBy) || ''),
     _useState44 = _slicedToArray(_useState43, 2),
     notedBy = _useState44[0],
     setNotedBy = _useState44[1];
-  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedPosition) || ''),
     _useState46 = _slicedToArray(_useState45, 2),
     notedPosition = _useState46[0],
     setNotedPosition = _useState46[1];
-  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedBy) || ''),
     _useState48 = _slicedToArray(_useState47, 2),
     approvedBy = _useState48[0],
     setApprovedBy = _useState48[1];
-  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedPosition) || ''),
     _useState50 = _slicedToArray(_useState49, 2),
     approvedPosition = _useState50[0],
     setApprovedPosition = _useState50[1];
@@ -62782,6 +62790,23 @@ function ADRForm() {
     navigate('/adr-reports');
   };
   var handleConfirm = function handleConfirm() {
+    // Validate required fields
+    if (!documentName.trim()) {
+      alert('Please fill in the document name');
+      return;
+    }
+    if (!forName.trim()) {
+      alert('Please fill in the "For" field');
+      return;
+    }
+    if (!thruName.trim()) {
+      alert('Please fill in the "Thru" field');
+      return;
+    }
+    if (!fromName.trim()) {
+      alert('Please fill in the "From" field');
+      return;
+    }
     var formData = {
       documentName: documentName,
       forName: forName,
@@ -62806,8 +62831,13 @@ function ADRForm() {
       approvedBy: approvedBy,
       approvedPosition: approvedPosition
     };
-    var newReport = addReport(formData);
-    alert('Report submitted successfully!');
+    if (isEditing && reportToEdit && reportToEdit.id) {
+      updateReport(reportToEdit.id, formData);
+      alert('Report updated successfully!');
+    } else {
+      var newReport = addReport(formData);
+      alert('Report submitted successfully!');
+    }
     navigate('/adr-reports');
   };
 
@@ -62963,7 +62993,7 @@ function ADRForm() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
               src: "".concat(window.location.origin, "/images/confirm_icon.svg"),
               alt: "Confirm"
-            }), "Confirm"]
+            }), isEditing ? 'Update' : 'Confirm']
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
             className: "adr-form__action-btn adr-form__action-btn--view",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("svg", {
@@ -63842,7 +63872,8 @@ function ADRReports() {
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     reports = _useFormContext.reports,
     deleteReport = _useFormContext.deleteReport,
-    archiveReport = _useFormContext.archiveReport;
+    archiveReport = _useFormContext.archiveReport,
+    getReport = _useFormContext.getReport;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
     selectedReports = _useState2[0],
@@ -63854,8 +63885,14 @@ function ADRReports() {
     window.open("/adr-reports/view/".concat(id), '_blank');
   };
   var handleEditReport = function handleEditReport(id) {
-    // Navigate to edit form (functionality to be implemented)
-    navigate("/adr-reports/edit/".concat(id));
+    var report = getReport(id);
+    if (report) {
+      navigate('/adr-reports/create', {
+        state: {
+          report: report
+        }
+      });
+    }
   };
   var handleDeleteSingle = function handleDeleteSingle(id) {
     if (confirm('Are you sure you want to archive this report?')) {
@@ -64901,6 +64938,28 @@ var FormProvider = function FormProvider(_ref) {
     });
     return newReport;
   };
+  var updateReport = function updateReport(id, reportData) {
+    setReports(function (prev) {
+      return prev.map(function (report) {
+        if (report.id === id) {
+          return _objectSpread(_objectSpread(_objectSpread({}, report), reportData), {}, {
+            id: report.id,
+            // Ensure ID is preserved
+            createdAt: report.createdAt,
+            // Preserve original creation date
+            updatedAt: new Date().toISOString(),
+            status: report.status // Preserve original status unless explicitly changed
+          });
+        }
+        return report;
+      });
+    });
+  };
+  var getReport = function getReport(id) {
+    return reports.find(function (report) {
+      return report.id === id;
+    });
+  };
   var deleteReport = function deleteReport(id) {
     setReports(function (prev) {
       return prev.filter(function (report) {
@@ -64930,6 +64989,8 @@ var FormProvider = function FormProvider(_ref) {
     value: {
       reports: reports,
       addReport: addReport,
+      updateReport: updateReport,
+      getReport: getReport,
       deleteReport: deleteReport,
       archiveReport: archiveReport,
       restoreReport: restoreReport

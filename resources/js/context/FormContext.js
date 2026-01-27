@@ -24,6 +24,26 @@ export const FormProvider = ({ children }) => {
         return newReport;
     };
 
+    const updateReport = (id, reportData) => {
+        setReports(prev => prev.map(report => {
+            if (report.id === id) {
+                return {
+                    ...report,
+                    ...reportData,
+                    id: report.id, // Ensure ID is preserved
+                    createdAt: report.createdAt, // Preserve original creation date
+                    updatedAt: new Date().toISOString(),
+                    status: report.status // Preserve original status unless explicitly changed
+                };
+            }
+            return report;
+        }));
+    };
+
+    const getReport = (id) => {
+        return reports.find(report => report.id === id);
+    };
+
     const deleteReport = (id) => {
         setReports(prev => prev.filter(report => report.id !== id));
     };
@@ -41,7 +61,7 @@ export const FormProvider = ({ children }) => {
     };
 
     return (
-        <FormContext.Provider value={{ reports, addReport, deleteReport, archiveReport, restoreReport }}>
+        <FormContext.Provider value={{ reports, addReport, updateReport, getReport, deleteReport, archiveReport, restoreReport }}>
             {children}
         </FormContext.Provider>
     );

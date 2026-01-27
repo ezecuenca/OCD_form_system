@@ -4,7 +4,7 @@ import { useFormContext } from '../context/FormContext';
 
 function ADRReports() {
     const navigate = useNavigate();
-    const { reports, deleteReport, archiveReport } = useFormContext();
+    const { reports, deleteReport, archiveReport, getReport } = useFormContext();
     const [selectedReports, setSelectedReports] = useState([]);
 
     const handleCreateClick = () => {
@@ -16,8 +16,10 @@ function ADRReports() {
     };
     
     const handleEditReport = (id) => {
-        // Navigate to edit form (functionality to be implemented)
-        navigate(`/adr-reports/edit/${id}`);
+        const report = getReport(id);
+        if (report) {
+            navigate('/adr-reports/create', { state: { report } });
+        }
     };
     
     const handleDeleteSingle = (id) => {

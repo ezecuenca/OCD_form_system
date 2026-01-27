@@ -1,30 +1,35 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
 
 function ADRForm() {
     const navigate = useNavigate();
-    const { addReport } = useFormContext();
+    const location = useLocation();
+    const { addReport, updateReport, getReport } = useFormContext();
+    
+    // Check if we're editing an existing report
+    const reportToEdit = location.state?.report;
+    const isEditing = !!reportToEdit;
     
     // Document name
-    const [documentName, setDocumentName] = useState('');
+    const [documentName, setDocumentName] = useState(reportToEdit?.documentName || '');
     
     // Top fields
-    const [forName, setForName] = useState('');
-    const [forPosition, setForPosition] = useState('');
-    const [thruName, setThruName] = useState('');
-    const [thruPosition, setThruPosition] = useState('');
-    const [fromName, setFromName] = useState('');
-    const [fromPosition, setFromPosition] = useState('');
-    const [subject, setSubject] = useState('');
-    const [dateTime, setDateTime] = useState('');
+    const [forName, setForName] = useState(reportToEdit?.forName || '');
+    const [forPosition, setForPosition] = useState(reportToEdit?.forPosition || '');
+    const [thruName, setThruName] = useState(reportToEdit?.thruName || '');
+    const [thruPosition, setThruPosition] = useState(reportToEdit?.thruPosition || '');
+    const [fromName, setFromName] = useState(reportToEdit?.fromName || '');
+    const [fromPosition, setFromPosition] = useState(reportToEdit?.fromPosition || '');
+    const [subject, setSubject] = useState(reportToEdit?.subject || '');
+    const [dateTime, setDateTime] = useState(reportToEdit?.dateTime || '');
     
     // Status
-    const [status, setStatus] = useState('WHITE ALERT');
+    const [status, setStatus] = useState(reportToEdit?.status || 'WHITE ALERT');
     
     // Attendance and Reports
-    const [attendanceItems, setAttendanceItems] = useState([{ id: 1, name: '', task: '' }]);
-    const [reportsItems, setReportsItems] = useState([{ id: 1, report: '', remarks: '' }]);
+    const [attendanceItems, setAttendanceItems] = useState(reportToEdit?.attendanceItems || [{ id: 1, name: '', task: '' }]);
+    const [reportsItems, setReportsItems] = useState(reportToEdit?.reportsItems || [{ id: 1, report: '', remarks: '' }]);
     
     // Modals
     const [showCommunicationModal, setShowCommunicationModal] = useState(false);
@@ -33,28 +38,46 @@ function ADRForm() {
     const [showOtherItemsModal, setShowOtherItemsModal] = useState(false);
     
     // Communication and Other Items
-    const [communicationRows, setCommunicationRows] = useState([
+    const [communicationRows, setCommunicationRows] = useState(reportToEdit?.communicationRows || [
         { id: 1, particulars: '', noOfItems: 0, contact: '', status: '' }
     ]);
-    const [otherItemsRows, setOtherItemsRows] = useState([
+    const [otherItemsRows, setOtherItemsRows] = useState(reportToEdit?.otherItemsRows || [
         { id: 1, particulars: '', noOfItems: 0, status: '' }
     ]);
     
     // Signatures
-    const [preparedBy, setPreparedBy] = useState('');
-    const [preparedPosition, setPreparedPosition] = useState('');
-    const [receivedBy, setReceivedBy] = useState('');
-    const [receivedPosition, setReceivedPosition] = useState('');
-    const [notedBy, setNotedBy] = useState('');
-    const [notedPosition, setNotedPosition] = useState('');
-    const [approvedBy, setApprovedBy] = useState('');
-    const [approvedPosition, setApprovedPosition] = useState('');
+    const [preparedBy, setPreparedBy] = useState(reportToEdit?.preparedBy || '');
+    const [preparedPosition, setPreparedPosition] = useState(reportToEdit?.preparedPosition || '');
+    const [receivedBy, setReceivedBy] = useState(reportToEdit?.receivedBy || '');
+    const [receivedPosition, setReceivedPosition] = useState(reportToEdit?.receivedPosition || '');
+    const [notedBy, setNotedBy] = useState(reportToEdit?.notedBy || '');
+    const [notedPosition, setNotedPosition] = useState(reportToEdit?.notedPosition || '');
+    const [approvedBy, setApprovedBy] = useState(reportToEdit?.approvedBy || '');
+    const [approvedPosition, setApprovedPosition] = useState(reportToEdit?.approvedPosition || '');
 
     const handleReturn = () => {
         navigate('/adr-reports');
     };
     
     const handleConfirm = () => {
+        // Validate required fields
+        if (!documentName.trim()) {
+            alert('Please fill in the document name');
+            return;
+        }
+        if (!forName.trim()) {
+            alert('Please fill in the "For" field');
+            return;
+        }
+        if (!thruName.trim()) {
+            alert('Please fill in the "Thru" field');
+            return;
+        }
+        if (!fromName.trim()) {
+            alert('Please fill in the "From" field');
+            return;
+        }
+
         const formData = {
             documentName,
             forName,
@@ -80,8 +103,13 @@ function ADRForm() {
             approvedPosition
         };
         
-        const newReport = addReport(formData);
-        alert('Report submitted successfully!');
+        if (isEditing && reportToEdit && reportToEdit.id) {
+            updateReport(reportToEdit.id, formData);
+            alert('Report updated successfully!');
+        } else {
+            const newReport = addReport(formData);
+            alert('Report submitted successfully!');
+        }
         navigate('/adr-reports');
     };
     
@@ -188,7 +216,7 @@ function ADRForm() {
                     <div className="adr-form__actions">
                         <button className="adr-form__action-btn adr-form__action-btn--confirm" onClick={handleConfirm}>
                             <img src={`${window.location.origin}/images/confirm_icon.svg`} alt="Confirm" />
-                            Confirm
+                            {isEditing ? 'Update' : 'Confirm'}
                         </button>
                         <button className="adr-form__action-btn adr-form__action-btn--view">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
