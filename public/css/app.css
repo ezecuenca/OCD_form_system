@@ -353,6 +353,34 @@ body {
   width: 15px;
   height: 15px;
 }
+.adr-reports__action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: -1.5rem;
+}
+.adr-reports__action-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.adr-reports__action-btn img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+.adr-reports__action-btn:hover {
+  opacity: 0.7;
+}
 .adr-reports__table {
   background: white;
   border-radius: 8px;
@@ -474,11 +502,35 @@ body {
   flex-direction: column;
   gap: 0.75rem;
 }
+.adr-form__top-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
 .adr-form__title {
   font-size: 1.25rem;
   font-weight: 700;
   margin: 0;
   color: #333;
+}
+.adr-form__document-name {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  max-width: 400px;
+}
+.adr-form__document-name:focus {
+  outline: none;
+  border-color: #290081;
+  box-shadow: 0 0 0 2px rgba(41, 0, 129, 0.1);
+}
+.adr-form__document-name::-moz-placeholder {
+  color: #999;
+}
+.adr-form__document-name::placeholder {
+  color: #999;
 }
 .adr-form__actions {
   display: flex;
@@ -837,10 +889,11 @@ body {
   font-weight: 500;
   margin-bottom: 0.15rem;
 }
-.adr-form__signature-fields input {
+.adr-form__signature-fields input:not(.adr-form__position-line) {
   font-size: 0.75rem;
   padding: 0.4rem 0.5rem !important;
   min-height: 32px !important;
+  font-weight: 600;
 }
 .adr-form__signature-item {
   display: flex;
@@ -1304,4 +1357,274 @@ body {
 .archived-reports__pagination button svg {
   width: 16px;
   height: 16px;
+}
+
+.document-viewer {
+  background: #f5f5f5;
+  min-height: 100vh;
+  padding: 2rem;
+}
+.document-viewer__actions {
+  max-width: 8.5in;
+  margin: 0 auto 1rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+@media print {
+  .document-viewer__actions {
+    display: none;
+  }
+}
+.document-viewer__btn {
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #333;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.document-viewer__btn:hover {
+  background: #f0f0f0;
+}
+.document-viewer__page {
+  background: white;
+  width: 8.5in;
+  min-height: 11in;
+  margin: 0 auto;
+  padding: 0.75in;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  font-size: 11pt;
+  line-height: 1.4;
+}
+@media print {
+  .document-viewer__page {
+    box-shadow: none;
+    margin: 0;
+    padding: 0.5in;
+  }
+}
+.document-viewer__error {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+.document-viewer__error h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+.document-viewer__error button {
+  padding: 0.75rem 2rem;
+  background: #290081;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.document-viewer__error button:hover {
+  background: #1f0061;
+}
+
+.doc-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #333;
+}
+.doc-header__logo {
+  width: 80px;
+  height: 80px;
+}
+.doc-header__logo img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.doc-header__title {
+  flex: 1;
+  text-align: center;
+  padding: 0 1rem;
+}
+.doc-header__republic {
+  font-size: 9pt;
+  font-weight: normal;
+}
+.doc-header__department {
+  font-size: 9pt;
+  font-weight: normal;
+}
+.doc-header__office {
+  font-size: 14pt;
+  font-weight: bold;
+  margin: 0.2rem 0;
+}
+.doc-header__region {
+  font-size: 12pt;
+  font-weight: bold;
+}
+.doc-header__address {
+  font-size: 8pt;
+  margin-top: 0.2rem;
+}
+
+.doc-title {
+  text-align: center;
+  font-size: 12pt;
+  font-weight: bold;
+  margin: 1rem 0;
+  text-decoration: underline;
+}
+
+.doc-top-section {
+  margin: 1.5rem 0;
+}
+
+.doc-field {
+  display: flex;
+  margin-bottom: 0.75rem;
+  align-items: flex-start;
+}
+.doc-field__label {
+  min-width: 80px;
+  font-weight: normal;
+  font-size: 10pt;
+}
+.doc-field__colon {
+  margin: 0 0.5rem;
+}
+.doc-field__content {
+  flex: 1;
+}
+.doc-field__name {
+  font-weight: bold;
+  font-size: 10pt;
+}
+.doc-field__position {
+  font-size: 9pt;
+  font-style: italic;
+  margin-top: 0.1rem;
+  white-space: pre-line;
+}
+
+.doc-divider {
+  height: 1px;
+  background: #333;
+  margin: 1rem 0 1.5rem;
+}
+
+.doc-section {
+  display: flex;
+  margin-bottom: 1.5rem;
+  align-items: flex-start;
+}
+.doc-section__number {
+  min-width: 30px;
+  font-weight: bold;
+}
+.doc-section__content {
+  flex: 1;
+}
+.doc-section__title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.doc-subsection {
+  margin-top: 1rem;
+}
+.doc-subsection__title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+  font-size: 9pt;
+}
+.doc-table thead tr {
+  background: #f0f0f0;
+  border: 1px solid #333;
+}
+.doc-table thead th {
+  padding: 0.4rem;
+  text-align: left;
+  font-weight: bold;
+  border: 1px solid #333;
+  font-size: 9pt;
+}
+.doc-table tbody tr {
+  border: 1px solid #333;
+}
+.doc-table tbody td {
+  padding: 0.4rem;
+  border: 1px solid #333;
+  vertical-align: top;
+  white-space: pre-line;
+}
+
+.doc-signatures {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 2rem;
+  margin: 2rem 0 1.5rem;
+  page-break-inside: avoid;
+}
+
+.doc-signature {
+  text-align: center;
+}
+.doc-signature__label {
+  font-size: 9pt;
+  margin-bottom: 1.5rem;
+}
+.doc-signature__name {
+  font-weight: bold;
+  font-size: 10pt;
+  text-decoration: underline;
+  margin-bottom: 0.2rem;
+}
+.doc-signature__position {
+  font-size: 9pt;
+  white-space: pre-line;
+}
+
+.doc-footer {
+  text-align: center;
+  font-size: 8pt;
+  padding-top: 1rem;
+  border-top: 2px solid #333;
+  margin-top: 2rem;
+}
+.doc-footer__motto {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+.doc-footer__office, .doc-footer__email, .doc-footer__contact, .doc-footer__social {
+  margin: 0.1rem 0;
+}
+
+@media print {
+  @page {
+    size: letter;
+    margin: 0.5in;
+  }
+  body {
+    background: white;
+  }
+  .document-viewer {
+    background: white;
+    padding: 0;
+  }
+  .document-viewer__page {
+    width: 100%;
+    min-height: auto;
+    padding: 0;
+    box-shadow: none;
+  }
 }

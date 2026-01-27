@@ -1,24 +1,93 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useFormContext } from '../context/FormContext';
 
 function ADRForm() {
     const navigate = useNavigate();
+    const { addReport } = useFormContext();
+    
+    // Document name
+    const [documentName, setDocumentName] = useState('');
+    
+    // Top fields
+    const [forName, setForName] = useState('');
+    const [forPosition, setForPosition] = useState('');
+    const [thruName, setThruName] = useState('');
+    const [thruPosition, setThruPosition] = useState('');
+    const [fromName, setFromName] = useState('');
+    const [fromPosition, setFromPosition] = useState('');
+    const [subject, setSubject] = useState('');
+    const [dateTime, setDateTime] = useState('');
+    
+    // Status
+    const [status, setStatus] = useState('WHITE ALERT');
+    
+    // Attendance and Reports
     const [attendanceItems, setAttendanceItems] = useState([{ id: 1, name: '', task: '' }]);
     const [reportsItems, setReportsItems] = useState([{ id: 1, report: '', remarks: '' }]);
+    
+    // Modals
     const [showCommunicationModal, setShowCommunicationModal] = useState(false);
     const [showAttendanceModal, setShowAttendanceModal] = useState(false);
     const [showReportsModal, setShowReportsModal] = useState(false);
     const [showOtherItemsModal, setShowOtherItemsModal] = useState(false);
+    
+    // Communication and Other Items
     const [communicationRows, setCommunicationRows] = useState([
         { id: 1, particulars: '', noOfItems: 0, contact: '', status: '' }
     ]);
     const [otherItemsRows, setOtherItemsRows] = useState([
         { id: 1, particulars: '', noOfItems: 0, status: '' }
     ]);
+    
+    // Signatures
+    const [preparedBy, setPreparedBy] = useState('');
+    const [preparedPosition, setPreparedPosition] = useState('');
+    const [receivedBy, setReceivedBy] = useState('');
+    const [receivedPosition, setReceivedPosition] = useState('');
+    const [notedBy, setNotedBy] = useState('');
+    const [notedPosition, setNotedPosition] = useState('');
+    const [approvedBy, setApprovedBy] = useState('');
+    const [approvedPosition, setApprovedPosition] = useState('');
 
     const handleReturn = () => {
         navigate('/adr-reports');
     };
+    
+    const handleConfirm = () => {
+        const formData = {
+            documentName,
+            forName,
+            forPosition,
+            thruName,
+            thruPosition,
+            fromName,
+            fromPosition,
+            subject,
+            dateTime,
+            status,
+            attendanceItems,
+            reportsItems,
+            communicationRows,
+            otherItemsRows,
+            preparedBy,
+            preparedPosition,
+            receivedBy,
+            receivedPosition,
+            notedBy,
+            notedPosition,
+            approvedBy,
+            approvedPosition
+        };
+        
+        const newReport = addReport(formData);
+        alert('Report submitted successfully!');
+        navigate('/adr-reports');
+    };
+    
+    // const handleViewDocument = () => {
+    //     // Functionality disabled for now
+    // };
 
     const addAttendanceItem = () => {
         const newId = Math.max(...attendanceItems.map(item => item.id), 0) + 1;
@@ -101,8 +170,23 @@ function ADRForm() {
             <div className="adr-form__top">
                 <div className="adr-form__top-left">
                     <h1 className="adr-form__title">RDRRMOC DUTY REPORT</h1>
+                    <input 
+                        type="text" 
+                        className="adr-form__document-name" 
+                        placeholder="Enter document name..." 
+                        value={documentName}
+                        onChange={(e) => setDocumentName(e.target.value)}
+                    />
+                </div>
+                <div className="adr-form__top-right">
+                    <button className="adr-form__return-btn" onClick={handleReturn}>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Return
+                    </button>
                     <div className="adr-form__actions">
-                        <button className="adr-form__action-btn adr-form__action-btn--confirm">
+                        <button className="adr-form__action-btn adr-form__action-btn--confirm" onClick={handleConfirm}>
                             <img src={`${window.location.origin}/images/confirm_icon.svg`} alt="Confirm" />
                             Confirm
                         </button>
@@ -115,12 +199,6 @@ function ADRForm() {
                         </button>
                     </div>
                 </div>
-                <button className="adr-form__return-btn" onClick={handleReturn}>
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    Return
-                </button>
             </div>
 
             <div className="adr-form__content">
@@ -128,36 +206,36 @@ function ADRForm() {
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>For:</label>
-                            <input type="text" />
+                            <input type="text" value={forName} onChange={(e) => setForName(e.target.value)} />
                         </div>
-                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2"></textarea>
+                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={forPosition} onChange={(e) => setForPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>Thru:</label>
-                            <input type="text" />
+                            <input type="text" value={thruName} onChange={(e) => setThruName(e.target.value)} />
                         </div>
-                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2"></textarea>
+                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={thruPosition} onChange={(e) => setThruPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>From:</label>
-                            <input type="text" />
+                            <input type="text" value={fromName} onChange={(e) => setFromName(e.target.value)} />
                         </div>
-                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2"></textarea>
+                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={fromPosition} onChange={(e) => setFromPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__field-group adr-form__field-group--subject">
                         <div className="adr-form__subject-header">
                             <label>Subject:</label>
                             <span className="adr-form__subject-text">After Duty Report for the Period Covered</span>
-                            <input type="text" className="adr-form__subject-input" placeholder="Date and Time" />
+                            <input type="text" className="adr-form__subject-input" placeholder="Date and Time" value={dateTime} onChange={(e) => setDateTime(e.target.value)} />
                         </div>
                     </div>
                 </div>
 
                 <div className="adr-form__section">
                     <label className="adr-form__section-label">1. Status</label>
-                    <select className="adr-form__select">
+                    <select className="adr-form__select" value={status} onChange={(e) => setStatus(e.target.value)}>
                         <option>WHITE ALERT</option>
                         <option>BLUE ALERT</option>
                         <option>RED ALERT</option>
@@ -204,30 +282,30 @@ function ADRForm() {
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Prepared By:</label>
-                            <input type="text" />
+                            <input type="text" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} />
                         </div>
-                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2"></textarea>
+                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={preparedPosition} onChange={(e) => setPreparedPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Received By:</label>
-                            <input type="text" />
+                            <input type="text" value={receivedBy} onChange={(e) => setReceivedBy(e.target.value)} />
                         </div>
-                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2"></textarea>
+                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={receivedPosition} onChange={(e) => setReceivedPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Noted By:</label>
-                            <input type="text" />
+                            <input type="text" value={notedBy} onChange={(e) => setNotedBy(e.target.value)} />
                         </div>
-                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2"></textarea>
+                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={notedPosition} onChange={(e) => setNotedPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
-                            <label>Approved By:</label>
-                            <input type="text" />
+                            <label>Approved:</label>
+                            <input type="text" value={approvedBy} onChange={(e) => setApprovedBy(e.target.value)} />
                         </div>
-                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2"></textarea>
+                        <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={approvedPosition} onChange={(e) => setApprovedPosition(e.target.value)}></textarea>
                     </div>
                 </div>
             </div>
