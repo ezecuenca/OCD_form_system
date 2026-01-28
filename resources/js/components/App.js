@@ -8,7 +8,7 @@ import ADRForm from './ADRForm';
 import Schedule from './Schedule';
 import ArchivedReports from './ArchivedReports';
 import Settings from './Settings';
-import DocumentViewer from './ViewDocument';
+import DocumentViewer from './DocumentViewer';
 
 function App() {
     return (
@@ -22,7 +22,6 @@ function App() {
                         <Route path="/dashboard" element={<Navigate to="/adr-reports" replace />} />
                         <Route path="/adr-reports" element={<ADRReports />} />
                         <Route path="/adr-reports/create" element={<ADRForm />} />
-                        <Route path="/adr-reports/view/:id" element={<DocumentViewer />} />
                         <Route path="/schedule" element={<Schedule />} />
                         <Route path="/archived-reports" element={<ArchivedReports />} />
                         <Route path="/settings" element={<Settings />} />

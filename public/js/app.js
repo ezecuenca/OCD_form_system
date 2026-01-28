@@ -64175,8 +64175,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Schedule__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Schedule */ "./resources/js/components/Schedule.js");
 /* harmony import */ var _ArchivedReports__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ArchivedReports */ "./resources/js/components/ArchivedReports.js");
 /* harmony import */ var _Settings__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Settings */ "./resources/js/components/Settings.js");
-/* harmony import */ var _ViewDocument__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./ViewDocument */ "./resources/js/components/ViewDocument.js");
-/* harmony import */ var _ViewDocument__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_ViewDocument__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _DocumentViewer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./DocumentViewer */ "./resources/js/components/DocumentViewer.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
@@ -64215,9 +64214,6 @@ function App() {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
             path: "/adr-reports/create",
             element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_ADRForm__WEBPACK_IMPORTED_MODULE_7__["default"], {})
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
-            path: "/adr-reports/view/:id",
-            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)((_ViewDocument__WEBPACK_IMPORTED_MODULE_11___default()), {})
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
             path: "/schedule",
             element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Schedule__WEBPACK_IMPORTED_MODULE_8__["default"], {})
@@ -64536,6 +64532,34 @@ function ArchivedReports() {
   });
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ArchivedReports);
+
+/***/ },
+
+/***/ "./resources/js/components/DocumentViewer.js"
+/*!***************************************************!*\
+  !*** ./resources/js/components/DocumentViewer.js ***!
+  \***************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+function DocumentViewer() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+    className: "document-viewer",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
+      children: "This is for the document viewer"
+    })
+  });
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DocumentViewer);
 
 /***/ },
 
@@ -64866,16 +64890,6 @@ function Sidebar() {
   });
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Sidebar);
-
-/***/ },
-
-/***/ "./resources/js/components/ViewDocument.js"
-/*!*************************************************!*\
-  !*** ./resources/js/components/ViewDocument.js ***!
-  \*************************************************/
-() {
-
-
 
 /***/ },
 
