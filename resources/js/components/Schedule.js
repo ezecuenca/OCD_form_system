@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AddTaskModal from './AddTaskModal';
 
 function Schedule() {
-    const [currentDate, setCurrentDate] = useState(new Date(2026, 0, 1)); // January 1, 2026
+    const [currentDate, setCurrentDate] = useState(new Date());
     const [tasks, setTasks] = useState([]);
     const [showTaskForm, setShowTaskForm] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
@@ -98,7 +98,6 @@ function Schedule() {
                                         {dayTasks.map((task, taskIndex) => (
                                             <div key={taskIndex} className="schedule__task">
                                                 <div className="schedule__task-name">{task.name}</div>
-                                                <div className="schedule__task-description">{task.task}</div>
                                             </div>
                                         ))}
                                     </div>
@@ -109,8 +108,8 @@ function Schedule() {
 
                     <div className="schedule__actions">
                         <button className="schedule__btn schedule__btn--primary" onClick={handleAddTaskClick}>Add Task</button>
-                        <button className="schedule__btn schedule__btn--secondary">Swap Task</button>
-                        <button className="schedule__btn schedule__btn--tertiary">Swapping Form List</button>
+                        <button className="schedule__btn schedule__btn--secondary">Swap Form</button>
+                        <button className="schedule__btn schedule__btn--tertiary">Swapping Requests</button>
                     </div>
                 </div>
             </div>

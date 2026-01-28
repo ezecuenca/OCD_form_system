@@ -64765,10 +64765,10 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 function Schedule() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date(2026, 0, 1)),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
     _useState2 = _slicedToArray(_useState, 2),
     currentDate = _useState2[0],
-    setCurrentDate = _useState2[1]; // January 1, 2026
+    setCurrentDate = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState4 = _slicedToArray(_useState3, 2),
     tasks = _useState4[0],
@@ -64872,15 +64872,12 @@ function Schedule() {
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                 className: "schedule__day-tasks",
                 children: dayTasks.map(function (task, taskIndex) {
-                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                     className: "schedule__task",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                       className: "schedule__task-name",
                       children: task.name
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-                      className: "schedule__task-description",
-                      children: task.task
-                    })]
+                    })
                   }, taskIndex);
                 })
               })]
@@ -64894,10 +64891,10 @@ function Schedule() {
             children: "Add Task"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "schedule__btn schedule__btn--secondary",
-            children: "Swap Task"
+            children: "Swap Form"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "schedule__btn schedule__btn--tertiary",
-            children: "Swapping Form List"
+            children: "Swapping Requests"
           })]
         })]
       })
