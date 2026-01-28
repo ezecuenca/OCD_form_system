@@ -8,7 +8,6 @@ import ADRForm from './ADRForm';
 import Schedule from './Schedule';
 import ArchivedReports from './ArchivedReports';
 import Settings from './Settings';
-import DocumentViewer from './DocumentViewer';
 
 function App() {
     return (

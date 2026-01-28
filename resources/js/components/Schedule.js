@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import AddTaskModal from './AddTaskModal';
 
 function Schedule() {
     const [currentDate, setCurrentDate] = useState(new Date(2026, 0, 1)); // January 1, 2026
     const [tasks, setTasks] = useState([]);
     const [showTaskForm, setShowTaskForm] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
 
     const daysInMonth = (date) => {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -39,6 +41,24 @@ function Schedule() {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
     };
 
+    const handleAddTaskClick = () => {
+        const today = new Date(currentDate.getFullYear(), currentDate.getMonth(), new Date().getDate());
+        const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        setSelectedDate(dateStr);
+        setShowTaskForm(true);
+    };
+
+    const handleAddTask = (taskData) => {
+        setTasks([...tasks, taskData]);
+        setShowTaskForm(false);
+    };
+
+    const getTasksForDate = (day) => {
+        if (!day) return [];
+        const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        return tasks.filter(task => task.date === dateStr);
+    };
+
     const monthName = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
     const days = getDaysArray();
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -66,23 +86,42 @@ function Schedule() {
                     </div>
 
                     <div className="schedule__grid">
-                        {days.map((day, index) => (
-                            <div
-                                key={index}
-                                className={`schedule__day ${day ? 'schedule__day--active' : 'schedule__day--empty'}`}
-                            >
-                                {day}
-                            </div>
-                        ))}
+                        {days.map((day, index) => {
+                            const dayTasks = getTasksForDate(day);
+                            return (
+                                <div
+                                    key={index}
+                                    className={`schedule__day ${day ? 'schedule__day--active' : 'schedule__day--empty'}`}
+                                >
+                                    <div className="schedule__day-number">{day}</div>
+                                    <div className="schedule__day-tasks">
+                                        {dayTasks.map((task, taskIndex) => (
+                                            <div key={taskIndex} className="schedule__task">
+                                                <div className="schedule__task-name">{task.name}</div>
+                                                <div className="schedule__task-description">{task.task}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
 
                     <div className="schedule__actions">
-                        <button className="schedule__btn schedule__btn--primary">Add Task</button>
+                        <button className="schedule__btn schedule__btn--primary" onClick={handleAddTaskClick}>Add Task</button>
                         <button className="schedule__btn schedule__btn--secondary">Swap Task</button>
                         <button className="schedule__btn schedule__btn--tertiary">Swapping Form List</button>
                     </div>
                 </div>
             </div>
+
+            <AddTaskModal
+                isOpen={showTaskForm}
+                onClose={() => setShowTaskForm(false)}
+                selectedDate={selectedDate}
+                currentMonth={currentDate}
+                onAddTask={handleAddTask}
+            />
         </div>
     );
 }
