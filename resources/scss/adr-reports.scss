@@ -65,8 +65,15 @@
             min-height: 38px;
 
             &:hover {
-                background: #f8f8f8;
-                border-color: #1e0060;
+                background: #E99745;
+                border-color: #E99745;
+                color: white;
+            }
+
+            &:hover svg {
+                path {
+                    stroke: white;
+                }
             }
 
             svg {
@@ -82,8 +89,8 @@
         border: 2px solid #290081 !important;
 
         &:hover {
-            background: #1e0060 !important;
-            border-color: #1e0060 !important;
+            background: #E99745 !important;
+            border-color: #E99745 !important;
         }
 
         img {
@@ -108,13 +115,21 @@
             transition: all 0.2s;
             min-height: 38px;
 
-            &:hover {
+            &:hover:not(:disabled) {
                 background: #dc3545;
                 color: white;
 
                 img {
                     filter: brightness(0) invert(1);
                 }
+            }
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                border-color: #dc3545;
+                background: white;
+                color: #dc3545;
             }
 
             img {

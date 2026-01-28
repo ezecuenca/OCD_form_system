@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
+import ConfirmModal from './ConfirmModal';
 
 function ADRReports() {
     const navigate = useNavigate();
     const { reports, deleteReport, archiveReport, getReport } = useFormContext();
     const [selectedReports, setSelectedReports] = useState([]);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [confirmAction, setConfirmAction] = useState(null);
+    const [confirmMessage, setConfirmMessage] = useState('');
 
     const handleCreateClick = () => {
         navigate('/adr-reports/create');
@@ -23,9 +27,12 @@ function ADRReports() {
     };
     
     const handleDeleteSingle = (id) => {
-        if (confirm('Are you sure you want to archive this report?')) {
+        setConfirmMessage('Are you sure you want to archive (1) document?');
+        setConfirmAction(() => () => {
             archiveReport(id);
-        }
+            setShowConfirmModal(false);
+        });
+        setShowConfirmModal(true);
     };
     
     const handleSelectReport = (id) => {
@@ -44,21 +51,28 @@ function ADRReports() {
             return;
         }
         
-        if (confirm(`Are you sure you want to archive ${selectedReports.length} report(s)?`)) {
+        setConfirmMessage(`Are you sure you want to archive (${selectedReports.length}) documents?`);
+        setConfirmAction(() => () => {
             selectedReports.forEach(id => archiveReport(id));
             setSelectedReports([]);
-        }
+            setShowConfirmModal(false);
+        });
+        setShowConfirmModal(true);
     };
     
     const formatDate = (isoString) => {
         const date = new Date(isoString);
-        return date.toLocaleString('en-US', {
-            month: 'short',
+        const dateStr = date.toLocaleDateString('en-US', {
+            month: 'long',
             day: 'numeric',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
+            year: 'numeric'
         });
+        const timeStr = date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
+        return { date: dateStr, time: timeStr };
     };
 
     const activeReports = reports.filter(r => r.status === 'Active');
@@ -74,7 +88,7 @@ function ADRReports() {
 
             <div className="adr-reports__controls">
                 <div className="adr-reports__actions">
-                    <button onClick={handleDelete} disabled={selectedReports.length === 0}>
+                    <button onClick={handleDelete} disabled={selectedReports.length < 2}>
                         <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Archive" />
                         Archive
                     </button>
@@ -166,7 +180,12 @@ function ADRReports() {
                                     <td>
                                         {report.documentName || 'Untitled Document'}
                                     </td>
-                                    <td>{formatDate(report.createdAt)}</td>
+                                    <td>
+                                        <div className="adr-reports__table-datetime">
+                                            <div className="date">{formatDate(report.createdAt).date}</div>
+                                            <div className="time">{formatDate(report.createdAt).time}</div>
+                                        </div>
+                                    </td>
                                 </tr>
                             ))
                         )}
@@ -196,6 +215,13 @@ function ADRReports() {
                     </svg>
                 </button>
             </div>
+
+            <ConfirmModal
+                isOpen={showConfirmModal}
+                message={confirmMessage}
+                onConfirm={confirmAction}
+                onCancel={() => setShowConfirmModal(false)}
+            />
         </div>
     );
 }

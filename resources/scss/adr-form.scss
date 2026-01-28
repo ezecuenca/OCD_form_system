@@ -111,14 +111,19 @@
             color: #28a745;
 
             &:hover {
-                background: #f8f8f8;
-                border-color: #218838;
+                background: #28a745;
+                border-color: #28a745;
+                color: white;
             }
 
             img {
                 width: 16px;
                 height: 16px;
                 filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(90%) contrast(80%);
+            }
+
+            &:hover img {
+                filter: brightness(0) invert(1);
             }
         }
 
@@ -127,8 +132,15 @@
             color: #290081;
 
             &:hover {
-                background: #f8f8f8;
-                border-color: #1e0060;
+                background: #E99745;
+                border-color: #E99745;
+                color: white;
+            }
+
+            &:hover svg {
+                path {
+                    stroke: white;
+                }
             }
         }
     }
@@ -436,6 +448,39 @@
             font-size: 0.8125rem;
             font-weight: 500;
             color: #333;
+        }
+    }
+
+    &__other-admin-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding-left: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    &__other-admin-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0.75rem;
+        background: #f8f9fa;
+        border-radius: 4px;
+        border-left: 3px solid #e0e0e0;
+
+        span {
+            font-size: 0.8rem;
+            color: #555;
+            flex: 1;
+            margin-right: 1rem;
+            font-style: italic;
+        }
+
+        &:last-child {
+            span {
+                font-weight: 500;
+                font-style: normal;
+            }
         }
     }
 

@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { useFormContext } from '../context/FormContext';
+import ConfirmModal from './ConfirmModal';
 
 function ArchivedReports() {
     const { reports, deleteReport, restoreReport } = useFormContext();
     const [selectedReports, setSelectedReports] = useState([]);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [confirmAction, setConfirmAction] = useState(null);
+    const [confirmMessage, setConfirmMessage] = useState('');
 
     const handleViewDocument = (id) => {
         window.open(`/adr-reports/view/${id}`, '_blank');
@@ -15,16 +19,22 @@ function ArchivedReports() {
             return;
         }
 
-        if (confirm(`Are you sure you want to restore ${selectedReports.length} report(s)?`)) {
+        setConfirmMessage(`Are you sure you want to restore (${selectedReports.length}) documents?`);
+        setConfirmAction(() => () => {
             selectedReports.forEach(id => restoreReport(id));
             setSelectedReports([]);
-        }
+            setShowConfirmModal(false);
+        });
+        setShowConfirmModal(true);
     };
 
     const handleRestoreSingle = (id) => {
-        if (confirm('Are you sure you want to restore this report?')) {
+        setConfirmMessage('Are you sure you want to restore (1) document?');
+        setConfirmAction(() => () => {
             restoreReport(id);
-        }
+            setShowConfirmModal(false);
+        });
+        setShowConfirmModal(true);
     };
 
     const handleSelectReport = (id) => {
@@ -39,13 +49,17 @@ function ArchivedReports() {
 
     const formatDate = (isoString) => {
         const date = new Date(isoString);
-        return date.toLocaleString('en-US', {
-            month: 'short',
+        const dateStr = date.toLocaleDateString('en-US', {
+            month: 'long',
             day: 'numeric',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
+            year: 'numeric'
         });
+        const timeStr = date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
+        return { date: dateStr, time: timeStr };
     };
 
     const archivedReports = reports.filter(r => r.status === 'Archived');
@@ -61,7 +75,7 @@ function ArchivedReports() {
 
             <div className="archived-reports__controls">
                 <div className="archived-reports__actions">
-                    <button onClick={handleRestore} disabled={selectedReports.length === 0}>
+                    <button onClick={handleRestore} disabled={selectedReports.length < 2}>
                         <svg width="15" height="15" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clipPath="url(#clip0_8_219)">
                                 <path fillRule="evenodd" clipRule="evenodd" d="M14 9C14 7.9 13.1 7 12 7C10.9 7 10 7.9 10 9C10 10.1 10.9 11 12 11C13.1 11 14 10.1 14 9ZM12 0C7.03 0 3 4.03 3 9H0L4 13L8 9H5C5 5.13 8.13 2 12 2C15.87 2 19 5.13 19 9C19 12.87 15.87 16 12 16C10.49 16 9.09 15.51 7.94 14.7L6.52 16.14C8.04 17.3 9.94 18 12 18C16.97 18 21 13.97 21 9C21 4.03 16.97 0 12 0Z" fill="currentColor"/>
@@ -130,7 +144,7 @@ function ArchivedReports() {
                                             onChange={() => handleSelectReport(report.id)}
                                         />
                                     </td>
-                                    <td>
+                                    <td className="archived-reports__table-actions">
                                         <div className="archived-reports__action-buttons">
                                             <button 
                                                 className="archived-reports__action-btn archived-reports__action-btn--view"
@@ -151,7 +165,12 @@ function ArchivedReports() {
                                     <td>
                                         {report.documentName || 'Untitled Document'}
                                     </td>
-                                    <td>{formatDate(report.createdAt)}</td>
+                                    <td>
+                                        <div className="archived-reports__table-datetime">
+                                            <div className="date">{formatDate(report.createdAt).date}</div>
+                                            <div className="time">{formatDate(report.createdAt).time}</div>
+                                        </div>
+                                    </td>
                                 </tr>
                             ))
                         )}
@@ -181,6 +200,13 @@ function ArchivedReports() {
                     </svg>
                 </button>
             </div>
+
+            <ConfirmModal
+                isOpen={showConfirmModal}
+                message={confirmMessage}
+                onConfirm={confirmAction}
+                onCancel={() => setShowConfirmModal(false)}
+            />
         </div>
     );
 }

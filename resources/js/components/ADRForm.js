@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
+import ConfirmModal from './ConfirmModal';
 
 function ADRForm() {
     const navigate = useNavigate();
@@ -36,6 +37,10 @@ function ADRForm() {
     const [showAttendanceModal, setShowAttendanceModal] = useState(false);
     const [showReportsModal, setShowReportsModal] = useState(false);
     const [showOtherItemsModal, setShowOtherItemsModal] = useState(false);
+    const [showOtherAdminModal, setShowOtherAdminModal] = useState(false);
+    const [showEndorsedItemsModal, setShowEndorsedItemsModal] = useState(false);
+    const [showValidationModal, setShowValidationModal] = useState(false);
+    const [validationMessage, setValidationMessage] = useState('');
     
     // Communication and Other Items
     const [communicationRows, setCommunicationRows] = useState(reportToEdit?.communicationRows || [
@@ -43,6 +48,12 @@ function ADRForm() {
     ]);
     const [otherItemsRows, setOtherItemsRows] = useState(reportToEdit?.otherItemsRows || [
         { id: 1, particulars: '', noOfItems: 0, status: '' }
+    ]);
+    const [otherAdminRows, setOtherAdminRows] = useState(reportToEdit?.otherAdminRows || [
+        { id: 1, concern: '' }
+    ]);
+    const [endorsedItemsRows, setEndorsedItemsRows] = useState(reportToEdit?.endorsedItemsRows || [
+        { id: 1, item: '' }
     ]);
     
     // Signatures
@@ -62,19 +73,23 @@ function ADRForm() {
     const handleConfirm = () => {
         // Validate required fields
         if (!documentName.trim()) {
-            alert('Please fill in the document name');
+            setValidationMessage('Please fill in the document name');
+            setShowValidationModal(true);
             return;
         }
         if (!forName.trim()) {
-            alert('Please fill in the "For" field');
+            setValidationMessage('Please fill in the "For" field');
+            setShowValidationModal(true);
             return;
         }
         if (!thruName.trim()) {
-            alert('Please fill in the "Thru" field');
+            setValidationMessage('Please fill in the "Thru" field');
+            setShowValidationModal(true);
             return;
         }
         if (!fromName.trim()) {
-            alert('Please fill in the "From" field');
+            setValidationMessage('Please fill in the "From" field');
+            setShowValidationModal(true);
             return;
         }
 
@@ -93,6 +108,8 @@ function ADRForm() {
             reportsItems,
             communicationRows,
             otherItemsRows,
+            otherAdminRows,
+            endorsedItemsRows,
             preparedBy,
             preparedPosition,
             receivedBy,
@@ -105,10 +122,8 @@ function ADRForm() {
         
         if (isEditing && reportToEdit && reportToEdit.id) {
             updateReport(reportToEdit.id, formData);
-            alert('Report updated successfully!');
         } else {
             const newReport = addReport(formData);
-            alert('Report submitted successfully!');
         }
         navigate('/adr-reports');
     };
@@ -190,6 +205,36 @@ function ADRForm() {
     const decrementOtherItemsCounter = (id) => {
         setOtherItemsRows(otherItemsRows.map(row => 
             row.id === id && row.noOfItems > 0 ? { ...row, noOfItems: row.noOfItems - 1 } : row
+        ));
+    };
+
+    const addOtherAdminRow = () => {
+        const newId = Math.max(...otherAdminRows.map(row => row.id), 0) + 1;
+        setOtherAdminRows([...otherAdminRows, { id: newId, concern: '' }]);
+    };
+
+    const removeOtherAdminRow = (id) => {
+        setOtherAdminRows(otherAdminRows.filter(row => row.id !== id));
+    };
+
+    const updateOtherAdminRow = (id, field, value) => {
+        setOtherAdminRows(otherAdminRows.map(row => 
+            row.id === id ? { ...row, [field]: value } : row
+        ));
+    };
+
+    const addEndorsedItemsRow = () => {
+        const newId = Math.max(...endorsedItemsRows.map(row => row.id), 0) + 1;
+        setEndorsedItemsRows([...endorsedItemsRows, { id: newId, item: '' }]);
+    };
+
+    const removeEndorsedItemsRow = (id) => {
+        setEndorsedItemsRows(endorsedItemsRows.filter(row => row.id !== id));
+    };
+
+    const updateEndorsedItemsRow = (id, field, value) => {
+        setEndorsedItemsRows(endorsedItemsRows.map(row => 
+            row.id === id ? { ...row, [field]: value } : row
         ));
     };
 
@@ -303,6 +348,26 @@ function ADRForm() {
                         <button className="adr-form__customize-btn" type="button" onClick={() => setShowOtherItemsModal(true)}>
                             CUSTOMIZE
                         </button>
+                    </div>
+                    <div className="adr-form__customize-group">
+                        <label>C. Other Administrative Matters:</label>
+                        <button className="adr-form__customize-btn" type="button" onClick={() => setShowOtherAdminModal(true)}>
+                            CUSTOMIZE
+                        </button>
+                    </div>
+                    <div className="adr-form__other-admin-content">
+                        <div className="adr-form__other-admin-item">
+                            <span>(List down administrative concerns such as but not limited to: Duty driver on-call, vehicle activities, internet or other ICT equipment issues, parcel or documents received/delivered, untoward incidents that should be elevated to the management level).</span>
+                        </div>
+                        <div className="adr-form__other-admin-item">
+                            <span>1. The following were endorsed to incoming Operations Duty Staff:</span>
+                            <button className="adr-form__customize-btn" type="button" onClick={() => setShowEndorsedItemsModal(true)}>
+                                CUSTOMIZE
+                            </button>
+                        </div>
+                        <div className="adr-form__other-admin-item">
+                            <span>2. For information of the OCD Officer-In-Charge.</span>
+                        </div>
                     </div>
                 </div>
 
@@ -691,6 +756,134 @@ function ADRForm() {
                     </div>
                 </div>
             )}
+
+            {showOtherAdminModal && (
+                <div className="adr-form__modal adr-form__modal--active" onClick={() => setShowOtherAdminModal(false)}>
+                    <div className="adr-form__modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="adr-form__modal-header">
+                            <h2>Administrative Concerns</h2>
+                            <button className="adr-form__modal-close" type="button" onClick={() => setShowOtherAdminModal(false)}>
+                                &times;
+                            </button>
+                        </div>
+                        <div className="adr-form__modal-body">
+                            <table className="adr-form__modal-table">
+                                <thead>
+                                    <tr>
+                                        <th style={{ width: '50px' }}></th>
+                                        <th>Concern</th>
+                                        <th style={{ width: '60px' }}>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {otherAdminRows.map((row, index) => (
+                                        <tr key={row.id}>
+                                            <td>•</td>
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    className="adr-form__modal-input" 
+                                                    placeholder="Enter administrative concern"
+                                                    value={row.concern}
+                                                    onChange={(e) => updateOtherAdminRow(row.id, 'concern', e.target.value)}
+                                                />
+                                            </td>
+                                            <td>
+                                                <button 
+                                                    className="adr-form__modal-action-btn" 
+                                                    type="button"
+                                                    onClick={() => removeOtherAdminRow(row.id)}
+                                                >
+                                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                                        <path d="M3 6H5H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                    </svg>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <button className="adr-form__modal-add-row" type="button" onClick={addOtherAdminRow}>
+                                Add Row
+                            </button>
+                        </div>
+                        <div className="adr-form__modal-footer">
+                            <button className="adr-form__modal-confirm" type="button" onClick={() => setShowOtherAdminModal(false)}>
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showEndorsedItemsModal && (
+                <div className="adr-form__modal adr-form__modal--active" onClick={() => setShowEndorsedItemsModal(false)}>
+                    <div className="adr-form__modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="adr-form__modal-header">
+                            <h2>Endorsed to Incoming Operations Duty Staff</h2>
+                            <button className="adr-form__modal-close" type="button" onClick={() => setShowEndorsedItemsModal(false)}>
+                                &times;
+                            </button>
+                        </div>
+                        <div className="adr-form__modal-body">
+                            <table className="adr-form__modal-table">
+                                <thead>
+                                    <tr>
+                                        <th style={{ width: '70px' }}></th>
+                                        <th>Item</th>
+                                        <th style={{ width: '60px' }}>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {endorsedItemsRows.map((row, index) => (
+                                        <tr key={row.id}>
+                                            <td>1.{index + 1}</td>
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    className="adr-form__modal-input" 
+                                                    placeholder="Enter item"
+                                                    value={row.item}
+                                                    onChange={(e) => updateEndorsedItemsRow(row.id, 'item', e.target.value)}
+                                                />
+                                            </td>
+                                            <td>
+                                                <button 
+                                                    className="adr-form__modal-action-btn" 
+                                                    type="button"
+                                                    onClick={() => removeEndorsedItemsRow(row.id)}
+                                                >
+                                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                                        <path d="M3 6H5H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                    </svg>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <button className="adr-form__modal-add-row" type="button" onClick={addEndorsedItemsRow}>
+                                Add Row
+                            </button>
+                        </div>
+                        <div className="adr-form__modal-footer">
+                            <button className="adr-form__modal-confirm" type="button" onClick={() => setShowEndorsedItemsModal(false)}>
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <ConfirmModal
+                isOpen={showValidationModal}
+                message={validationMessage}
+                onConfirm={() => setShowValidationModal(false)}
+                onCancel={() => setShowValidationModal(false)}
+                showCancel={false}
+            />
         </div>
     );
 }

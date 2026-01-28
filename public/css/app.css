@@ -307,8 +307,12 @@ body {
   min-height: 38px;
 }
 .adr-reports__filters button:hover {
-  background: #f8f8f8;
-  border-color: #1e0060;
+  background: #E99745;
+  border-color: #E99745;
+  color: white;
+}
+.adr-reports__filters button:hover svg path {
+  stroke: white;
 }
 .adr-reports__filters button svg {
   width: 13px;
@@ -320,8 +324,8 @@ body {
   border: 2px solid #290081 !important;
 }
 .adr-reports__create-btn:hover {
-  background: #1e0060 !important;
-  border-color: #1e0060 !important;
+  background: #E99745 !important;
+  border-color: #E99745 !important;
 }
 .adr-reports__create-btn img {
   filter: brightness(0) invert(1);
@@ -342,12 +346,19 @@ body {
   transition: all 0.2s;
   min-height: 38px;
 }
-.adr-reports__actions button:hover {
+.adr-reports__actions button:hover:not(:disabled) {
   background: #dc3545;
   color: white;
 }
-.adr-reports__actions button:hover img {
+.adr-reports__actions button:hover:not(:disabled) img {
   filter: brightness(0) invert(1);
+}
+.adr-reports__actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #dc3545;
+  background: white;
+  color: #dc3545;
 }
 .adr-reports__actions button img {
   width: 15px;
@@ -585,21 +596,29 @@ body {
   color: #28a745;
 }
 .adr-form__action-btn--confirm:hover {
-  background: #f8f8f8;
-  border-color: #218838;
+  background: #28a745;
+  border-color: #28a745;
+  color: white;
 }
 .adr-form__action-btn--confirm img {
   width: 16px;
   height: 16px;
   filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(90%) contrast(80%);
 }
+.adr-form__action-btn--confirm:hover img {
+  filter: brightness(0) invert(1);
+}
 .adr-form__action-btn--view {
   border-color: #290081;
   color: #290081;
 }
 .adr-form__action-btn--view:hover {
-  background: #f8f8f8;
-  border-color: #1e0060;
+  background: #E99745;
+  border-color: #E99745;
+  color: white;
+}
+.adr-form__action-btn--view:hover svg path {
+  stroke: white;
 }
 .adr-form__content {
   padding: 1.25rem 1.5rem 2rem;
@@ -872,6 +891,33 @@ body {
   font-size: 0.8125rem;
   font-weight: 500;
   color: #333;
+}
+.adr-form__other-admin-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+}
+.adr-form__other-admin-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border-left: 3px solid #e0e0e0;
+}
+.adr-form__other-admin-item span {
+  font-size: 0.8rem;
+  color: #555;
+  flex: 1;
+  margin-right: 1rem;
+  font-style: italic;
+}
+.adr-form__other-admin-item:last-child span {
+  font-weight: 500;
+  font-style: normal;
 }
 .adr-form__signature-fields {
   grid-column: 1/-1;
@@ -1572,8 +1618,12 @@ body {
   min-height: 38px;
 }
 .archived-reports__filters button:hover {
-  background: #f8f8f8;
-  border-color: #1e0060;
+  background: #E99745;
+  border-color: #E99745;
+  color: white;
+}
+.archived-reports__filters button:hover svg path {
+  stroke: white;
 }
 .archived-reports__filters button svg {
   width: 13px;
@@ -1595,12 +1645,19 @@ body {
   transition: all 0.2s;
   min-height: 38px;
 }
-.archived-reports__actions button:hover {
+.archived-reports__actions button:hover:not(:disabled) {
   background: #1071ef;
   color: white;
 }
-.archived-reports__actions button:hover svg path {
+.archived-reports__actions button:hover:not(:disabled) svg path {
   fill: white;
+}
+.archived-reports__actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #1071ef;
+  background: white;
+  color: #1071ef;
 }
 .archived-reports__actions button svg {
   width: 15px;
@@ -1611,7 +1668,7 @@ body {
   gap: 0.5rem;
   justify-content: flex-start;
   align-items: center;
-  margin-left: -1.5rem;
+  margin-left: -0.6rem;
 }
 .archived-reports__action-btn {
   width: 32px;
@@ -1669,6 +1726,28 @@ body {
   padding: 1rem;
   font-size: 0.875rem;
   color: #333;
+}
+.archived-reports__table-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.archived-reports__table-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+.archived-reports__table-actions button:hover {
+  opacity: 0.7;
+}
+.archived-reports__table-actions button img {
+  width: 16px;
+  height: 16px;
 }
 .archived-reports__table-document {
   font-weight: 500;
@@ -1980,5 +2059,85 @@ body {
     min-height: auto;
     padding: 0;
     box-shadow: none;
+  }
+}
+.confirm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.confirm-modal {
+  background: #f5f5f5;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  min-width: 400px;
+  max-width: 450px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.2s ease-out;
+}
+.confirm-modal__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.confirm-modal__message {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 1rem;
+}
+.confirm-modal__buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+.confirm-modal__btn {
+  padding: 0.75rem 2rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  min-width: 100px;
+}
+.confirm-modal__btn--confirm {
+  background: #1a0047;
+  color: white;
+}
+.confirm-modal__btn--confirm:hover {
+  background: #E99745;
+  border-color: #E99745;
+}
+.confirm-modal__btn--cancel {
+  background: white;
+  color: #000;
+  border: 2px solid #333;
+}
+.confirm-modal__btn--cancel:hover {
+  background: #E99745;
+  border-color: #E99745;
+  color: white;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
