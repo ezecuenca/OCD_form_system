@@ -1,16 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
 import ConfirmModal from './ConfirmModal';
 
 function ArchivedReports() {
+    const navigate = useNavigate();
     const { reports, deleteReport, restoreReport } = useFormContext();
     const [selectedReports, setSelectedReports] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
     const [confirmMessage, setConfirmMessage] = useState('');
+    const [showYearDropdown, setShowYearDropdown] = useState(false);
+    const [showMonthDropdown, setShowMonthDropdown] = useState(false);
+    const [selectedYear, setSelectedYear] = useState('All Years');
+    const [selectedMonth, setSelectedMonth] = useState('All Months');
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
+    const yearDropdownRef = useRef(null);
+    const monthDropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (yearDropdownRef.current && !yearDropdownRef.current.contains(event.target)) {
+                setShowYearDropdown(false);
+            }
+            if (monthDropdownRef.current && !monthDropdownRef.current.contains(event.target)) {
+                setShowMonthDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 1000); // Update every second
+
+        return () => clearInterval(timer);
+    }, []);
 
     const handleViewDocument = (id) => {
-        window.open(`/adr-reports/view/${id}`, '_blank');
+        navigate(`/adr-reports/view/${id}`);
     };
 
     const handleRestore = () => {
@@ -62,6 +95,34 @@ function ArchivedReports() {
         return { date: dateStr, time: timeStr };
     };
 
+    const formatCurrentDateTime = () => {
+        const dateStr = currentDateTime.toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        const timeStr = currentDateTime.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        });
+        return { date: dateStr, time: timeStr };
+    };
+
+    const years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
+    const months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    const handleYearSelect = (year) => {
+        setSelectedYear(year);
+        setShowYearDropdown(false);
+    };
+
+    const handleMonthSelect = (month) => {
+        setSelectedMonth(month);
+        setShowMonthDropdown(false);
+    };
+
     const archivedReports = reports.filter(r => r.status === 'Archived');
 
     return (
@@ -70,6 +131,13 @@ function ArchivedReports() {
                 <div className="archived-reports__search-bar-input">
                     <img src={`${window.location.origin}/images/search_icon.svg`} alt="Search" />
                     <input type="text" placeholder="Search..." />
+                </div>
+                <div className="archived-reports__datetime">
+                    <img src={`${window.location.origin}/images/date_time.svg`} alt="Date Time" className="archived-reports__datetime-icon" />
+                    <span className="archived-reports__datetime-text">
+                        <span className="archived-reports__datetime-date">{formatCurrentDateTime().date}</span>
+                        <span className="archived-reports__datetime-time">{formatCurrentDateTime().time}</span>
+                    </span>
                 </div>
             </div>
 
@@ -90,18 +158,48 @@ function ArchivedReports() {
                     </button>
                 </div>
                 <div className="archived-reports__filters">
-                    <button>
-                        Year
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                    </button>
-                    <button>
-                        Month
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                    </button>
+                    <div className="archived-reports__filter-dropdown" ref={yearDropdownRef}>
+                        <button onClick={() => setShowYearDropdown(!showYearDropdown)}>
+                            Year
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </button>
+                        {showYearDropdown && (
+                            <div className="archived-reports__dropdown-menu">
+                                {years.map((year) => (
+                                    <div 
+                                        key={year} 
+                                        className="archived-reports__dropdown-item"
+                                        onClick={() => handleYearSelect(year)}
+                                    >
+                                        {year}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                    <div className="archived-reports__filter-dropdown" ref={monthDropdownRef}>
+                        <button onClick={() => setShowMonthDropdown(!showMonthDropdown)}>
+                            Month
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </button>
+                        {showMonthDropdown && (
+                            <div className="archived-reports__dropdown-menu">
+                                {months.map((month) => (
+                                    <div 
+                                        key={month} 
+                                        className="archived-reports__dropdown-item"
+                                        onClick={() => handleMonthSelect(month)}
+                                    >
+                                        {month}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -124,7 +222,7 @@ function ArchivedReports() {
                             </th>
                             <th>Actions</th>
                             <th>Documents</th>
-                            <th>Date/Time</th>
+                            <th>Created at</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const FormContext = createContext();
 
@@ -10,15 +10,28 @@ export const useFormContext = () => {
     return context;
 };
 
+// Normalize id so string "123" and number 123 match (e.g. from URL vs state)
+const sameId = (a, b) => (a == null && b == null) || (Number(a) === Number(b));
+
 export const FormProvider = ({ children }) => {
-    const [reports, setReports] = useState([]);
+    // Load reports from localStorage on initialization
+    const [reports, setReports] = useState(() => {
+        const savedReports = localStorage.getItem('adr_reports');
+        return savedReports ? JSON.parse(savedReports) : [];
+    });
+
+    // Save reports to localStorage whenever they change
+    useEffect(() => {
+        localStorage.setItem('adr_reports', JSON.stringify(reports));
+    }, [reports]);
 
     const addReport = (reportData) => {
         const newReport = {
             id: Date.now(),
             ...reportData,
             createdAt: new Date().toISOString(),
-            status: 'Active'
+            alertStatus: reportData.status ?? 'WHITE ALERT', // WHITE ALERT, etc. from form dropdown
+            status: 'Active' // Active/Archived for reports list
         };
         setReports(prev => [newReport, ...prev]);
         return newReport;
@@ -26,14 +39,15 @@ export const FormProvider = ({ children }) => {
 
     const updateReport = (id, reportData) => {
         setReports(prev => prev.map(report => {
-            if (report.id === id) {
+            if (sameId(report.id, id)) {
                 return {
                     ...report,
                     ...reportData,
-                    id: report.id, // Ensure ID is preserved
-                    createdAt: report.createdAt, // Preserve original creation date
+                    id: report.id,
+                    createdAt: report.createdAt,
                     updatedAt: new Date().toISOString(),
-                    status: report.status // Preserve original status unless explicitly changed
+                    alertStatus: reportData.status ?? report.alertStatus ?? 'WHITE ALERT',
+                    status: report.status // Preserve Active/Archived for list
                 };
             }
             return report;
@@ -41,22 +55,22 @@ export const FormProvider = ({ children }) => {
     };
 
     const getReport = (id) => {
-        return reports.find(report => report.id === id);
+        return reports.find(report => sameId(report.id, id));
     };
 
     const deleteReport = (id) => {
-        setReports(prev => prev.filter(report => report.id !== id));
+        setReports(prev => prev.filter(report => !sameId(report.id, id)));
     };
 
     const archiveReport = (id) => {
-        setReports(prev => prev.map(report => 
-            report.id === id ? { ...report, status: 'Archived' } : report
+        setReports(prev => prev.map(report =>
+            sameId(report.id, id) ? { ...report, status: 'Archived' } : report
         ));
     };
 
     const restoreReport = (id) => {
-        setReports(prev => prev.map(report => 
-            report.id === id ? { ...report, status: 'Active' } : report
+        setReports(prev => prev.map(report =>
+            sameId(report.id, id) ? { ...report, status: 'Active' } : report
         ));
     };
 

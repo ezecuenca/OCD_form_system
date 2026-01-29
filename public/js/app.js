@@ -62693,7 +62693,7 @@ function ADRForm() {
     setDateTime = _useState16[1];
 
   // Status
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) || 'WHITE ALERT'),
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.alertStatus) || (reportToEdit !== null && reportToEdit !== void 0 && reportToEdit.status && (reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) !== 'Active' && (reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) !== 'Archived' ? reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status : 'WHITE ALERT')),
     _useState18 = _slicedToArray(_useState17, 2),
     status = _useState18[0],
     setStatus = _useState18[1];
@@ -62749,100 +62749,86 @@ function ADRForm() {
     _useState38 = _slicedToArray(_useState37, 2),
     validationMessage = _useState38[0],
     setValidationMessage = _useState38[1];
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState40 = _slicedToArray(_useState39, 2),
+    errorField = _useState40[0],
+    setErrorField = _useState40[1];
 
   // Communication and Other Items
-  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.communicationRows) || [{
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.communicationRows) || [{
       id: 1,
       particulars: '',
       noOfItems: 0,
       contact: '',
       status: ''
     }]),
-    _useState40 = _slicedToArray(_useState39, 2),
-    communicationRows = _useState40[0],
-    setCommunicationRows = _useState40[1];
-  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherItemsRows) || [{
+    _useState42 = _slicedToArray(_useState41, 2),
+    communicationRows = _useState42[0],
+    setCommunicationRows = _useState42[1];
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherItemsRows) || [{
       id: 1,
       particulars: '',
       noOfItems: 0,
       status: ''
     }]),
-    _useState42 = _slicedToArray(_useState41, 2),
-    otherItemsRows = _useState42[0],
-    setOtherItemsRows = _useState42[1];
-  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherAdminRows) || [{
+    _useState44 = _slicedToArray(_useState43, 2),
+    otherItemsRows = _useState44[0],
+    setOtherItemsRows = _useState44[1];
+  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherAdminRows) || [{
       id: 1,
       concern: ''
     }]),
-    _useState44 = _slicedToArray(_useState43, 2),
-    otherAdminRows = _useState44[0],
-    setOtherAdminRows = _useState44[1];
-  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.endorsedItemsRows) || [{
+    _useState46 = _slicedToArray(_useState45, 2),
+    otherAdminRows = _useState46[0],
+    setOtherAdminRows = _useState46[1];
+  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.endorsedItemsRows) || [{
       id: 1,
       item: ''
     }]),
-    _useState46 = _slicedToArray(_useState45, 2),
-    endorsedItemsRows = _useState46[0],
-    setEndorsedItemsRows = _useState46[1];
+    _useState48 = _slicedToArray(_useState47, 2),
+    endorsedItemsRows = _useState48[0],
+    setEndorsedItemsRows = _useState48[1];
 
   // Signatures
-  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedBy) || ''),
-    _useState48 = _slicedToArray(_useState47, 2),
-    preparedBy = _useState48[0],
-    setPreparedBy = _useState48[1];
-  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedPosition) || ''),
+  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedBy) || ''),
     _useState50 = _slicedToArray(_useState49, 2),
-    preparedPosition = _useState50[0],
-    setPreparedPosition = _useState50[1];
-  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedBy) || ''),
+    preparedBy = _useState50[0],
+    setPreparedBy = _useState50[1];
+  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedPosition) || ''),
     _useState52 = _slicedToArray(_useState51, 2),
-    receivedBy = _useState52[0],
-    setReceivedBy = _useState52[1];
-  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedPosition) || ''),
+    preparedPosition = _useState52[0],
+    setPreparedPosition = _useState52[1];
+  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedBy) || ''),
     _useState54 = _slicedToArray(_useState53, 2),
-    receivedPosition = _useState54[0],
-    setReceivedPosition = _useState54[1];
-  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedBy) || ''),
+    receivedBy = _useState54[0],
+    setReceivedBy = _useState54[1];
+  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedPosition) || ''),
     _useState56 = _slicedToArray(_useState55, 2),
-    notedBy = _useState56[0],
-    setNotedBy = _useState56[1];
-  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedPosition) || ''),
+    receivedPosition = _useState56[0],
+    setReceivedPosition = _useState56[1];
+  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedBy) || ''),
     _useState58 = _slicedToArray(_useState57, 2),
-    notedPosition = _useState58[0],
-    setNotedPosition = _useState58[1];
-  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedBy) || ''),
+    notedBy = _useState58[0],
+    setNotedBy = _useState58[1];
+  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedPosition) || ''),
     _useState60 = _slicedToArray(_useState59, 2),
-    approvedBy = _useState60[0],
-    setApprovedBy = _useState60[1];
-  var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedPosition) || ''),
+    notedPosition = _useState60[0],
+    setNotedPosition = _useState60[1];
+  var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedBy) || ''),
     _useState62 = _slicedToArray(_useState61, 2),
-    approvedPosition = _useState62[0],
-    setApprovedPosition = _useState62[1];
+    approvedBy = _useState62[0],
+    setApprovedBy = _useState62[1];
+  var _useState63 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedPosition) || ''),
+    _useState64 = _slicedToArray(_useState63, 2),
+    approvedPosition = _useState64[0],
+    setApprovedPosition = _useState64[1];
   var handleReturn = function handleReturn() {
     navigate('/adr-reports');
   };
   var handleConfirm = function handleConfirm() {
-    // Validate required fields
-    if (!documentName.trim()) {
-      setValidationMessage('Please fill in the document name');
-      setShowValidationModal(true);
-      return;
-    }
-    if (!forName.trim()) {
-      setValidationMessage('Please fill in the "For" field');
-      setShowValidationModal(true);
-      return;
-    }
-    if (!thruName.trim()) {
-      setValidationMessage('Please fill in the "Thru" field');
-      setShowValidationModal(true);
-      return;
-    }
-    if (!fromName.trim()) {
-      setValidationMessage('Please fill in the "From" field');
-      setShowValidationModal(true);
-      return;
-    }
+    // Validation temporarily disabled for template work
+    // TODO: Re-enable validation after template is complete
+
     var formData = {
       documentName: documentName,
       forName: forName,
@@ -62871,49 +62857,97 @@ function ADRForm() {
     };
     if (isEditing && reportToEdit && reportToEdit.id) {
       updateReport(reportToEdit.id, formData);
+      navigate('/adr-reports', {
+        state: {
+          success: true,
+          message: 'Document updated successfully!'
+        }
+      });
     } else {
       var newReport = addReport(formData);
+      navigate('/adr-reports', {
+        state: {
+          success: true,
+          message: 'Document created successfully!'
+        }
+      });
     }
-    navigate('/adr-reports');
   };
-
-  // const handleViewDocument = () => {
-  //     // Functionality disabled for now
-  // };
-
+  var handleViewDocument = function handleViewDocument() {
+    if (isEditing && reportToEdit && reportToEdit.id) {
+      // If editing existing report, navigate to view
+      navigate("/adr-reports/view/".concat(reportToEdit.id));
+    } else {
+      // If creating new, save first then view
+      var formData = {
+        documentName: documentName,
+        forName: forName,
+        forPosition: forPosition,
+        thruName: thruName,
+        thruPosition: thruPosition,
+        fromName: fromName,
+        fromPosition: fromPosition,
+        subject: subject,
+        dateTime: dateTime,
+        status: status,
+        attendanceItems: attendanceItems,
+        reportsItems: reportsItems,
+        communicationRows: communicationRows,
+        otherItemsRows: otherItemsRows,
+        otherAdminRows: otherAdminRows,
+        endorsedItemsRows: endorsedItemsRows,
+        preparedBy: preparedBy,
+        preparedPosition: preparedPosition,
+        receivedBy: receivedBy,
+        receivedPosition: receivedPosition,
+        notedBy: notedBy,
+        notedPosition: notedPosition,
+        approvedBy: approvedBy,
+        approvedPosition: approvedPosition
+      };
+      var newReport = addReport(formData);
+      navigate("/adr-reports/view/".concat(newReport.id));
+    }
+  };
   var addAttendanceItem = function addAttendanceItem() {
-    var newId = Math.max.apply(Math, _toConsumableArray(attendanceItems.map(function (item) {
-      return item.id;
-    })).concat([0])) + 1;
-    setAttendanceItems([].concat(_toConsumableArray(attendanceItems), [{
-      id: newId,
-      name: '',
-      task: ''
-    }]));
+    setAttendanceItems(function (prev) {
+      var newId = Math.max.apply(Math, _toConsumableArray(prev.map(function (item) {
+        return Number(item.id) || 0;
+      })).concat([0])) + 1;
+      return [].concat(_toConsumableArray(prev), [{
+        id: newId,
+        name: '',
+        task: ''
+      }]);
+    });
   };
   var removeAttendanceItem = function removeAttendanceItem(id) {
-    if (attendanceItems.length > 1) {
-      setAttendanceItems(attendanceItems.filter(function (item) {
-        return item.id !== id;
-      }));
-    }
+    setAttendanceItems(function (prev) {
+      if (prev.length <= 1) return prev;
+      return prev.filter(function (item) {
+        return Number(item.id) !== Number(id);
+      });
+    });
   };
   var addReportsItem = function addReportsItem() {
-    var newId = Math.max.apply(Math, _toConsumableArray(reportsItems.map(function (item) {
-      return item.id;
-    })).concat([0])) + 1;
-    setReportsItems([].concat(_toConsumableArray(reportsItems), [{
-      id: newId,
-      report: '',
-      remarks: ''
-    }]));
+    setReportsItems(function (prev) {
+      var newId = Math.max.apply(Math, _toConsumableArray(prev.map(function (item) {
+        return Number(item.id) || 0;
+      })).concat([0])) + 1;
+      return [].concat(_toConsumableArray(prev), [{
+        id: newId,
+        report: '',
+        remarks: ''
+      }]);
+    });
   };
   var removeReportsItem = function removeReportsItem(id) {
-    if (reportsItems.length > 1) {
-      setReportsItems(reportsItems.filter(function (item) {
-        return item.id !== id;
-      }));
-    }
+    setReportsItems(function (prev) {
+      if (prev.length <= 1) return prev;
+      return prev.filter(function (item) {
+        return Number(item.id) !== Number(id);
+      });
+    });
   };
   var addCommunicationRow = function addCommunicationRow() {
     var newId = Math.max.apply(Math, _toConsumableArray(communicationRows.map(function (row) {
@@ -63035,11 +63069,12 @@ function ADRForm() {
           children: "RDRRMOC DUTY REPORT"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
           type: "text",
-          className: "adr-form__document-name",
+          className: "adr-form__document-name ".concat(errorField === 'documentName' ? 'adr-form__input-error' : ''),
           placeholder: "Enter document name...",
           value: documentName,
           onChange: function onChange(e) {
-            return setDocumentName(e.target.value);
+            setDocumentName(e.target.value);
+            if (errorField === 'documentName') setErrorField('');
           }
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -63068,8 +63103,9 @@ function ADRForm() {
               src: "".concat(window.location.origin, "/images/confirm_icon.svg"),
               alt: "Confirm"
             }), isEditing ? 'Update' : 'Confirm']
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
+          }), !isEditing && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
             className: "adr-form__action-btn adr-form__action-btn--view",
+            onClick: handleViewDocument,
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
@@ -63107,9 +63143,11 @@ function ADRForm() {
               children: "For:"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
               type: "text",
+              className: errorField === 'forName' ? 'adr-form__input-error' : '',
               value: forName,
               onChange: function onChange(e) {
-                return setForName(e.target.value);
+                setForName(e.target.value);
+                if (errorField === 'forName') setErrorField('');
               }
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
@@ -63129,9 +63167,11 @@ function ADRForm() {
               children: "Thru:"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
               type: "text",
+              className: errorField === 'thruName' ? 'adr-form__input-error' : '',
               value: thruName,
               onChange: function onChange(e) {
-                return setThruName(e.target.value);
+                setThruName(e.target.value);
+                if (errorField === 'thruName') setErrorField('');
               }
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
@@ -63151,9 +63191,11 @@ function ADRForm() {
               children: "From:"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
               type: "text",
+              className: errorField === 'fromName' ? 'adr-form__input-error' : '',
               value: fromName,
               onChange: function onChange(e) {
-                return setFromName(e.target.value);
+                setFromName(e.target.value);
+                if (errorField === 'fromName') setErrorField('');
               }
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
@@ -63605,11 +63647,14 @@ function ADRForm() {
                       placeholder: "Enter name",
                       value: item.name,
                       onChange: function onChange(e) {
-                        setAttendanceItems(attendanceItems.map(function (i) {
-                          return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
-                            name: e.target.value
-                          }) : i;
-                        }));
+                        var value = e.target.value;
+                        setAttendanceItems(function (prev) {
+                          return prev.map(function (i) {
+                            return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
+                              name: value
+                            }) : i;
+                          });
+                        });
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
@@ -63619,11 +63664,14 @@ function ADRForm() {
                       rows: "2",
                       value: item.task,
                       onChange: function onChange(e) {
-                        setAttendanceItems(attendanceItems.map(function (i) {
-                          return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
-                            task: e.target.value
-                          }) : i;
-                        }));
+                        var value = e.target.value;
+                        setAttendanceItems(function (prev) {
+                          return prev.map(function (i) {
+                            return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
+                              task: value
+                            }) : i;
+                          });
+                        });
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
@@ -63730,11 +63778,14 @@ function ADRForm() {
                       rows: "3",
                       value: item.report,
                       onChange: function onChange(e) {
-                        setReportsItems(reportsItems.map(function (i) {
-                          return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
-                            report: e.target.value
-                          }) : i;
-                        }));
+                        var value = e.target.value;
+                        setReportsItems(function (prev) {
+                          return prev.map(function (i) {
+                            return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
+                              report: value
+                            }) : i;
+                          });
+                        });
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
@@ -63744,11 +63795,14 @@ function ADRForm() {
                       placeholder: "Enter remarks",
                       value: item.remarks,
                       onChange: function onChange(e) {
-                        setReportsItems(reportsItems.map(function (i) {
-                          return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
-                            remarks: e.target.value
-                          }) : i;
-                        }));
+                        var value = e.target.value;
+                        setReportsItems(function (prev) {
+                          return prev.map(function (i) {
+                            return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
+                              remarks: value
+                            }) : i;
+                          });
+                        });
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
@@ -64186,7 +64240,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
 /* harmony import */ var _ConfirmModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ConfirmModal */ "./resources/js/components/ConfirmModal.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _SuccessNotification__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SuccessNotification */ "./resources/js/components/SuccessNotification.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -64202,8 +64257,10 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
+
 function ADRReports() {
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
+  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useLocation)();
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     reports = _useFormContext.reports,
     deleteReport = _useFormContext.deleteReport,
@@ -64225,11 +64282,76 @@ function ADRReports() {
     _useState8 = _slicedToArray(_useState7, 2),
     confirmMessage = _useState8[0],
     setConfirmMessage = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState0 = _slicedToArray(_useState9, 2),
+    showYearDropdown = _useState0[0],
+    setShowYearDropdown = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState10 = _slicedToArray(_useState1, 2),
+    showMonthDropdown = _useState10[0],
+    setShowMonthDropdown = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('All Years'),
+    _useState12 = _slicedToArray(_useState11, 2),
+    selectedYear = _useState12[0],
+    setSelectedYear = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('All Months'),
+    _useState14 = _slicedToArray(_useState13, 2),
+    selectedMonth = _useState14[0],
+    setSelectedMonth = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState16 = _slicedToArray(_useState15, 2),
+    showSuccessNotification = _useState16[0],
+    setShowSuccessNotification = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState18 = _slicedToArray(_useState17, 2),
+    successMessage = _useState18[0],
+    setSuccessMessage = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
+    _useState20 = _slicedToArray(_useState19, 2),
+    currentDateTime = _useState20[0],
+    setCurrentDateTime = _useState20[1];
+  var yearDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var monthDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var handleClickOutside = function handleClickOutside(event) {
+      if (yearDropdownRef.current && !yearDropdownRef.current.contains(event.target)) {
+        setShowYearDropdown(false);
+      }
+      if (monthDropdownRef.current && !monthDropdownRef.current.contains(event.target)) {
+        setShowMonthDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return function () {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var _location$state;
+    if ((_location$state = location.state) !== null && _location$state !== void 0 && _location$state.success) {
+      setSuccessMessage(location.state.message || 'Document saved successfully!');
+      setShowSuccessNotification(true);
+      // Clear the state to prevent showing notification on refresh
+      navigate(location.pathname, {
+        replace: true,
+        state: {}
+      });
+    }
+  }, [location.state, navigate]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var timer = setInterval(function () {
+      setCurrentDateTime(new Date());
+    }, 1000); // Update every second
+
+    return function () {
+      return clearInterval(timer);
+    };
+  }, []);
   var handleCreateClick = function handleCreateClick() {
     navigate('/adr-reports/create');
   };
   var handleViewDocument = function handleViewDocument(id) {
-    window.open("/adr-reports/view/".concat(id), '_blank');
+    navigate("/adr-reports/view/".concat(id));
   };
   var handleEditReport = function handleEditReport(id) {
     var report = getReport(id);
@@ -64296,79 +64418,158 @@ function ADRReports() {
       time: timeStr
     };
   };
+  var years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
+  var months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var handleYearSelect = function handleYearSelect(year) {
+    setSelectedYear(year);
+    setShowYearDropdown(false);
+  };
+  var handleMonthSelect = function handleMonthSelect(month) {
+    setSelectedMonth(month);
+    setShowMonthDropdown(false);
+  };
+  var formatCurrentDateTime = function formatCurrentDateTime() {
+    var dateStr = currentDateTime.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    var timeStr = currentDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    });
+    return {
+      date: dateStr,
+      time: timeStr
+    };
+  };
   var activeReports = reports.filter(function (r) {
     return r.status === 'Active';
   });
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     className: "adr-reports",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "adr-reports__search-bar",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-reports__search-bar-input",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
           src: "".concat(window.location.origin, "/images/search_icon.svg"),
           alt: "Search"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
           type: "text",
           placeholder: "Search..."
         })]
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+        className: "adr-reports__datetime",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
+          src: "".concat(window.location.origin, "/images/date_time.svg"),
+          alt: "Date Time",
+          className: "adr-reports__datetime-icon"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("span", {
+          className: "adr-reports__datetime-text",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+            className: "adr-reports__datetime-date",
+            children: formatCurrentDateTime().date
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+            className: "adr-reports__datetime-time",
+            children: formatCurrentDateTime().time
+          })]
+        })]
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "adr-reports__controls",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         className: "adr-reports__actions",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
           onClick: handleDelete,
           disabled: selectedReports.length < 2,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
             src: "".concat(window.location.origin, "/images/delete_icon.svg"),
             alt: "Archive"
           }), "Archive"]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-reports__filters",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
-          children: ["Year", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
-            viewBox: "0 0 24 24",
-            fill: "none",
-            xmlns: "http://www.w3.org/2000/svg",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
-              d: "M6 9L12 15L18 9",
-              stroke: "currentColor",
-              strokeWidth: "2",
-              strokeLinecap: "round",
-              strokeLinejoin: "round"
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          className: "adr-reports__filter-dropdown",
+          ref: yearDropdownRef,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
+            onClick: function onClick() {
+              return setShowYearDropdown(!showYearDropdown);
+            },
+            children: ["Year", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
+              viewBox: "0 0 24 24",
+              fill: "none",
+              xmlns: "http://www.w3.org/2000/svg",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
+                d: "M6 9L12 15L18 9",
+                stroke: "currentColor",
+                strokeWidth: "2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round"
+              })
+            })]
+          }), showYearDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            className: "adr-reports__dropdown-menu",
+            children: years.map(function (year) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                className: "adr-reports__dropdown-item",
+                onClick: function onClick() {
+                  return handleYearSelect(year);
+                },
+                children: year
+              }, year);
             })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
-          children: ["Month", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
-            viewBox: "0 0 24 24",
-            fill: "none",
-            xmlns: "http://www.w3.org/2000/svg",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
-              d: "M6 9L12 15L18 9",
-              stroke: "currentColor",
-              strokeWidth: "2",
-              strokeLinecap: "round",
-              strokeLinejoin: "round"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          className: "adr-reports__filter-dropdown",
+          ref: monthDropdownRef,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
+            onClick: function onClick() {
+              return setShowMonthDropdown(!showMonthDropdown);
+            },
+            children: ["Month", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
+              viewBox: "0 0 24 24",
+              fill: "none",
+              xmlns: "http://www.w3.org/2000/svg",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
+                d: "M6 9L12 15L18 9",
+                stroke: "currentColor",
+                strokeWidth: "2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round"
+              })
+            })]
+          }), showMonthDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            className: "adr-reports__dropdown-menu",
+            children: months.map(function (month) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                className: "adr-reports__dropdown-item",
+                onClick: function onClick() {
+                  return handleMonthSelect(month);
+                },
+                children: month
+              }, month);
             })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
           className: "adr-reports__create-btn",
           onClick: handleCreateClick,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
             src: "".concat(window.location.origin, "/images/create_icon.svg"),
             alt: "Create"
           }), "Create New"]
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       className: "adr-reports__table",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
                 type: "checkbox",
                 checked: selectedReports.length === activeReports.length && activeReports.length > 0,
                 onChange: function onChange(e) {
@@ -64381,17 +64582,17 @@ function ADRReports() {
                   }
                 }
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
               children: "Actions"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
               children: "Documents"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
-              children: "Date/Time"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+              children: "Created at"
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
-          children: activeReports.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tr", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
+          children: activeReports.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tr", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
               colSpan: "4",
               style: {
                 textAlign: 'center',
@@ -64401,59 +64602,59 @@ function ADRReports() {
               children: "No reports yet. Click \"Create New\" to add one."
             })
           }) : activeReports.map(function (report) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
                   type: "checkbox",
                   checked: selectedReports.includes(report.id),
                   onChange: function onChange() {
                     return handleSelectReport(report.id);
                   }
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
                   className: "adr-reports__action-buttons",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                     className: "adr-reports__action-btn adr-reports__action-btn--view",
                     onClick: function onClick() {
                       return handleViewDocument(report.id);
                     },
                     title: "View",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
                       src: "".concat(window.location.origin, "/images/view_icon.svg"),
                       alt: "View"
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                     className: "adr-reports__action-btn adr-reports__action-btn--edit",
                     onClick: function onClick() {
                       return handleEditReport(report.id);
                     },
                     title: "Edit",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
                       src: "".concat(window.location.origin, "/images/edit_icon.svg"),
                       alt: "Edit"
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                     className: "adr-reports__action-btn adr-reports__action-btn--delete",
                     onClick: function onClick() {
                       return handleDeleteSingle(report.id);
                     },
                     title: "Archive",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
                       src: "".concat(window.location.origin, "/images/delete_icon.svg"),
                       alt: "Archive"
                     })
                   })]
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                 children: report.documentName || 'Untitled Document'
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
                   className: "adr-reports__table-datetime",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                     className: "date",
                     children: formatDate(report.createdAt).date
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                     className: "time",
                     children: formatDate(report.createdAt).time
                   })]
@@ -64463,14 +64664,14 @@ function ADRReports() {
           })
         })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "adr-reports__pagination",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
             d: "M11 17L6 12L11 7M18 17L13 12L18 7",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -64478,12 +64679,12 @@ function ADRReports() {
             strokeLinejoin: "round"
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
             d: "M15 18L9 12L15 6",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -64491,12 +64692,12 @@ function ADRReports() {
             strokeLinejoin: "round"
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
             d: "M9 18L15 12L9 6",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -64504,12 +64705,12 @@ function ADRReports() {
             strokeLinejoin: "round"
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
             d: "M13 17L18 12L13 7M6 17L11 12L6 7",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -64518,12 +64719,18 @@ function ADRReports() {
           })
         })
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ConfirmModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_ConfirmModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
       isOpen: showConfirmModal,
       message: confirmMessage,
       onConfirm: confirmAction,
       onCancel: function onCancel() {
         return setShowConfirmModal(false);
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_SuccessNotification__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      message: successMessage,
+      isVisible: showSuccessNotification,
+      onClose: function onClose() {
+        return setShowSuccessNotification(false);
       }
     })]
   });
@@ -64700,7 +64907,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Schedule__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Schedule */ "./resources/js/components/Schedule.js");
 /* harmony import */ var _ArchivedReports__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ArchivedReports */ "./resources/js/components/ArchivedReports.js");
 /* harmony import */ var _Settings__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Settings */ "./resources/js/components/Settings.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _DocumentViewer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./DocumentViewer */ "./resources/js/components/DocumentViewer.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
 
 
 
@@ -64713,39 +64922,42 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function App() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_context_FormContext__WEBPACK_IMPORTED_MODULE_3__.FormProvider, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.BrowserRouter, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_4__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Header__WEBPACK_IMPORTED_MODULE_5__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("main", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_context_FormContext__WEBPACK_IMPORTED_MODULE_3__.FormProvider, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.BrowserRouter, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_4__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Header__WEBPACK_IMPORTED_MODULE_5__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("main", {
         className: "main-content",
         id: "app-content",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Routes, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Routes, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
             path: "/",
-            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Navigate, {
+            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Navigate, {
               to: "/adr-reports",
               replace: true
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
             path: "/dashboard",
-            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Navigate, {
+            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Navigate, {
               to: "/adr-reports",
               replace: true
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
             path: "/adr-reports",
-            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_ADRReports__WEBPACK_IMPORTED_MODULE_6__["default"], {})
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_ADRReports__WEBPACK_IMPORTED_MODULE_6__["default"], {})
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
             path: "/adr-reports/create",
-            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_ADRForm__WEBPACK_IMPORTED_MODULE_7__["default"], {})
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_ADRForm__WEBPACK_IMPORTED_MODULE_7__["default"], {})
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+            path: "/adr-reports/view/:id",
+            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_DocumentViewer__WEBPACK_IMPORTED_MODULE_11__["default"], {})
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
             path: "/schedule",
-            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Schedule__WEBPACK_IMPORTED_MODULE_8__["default"], {})
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Schedule__WEBPACK_IMPORTED_MODULE_8__["default"], {})
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
             path: "/archived-reports",
-            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_ArchivedReports__WEBPACK_IMPORTED_MODULE_9__["default"], {})
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_ArchivedReports__WEBPACK_IMPORTED_MODULE_9__["default"], {})
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
             path: "/settings",
-            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_Settings__WEBPACK_IMPORTED_MODULE_10__["default"], {})
+            element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Settings__WEBPACK_IMPORTED_MODULE_10__["default"], {})
           })]
         })
       })]
@@ -64769,9 +64981,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
-/* harmony import */ var _ConfirmModal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ConfirmModal */ "./resources/js/components/ConfirmModal.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
+/* harmony import */ var _ConfirmModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ConfirmModal */ "./resources/js/components/ConfirmModal.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -64786,8 +64999,10 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
+
 function ArchivedReports() {
-  var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_1__.useFormContext)(),
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
+  var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     reports = _useFormContext.reports,
     deleteReport = _useFormContext.deleteReport,
     restoreReport = _useFormContext.restoreReport;
@@ -64807,8 +65022,53 @@ function ArchivedReports() {
     _useState8 = _slicedToArray(_useState7, 2),
     confirmMessage = _useState8[0],
     setConfirmMessage = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState0 = _slicedToArray(_useState9, 2),
+    showYearDropdown = _useState0[0],
+    setShowYearDropdown = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState10 = _slicedToArray(_useState1, 2),
+    showMonthDropdown = _useState10[0],
+    setShowMonthDropdown = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('All Years'),
+    _useState12 = _slicedToArray(_useState11, 2),
+    selectedYear = _useState12[0],
+    setSelectedYear = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('All Months'),
+    _useState14 = _slicedToArray(_useState13, 2),
+    selectedMonth = _useState14[0],
+    setSelectedMonth = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
+    _useState16 = _slicedToArray(_useState15, 2),
+    currentDateTime = _useState16[0],
+    setCurrentDateTime = _useState16[1];
+  var yearDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var monthDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var handleClickOutside = function handleClickOutside(event) {
+      if (yearDropdownRef.current && !yearDropdownRef.current.contains(event.target)) {
+        setShowYearDropdown(false);
+      }
+      if (monthDropdownRef.current && !monthDropdownRef.current.contains(event.target)) {
+        setShowMonthDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return function () {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var timer = setInterval(function () {
+      setCurrentDateTime(new Date());
+    }, 1000); // Update every second
+
+    return function () {
+      return clearInterval(timer);
+    };
+  }, []);
   var handleViewDocument = function handleViewDocument(id) {
-    window.open("/adr-reports/view/".concat(id), '_blank');
+    navigate("/adr-reports/view/".concat(id));
   };
   var handleRestore = function handleRestore() {
     if (selectedReports.length === 0) {
@@ -64865,48 +65125,91 @@ function ArchivedReports() {
       time: timeStr
     };
   };
+  var formatCurrentDateTime = function formatCurrentDateTime() {
+    var dateStr = currentDateTime.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    var timeStr = currentDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    });
+    return {
+      date: dateStr,
+      time: timeStr
+    };
+  };
+  var years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
+  var months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var handleYearSelect = function handleYearSelect(year) {
+    setSelectedYear(year);
+    setShowYearDropdown(false);
+  };
+  var handleMonthSelect = function handleMonthSelect(month) {
+    setSelectedMonth(month);
+    setShowMonthDropdown(false);
+  };
   var archivedReports = reports.filter(function (r) {
     return r.status === 'Archived';
   });
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     className: "archived-reports",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       className: "archived-reports__search-bar",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "archived-reports__search-bar-input",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
           src: "".concat(window.location.origin, "/images/search_icon.svg"),
           alt: "Search"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
           type: "text",
           placeholder: "Search..."
         })]
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: "archived-reports__datetime",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+          src: "".concat(window.location.origin, "/images/date_time.svg"),
+          alt: "Date Time",
+          className: "archived-reports__datetime-icon"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+          className: "archived-reports__datetime-text",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            className: "archived-reports__datetime-date",
+            children: formatCurrentDateTime().date
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            className: "archived-reports__datetime-time",
+            children: formatCurrentDateTime().time
+          })]
+        })]
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       className: "archived-reports__controls",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "archived-reports__actions",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
           onClick: handleRestore,
           disabled: selectedReports.length < 2,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("svg", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("svg", {
             width: "15",
             height: "15",
             viewBox: "0 0 21 18",
             fill: "none",
             xmlns: "http://www.w3.org/2000/svg",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("g", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("g", {
               clipPath: "url(#clip0_8_219)",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("path", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
                 fillRule: "evenodd",
                 clipRule: "evenodd",
                 d: "M14 9C14 7.9 13.1 7 12 7C10.9 7 10 7.9 10 9C10 10.1 10.9 11 12 11C13.1 11 14 10.1 14 9ZM12 0C7.03 0 3 4.03 3 9H0L4 13L8 9H5C5 5.13 8.13 2 12 2C15.87 2 19 5.13 19 9C19 12.87 15.87 16 12 16C10.49 16 9.09 15.51 7.94 14.7L6.52 16.14C8.04 17.3 9.94 18 12 18C16.97 18 21 13.97 21 9C21 4.03 16.97 0 12 0Z",
                 fill: "currentColor"
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("defs", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("clipPath", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("defs", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("clipPath", {
                 id: "clip0_8_219",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("rect", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("rect", {
                   width: "21",
                   height: "18",
                   fill: "white"
@@ -64915,43 +65218,79 @@ function ArchivedReports() {
             })]
           }), "Restore"]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "archived-reports__filters",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
-          children: ["Year", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("svg", {
-            viewBox: "0 0 24 24",
-            fill: "none",
-            xmlns: "http://www.w3.org/2000/svg",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("path", {
-              d: "M6 9L12 15L18 9",
-              stroke: "currentColor",
-              strokeWidth: "2",
-              strokeLinecap: "round",
-              strokeLinejoin: "round"
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "archived-reports__filter-dropdown",
+          ref: yearDropdownRef,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
+            onClick: function onClick() {
+              return setShowYearDropdown(!showYearDropdown);
+            },
+            children: ["Year", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
+              viewBox: "0 0 24 24",
+              fill: "none",
+              xmlns: "http://www.w3.org/2000/svg",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                d: "M6 9L12 15L18 9",
+                stroke: "currentColor",
+                strokeWidth: "2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round"
+              })
+            })]
+          }), showYearDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: "archived-reports__dropdown-menu",
+            children: years.map(function (year) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                className: "archived-reports__dropdown-item",
+                onClick: function onClick() {
+                  return handleYearSelect(year);
+                },
+                children: year
+              }, year);
             })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
-          children: ["Month", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("svg", {
-            viewBox: "0 0 24 24",
-            fill: "none",
-            xmlns: "http://www.w3.org/2000/svg",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("path", {
-              d: "M6 9L12 15L18 9",
-              stroke: "currentColor",
-              strokeWidth: "2",
-              strokeLinecap: "round",
-              strokeLinejoin: "round"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "archived-reports__filter-dropdown",
+          ref: monthDropdownRef,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
+            onClick: function onClick() {
+              return setShowMonthDropdown(!showMonthDropdown);
+            },
+            children: ["Month", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
+              viewBox: "0 0 24 24",
+              fill: "none",
+              xmlns: "http://www.w3.org/2000/svg",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                d: "M6 9L12 15L18 9",
+                stroke: "currentColor",
+                strokeWidth: "2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round"
+              })
+            })]
+          }), showMonthDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: "archived-reports__dropdown-menu",
+            children: months.map(function (month) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                className: "archived-reports__dropdown-item",
+                onClick: function onClick() {
+                  return handleMonthSelect(month);
+                },
+                children: month
+              }, month);
             })
           })]
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
       className: "archived-reports__table",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("table", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("thead", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
                 type: "checkbox",
                 checked: selectedReports.length === archivedReports.length && archivedReports.length > 0,
                 onChange: function onChange(e) {
@@ -64964,17 +65303,17 @@ function ArchivedReports() {
                   }
                 }
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
               children: "Actions"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
               children: "Documents"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
-              children: "Date/Time"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+              children: "Created at"
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("tbody", {
-          children: archivedReports.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("tr", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+          children: archivedReports.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tr", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
               colSpan: "4",
               style: {
                 textAlign: 'center',
@@ -64984,50 +65323,50 @@ function ArchivedReports() {
               children: "No archived reports yet."
             })
           }) : archivedReports.map(function (report) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
                   type: "checkbox",
                   checked: selectedReports.includes(report.id),
                   onChange: function onChange() {
                     return handleSelectReport(report.id);
                   }
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
                 className: "archived-reports__table-actions",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
                   className: "archived-reports__action-buttons",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
                     className: "archived-reports__action-btn archived-reports__action-btn--view",
                     onClick: function onClick() {
                       return handleViewDocument(report.id);
                     },
                     title: "View",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
                       src: "".concat(window.location.origin, "/images/view_icon.svg"),
                       alt: "View"
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
                     className: "archived-reports__action-btn archived-reports__action-btn--restore",
                     onClick: function onClick() {
                       return handleRestoreSingle(report.id);
                     },
                     title: "Restore",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
                       src: "".concat(window.location.origin, "/images/restore_icon.svg"),
                       alt: "Restore"
                     })
                   })]
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
                 children: report.documentName || 'Untitled Document'
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
                   className: "archived-reports__table-datetime",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                     className: "date",
                     children: formatDate(report.createdAt).date
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                     className: "time",
                     children: formatDate(report.createdAt).time
                   })]
@@ -65037,14 +65376,14 @@ function ArchivedReports() {
           })
         })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       className: "archived-reports__pagination",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("svg", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
             d: "M11 17L6 12L11 7M18 17L13 12L18 7",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -65052,12 +65391,12 @@ function ArchivedReports() {
             strokeLinejoin: "round"
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("svg", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
             d: "M15 18L9 12L15 6",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -65065,12 +65404,12 @@ function ArchivedReports() {
             strokeLinejoin: "round"
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("svg", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
             d: "M9 18L15 12L9 6",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -65078,12 +65417,12 @@ function ArchivedReports() {
             strokeLinejoin: "round"
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("svg", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
             d: "M13 17L18 12L13 7M6 17L11 12L6 7",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -65092,7 +65431,7 @@ function ArchivedReports() {
           })
         })
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_ConfirmModal__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ConfirmModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
       isOpen: showConfirmModal,
       message: confirmMessage,
       onConfirm: confirmAction,
@@ -65160,6 +65499,239 @@ function ConfirmModal(_ref) {
   });
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ConfirmModal);
+
+/***/ },
+
+/***/ "./resources/js/components/DocumentViewer.js"
+/*!***************************************************!*\
+  !*** ./resources/js/components/DocumentViewer.js ***!
+  \***************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+function DocumentViewer() {
+  var _useParams = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useParams)(),
+    id = _useParams.id;
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
+  var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
+    getReport = _useFormContext.getReport;
+  var report = getReport(parseInt(id));
+  if (!report) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      style: {
+        padding: '2rem',
+        textAlign: 'center'
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+        children: "Document not found"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+        onClick: function onClick() {
+          return navigate('/adr-reports');
+        },
+        children: "Back to Reports"
+      })]
+    });
+  }
+  var formatDate = function formatDate(isoString) {
+    if (!isoString) return '';
+    var date = new Date(isoString);
+    return date.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
+  var formatTime = function formatTime(isoString) {
+    if (!isoString) return '';
+    var date = new Date(isoString);
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    className: "document-viewer",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      className: "document-viewer__actions",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+        onClick: function onClick() {
+          return navigate('/adr-reports/create', {
+            state: {
+              report: report
+            }
+          });
+        },
+        className: "document-viewer__back-btn",
+        children: "Back to Form"
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      className: "document-viewer__content",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h2", {
+        className: "document-viewer__title",
+        children: "RDRRMOC DUTY REPORT"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        className: "document-viewer__metadata",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "document-viewer__field",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+            className: "document-viewer__label",
+            children: "FOR"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+            className: "document-viewer__colon",
+            children: ":"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "document-viewer__value",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "document-viewer__name",
+              children: report.forName || ''
+            }), report.forPosition && report.forPosition.split('\n').map(function (line, index) {
+              return line.trim() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+                className: "document-viewer__position",
+                children: line.trim()
+              }, index);
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "document-viewer__field",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+            className: "document-viewer__label",
+            children: "THRU"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+            className: "document-viewer__colon",
+            children: ":"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "document-viewer__value",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "document-viewer__name",
+              children: report.thruName || ''
+            }), report.thruPosition && report.thruPosition.split('\n').map(function (line, index) {
+              return line.trim() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+                className: "document-viewer__position",
+                children: line.trim()
+              }, index);
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "document-viewer__field",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+            className: "document-viewer__label",
+            children: "FROM"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+            className: "document-viewer__colon",
+            children: ":"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "document-viewer__value",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "document-viewer__name",
+              children: report.fromName || ''
+            }), report.fromPosition && report.fromPosition.split('\n').map(function (line, index) {
+              return line.trim() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+                className: "document-viewer__position",
+                children: line.trim()
+              }, index);
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "document-viewer__field",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+            className: "document-viewer__label",
+            children: "SUBJECT"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+            className: "document-viewer__colon",
+            children: ":"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "document-viewer__value",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+              className: "document-viewer__subject",
+              children: [report.subject || 'After Duty Report', report.dateTime && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+                children: [" for the Period Covered ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+                  className: "document-viewer__datetime-bold",
+                  children: report.dateTime
+                })]
+              })]
+            })
+          })]
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        className: "document-viewer__divider"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        className: "document-viewer__status-section",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "document-viewer__status-item",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+            className: "document-viewer__status-number",
+            children: "1."
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+            className: "document-viewer__status-text",
+            children: ["RDRRMC Operations Center is on ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+              className: "document-viewer__status-alert",
+              children: report.alertStatus || 'WHITE ALERT'
+            }), "."]
+          })]
+        })
+      }), report.attendanceItems && report.attendanceItems.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        className: "document-viewer__section",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h3", {
+          className: "document-viewer__section-title",
+          children: "2. Attendance:"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("table", {
+          className: "document-viewer__table",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("thead", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                className: "document-viewer__table-num",
+                children: "#"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                className: "document-viewer__table-name",
+                children: "Name"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                className: "document-viewer__table-tasks",
+                children: "Tasks"
+              })]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("tbody", {
+            children: report.attendanceItems.map(function (item, index) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                  className: "document-viewer__table-num",
+                  children: index + 1
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                  className: "document-viewer__table-name",
+                  children: item.name || ''
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                  className: "document-viewer__table-tasks",
+                  children: item.task ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("ul", {
+                    className: "document-viewer__task-list",
+                    children: item.task.split(/[;\n]/).map(function (task, i) {
+                      return task.trim() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("li", {
+                        children: task.trim()
+                      }, i);
+                    })
+                  }) : ''
+                })]
+              }, item.id || index);
+            })
+          })]
+        })]
+      })]
+    })]
+  });
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DocumentViewer);
 
 /***/ },
 
@@ -65544,6 +66116,68 @@ function Sidebar() {
 
 /***/ },
 
+/***/ "./resources/js/components/SuccessNotification.js"
+/*!********************************************************!*\
+  !*** ./resources/js/components/SuccessNotification.js ***!
+  \********************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+function SuccessNotification(_ref) {
+  var message = _ref.message,
+    isVisible = _ref.isVisible,
+    onClose = _ref.onClose;
+  var onCloseRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(onClose);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (isVisible) {
+      var timer = setTimeout(function () {
+        onCloseRef.current();
+      }, 1000);
+      return function () {
+        return clearTimeout(timer);
+      };
+    }
+  }, [isVisible]);
+  if (!isVisible) return null;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+    className: "success-notification",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+      className: "success-notification__content",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
+        className: "success-notification__icon",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+          d: "M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z",
+          stroke: "currentColor",
+          strokeWidth: "2",
+          strokeLinecap: "round",
+          strokeLinejoin: "round"
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+        className: "success-notification__message",
+        children: message
+      })]
+    })
+  });
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SuccessNotification);
+
+/***/ },
+
 /***/ "./resources/js/context/FormContext.js"
 /*!*********************************************!*\
   !*** ./resources/js/context/FormContext.js ***!
@@ -65585,18 +66219,35 @@ var useFormContext = function useFormContext() {
   }
   return context;
 };
+
+// Normalize id so string "123" and number 123 match (e.g. from URL vs state)
+var sameId = function sameId(a, b) {
+  return a == null && b == null || Number(a) === Number(b);
+};
 var FormProvider = function FormProvider(_ref) {
   var children = _ref.children;
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+  // Load reports from localStorage on initialization
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
+      var savedReports = localStorage.getItem('adr_reports');
+      return savedReports ? JSON.parse(savedReports) : [];
+    }),
     _useState2 = _slicedToArray(_useState, 2),
     reports = _useState2[0],
     setReports = _useState2[1];
+
+  // Save reports to localStorage whenever they change
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    localStorage.setItem('adr_reports', JSON.stringify(reports));
+  }, [reports]);
   var addReport = function addReport(reportData) {
+    var _reportData$status;
     var newReport = _objectSpread(_objectSpread({
       id: Date.now()
     }, reportData), {}, {
       createdAt: new Date().toISOString(),
-      status: 'Active'
+      alertStatus: (_reportData$status = reportData.status) !== null && _reportData$status !== void 0 ? _reportData$status : 'WHITE ALERT',
+      // WHITE ALERT, etc. from form dropdown
+      status: 'Active' // Active/Archived for reports list
     });
     setReports(function (prev) {
       return [newReport].concat(_toConsumableArray(prev));
@@ -65606,14 +66257,14 @@ var FormProvider = function FormProvider(_ref) {
   var updateReport = function updateReport(id, reportData) {
     setReports(function (prev) {
       return prev.map(function (report) {
-        if (report.id === id) {
+        if (sameId(report.id, id)) {
+          var _ref2, _reportData$status2;
           return _objectSpread(_objectSpread(_objectSpread({}, report), reportData), {}, {
             id: report.id,
-            // Ensure ID is preserved
             createdAt: report.createdAt,
-            // Preserve original creation date
             updatedAt: new Date().toISOString(),
-            status: report.status // Preserve original status unless explicitly changed
+            alertStatus: (_ref2 = (_reportData$status2 = reportData.status) !== null && _reportData$status2 !== void 0 ? _reportData$status2 : report.alertStatus) !== null && _ref2 !== void 0 ? _ref2 : 'WHITE ALERT',
+            status: report.status // Preserve Active/Archived for list
           });
         }
         return report;
@@ -65622,20 +66273,20 @@ var FormProvider = function FormProvider(_ref) {
   };
   var getReport = function getReport(id) {
     return reports.find(function (report) {
-      return report.id === id;
+      return sameId(report.id, id);
     });
   };
   var deleteReport = function deleteReport(id) {
     setReports(function (prev) {
       return prev.filter(function (report) {
-        return report.id !== id;
+        return !sameId(report.id, id);
       });
     });
   };
   var archiveReport = function archiveReport(id) {
     setReports(function (prev) {
       return prev.map(function (report) {
-        return report.id === id ? _objectSpread(_objectSpread({}, report), {}, {
+        return sameId(report.id, id) ? _objectSpread(_objectSpread({}, report), {}, {
           status: 'Archived'
         }) : report;
       });
@@ -65644,7 +66295,7 @@ var FormProvider = function FormProvider(_ref) {
   var restoreReport = function restoreReport(id) {
     setReports(function (prev) {
       return prev.map(function (report) {
-        return report.id === id ? _objectSpread(_objectSpread({}, report), {}, {
+        return sameId(report.id, id) ? _objectSpread(_objectSpread({}, report), {}, {
           status: 'Active'
         }) : report;
       });
