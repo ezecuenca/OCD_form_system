@@ -41,12 +41,20 @@ function Schedule() {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
     };
 
-    const handleAddTaskClick = () => {
-        const today = new Date(currentDate.getFullYear(), currentDate.getMonth(), new Date().getDate());
-        const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const handleDayClick = (day) => {
+        if (!day) return;
+
+        const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         setSelectedDate(dateStr);
         setShowTaskForm(true);
     };
+
+    //const handleAddTaskClick = () => {
+    //    const today = new Date(currentDate.getFullYear(), currentDate.getMonth(), new Date().getDate());
+    //    const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    //    setSelectedDate(dateStr);
+    //    setShowTaskForm(true);
+    //};
 
     const handleAddTask = (taskData) => {
         setTasks([...tasks, taskData]);
@@ -88,10 +96,28 @@ function Schedule() {
                     <div className="schedule__grid">
                         {days.map((day, index) => {
                             const dayTasks = getTasksForDate(day);
+                            const isToday =
+                                day &&
+                                currentDate.getFullYear() === new Date().getFullYear() &&
+                                currentDate.getMonth() === new Date().getMonth() &&
+                                day === new Date().getDate();
+
                             return (
                                 <div
                                     key={index}
-                                    className={`schedule__day ${day ? 'schedule__day--active' : 'schedule__day--empty'}`}
+                                    className={`schedule__day 
+                                        ${day ? 'schedule__day--active' : 'schedule__day--empty'}
+                                        ${isToday ? 'schedule__day--today' : ''}`}
+                                    onClick={() => handleDayClick(day)}
+                                    //Make it look clickable
+                                    role="button"
+                                    tabIndex={day ? 0 : -1}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            handleDayClick(day);
+                                        }
+                                    }}
+                                    // ----------------------------------------------
                                 >
                                     <div className="schedule__day-number">{day}</div>
                                     <div className="schedule__day-tasks">
@@ -106,10 +132,20 @@ function Schedule() {
                         })}
                     </div>
 
+                    {/* You can keep this button if you want a "Add for today" shortcut */}
                     <div className="schedule__actions">
-                        <button className="schedule__btn schedule__btn--primary" onClick={handleAddTaskClick}>Add Task</button>
-                        <button className="schedule__btn schedule__btn--secondary">Swap Form</button>
-                        <button className="schedule__btn schedule__btn--tertiary">Swapping Requests</button>
+                        <button
+                        className="schedule__btn schedule__btn--primary"
+                        onClick={() => {
+                            const today = new Date();
+                            const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                            setSelectedDate(dateStr);
+                            setShowTaskForm(true);
+                        }}
+                        >
+                        Add Task (Today)
+                        </button>
+                        <button className="schedule__btn schedule__btn--tertiary">Swapping Form Requests</button>
                     </div>
                 </div>
             </div>

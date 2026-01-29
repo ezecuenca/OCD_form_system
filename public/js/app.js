@@ -64568,10 +64568,15 @@ function AddTaskModal(_ref) {
     _useState4 = _slicedToArray(_useState3, 2),
     task = _useState4[0],
     setTask = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(selectedDate || ''),
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState6 = _slicedToArray(_useState5, 2),
     schedule = _useState6[0],
     setSchedule = _useState6[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (isOpen && selectedDate) {
+      setSchedule(selectedDate);
+    }
+  }, [isOpen, selectedDate]);
   var handleAddTask = function handleAddTask(e) {
     e.preventDefault();
     if (!name.trim() || !task.trim() || !schedule) {
@@ -64588,10 +64593,16 @@ function AddTaskModal(_ref) {
     setName('');
     setTask('');
     setSchedule(selectedDate || '');
+    onClose();
   };
   var formatDateForDisplay = function formatDateForDisplay(dateString) {
-    if (!dateString) return '';
-    var date = new Date(dateString + 'T00:00:00');
+    if (!dateString) return 'No data selected';
+    var _dateString$split = dateString.split('-'),
+      _dateString$split2 = _slicedToArray(_dateString$split, 3),
+      year = _dateString$split2[0],
+      month = _dateString$split2[1],
+      day = _dateString$split2[2];
+    var date = new Date(year, month - 1, day);
     return date.toLocaleDateString('en-US', {
       month: 'numeric',
       day: 'numeric',
@@ -64648,14 +64659,25 @@ function AddTaskModal(_ref) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
             htmlFor: "schedule",
             children: "Schedule:"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
-            type: "date",
-            id: "schedule",
-            value: schedule,
-            onChange: function onChange(e) {
-              return setSchedule(e.target.value);
-            }
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+            style: {
+              padding: '1rem',
+              backgroundColor: '#f9f9f9',
+              border: '2px solid #e0e0e0',
+              borderRadius: '8px',
+              minHeight: '50px',
+              display: 'flex',
+              alignItems: 'center'
+            },
+            children: formatDateForDisplay(schedule)
           })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("small", {
+          style: {
+            color: '#777',
+            marginTop: '0.4rem',
+            fontSize: '0.8rem'
+          },
+          children: ["Selected Date: ", formatDateForDisplay(schedule)]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
           className: "modal__actions",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
@@ -65294,12 +65316,20 @@ function Schedule() {
   var nextMonth = function nextMonth() {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
   };
-  var handleAddTaskClick = function handleAddTaskClick() {
-    var today = new Date(currentDate.getFullYear(), currentDate.getMonth(), new Date().getDate());
-    var dateStr = "".concat(today.getFullYear(), "-").concat(String(today.getMonth() + 1).padStart(2, '0'), "-").concat(String(today.getDate()).padStart(2, '0'));
+  var handleDayClick = function handleDayClick(day) {
+    if (!day) return;
+    var dateStr = "".concat(currentDate.getFullYear(), "-").concat(String(currentDate.getMonth() + 1).padStart(2, '0'), "-").concat(String(day).padStart(2, '0'));
     setSelectedDate(dateStr);
     setShowTaskForm(true);
   };
+
+  //const handleAddTaskClick = () => {
+  //    const today = new Date(currentDate.getFullYear(), currentDate.getMonth(), new Date().getDate());
+  //    const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  //    setSelectedDate(dateStr);
+  //    setShowTaskForm(true);
+  //};
+
   var handleAddTask = function handleAddTask(taskData) {
     setTasks([].concat(_toConsumableArray(tasks), [taskData]));
     setShowTaskForm(false);
@@ -65349,8 +65379,23 @@ function Schedule() {
           className: "schedule__grid",
           children: days.map(function (day, index) {
             var dayTasks = getTasksForDate(day);
+            var isToday = day && currentDate.getFullYear() === new Date().getFullYear() && currentDate.getMonth() === new Date().getMonth() && day === new Date().getDate();
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-              className: "schedule__day ".concat(day ? 'schedule__day--active' : 'schedule__day--empty'),
+              className: "schedule__day \n                                        ".concat(day ? 'schedule__day--active' : 'schedule__day--empty', "\n                                        ").concat(isToday ? 'schedule__day--today' : ''),
+              onClick: function onClick() {
+                return handleDayClick(day);
+              }
+              //Make it look clickable
+              ,
+              role: "button",
+              tabIndex: day ? 0 : -1,
+              onKeyDown: function onKeyDown(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleDayClick(day);
+                }
+              }
+              // ----------------------------------------------
+              ,
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                 className: "schedule__day-number",
                 children: day
@@ -65372,14 +65417,16 @@ function Schedule() {
           className: "schedule__actions",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "schedule__btn schedule__btn--primary",
-            onClick: handleAddTaskClick,
-            children: "Add Task"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-            className: "schedule__btn schedule__btn--secondary",
-            children: "Swap Form"
+            onClick: function onClick() {
+              var today = new Date();
+              var dateStr = "".concat(today.getFullYear(), "-").concat(String(today.getMonth() + 1).padStart(2, '0'), "-").concat(String(today.getDate()).padStart(2, '0'));
+              setSelectedDate(dateStr);
+              setShowTaskForm(true);
+            },
+            children: "Add Task (Today)"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "schedule__btn schedule__btn--tertiary",
-            children: "Swapping Requests"
+            children: "Swapping Form Requests"
           })]
         })]
       })
