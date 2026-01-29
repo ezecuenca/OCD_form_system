@@ -26,6 +26,10 @@ Route::get('/adr-reports', function () {
     return view('welcome');
 })->name('adr-reports.index');
 
+Route::get('/schedule', function () {
+    return view('welcome');
+})->name('schedule.index');
+
 Route::get('/archived-reports', function () {
     return view('welcome');
 })->name('archived-reports.index');
