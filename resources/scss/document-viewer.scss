@@ -15,7 +15,8 @@
         }
     }
     
-    &__btn {
+    &__print-btn,
+    &__back-btn {
         padding: 0.5rem 1.5rem;
         border: 1px solid #333;
         background: white;
@@ -28,81 +29,85 @@
         }
     }
     
-    &__page {
+    &__header {
         background: white;
         width: 8.5in;
-        min-height: 11in;
         margin: 0 auto;
         padding: 0.75in;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        font-family: Arial, sans-serif;
-        font-size: 11pt;
-        line-height: 1.4;
         
         @media print {
             box-shadow: none;
-            margin: 0;
             padding: 0.5in;
         }
     }
     
-    &__error {
-        text-align: center;
-        padding: 4rem 2rem;
-        
-        h2 {
-            margin-bottom: 1.5rem;
-            color: #333;
-        }
-        
-        button {
-            padding: 0.75rem 2rem;
-            background: #290081;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            
-            &:hover {
-                background: #1f0061;
-            }
-        }
+    &__header-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
-}
-
-.doc-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #333;
     
-    &__logo {
+    &__logos {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    &__logo-left,
+    &__logo-right {
         width: 80px;
         height: 80px;
-        
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
-    &__title {
-        flex: 1;
+    &__logo-circle {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+        border: 3px solid #1e3a8a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
         text-align: center;
-        padding: 0 1rem;
+    }
+    
+    &__logo-bagong {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #dc2626 0%, #fbbf24 50%, #2563eb 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 8px;
+        text-align: center;
+        padding: 5px;
+    }
+    
+    &__header-text {
+        text-align: center;
+        width: 100%;
     }
     
     &__republic {
         font-size: 9pt;
+        margin: 0;
         font-weight: normal;
     }
     
     &__department {
         font-size: 9pt;
+        margin: 0;
         font-weight: normal;
     }
     
@@ -115,174 +120,311 @@
     &__region {
         font-size: 12pt;
         font-weight: bold;
+        margin: 0.2rem 0;
     }
     
     &__address {
         font-size: 8pt;
-        margin-top: 0.2rem;
-    }
-}
-
-.doc-title {
-    text-align: center;
-    font-size: 12pt;
-    font-weight: bold;
-    margin: 1rem 0;
-    text-decoration: underline;
-}
-
-.doc-top-section {
-    margin: 1.5rem 0;
-}
-
-.doc-field {
-    display: flex;
-    margin-bottom: 0.75rem;
-    align-items: flex-start;
-    
-    &__label {
-        min-width: 80px;
-        font-weight: normal;
-        font-size: 10pt;
-    }
-    
-    &__colon {
-        margin: 0 0.5rem;
-    }
-    
-    &__content {
-        flex: 1;
-    }
-    
-    &__name {
-        font-weight: bold;
-        font-size: 10pt;
-    }
-    
-    &__position {
-        font-size: 9pt;
-        font-style: italic;
-        margin-top: 0.1rem;
-        white-space: pre-line;
-    }
-}
-
-.doc-divider {
-    height: 1px;
-    background: #333;
-    margin: 1rem 0 1.5rem;
-}
-
-.doc-section {
-    display: flex;
-    margin-bottom: 1.5rem;
-    align-items: flex-start;
-    
-    &__number {
-        min-width: 30px;
-        font-weight: bold;
-    }
-    
-    &__content {
-        flex: 1;
+        margin: 0.2rem 0;
     }
     
     &__title {
+        font-size: 12pt;
         font-weight: bold;
-        margin-bottom: 0.5rem;
+        margin: 0.5rem 0;
+        text-decoration: none;
     }
-}
-
-.doc-subsection {
-    margin-top: 1rem;
+    
+    &__content {
+        background: white;
+        width: 8.5in;
+        margin: 0 auto;
+        padding: 0.75in;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        font-family: Arial, sans-serif;
+        font-size: 11pt;
+        line-height: 1.4;
+        
+        @media print {
+            box-shadow: none;
+            padding: 0.5in;
+        }
+    }
     
     &__title {
+        text-align: center;
+        font-size: 11.5pt;
         font-weight: bold;
-        margin-bottom: 0.5rem;
-    }
-}
-
-.doc-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 0.5rem 0;
-    font-size: 9pt;
-    
-    thead {
-        tr {
-            background: #f0f0f0;
-            border: 1px solid #333;
-        }
-        
-        th {
-            padding: 0.4rem;
-            text-align: left;
-            font-weight: bold;
-            border: 1px solid #333;
-            font-size: 9pt;
-        }
-    }
-    
-    tbody {
-        tr {
-            border: 1px solid #333;
-        }
-        
-        td {
-            padding: 0.4rem;
-            border: 1px solid #333;
-            vertical-align: top;
-            white-space: pre-line;
-        }
-    }
-}
-
-.doc-signatures {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem 2rem;
-    margin: 2rem 0 1.5rem;
-    page-break-inside: avoid;
-}
-
-.doc-signature {
-    text-align: center;
-    
-    &__label {
-        font-size: 9pt;
         margin-bottom: 1.5rem;
     }
     
+    &__metadata {
+        margin: 1.5rem 0;
+    }
+    
+    &__field {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        font-size: 11pt;
+        line-height: 1.5;
+    }
+    
+    &__label {
+        font-weight: normal;
+        min-width: 70px;
+        text-align: left;
+    }
+    
+    &__colon {
+        margin-right: 3rem;
+        margin-left: 1.4rem;
+        font-weight: bold;
+    }
+    
+    &__value {
+        flex: 1;
+        line-height: 1.1;
+    }
+    
     &__name {
         font-weight: bold;
-        font-size: 10pt;
-        text-decoration: underline;
-        margin-bottom: 0.2rem;
+        line-height: 1.1;
+        margin: 0;
     }
     
     &__position {
-        font-size: 9pt;
-        white-space: pre-line;
+        margin-top: 0;
+        padding-left: 0;
+        font-weight: normal;
+        line-height: 1.1;
+        margin: 0;
     }
-}
-
-.doc-footer {
-    text-align: center;
-    font-size: 8pt;
-    padding-top: 1rem;
-    border-top: 2px solid #333;
-    margin-top: 2rem;
     
-    &__motto {
+    &__subject {
+        font-weight: normal;
+    }
+    
+    &__datetime-bold {
         font-weight: bold;
-        margin-bottom: 0.3rem;
     }
     
-    &__office,
-    &__email,
-    &__contact,
-    &__social {
-        margin: 0.1rem 0;
+    &__divider {
+        height: 1px;
+        background: #333;
+        margin: 1rem 0;
+        width: 100%;
+    }
+    
+    &__status {
+        margin: 1.5rem 0;
+        font-size: 11pt;
+    }
+    
+    &__alert {
+        text-transform: uppercase;
+    }
+    
+    &__status-section {
+        margin: 1rem 0;
+        font-size: 11pt;
+    }
+    
+    &__status-item {
+        display: flex;
+        align-items: flex-start;
+        line-height: 1.5;
+    }
+    
+    &__status-number {
+        margin-right: 0.5rem;
+        font-weight: normal;
+    }
+    
+    &__status-text {
+        flex: 1;
+    }
+    
+    &__status-alert {
+        font-weight: bold;
+        text-decoration: underline;
+        text-transform: uppercase;
+    }
+    
+    &__section {
+        margin: 1.5rem 0;
+    }
+    
+    &__section-title {
+        font-weight: bold;
+        font-size: 11pt;
+        margin-bottom: 0.5rem;
+    }
+    
+    &__table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+        margin: 0.5rem 0;
+        font-size: 9pt;
+        
+        thead {
+            tr {
+                background: #f0f0f0;
+            }
+            
+            th {
+                padding: 0.4rem;
+                text-align: left;
+                font-weight: bold;
+                border: 1px solid #333;
+            }
+        }
+        
+        tbody {
+            tr {
+                border: 1px solid #333;
+            }
+            
+            td {
+                padding: 0.4rem;
+                border: 1px solid #333;
+                word-break: break-word;
+                overflow-wrap: break-word;
+                min-width: 0;
+            }
+        }
+    }
+    
+    &__table-num {
+        width: 2rem;
+        text-align: center;
+        font-weight: normal;
+        vertical-align: middle;
+    }
+    
+    &__table-name {
+        width: 34%;
+        max-width: 7rem;
+        font-weight: bold;
+        vertical-align: middle;
+    }
+    
+    &__table-tasks {
+        vertical-align: top;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        min-width: 0;
+    }
+    
+    &__task-list {
+        margin: 0;
+        padding-left: 1.5rem;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        
+        li {
+            margin-bottom: 0.3rem;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+    }
+    
+    &__legend {
+        font-size: 8pt;
+        font-style: italic;
+        margin-top: 0.5rem;
+    }
+    
+    &__admin-note {
+        font-size: 9pt;
+        font-style: italic;
+        margin: 0.5rem 0;
+    }
+    
+    &__admin-list,
+    &__endorsed-list {
+        margin: 0.5rem 0;
+        padding-left: 1.5rem;
+        
+        li {
+            margin-bottom: 0.3rem;
+        }
+    }
+    
+    &__endorsed {
+        margin: 1rem 0;
+    }
+    
+    &__signatures {
+        margin: 2rem 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        page-break-inside: avoid;
+    }
+    
+    &__signature-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+    
+    &__signature-item {
+        text-align: center;
+    }
+    
+    &__signature-line {
+        height: 50px;
+        border-bottom: 1px solid #333;
+        margin-bottom: 0.5rem;
+    }
+    
+    &__signature-name {
+        font-weight: bold;
+        text-decoration: underline;
+        margin: 0.5rem 0 0.2rem;
+        font-size: 10pt;
+    }
+    
+    &__signature-position {
+        font-size: 9pt;
+        margin: 0;
+    }
+    
+    &__footer {
+        background: white;
+        width: 8.5in;
+        margin: 0 auto;
+        padding: 0.75in;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        text-align: center;
+        
+        @media print {
+            box-shadow: none;
+            padding: 0.5in;
+        }
+    }
+    
+    &__footer-line {
+        height: 2px;
+        background: #2563eb;
+        margin-bottom: 0.5rem;
+    }
+    
+    &__footer-slogan {
+        font-weight: bold;
+        font-size: 10pt;
+        margin: 0.5rem 0;
+    }
+    
+    &__footer-info {
+        font-size: 8pt;
+        margin-top: 0.5rem;
+        
+        p {
+            margin: 0.2rem 0;
+        }
     }
 }
 
@@ -300,9 +442,10 @@
         background: white;
         padding: 0;
         
-        &__page {
+        &__header,
+        &__content,
+        &__footer {
             width: 100%;
-            min-height: auto;
             padding: 0;
             box-shadow: none;
         }

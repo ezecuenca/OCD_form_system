@@ -13,27 +13,27 @@
 
 .confirm-modal {
     background: #f5f5f5;
-    border-radius: 20px;
-    padding: 2.5rem 2rem;
-    min-width: 400px;
-    max-width: 450px;
+    border-radius: 16px;
+    padding: 1.5rem 1.25rem;
+    min-width: 320px;
+    max-width: 380px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     animation: modalFadeIn 0.2s ease-out;
 
     &__content {
         display: flex;
         flex-direction: column;
-        gap: 2rem;
+        gap: 1.5rem;
     }
 
     &__message {
-        font-size: 1rem;
+        font-size: 0.9rem;
         font-weight: 600;
         color: #000;
         margin: 0;
         text-align: center;
-        line-height: 1.5;
-        padding: 0 1rem;
+        line-height: 1.4;
+        padding: 0 0.5rem;
     }
 
     &__buttons {
@@ -43,14 +43,14 @@
     }
 
     &__btn {
-        padding: 0.75rem 2rem;
-        border-radius: 12px;
-        font-size: 0.95rem;
+        padding: 0.625rem 1.5rem;
+        border-radius: 10px;
+        font-size: 0.875rem;
         font-weight: 500;
         cursor: pointer;
         transition: all 0.2s;
         border: none;
-        min-width: 100px;
+        min-width: 90px;
 
         &--confirm {
             background: #1a0047;

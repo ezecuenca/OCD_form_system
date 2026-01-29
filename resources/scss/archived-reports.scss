@@ -4,6 +4,7 @@
 
     &__search-bar {
         margin-bottom: 1rem;
+        position: relative;
 
         &-input {
             max-width: 320px;
@@ -35,6 +36,42 @@
         }
     }
 
+    &__datetime {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #333;
+        white-space: nowrap;
+
+        &-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            filter: brightness(0) saturate(100%) invert(20%) sepia(8%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(90%);
+        }
+
+        &-text {
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        &-date {
+            font-weight: 500;
+            color: #333;
+        }
+
+        &-time {
+            font-weight: 400;
+            color: #666;
+        }
+    }
+
     &__controls {
         display: flex;
         justify-content: space-between;
@@ -46,6 +83,7 @@
         display: flex;
         align-items: stretch;
         gap: 0.5rem;
+        margin-right: 1.2rem;
 
         button {
             padding: 0 1rem;
@@ -80,6 +118,50 @@
                 width: 13px;
                 height: 13px;
             }
+        }
+    }
+
+    &__filter-dropdown {
+        position: relative;
+        display: inline-flex;
+        flex-direction: column;
+    }
+
+    &__dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 0.25rem;
+        background: white;
+        border: 2px solid #290081;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        min-width: 100%;
+        width: max-content;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        animation: dropdownFadeIn 0.2s ease-out;
+    }
+
+    &__dropdown-item {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        font-size: 0.8125rem;
+        color: #333;
+        transition: all 0.2s;
+
+        &:hover {
+            background: #E99745;
+            color: white;
+        }
+
+        &:first-child {
+            border-radius: 6px 6px 0 0;
+        }
+
+        &:last-child {
+            border-radius: 0 0 6px 6px;
         }
     }
 
@@ -279,5 +361,16 @@
                 height: 16px;
             }
         }
+    }
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

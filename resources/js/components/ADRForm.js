@@ -26,7 +26,7 @@ function ADRForm() {
     const [dateTime, setDateTime] = useState(reportToEdit?.dateTime || '');
     
     // Status
-    const [status, setStatus] = useState(reportToEdit?.status || 'WHITE ALERT');
+    const [status, setStatus] = useState(reportToEdit?.alertStatus || (reportToEdit?.status && reportToEdit?.status !== 'Active' && reportToEdit?.status !== 'Archived' ? reportToEdit?.status : 'WHITE ALERT'));
     
     // Attendance and Reports
     const [attendanceItems, setAttendanceItems] = useState(reportToEdit?.attendanceItems || [{ id: 1, name: '', task: '' }]);
@@ -41,6 +41,7 @@ function ADRForm() {
     const [showEndorsedItemsModal, setShowEndorsedItemsModal] = useState(false);
     const [showValidationModal, setShowValidationModal] = useState(false);
     const [validationMessage, setValidationMessage] = useState('');
+    const [errorField, setErrorField] = useState('');
     
     // Communication and Other Items
     const [communicationRows, setCommunicationRows] = useState(reportToEdit?.communicationRows || [
@@ -71,28 +72,9 @@ function ADRForm() {
     };
     
     const handleConfirm = () => {
-        // Validate required fields
-        if (!documentName.trim()) {
-            setValidationMessage('Please fill in the document name');
-            setShowValidationModal(true);
-            return;
-        }
-        if (!forName.trim()) {
-            setValidationMessage('Please fill in the "For" field');
-            setShowValidationModal(true);
-            return;
-        }
-        if (!thruName.trim()) {
-            setValidationMessage('Please fill in the "Thru" field');
-            setShowValidationModal(true);
-            return;
-        }
-        if (!fromName.trim()) {
-            setValidationMessage('Please fill in the "From" field');
-            setShowValidationModal(true);
-            return;
-        }
-
+        // Validation temporarily disabled for template work
+        // TODO: Re-enable validation after template is complete
+        
         const formData = {
             documentName,
             forName,
@@ -122,36 +104,77 @@ function ADRForm() {
         
         if (isEditing && reportToEdit && reportToEdit.id) {
             updateReport(reportToEdit.id, formData);
+            navigate('/adr-reports', { state: { success: true, message: 'Document updated successfully!' } });
         } else {
             const newReport = addReport(formData);
+            navigate('/adr-reports', { state: { success: true, message: 'Document created successfully!' } });
         }
-        navigate('/adr-reports');
     };
     
-    // const handleViewDocument = () => {
-    //     // Functionality disabled for now
-    // };
+    const handleViewDocument = () => {
+        if (isEditing && reportToEdit && reportToEdit.id) {
+            // If editing existing report, navigate to view
+            navigate(`/adr-reports/view/${reportToEdit.id}`);
+        } else {
+            // If creating new, save first then view
+            const formData = {
+                documentName,
+                forName,
+                forPosition,
+                thruName,
+                thruPosition,
+                fromName,
+                fromPosition,
+                subject,
+                dateTime,
+                status,
+                attendanceItems,
+                reportsItems,
+                communicationRows,
+                otherItemsRows,
+                otherAdminRows,
+                endorsedItemsRows,
+                preparedBy,
+                preparedPosition,
+                receivedBy,
+                receivedPosition,
+                notedBy,
+                notedPosition,
+                approvedBy,
+                approvedPosition
+            };
+            
+            const newReport = addReport(formData);
+            navigate(`/adr-reports/view/${newReport.id}`);
+        }
+    };
 
     const addAttendanceItem = () => {
-        const newId = Math.max(...attendanceItems.map(item => item.id), 0) + 1;
-        setAttendanceItems([...attendanceItems, { id: newId, name: '', task: '' }]);
+        setAttendanceItems(prev => {
+            const newId = Math.max(...prev.map(item => Number(item.id) || 0), 0) + 1;
+            return [...prev, { id: newId, name: '', task: '' }];
+        });
     };
 
     const removeAttendanceItem = (id) => {
-        if (attendanceItems.length > 1) {
-            setAttendanceItems(attendanceItems.filter(item => item.id !== id));
-        }
+        setAttendanceItems(prev => {
+            if (prev.length <= 1) return prev;
+            return prev.filter(item => Number(item.id) !== Number(id));
+        });
     };
 
     const addReportsItem = () => {
-        const newId = Math.max(...reportsItems.map(item => item.id), 0) + 1;
-        setReportsItems([...reportsItems, { id: newId, report: '', remarks: '' }]);
+        setReportsItems(prev => {
+            const newId = Math.max(...prev.map(item => Number(item.id) || 0), 0) + 1;
+            return [...prev, { id: newId, report: '', remarks: '' }];
+        });
     };
 
     const removeReportsItem = (id) => {
-        if (reportsItems.length > 1) {
-            setReportsItems(reportsItems.filter(item => item.id !== id));
-        }
+        setReportsItems(prev => {
+            if (prev.length <= 1) return prev;
+            return prev.filter(item => Number(item.id) !== Number(id));
+        });
     };
 
     const addCommunicationRow = () => {
@@ -245,10 +268,13 @@ function ADRForm() {
                     <h1 className="adr-form__title">RDRRMOC DUTY REPORT</h1>
                     <input 
                         type="text" 
-                        className="adr-form__document-name" 
+                        className={`adr-form__document-name ${errorField === 'documentName' ? 'adr-form__input-error' : ''}`}
                         placeholder="Enter document name..." 
                         value={documentName}
-                        onChange={(e) => setDocumentName(e.target.value)}
+                        onChange={(e) => {
+                            setDocumentName(e.target.value);
+                            if (errorField === 'documentName') setErrorField('');
+                        }}
                     />
                 </div>
                 <div className="adr-form__top-right">
@@ -263,13 +289,15 @@ function ADRForm() {
                             <img src={`${window.location.origin}/images/confirm_icon.svg`} alt="Confirm" />
                             {isEditing ? 'Update' : 'Confirm'}
                         </button>
-                        <button className="adr-form__action-btn adr-form__action-btn--view">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                                <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            View document
-                        </button>
+                        {!isEditing && (
+                            <button className="adr-form__action-btn adr-form__action-btn--view" onClick={handleViewDocument}>
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                    <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                                View document
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
@@ -279,21 +307,45 @@ function ADRForm() {
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>For:</label>
-                            <input type="text" value={forName} onChange={(e) => setForName(e.target.value)} />
+                            <input 
+                                type="text" 
+                                className={errorField === 'forName' ? 'adr-form__input-error' : ''}
+                                value={forName} 
+                                onChange={(e) => {
+                                    setForName(e.target.value);
+                                    if (errorField === 'forName') setErrorField('');
+                                }}
+                            />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={forPosition} onChange={(e) => setForPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>Thru:</label>
-                            <input type="text" value={thruName} onChange={(e) => setThruName(e.target.value)} />
+                            <input 
+                                type="text" 
+                                className={errorField === 'thruName' ? 'adr-form__input-error' : ''}
+                                value={thruName} 
+                                onChange={(e) => {
+                                    setThruName(e.target.value);
+                                    if (errorField === 'thruName') setErrorField('');
+                                }}
+                            />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={thruPosition} onChange={(e) => setThruPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>From:</label>
-                            <input type="text" value={fromName} onChange={(e) => setFromName(e.target.value)} />
+                            <input 
+                                type="text" 
+                                className={errorField === 'fromName' ? 'adr-form__input-error' : ''}
+                                value={fromName} 
+                                onChange={(e) => {
+                                    setFromName(e.target.value);
+                                    if (errorField === 'fromName') setErrorField('');
+                                }}
+                            />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={fromPosition} onChange={(e) => setFromPosition(e.target.value)}></textarea>
                     </div>
@@ -537,8 +589,9 @@ function ADRForm() {
                                                     placeholder="Enter name"
                                                     value={item.name}
                                                     onChange={(e) => {
-                                                        setAttendanceItems(attendanceItems.map(i => 
-                                                            i.id === item.id ? { ...i, name: e.target.value } : i
+                                                        const value = e.target.value;
+                                                        setAttendanceItems(prev => prev.map(i => 
+                                                            i.id === item.id ? { ...i, name: value } : i
                                                         ));
                                                     }}
                                                 />
@@ -550,8 +603,9 @@ function ADRForm() {
                                                     rows="2"
                                                     value={item.task}
                                                     onChange={(e) => {
-                                                        setAttendanceItems(attendanceItems.map(i => 
-                                                            i.id === item.id ? { ...i, task: e.target.value } : i
+                                                        const value = e.target.value;
+                                                        setAttendanceItems(prev => prev.map(i => 
+                                                            i.id === item.id ? { ...i, task: value } : i
                                                         ));
                                                     }}
                                                 ></textarea>
@@ -615,8 +669,9 @@ function ADRForm() {
                                                     rows="3"
                                                     value={item.report}
                                                     onChange={(e) => {
-                                                        setReportsItems(reportsItems.map(i => 
-                                                            i.id === item.id ? { ...i, report: e.target.value } : i
+                                                        const value = e.target.value;
+                                                        setReportsItems(prev => prev.map(i => 
+                                                            i.id === item.id ? { ...i, report: value } : i
                                                         ));
                                                     }}
                                                 ></textarea>
@@ -628,8 +683,9 @@ function ADRForm() {
                                                     placeholder="Enter remarks"
                                                     value={item.remarks}
                                                     onChange={(e) => {
-                                                        setReportsItems(reportsItems.map(i => 
-                                                            i.id === item.id ? { ...i, remarks: e.target.value } : i
+                                                        const value = e.target.value;
+                                                        setReportsItems(prev => prev.map(i => 
+                                                            i.id === item.id ? { ...i, remarks: value } : i
                                                         ));
                                                     }}
                                                 />
