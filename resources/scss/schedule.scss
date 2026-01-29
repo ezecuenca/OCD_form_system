@@ -106,8 +106,29 @@
         transition: background-color 0.2s ease;
 
         &--active {
-            &:hover {
-                background-color: #FFF5E6;
+            position: relative;
+
+            &:after {
+                content: '+';
+                position: absolute;
+                top: 0.5rem;
+                right: 0.6rem;
+                font-size: 1.1rem;
+                color: #E99745;
+                opacity: 0.35;
+                font-weight: 300;
+                pointer-events: none;
+                transition: opacity 0.2s ease;
+            }
+
+            &:hover::after,
+            &:focus::after {
+                opacity: 0.9;
+            }
+
+            &:focus {
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(233, 151, 69, 0.4);
             }
         }
 

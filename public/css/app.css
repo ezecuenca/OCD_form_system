@@ -1301,8 +1301,27 @@ body {
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-.schedule__day--active:hover {
-  background-color: #FFF5E6;
+.schedule__day--active {
+  position: relative;
+}
+.schedule__day--active:after {
+  content: "+";
+  position: absolute;
+  top: 0.5rem;
+  right: 0.6rem;
+  font-size: 1.1rem;
+  color: #E99745;
+  opacity: 0.35;
+  font-weight: 300;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.schedule__day--active:hover::after, .schedule__day--active:focus::after {
+  opacity: 0.9;
+}
+.schedule__day--active:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(233, 151, 69, 0.4);
 }
 .schedule__day--empty {
   background-color: #f9f9f9;
