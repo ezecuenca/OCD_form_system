@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AddTaskModal from './AddTaskModal';
+import TasksModal from './TasksModal';
 import { set } from 'lodash';
 
 function Schedule() {
@@ -153,12 +153,12 @@ function Schedule() {
                         >
                         Add Task (Today)
                         </button>
-                        <button className="schedule__btn schedule__btn--tertiary">Swapping Form Requests</button>
+                        <button className="schedule__btn schedule__btn--tertiary" onClick={() => window.location.href = '/swap-form'}>Swapping Form Requests</button>
                     </div>
                 </div>
             </div>
 
-            <AddTaskModal
+            <TasksModal
                 isOpen={showTaskForm}
                 onClose={() => {
                     setShowTaskForm(false);

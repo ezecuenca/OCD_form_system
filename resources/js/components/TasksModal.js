@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function AddTaskModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit }) {
+function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit }) {
     
     const isAddMode = mode === 'add';
     const isViewMode = mode === 'view';
@@ -171,4 +171,4 @@ function AddTaskModal({ isOpen, onClose, selectedDate, initialTask = null, mode 
     );
 }
 
-export default AddTaskModal;
+export default TasksModal;
