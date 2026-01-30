@@ -52,13 +52,6 @@ function Schedule() {
         setShowTaskForm(true);
     };
 
-    //const handleAddTaskClick = () => {
-    //    const today = new Date(currentDate.getFullYear(), currentDate.getMonth(), new Date().getDate());
-    //    const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    //    setSelectedDate(dateStr);
-    //    setShowTaskForm(true);
-    //};
-
     const handleAddTask = (taskData) => {
         setTasks([...tasks, taskData]);
         setShowTaskForm(false);

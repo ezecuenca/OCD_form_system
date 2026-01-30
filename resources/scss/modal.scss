@@ -1,0 +1,176 @@
+// ────────────────────────────────────────────────
+//              MODAL BASE & VIEW MODE
+// ────────────────────────────────────────────────
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+}
+
+.modal {
+    background: white;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 540px;
+    margin: 1.5rem;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
+    overflow: hidden;
+    animation: modalFadeIn 0.25s ease-out;
+
+    @keyframes modalFadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+}
+
+.modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #f0f0f0;
+    background: linear-gradient(to bottom, #fdfdfd, #ffffff);
+
+    h2 {
+        margin: 0;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #2d2d2d;
+        letter-spacing: -0.4px;
+    }
+
+    .modal__close {
+        background: none;
+        border: none;
+        font-size: 2.1rem;
+        line-height: 1;
+        color: #888;
+        cursor: pointer;
+        padding: 0 0.5rem;
+        transition: color 0.18s, transform 0.18s;
+
+        &:hover,
+        &:focus {
+            color: #E99745;
+            transform: rotate(90deg);
+        }
+    }
+}
+
+.modal__content {
+    padding: 2rem;
+}
+
+// ────────────────────────────────────────────────
+//              VIEW TASK LAYOUT (grid style)
+// ────────────────────────────────────────────────
+
+.view-task {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    &__row {
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        gap: 1.25rem;
+        align-items: start;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #f3f3f3;
+
+        &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.97rem;
+            padding-top: 0.35rem;
+        }
+
+        .value {
+            font-size: 1.03rem;
+            line-height: 1.48;
+            color: #222;
+            font-weight: 500;
+            word-break: break-word;
+
+            &.strong {
+                font-weight: 650;
+                color: #111;
+            }
+
+            &.description {
+                white-space: pre-wrap;
+                min-height: 80px;
+                padding: 1rem;
+                background: #f9fcf5;
+                border: 1px solid #e8f0d8;
+                border-radius: 8px;
+                color: #2f2f2f;
+            }
+
+            &.date {
+                color: #E99745;
+                font-weight: 600;
+                font-size: 1.05rem;
+            }
+        }
+    }
+}
+
+// ────────────────────────────────────────────────
+//              ACTION BUTTONS
+// ────────────────────────────────────────────────
+
+.modal__actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.2rem;
+    justify-content: flex-start;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f0f0f0;
+
+    .btn {
+        min-width: 140px;
+        padding: 0.9rem 1.6rem;
+        font-size: 0.98rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+
+        &--primary {  // Edit / Save
+            background: #7ED321;
+            color: white;
+            border: none;
+            box-shadow: 0 3px 10px rgba(126, 211, 33, 0.28);
+
+            &:hover {
+                background: #6ebd1c;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 16px rgba(126, 211, 33, 0.38);
+            }
+        }
+
+        &--secondary {  // Swap Task / Cancel
+            background: white;
+            color: #E99745;
+            border: 2px solid #E99745;
+
+            &:hover {
+                background: #E99745;
+                color: white;
+                transform: translateY(-1px);
+            }
+        }
+    }
+}

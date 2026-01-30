@@ -85,54 +85,64 @@ function AddTaskModal({ isOpen, onClose, selectedDate, initialTask = null, mode 
                 </div>
 
                 <form onSubmit={handleSubmit} className="modal__form">
-                    <div className="form__group">
-                        <label>Name</label>
-                        {isViewMode ? (
-                            <div className="readonly-field">{name || '—'}</div>
-                        ) : (
+                    {isAddMode || isEditMode ? (
+                    <>
+                        <div className="form__group">
+                            <label>Name</label>
                             <input
                                 type="text"
+                                id='name'
                                 value={name}
                                 onChange={e => setName(e.target.value)}
                                 placeholder="Enter name"
-                                disabled={isViewMode}
                             />
-                        )}
-                    </div>
+                        </div>
 
-                    <div className="form__group">
-                        <label>Task / Description</label>
-                        {isViewMode ? (
-                            <div className="readonly-field multiline">
-                                {task || 'No description provided'}
-                            </div>
-                        ) : (
+                        <div className="form__group">
+                            <label>Task / Description</label>
                             <textarea
+                                id="task"
                                 value={task}
                                 onChange={e => setTask(e.target.value)}
                                 placeholder="Enter task details"
                                 rows="5"
-                                disabled={isViewMode}
                             />
-                        )}
-                    </div>
+                        </div>
 
-                    <div className="form__group">
-                        <label>Date</label>
-                        {isViewMode ? (
-                            <div className="readonly-field">{formatDate(schedule)}</div>
-                        ) : (
-                            <>
-                                <input
-                                    type="date"
-                                    value={schedule}
-                                    readOnly={!isEditMode}
-                                    style={isEditMode ? {} : { backgroundColor: '#f9f9f9', cursor: 'default' }}
-                                />
-                                <small>{formatDate(schedule)}</small>
-                            </>
-                        )}
+                        <div className="form__group">
+                            <label>Date</label>
+                            <input
+                                type="date"
+                                value={schedule}
+                                readOnly={!isEditMode}
+                                style={isEditMode ? {} : { backgroundColor: '#f9f9f9', cursor: 'default' }}
+                            />
+                            <small style={{ color: '#666', marginTop: '0.4rem', display: 'block' }}>
+                                {formatDate(schedule)}
+                            </small>
+                        </div>
+                    </>
+                    ) : isViewMode && (
+
+                        <div className="view-task">
+                            <div className="view-task__row">
+                            <label>Name</label>
+                            <div className="value strong">{name || '—'}</div>
+                        </div>
+
+                        <div className="view-task__row">
+                            <label>Task / Description</label>
+                            <div className="value description">
+                                {task || 'No description provided'}
+                            </div>
+                        </div>
+
+                        <div className="view-task__row">
+                            <label>Date</label>
+                            <div className="value date">{formatDate(schedule)}</div>
+                        </div>
                     </div>
+                )}
 
                     <div className="modal__actions">
                         {isAddMode && (
