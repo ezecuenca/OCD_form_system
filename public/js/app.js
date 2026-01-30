@@ -65670,6 +65670,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -65708,8 +65714,11 @@ function Schedule() {
   var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('add'),
     _useState10 = _slicedToArray(_useState1, 2),
     modalMode = _useState10[0],
-    setModalMode = _useState10[1]; // 'add' | 'view' | 'edit'
-
+    setModalMode = _useState10[1]; // 'add' | 'view' | 'edit' | 'swap'
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState12 = _slicedToArray(_useState11, 2),
+    taskToSwap = _useState12[0],
+    setTaskToSwap = _useState12[1];
   var daysInMonth = function daysInMonth(date) {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -65738,6 +65747,20 @@ function Schedule() {
   var nextMonth = function nextMonth() {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
   };
+  var formatDate = function formatDate(dateStr) {
+    if (!dateStr) return '—';
+    var _dateStr$split = dateStr.split('-'),
+      _dateStr$split2 = _slicedToArray(_dateStr$split, 3),
+      y = _dateStr$split2[0],
+      m = _dateStr$split2[1],
+      d = _dateStr$split2[2];
+    return new Date(y, m - 1, d).toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
   var handleDayClick = function handleDayClick(day) {
     if (!day) return;
     var dateStr = "".concat(currentDate.getFullYear(), "-").concat(String(currentDate.getMonth() + 1).padStart(2, '0'), "-").concat(String(day).padStart(2, '0'));
@@ -65750,8 +65773,47 @@ function Schedule() {
   };
   var handleTaskClick = function handleTaskClick(task) {
     setSelectedTask(task);
+    setTaskToSwap(task);
     setModalMode('view');
     setShowTaskForm(true);
+  };
+  var handleSwapDayClick = function handleSwapDayClick(day) {
+    if (!day || !taskToSwap || modalMode !== 'swap') return;
+    var targetDateStr = "".concat(currentDate.getFullYear(), "-").concat(String(currentDate.getMonth() + 1).padStart(2, '0'), "-").concat(String(day).padStart(2, '0'));
+    var existingTaskOnTarget = tasks.find(function (t) {
+      return t.date === targetDateStr;
+    });
+    setTasks(function (prevTasks) {
+      var newTasks = _toConsumableArray(prevTasks);
+      if (existingTaskOnTarget) {
+        newTasks = newTasks.map(function (t) {
+          if (t === taskToSwap) {
+            return _objectSpread(_objectSpread({}, t), {}, {
+              date: targetDateStr
+            });
+          }
+          if (t === existingTaskOnTarget) {
+            return _objectSpread(_objectSpread({}, t), {}, {
+              date: taskToSwap.date
+            });
+          }
+          return t;
+        });
+      } else {
+        newTasks = newTasks.map(function (t) {
+          return t === taskToSwap ? _objectSpread(_objectSpread({}, t), {}, {
+            date: targetDateStr
+          }) : t;
+        });
+      }
+      return newTasks;
+    });
+
+    // Reset and close
+    setShowTaskForm(false);
+    setModalMode('add');
+    setSelectedTask(null);
+    setTaskToSwap(null);
   };
   var getTasksForDate = function getTasksForDate(day) {
     if (!day) return [];
@@ -65766,9 +65828,45 @@ function Schedule() {
   });
   var days = getDaysArray();
   var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  console.log('Current modalMode:', modalMode);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
     className: "schedule",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+    children: [modalMode === 'swap' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      style: {
+        position: 'fixed',
+        top: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        background: '#fff8e1',
+        padding: '12px 24px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '16px'
+      },
+      children: [console.log('Banner is rendering now'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("p", {
+        style: {
+          margin: 0,
+          fontWeight: 500
+        },
+        children: ["Click a day to swap/move the task - Current: ", formatDate(taskToSwap.date)]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+        onClick: function onClick() {
+          setModalMode('add');
+        },
+        style: {
+          background: '#e74c3c',
+          color: 'white',
+          border: 'none',
+          padding: '6px 12px',
+          borderRadius: '6px',
+          cursor: 'pointer'
+        },
+        children: "Cancel"
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
       className: "schedule__content",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
         className: "schedule__card",
@@ -65802,19 +65900,23 @@ function Schedule() {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
               className: "schedule__day \n                                        ".concat(day ? 'schedule__day--active' : 'schedule__day--empty', "\n                                        ").concat(isToday ? 'schedule__day--today' : ''),
               onClick: function onClick() {
-                return handleDayClick(day);
-              }
-              //Make it look clickable
-              ,
+                if (modalMode === 'swap') {
+                  handleSwapDayClick(day);
+                } else {
+                  handleDayClick(day);
+                }
+              },
               role: "button",
               tabIndex: day ? 0 : -1,
               onKeyDown: function onKeyDown(e) {
                 if (e.key === 'Enter' || e.key === ' ') {
-                  handleDayClick(day);
+                  if (modalMode === 'swap') {
+                    handleSwapDayClick(day);
+                  } else {
+                    handleDayClick(day);
+                  }
                 }
-              }
-              // ----------------------------------------------
-              ,
+              },
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
                 className: "schedule__day-number",
                 children: day
@@ -65852,6 +65954,9 @@ function Schedule() {
             },
             children: "Add Task (Today)"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+            className: "schedule__btn schedule__btn--secondary",
+            children: "Swapping Form"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
             className: "schedule__btn schedule__btn--tertiary",
             onClick: function onClick() {
               return window.location.href = '/swap-form';
@@ -65865,7 +65970,9 @@ function Schedule() {
       onClose: function onClose() {
         setShowTaskForm(false);
         setSelectedTask(null);
-        setModalMode('add');
+        if (!isSwapClose) {
+          setModalMode('add');
+        }
       },
       selectedDate: selectedDate,
       currentMonth: currentDate,
@@ -65873,7 +65980,7 @@ function Schedule() {
       initialTask: selectedTask,
       mode: modalMode,
       onUpdateTask: function onUpdateTask(updateTask) {
-        setTask(function (prev) {
+        setTasks(function (prev) {
           return prev.map(function (t) {
             return t === selectedTask ? updateTask : t;
           });
@@ -65884,6 +65991,10 @@ function Schedule() {
       },
       onSwitchToEdit: function onSwitchToEdit() {
         return setModalMode('edit');
+      },
+      onSwitchToSwap: function onSwitchToSwap() {
+        console.log('Swap mode triggered');
+        setModalMode('swap');
       }
     })]
   });
@@ -66374,7 +66485,8 @@ function TasksModal(_ref) {
     mode = _ref$mode === void 0 ? 'add' : _ref$mode,
     onAddTask = _ref.onAddTask,
     onUpdateTask = _ref.onUpdateTask,
-    onSwitchToEdit = _ref.onSwitchToEdit;
+    onSwitchToEdit = _ref.onSwitchToEdit,
+    onSwitchToSwap = _ref.onSwitchToSwap;
   var isAddMode = mode === 'add';
   var isViewMode = mode === 'view';
   var isEditMode = mode === 'edit';
@@ -66457,7 +66569,7 @@ function TasksModal(_ref) {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         className: "modal__header",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h2", {
-          children: isAddMode ? 'Add Task' : isViewMode ? 'View Task' : 'Edit Task'
+          children: isAddMode ? 'Add Task' : isViewMode ? 'View Task' : isEditMode ? 'Edit Task' : 'Swap Task'
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
           className: "modal__close",
           onClick: onClose,
@@ -66553,11 +66665,17 @@ function TasksModal(_ref) {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
               type: "button",
               className: "btn btn--primary",
-              onClick: onSwitchToEdit,
+              onClick: function onClick() {
+                return onSwitchToEdit();
+              },
               children: "Edit Task"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
               type: "button",
               className: "btn btn--secondary",
+              onClick: function onClick() {
+                onSwitchToSwap();
+                onClose(true);
+              },
               children: "Swap Task"
             })]
           }), isEditMode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {

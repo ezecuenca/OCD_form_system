@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit }) {
+function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit, onSwitchToSwap }) {
     
     const isAddMode = mode === 'add';
     const isViewMode = mode === 'view';
@@ -80,7 +80,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
         <div className="modal-overlay">
             <div className="modal">
                 <div className="modal__header">
-                    <h2>{isAddMode ? 'Add Task' : isViewMode ? 'View Task' : 'Edit Task'}</h2>
+                    <h2>{isAddMode ? 'Add Task' : isViewMode ? 'View Task' : isEditMode ? 'Edit Task' : 'Swap Task'}</h2>
                     <button className="modal__close" onClick={onClose}>×</button>
                 </div>
 
@@ -153,8 +153,8 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
 
                         {isViewMode && (
                             <>
-                                <button type="button" className="btn btn--primary" onClick={onSwitchToEdit}>Edit Task</button>
-                                <button type="button" className="btn btn--secondary">Swap Task</button>
+                                <button type="button" className="btn btn--primary" onClick={() => onSwitchToEdit()}>Edit Task</button>
+                                <button type="button" className="btn btn--secondary" onClick={() => { onSwitchToSwap(); onClose(true); }}>Swap Task</button>
                             </>
                         )}
 
@@ -163,7 +163,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                                 <button type="submit" className="btn btn--primary">Save Changes</button>
                                 <button type="button" className="btn btn--secondary" onClick={onClose}>Cancel</button>
                             </>
-                        )}
+                        )}                        
                     </div>
                 </form>
             </div>

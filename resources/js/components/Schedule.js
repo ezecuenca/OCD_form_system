@@ -8,7 +8,8 @@ function Schedule() {
     const [showTaskForm, setShowTaskForm] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTask, setSelectedTask] = useState(null);
-    const [modalMode, setModalMode] = useState('add'); // 'add' | 'view' | 'edit'
+    const [modalMode, setModalMode] = useState('add'); // 'add' | 'view' | 'edit' | 'swap'
+    const [taskToSwap, setTaskToSwap] = useState(null);
 
     const daysInMonth = (date) => {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -44,6 +45,17 @@ function Schedule() {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
     };
 
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '—';
+        const [y, m, d] = dateStr.split('-');
+        return new Date(y, m - 1, d).toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        });
+    };
+
     const handleDayClick = (day) => {
         if (!day) return;
 
@@ -59,8 +71,45 @@ function Schedule() {
 
     const handleTaskClick = (task) => {
         setSelectedTask(task);
+        setTaskToSwap(task);
         setModalMode('view');
         setShowTaskForm(true);
+    };
+
+    const handleSwapDayClick = (day) => {
+        if (!day || !taskToSwap || modalMode !== 'swap') return;
+
+        const targetDateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+        const existingTaskOnTarget = tasks.find(t => t.date === targetDateStr);
+
+        setTasks(prevTasks => {
+            let newTasks = [...prevTasks];
+
+            if (existingTaskOnTarget) {
+                newTasks = newTasks.map(t => {
+                    if (t === taskToSwap) {
+                        return { ...t, date: targetDateStr };
+                    }
+                    if (t === existingTaskOnTarget) {
+                        return { ...t, date: taskToSwap.date };
+                    }
+                    return t;
+                });
+            } else {
+                newTasks = newTasks.map(t =>
+                    t === taskToSwap ? { ...t, date: targetDateStr } : t
+                );
+            }
+
+            return newTasks;
+        });
+
+        // Reset and close
+        setShowTaskForm(false);
+        setModalMode('add');
+        setSelectedTask(null);
+        setTaskToSwap(null);
     };
 
     const getTasksForDate = (day) => {
@@ -73,8 +122,47 @@ function Schedule() {
     const days = getDaysArray();
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+    console.log('Current modalMode:', modalMode);
+
     return (
         <div className="schedule">
+            {modalMode === 'swap' && (
+                <div style={{
+                    position: 'fixed',
+                    top: '20px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: '#fff8e1',
+                    padding: '12px 24px',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                    zIndex: 9999,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '16px'
+                }}>
+                    {console.log('Banner is rendering now')}
+                    <p style={{ margin: 0, fontWeight: 500 }}>
+                        Click a day to swap/move the task - Current: {formatDate(taskToSwap.date)}
+                    </p>
+                    <button
+                        onClick={() => {
+                            setModalMode('add');
+                        }}
+                        style={{
+                            background: '#e74c3c',
+                            color: 'white',
+                            border: 'none',
+                            padding: '6px 12px',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        Cancel
+                    </button>
+                </div>
+            )}
+
             <div className="schedule__content">
                 <div className="schedule__card">
                     <div className="schedule__month-header">
@@ -110,16 +198,24 @@ function Schedule() {
                                     className={`schedule__day 
                                         ${day ? 'schedule__day--active' : 'schedule__day--empty'}
                                         ${isToday ? 'schedule__day--today' : ''}`}
-                                    onClick={() => handleDayClick(day)}
-                                    //Make it look clickable
+                                    onClick={() => {
+                                        if (modalMode === 'swap') {
+                                            handleSwapDayClick(day);
+                                        } else {
+                                            handleDayClick(day);
+                                        }
+                                    }}
                                     role="button"
                                     tabIndex={day ? 0 : -1}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter' || e.key === ' ') {
-                                            handleDayClick(day);
+                                            if (modalMode === 'swap') {
+                                                handleSwapDayClick(day);
+                                            } else {
+                                                handleDayClick(day);
+                                            }
                                         }
                                     }}
-                                    // ----------------------------------------------
                                 >
                                     <div className="schedule__day-number">{day}</div>
                                     <div className="schedule__day-tasks">
@@ -153,6 +249,7 @@ function Schedule() {
                         >
                         Add Task (Today)
                         </button>
+                        <button className="schedule__btn schedule__btn--secondary">Swapping Form</button>
                         <button className="schedule__btn schedule__btn--tertiary" onClick={() => window.location.href = '/swap-form'}>Swapping Form Requests</button>
                     </div>
                 </div>
@@ -163,7 +260,9 @@ function Schedule() {
                 onClose={() => {
                     setShowTaskForm(false);
                     setSelectedTask(null);
-                    setModalMode('add');
+                    if (!isSwapClose) {
+                        setModalMode('add');
+                    }
                 }}
                 selectedDate={selectedDate}
                 currentMonth={currentDate}
@@ -171,12 +270,16 @@ function Schedule() {
                 initialTask={selectedTask}
                 mode={modalMode}
                 onUpdateTask={(updateTask) => {
-                    setTask(prev => prev.map(t => t === selectedTask ? updateTask : t));
+                    setTasks(prev => prev.map(t => t === selectedTask ? updateTask : t));
                     setShowTaskForm(false);
                     setSelectedTask(null);
                     setModalMode('add');
                 }}
                 onSwitchToEdit={() => setModalMode('edit')}
+                onSwitchToSwap={() => {
+                    console.log('Swap mode triggered');
+                    setModalMode('swap')
+                }}
             />
         </div>
     );
