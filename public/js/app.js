@@ -65968,9 +65968,9 @@ function Schedule() {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_TasksModal__WEBPACK_IMPORTED_MODULE_1__["default"], {
       isOpen: showTaskForm,
       onClose: function onClose() {
-        setShowTaskForm(false);
-        setSelectedTask(null);
         setModalMode('add');
+        setSelectedTask(null);
+        setShowTaskForm(false);
       },
       selectedDate: selectedDate,
       currentMonth: currentDate,

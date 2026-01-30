@@ -258,9 +258,9 @@ function Schedule() {
             <TasksModal
                 isOpen={showTaskForm}
                 onClose={() => {
-                    setShowTaskForm(false);
-                    setSelectedTask(null);
                     setModalMode('add');
+                    setSelectedTask(null);
+                    setShowTaskForm(false);
                 }}
                 selectedDate={selectedDate}
                 currentMonth={currentDate}
