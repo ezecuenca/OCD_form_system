@@ -15,8 +15,7 @@
         }
     }
     
-    &__print-btn,
-    &__back-btn {
+    &__print-btn {
         padding: 0.5rem 1.5rem;
         border: 1px solid #333;
         background: white;
@@ -26,6 +25,29 @@
         
         &:hover {
             background: #f0f0f0;
+        }
+    }
+    
+    &__back-btn {
+        padding: 0;
+        border: none;
+        background: transparent;
+        color: #333;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: opacity 0.2s;
+        
+        &:hover {
+            opacity: 0.7;
+        }
+        
+        svg {
+            width: 16px;
+            height: 16px;
         }
     }
     
@@ -256,9 +278,25 @@
     }
     
     &__section-title {
+        font-weight: normal;
+        font-size: 11pt;
+        margin-bottom: 0.5rem;
+    }
+    
+    &__subsection {
+        margin: 1rem 0;
+    }
+    
+    &__subsection-title {
         font-weight: bold;
         font-size: 11pt;
         margin-bottom: 0.5rem;
+    }
+    
+    &__admin-text {
+        font-weight: normal;
+        font-size: 11pt;
+        margin: 0.25rem 0;
     }
     
     &__table {
@@ -317,6 +355,31 @@
         min-width: 0;
     }
     
+    &__table-report {
+        vertical-align: top;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        min-width: 0;
+    }
+    
+    &__table-remarks {
+        vertical-align: middle;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        min-width: 0;
+        width: 28%;
+        max-width: 11rem;
+    }
+    
+    &__report-text {
+        div {
+            margin-bottom: 0.25rem;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+    
     &__task-list {
         margin: 0;
         padding-left: 1.5rem;
@@ -330,6 +393,12 @@
         }
     }
     
+    &__table-items {
+        width: 5rem;
+        text-align: center;
+        vertical-align: middle;
+    }
+    
     &__legend {
         font-size: 8pt;
         font-style: italic;
@@ -337,7 +406,7 @@
     }
     
     &__admin-note {
-        font-size: 9pt;
+        font-size: 11pt;
         font-style: italic;
         margin: 0.5rem 0;
     }
@@ -346,6 +415,7 @@
     &__endorsed-list {
         margin: 0.5rem 0;
         padding-left: 1.5rem;
+        font-size: 11pt;
         
         li {
             margin-bottom: 0.3rem;
@@ -360,36 +430,41 @@
         margin: 2rem 0;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 2rem;
+        gap: 2rem 1.5rem;
         page-break-inside: avoid;
     }
     
     &__signature-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
+        display: contents;
     }
     
     &__signature-item {
         text-align: center;
+        
+        &--full {
+            grid-column: 1 / -1;
+        }
     }
     
-    &__signature-line {
-        height: 50px;
-        border-bottom: 1px solid #333;
-        margin-bottom: 0.5rem;
+    &__signature-label {
+        font-weight: normal;
+        font-size: 11pt;
+        margin-bottom: 3rem;
     }
     
     &__signature-name {
         font-weight: bold;
         text-decoration: underline;
-        margin: 0.5rem 0 0.2rem;
-        font-size: 10pt;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 2px;
+        margin: 0.25rem 0 0.2rem;
+        font-size: 11pt;
     }
     
     &__signature-position {
-        font-size: 9pt;
+        font-size: 11pt;
         margin: 0;
+        font-weight: normal;
     }
     
     &__footer {

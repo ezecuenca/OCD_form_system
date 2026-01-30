@@ -255,7 +255,7 @@ body {
   max-width: 320px;
   display: flex;
   align-items: center;
-  background: white;
+  background: #f7f7f7;
   border: 2px solid #290081;
   border-radius: 8px;
   padding: 0 0.85rem;
@@ -440,7 +440,7 @@ body {
   gap: 0.5rem;
   justify-content: flex-start;
   align-items: center;
-  margin-left: -1.5rem;
+  margin-left: -1.9rem;
 }
 .adr-reports__action-btn {
   width: 32px;
@@ -612,6 +612,7 @@ body {
   border-radius: 4px;
   font-size: 0.9rem;
   max-width: 400px;
+  background: #f7f7f7;
 }
 .adr-form__document-name:focus {
   outline: none;
@@ -773,12 +774,13 @@ body {
   color: #333;
 }
 .adr-form__subject-input {
-  padding: 0.4rem 0.6rem;
+  padding: 0.5rem 0.75rem;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 0.8rem;
-  min-width: 400px;
+  font-size: 0.9rem;
+  min-width: 480px;
   font-weight: 600;
+  background: #f7f7f7;
 }
 .adr-form__subject-input::-moz-placeholder {
   color: #999;
@@ -813,18 +815,20 @@ body {
 .adr-form__field select {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #290081;
+  border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 0.8125rem;
   font-family: inherit;
   outline: none;
   transition: border-color 0.2s;
-  background: white;
+  background: #f7f7f7;
 }
 .adr-form__field input:focus,
 .adr-form__field textarea:focus,
 .adr-form__field select:focus {
-  border-color: #18004C;
+  outline: none;
+  border-color: #290081;
+  box-shadow: 0 0 0 2px rgba(41, 0, 129, 0.1);
 }
 .adr-form__field textarea {
   resize: vertical;
@@ -1076,6 +1080,12 @@ body {
   min-height: 60px;
   resize: vertical;
   font-family: inherit;
+  background: #f7f7f7;
+}
+.adr-form__modal-textarea:focus {
+  outline: none;
+  border-color: #290081;
+  box-shadow: 0 0 0 2px rgba(41, 0, 129, 0.1);
 }
 .adr-form__modal {
   display: none;
@@ -1179,6 +1189,7 @@ body {
   font-family: inherit;
   outline: none;
   transition: border-color 0.2s;
+  background: #f7f7f7;
 }
 .adr-form__modal-input:focus {
   border-color: #290081;
@@ -1206,7 +1217,7 @@ body {
 }
 .adr-form__modal-add-row {
   padding: 0.5rem 1rem;
-  background: #290081;
+  background: #18004C;
   color: white;
   border: none;
   border-radius: 4px;
@@ -1216,7 +1227,7 @@ body {
   transition: all 0.2s;
 }
 .adr-form__modal-add-row:hover {
-  background: #18004C;
+  background: #E99745;
 }
 .adr-form__modal-footer {
   padding: 1rem 1.5rem;
@@ -1226,7 +1237,7 @@ body {
 }
 .adr-form__modal-confirm {
   padding: 0.5rem 1.5rem;
-  background: #290081;
+  background: #18004C;
   color: white;
   border: none;
   border-radius: 4px;
@@ -1236,7 +1247,7 @@ body {
   transition: all 0.2s;
 }
 .adr-form__modal-confirm:hover {
-  background: #18004C;
+  background: #E99745;
 }
 .adr-form__counter {
   display: flex;
@@ -1861,7 +1872,7 @@ body {
   gap: 0.5rem;
   justify-content: flex-start;
   align-items: center;
-  margin-left: -0.6rem;
+  margin-left: -0.7rem;
 }
 .archived-reports__action-btn {
   width: 32px;
@@ -2012,7 +2023,7 @@ body {
     display: none;
   }
 }
-.document-viewer__print-btn, .document-viewer__back-btn {
+.document-viewer__print-btn {
   padding: 0.5rem 1.5rem;
   border: 1px solid #333;
   background: white;
@@ -2020,8 +2031,28 @@ body {
   cursor: pointer;
   font-size: 0.9rem;
 }
-.document-viewer__print-btn:hover, .document-viewer__back-btn:hover {
+.document-viewer__print-btn:hover {
   background: #f0f0f0;
+}
+.document-viewer__back-btn {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #333;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: opacity 0.2s;
+}
+.document-viewer__back-btn:hover {
+  opacity: 0.7;
+}
+.document-viewer__back-btn svg {
+  width: 16px;
+  height: 16px;
 }
 .document-viewer__header {
   background: white;
@@ -2218,9 +2249,22 @@ body {
   margin: 1.5rem 0;
 }
 .document-viewer__section-title {
+  font-weight: normal;
+  font-size: 11pt;
+  margin-bottom: 0.5rem;
+}
+.document-viewer__subsection {
+  margin: 1rem 0;
+}
+.document-viewer__subsection-title {
   font-weight: bold;
   font-size: 11pt;
   margin-bottom: 0.5rem;
+}
+.document-viewer__admin-text {
+  font-weight: normal;
+  font-size: 11pt;
+  margin: 0.25rem 0;
 }
 .document-viewer__table {
   width: 100%;
@@ -2266,6 +2310,26 @@ body {
   overflow-wrap: break-word;
   min-width: 0;
 }
+.document-viewer__table-report {
+  vertical-align: top;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+.document-viewer__table-remarks {
+  vertical-align: middle;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  min-width: 0;
+  width: 28%;
+  max-width: 11rem;
+}
+.document-viewer__report-text div {
+  margin-bottom: 0.25rem;
+}
+.document-viewer__report-text div:last-child {
+  margin-bottom: 0;
+}
 .document-viewer__task-list {
   margin: 0;
   padding-left: 1.5rem;
@@ -2277,19 +2341,25 @@ body {
   word-break: break-word;
   overflow-wrap: break-word;
 }
+.document-viewer__table-items {
+  width: 5rem;
+  text-align: center;
+  vertical-align: middle;
+}
 .document-viewer__legend {
   font-size: 8pt;
   font-style: italic;
   margin-top: 0.5rem;
 }
 .document-viewer__admin-note {
-  font-size: 9pt;
+  font-size: 11pt;
   font-style: italic;
   margin: 0.5rem 0;
 }
 .document-viewer__admin-list, .document-viewer__endorsed-list {
   margin: 0.5rem 0;
   padding-left: 1.5rem;
+  font-size: 11pt;
 }
 .document-viewer__admin-list li, .document-viewer__endorsed-list li {
   margin-bottom: 0.3rem;
@@ -2301,31 +2371,35 @@ body {
   margin: 2rem 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 2rem 1.5rem;
   page-break-inside: avoid;
 }
 .document-viewer__signature-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  display: contents;
 }
 .document-viewer__signature-item {
   text-align: center;
 }
-.document-viewer__signature-line {
-  height: 50px;
-  border-bottom: 1px solid #333;
-  margin-bottom: 0.5rem;
+.document-viewer__signature-item--full {
+  grid-column: 1/-1;
+}
+.document-viewer__signature-label {
+  font-weight: normal;
+  font-size: 11pt;
+  margin-bottom: 3rem;
 }
 .document-viewer__signature-name {
   font-weight: bold;
   text-decoration: underline;
-  margin: 0.5rem 0 0.2rem;
-  font-size: 10pt;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+  margin: 0.25rem 0 0.2rem;
+  font-size: 11pt;
 }
 .document-viewer__signature-position {
-  font-size: 9pt;
+  font-size: 11pt;
   margin: 0;
+  font-weight: normal;
 }
 .document-viewer__footer {
   background: white;
