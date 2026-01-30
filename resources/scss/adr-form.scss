@@ -38,8 +38,9 @@
         padding: 0.5rem 0.75rem;
         border: 1px solid #ddd;
         border-radius: 4px;
-        font-size: 0.9rem;
+        font-size: 0.9rem;  
         max-width: 400px;
+        background: #f7f7f7;
         
         &:focus {
             outline: none;
@@ -225,12 +226,13 @@
     }
 
     &__subject-input {
-        padding: 0.4rem 0.6rem;
+        padding: 0.5rem 0.75rem;
         border: 1px solid #ddd;
         border-radius: 4px;
-        font-size: 0.8rem;
-        min-width: 400px;
+        font-size: 0.9rem;
+        min-width: 480px;
         font-weight: 600;
+        background: #f7f7f7;
         
         &::placeholder {
             color: #999;
@@ -265,16 +267,18 @@
         select {
             width: 100%;
             padding: 0.5rem;
-            border: 1px solid $form-purple;
+            border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 0.8125rem;
             font-family: inherit;
             outline: none;
             transition: border-color 0.2s;
-            background: white;
+            background: #f7f7f7;
 
             &:focus {
-                border-color: #18004C;
+                outline: none;
+                border-color: $form-purple;
+                box-shadow: 0 0 0 2px rgba(41, 0, 129, 0.1);
             }
         }
 
@@ -568,6 +572,14 @@
         min-height: 60px;
         resize: vertical;
         font-family: inherit;
+        background: #f7f7f7;        
+
+        &:focus {
+            outline: none;
+            border-color: $form-purple;
+            box-shadow: 0 0 0 2px rgba(41, 0, 129, 0.1);
+        }
+        
     }
 
     &__modal {
@@ -688,6 +700,7 @@
             font-family: inherit;
             outline: none;
             transition: border-color 0.2s;
+            background: #f7f7f7;
 
             &:focus {
                 border-color: $form-purple;
@@ -720,7 +733,7 @@
 
         &-add-row {
             padding: 0.5rem 1rem;
-            background: $form-purple;
+            background: #18004C;
             color: white;
             border: none;
             border-radius: 4px;
@@ -730,7 +743,7 @@
             transition: all 0.2s;
 
             &:hover {
-                background: #18004C;
+                background: #E99745;
             }
         }
 
@@ -743,7 +756,7 @@
 
         &-confirm {
             padding: 0.5rem 1.5rem;
-            background: $form-purple;
+            background: #18004C;
             color: white;
             border: none;
             border-radius: 4px;
@@ -753,7 +766,7 @@
             transition: all 0.2s;
 
             &:hover {
-                background: #18004C;
+                background: #E99745;
             }
         }
     }
