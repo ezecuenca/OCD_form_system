@@ -60,7 +60,7 @@ function ADRReports() {
     };
     
     const handleViewDocument = (id) => {
-        navigate(`/adr-reports/view/${id}`);
+        navigate(`/adr-reports/view/${id}`, { state: { from: 'list' } });
     };
     
     const handleEditReport = (id) => {

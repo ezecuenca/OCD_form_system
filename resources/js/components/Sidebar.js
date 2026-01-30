@@ -36,7 +36,7 @@ function Sidebar() {
                     <span className="sidebar__link-icon">
                         <img src="/images/adr_archive_logo.svg" alt="Archived Reports" className="sidebar__link-icon-img" />
                     </span>
-                    <span className="sidebar__link-text">Archived Reports</span>
+                    <span className="sidebar__link-text">Archive</span>
                 </NavLink>
             </nav>
 

@@ -62876,7 +62876,11 @@ function ADRForm() {
   var handleViewDocument = function handleViewDocument() {
     if (isEditing && reportToEdit && reportToEdit.id) {
       // If editing existing report, navigate to view
-      navigate("/adr-reports/view/".concat(reportToEdit.id));
+      navigate("/adr-reports/view/".concat(reportToEdit.id), {
+        state: {
+          from: 'form'
+        }
+      });
     } else {
       // If creating new, save first then view
       var formData = {
@@ -62906,7 +62910,11 @@ function ADRForm() {
         approvedPosition: approvedPosition
       };
       var newReport = addReport(formData);
-      navigate("/adr-reports/view/".concat(newReport.id));
+      navigate("/adr-reports/view/".concat(newReport.id), {
+        state: {
+          from: 'form'
+        }
+      });
     }
   };
   var addAttendanceItem = function addAttendanceItem() {
@@ -64351,7 +64359,11 @@ function ADRReports() {
     navigate('/adr-reports/create');
   };
   var handleViewDocument = function handleViewDocument(id) {
-    navigate("/adr-reports/view/".concat(id));
+    navigate("/adr-reports/view/".concat(id), {
+      state: {
+        from: 'list'
+      }
+    });
   };
   var handleEditReport = function handleEditReport(id) {
     var report = getReport(id);
@@ -65090,7 +65102,11 @@ function ArchivedReports() {
     };
   }, []);
   var handleViewDocument = function handleViewDocument(id) {
-    navigate("/adr-reports/view/".concat(id));
+    navigate("/adr-reports/view/".concat(id), {
+      state: {
+        from: 'archived'
+      }
+    });
   };
   var handleRestore = function handleRestore() {
     if (selectedReports.length === 0) {
@@ -65545,12 +65561,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function DocumentViewer() {
+  var _location$state, _report$forPosition, _report$thruPosition, _report$fromPosition;
   var _useParams = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useParams)(),
     id = _useParams.id;
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
+  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useLocation)();
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     getReport = _useFormContext.getReport;
   var report = getReport(parseInt(id));
+  var from = (_location$state = location.state) === null || _location$state === void 0 ? void 0 : _location$state.from;
   if (!report) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
       style: {
@@ -65567,6 +65586,12 @@ function DocumentViewer() {
       })]
     });
   }
+  var dash = function dash(v) {
+    if (v == null || v === '') return '-';
+    if (typeof v === 'number') return v;
+    var s = String(v).trim();
+    return s !== '' ? s : '-';
+  };
   var formatDate = function formatDate(isoString) {
     if (!isoString) return '';
     var date = new Date(isoString);
@@ -65589,16 +65614,33 @@ function DocumentViewer() {
     className: "document-viewer",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
       className: "document-viewer__actions",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
         onClick: function onClick() {
-          return navigate('/adr-reports/create', {
-            state: {
-              report: report
-            }
-          });
+          if (from === 'form') {
+            navigate('/adr-reports/create', {
+              state: {
+                report: report
+              }
+            });
+          } else if (from === 'archived') {
+            navigate('/archived-reports');
+          } else {
+            navigate('/adr-reports');
+          }
         },
         className: "document-viewer__back-btn",
-        children: "Back to Form"
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("svg", {
+          viewBox: "0 0 24 24",
+          fill: "none",
+          xmlns: "http://www.w3.org/2000/svg",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("path", {
+            d: "M19 12H5M5 12L12 19M5 12L12 5",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round"
+          })
+        }), from === 'form' ? 'Back to Form' : 'Back to Reports']
       })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
       className: "document-viewer__content",
@@ -65619,12 +65661,15 @@ function DocumentViewer() {
             className: "document-viewer__value",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
               className: "document-viewer__name",
-              children: report.forName || ''
-            }), report.forPosition && report.forPosition.split('\n').map(function (line, index) {
-              return line.trim() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              children: dash(report.forName)
+            }), (_report$forPosition = report.forPosition) !== null && _report$forPosition !== void 0 && _report$forPosition.trim() ? report.forPosition.split('\n').map(function (line, index) {
+              return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
                 className: "document-viewer__position",
                 children: line.trim()
-              }, index);
+              }, index) : null;
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "document-viewer__position",
+              children: "-"
             })]
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
@@ -65639,12 +65684,15 @@ function DocumentViewer() {
             className: "document-viewer__value",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
               className: "document-viewer__name",
-              children: report.thruName || ''
-            }), report.thruPosition && report.thruPosition.split('\n').map(function (line, index) {
-              return line.trim() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              children: dash(report.thruName)
+            }), (_report$thruPosition = report.thruPosition) !== null && _report$thruPosition !== void 0 && _report$thruPosition.trim() ? report.thruPosition.split('\n').map(function (line, index) {
+              return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
                 className: "document-viewer__position",
                 children: line.trim()
-              }, index);
+              }, index) : null;
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "document-viewer__position",
+              children: "-"
             })]
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
@@ -65659,12 +65707,15 @@ function DocumentViewer() {
             className: "document-viewer__value",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
               className: "document-viewer__name",
-              children: report.fromName || ''
-            }), report.fromPosition && report.fromPosition.split('\n').map(function (line, index) {
-              return line.trim() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              children: dash(report.fromName)
+            }), (_report$fromPosition = report.fromPosition) !== null && _report$fromPosition !== void 0 && _report$fromPosition.trim() ? report.fromPosition.split('\n').map(function (line, index) {
+              return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
                 className: "document-viewer__position",
                 children: line.trim()
-              }, index);
+              }, index) : null;
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "document-viewer__position",
+              children: "-"
             })]
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
@@ -65677,14 +65728,14 @@ function DocumentViewer() {
             children: ":"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
             className: "document-viewer__value",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
               className: "document-viewer__subject",
-              children: [report.subject || 'After Duty Report', report.dateTime && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
-                children: [" for the Period Covered ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+                children: [" After Duty Report for the Period Covered ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
                   className: "document-viewer__datetime-bold",
-                  children: report.dateTime
+                  children: dash(report.dateTime)
                 })]
-              })]
+              })
             })
           })]
         })]
@@ -65701,7 +65752,7 @@ function DocumentViewer() {
             className: "document-viewer__status-text",
             children: ["RDRRMC Operations Center is on ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
               className: "document-viewer__status-alert",
-              children: report.alertStatus || 'WHITE ALERT'
+              children: dash(report.alertStatus) === '-' ? 'WHITE ALERT' : report.alertStatus
             }), "."]
           })]
         })
@@ -65715,8 +65766,7 @@ function DocumentViewer() {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("thead", {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
-                className: "document-viewer__table-num",
-                children: "#"
+                className: "document-viewer__table-num"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
                 className: "document-viewer__table-name",
                 children: "Name"
@@ -65727,26 +65777,237 @@ function DocumentViewer() {
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("tbody", {
             children: report.attendanceItems.map(function (item, index) {
+              var _item$task;
               return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
                   className: "document-viewer__table-num",
                   children: index + 1
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
                   className: "document-viewer__table-name",
-                  children: item.name || ''
+                  children: dash(item.name)
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
                   className: "document-viewer__table-tasks",
-                  children: item.task ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("ul", {
+                  children: (_item$task = item.task) !== null && _item$task !== void 0 && _item$task.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("ul", {
                     className: "document-viewer__task-list",
                     children: item.task.split(/[;\n]/).map(function (task, i) {
-                      return task.trim() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("li", {
+                      return task.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("li", {
                         children: task.trim()
-                      }, i);
+                      }, i) : null;
                     })
-                  }) : ''
+                  }) : '-'
                 })]
               }, item.id || index);
             })
+          })]
+        })]
+      }), report.reportsItems && report.reportsItems.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        className: "document-viewer__section",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h3", {
+          className: "document-viewer__section-title",
+          children: "3. Reports and Advisories released and issued (NDRRMC Dashboard, Website, SMS, E-mail, Viber, social media)"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("table", {
+          className: "document-viewer__table document-viewer__table--reports",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("thead", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                className: "document-viewer__table-num",
+                children: "#"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                className: "document-viewer__table-report",
+                children: "Reports and Advisories released"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                className: "document-viewer__table-remarks",
+                children: "Remarks"
+              })]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("tbody", {
+            children: report.reportsItems.map(function (item, index) {
+              var _item$report;
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                  className: "document-viewer__table-num",
+                  children: index + 1
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                  className: "document-viewer__table-report",
+                  children: (_item$report = item.report) !== null && _item$report !== void 0 && _item$report.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+                    className: "document-viewer__report-text",
+                    children: item.report.split(/\n/).map(function (line, i) {
+                      return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+                        children: line.trim()
+                      }, i) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}, i);
+                    })
+                  }) : '-'
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                  className: "document-viewer__table-remarks",
+                  children: dash(item.remarks)
+                })]
+              }, item.id || index);
+            })
+          })]
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        className: "document-viewer__section",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h3", {
+          className: "document-viewer__section-title",
+          children: "4. Administrative Matters:"
+        }), report.communicationRows && report.communicationRows.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "document-viewer__subsection",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h4", {
+            className: "document-viewer__subsection-title",
+            children: "A. Status of Communication Lines"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("table", {
+            className: "document-viewer__table document-viewer__table--communication",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("thead", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                  children: "Particulars"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                  className: "document-viewer__table-items",
+                  children: "No. of Items"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                  children: "Contact No. / Freq / Channel"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                  children: "Status / Remarks"
+                })]
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("tbody", {
+              children: report.communicationRows.map(function (row, index) {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                    children: dash(row.particulars)
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                    className: "document-viewer__table-items",
+                    children: row.noOfItems !== undefined && row.noOfItems !== null && row.noOfItems !== '' ? row.noOfItems : '-'
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                    children: dash(row.contact)
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                    children: dash(row.status)
+                  })]
+                }, row.id || index);
+              })
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+            className: "document-viewer__legend",
+            children: "Legend: Status - operational / non-operational / prepaid status of mobile phones"
+          })]
+        }), report.otherItemsRows && report.otherItemsRows.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "document-viewer__subsection",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h4", {
+            className: "document-viewer__subsection-title",
+            children: "B. Status of Other Items"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("table", {
+            className: "document-viewer__table document-viewer__table--other-items",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("thead", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                  children: "Particulars"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                  className: "document-viewer__table-items",
+                  children: "No. of Items"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+                  children: "Status / Remarks"
+                })]
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("tbody", {
+              children: report.otherItemsRows.map(function (row, index) {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                    children: dash(row.particulars)
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                    className: "document-viewer__table-items",
+                    children: row.noOfItems !== undefined && row.noOfItems !== null && row.noOfItems !== '' ? row.noOfItems : '-'
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+                    children: dash(row.status)
+                  })]
+                }, row.id || index);
+              })
+            })]
+          })]
+        }), report.otherAdminRows && report.otherAdminRows.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "document-viewer__subsection",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h4", {
+            className: "document-viewer__subsection-title",
+            children: "C. Other Administrative Matters:"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+            className: "document-viewer__admin-note",
+            children: "(List down administrative concerns such as but not limited to: Duty driver on-call, vehicle activities, internet or other ICT equipment issues, parcel or documents received/delivered, untoward incidents that should be elevated to the management level)."
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("ul", {
+            className: "document-viewer__admin-list",
+            children: report.otherAdminRows.map(function (row, index) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("li", {
+                children: dash(row.concern)
+              }, row.id || index);
+            })
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "document-viewer__subsection",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+            className: "document-viewer__admin-text",
+            children: "1. The following were endorsed to incoming Operations Duty Staff:"
+          }), report.endorsedItemsRows && report.endorsedItemsRows.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("ol", {
+            className: "document-viewer__endorsed-list",
+            children: report.endorsedItemsRows.map(function (row, index) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("li", {
+                children: dash(row.item)
+              }, row.id || index);
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+            className: "document-viewer__admin-text",
+            children: "2. For information of the OCD Officer-In-Charge."
+          })]
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        className: "document-viewer__signatures",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "document-viewer__signature-row",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "document-viewer__signature-item",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "document-viewer__signature-label",
+              children: "Prepared by:"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "document-viewer__signature-name",
+              children: dash(report.preparedBy)
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "document-viewer__signature-position",
+              children: dash(report.preparedPosition)
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "document-viewer__signature-item",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "document-viewer__signature-label",
+              children: "Received by:"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "document-viewer__signature-name",
+              children: dash(report.receivedBy)
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "document-viewer__signature-position",
+              children: dash(report.receivedPosition)
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "document-viewer__signature-item document-viewer__signature-item--full",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "document-viewer__signature-label",
+            children: "Noted by:"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "document-viewer__signature-name",
+            children: dash(report.notedBy)
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "document-viewer__signature-position",
+            children: dash(report.notedPosition)
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "document-viewer__signature-item document-viewer__signature-item--full",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "document-viewer__signature-label",
+            children: "Approved:"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "document-viewer__signature-name",
+            children: dash(report.approvedBy)
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "document-viewer__signature-position",
+            children: dash(report.approvedPosition)
           })]
         })]
       })]
@@ -66133,7 +66394,7 @@ function Sidebar() {
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
           className: "sidebar__link-text",
-          children: "Archived Reports"
+          children: "Archive"
         })]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
