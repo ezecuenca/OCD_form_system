@@ -1,15 +1,46 @@
 import React, { useEffect, useState } from 'react';
 
-function AddTaskModal({ isOpen, onClose, selectedDate, currentMonth, onAddTask }) {
+function AddTaskModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit }) {
+    
+    const isAddMode = mode === 'add';
+    const isViewMode = mode === 'view';
+    const isEditMode = mode === 'edit';
+
     const [name, setName] = useState('');
     const [task, setTask] = useState('');
     const [schedule, setSchedule] = useState('');
 
     useEffect(() => {
-        if (isOpen && selectedDate) {
-            setSchedule(selectedDate);
+        if (!isOpen) return;
+
+        if (isAddMode) {
+            setName('');
+            setTask('');
+            setSchedule(selectedDate || '');
+        } else if (initialTask) {
+            setName(initialTask.name || '');
+            setTask(initialTask.task || '');
+            setSchedule(initialTask.date || '');
         }
-    }, [isOpen, selectedDate]);
+    }, [isOpen, mode, initialTask, selectedDate]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (isViewMode) return;
+
+        const taskData = {
+            name: name.trim(),
+            task: task.trim(),
+            date: schedule,
+        };
+        if (isEditMode) {
+            onUpdateTask({ ...initialTask, ...taskData });
+        } else {
+            onAddTask(taskData);
+        }
+
+        onClose();
+    }
 
     const handleAddTask = (e) => {
         e.preventDefault();
@@ -32,14 +63,14 @@ function AddTaskModal({ isOpen, onClose, selectedDate, currentMonth, onAddTask }
         onClose();
     };
 
-    const formatDateForDisplay = (dateString) => {
-        if (!dateString) return 'No data selected';
-        const [year, month, day] = dateString.split('-');
-        const date = new Date(year, month - 1, day);
-        return date.toLocaleDateString('en-US', { 
-            month: 'numeric',
-            day: 'numeric', 
-            year: 'numeric' 
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '—';
+        const [y, m, d] = dateStr.split('-');
+        return new Date(y, m-1, d).toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
         });
     };
 
@@ -49,55 +80,80 @@ function AddTaskModal({ isOpen, onClose, selectedDate, currentMonth, onAddTask }
         <div className="modal-overlay">
             <div className="modal">
                 <div className="modal__header">
-                    <h2>Add Task</h2>
+                    <h2>{isAddMode ? 'Add Task' : isViewMode ? 'View Task' : 'Edit Task'}</h2>
                     <button className="modal__close" onClick={onClose}>×</button>
                 </div>
 
-                <form onSubmit={handleAddTask} className="modal__form">
+                <form onSubmit={handleSubmit} className="modal__form">
                     <div className="form__group">
-                        <label htmlFor="name">Name:</label>
-                        <input
-                            type="text"
-                            id="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            placeholder="Enter name"
-                        />
+                        <label>Name</label>
+                        {isViewMode ? (
+                            <div className="readonly-field">{name || '—'}</div>
+                        ) : (
+                            <input
+                                type="text"
+                                value={name}
+                                onChange={e => setName(e.target.value)}
+                                placeholder="Enter name"
+                                disabled={isViewMode}
+                            />
+                        )}
                     </div>
 
                     <div className="form__group">
-                        <label htmlFor="task">Task:</label>
-                        <textarea
-                            id="task"
-                            value={task}
-                            onChange={(e) => setTask(e.target.value)}
-                            placeholder="Enter task details"
-                            rows="4"
-                        />
+                        <label>Task / Description</label>
+                        {isViewMode ? (
+                            <div className="readonly-field multiline">
+                                {task || 'No description provided'}
+                            </div>
+                        ) : (
+                            <textarea
+                                value={task}
+                                onChange={e => setTask(e.target.value)}
+                                placeholder="Enter task details"
+                                rows="5"
+                                disabled={isViewMode}
+                            />
+                        )}
                     </div>
 
                     <div className="form__group">
-                        <label htmlFor="schedule">Schedule:</label>
-                        <div style={{
-                            padding: '1rem',
-                            backgroundColor: '#f9f9f9',
-                            border: '2px solid #e0e0e0',
-                            borderRadius: '8px',
-                            minHeight: '50px', 
-                            display: 'flex',
-                            alignItems: 'center'
-                        }}>
-                            {formatDateForDisplay(schedule)}
-                        </div>
+                        <label>Date</label>
+                        {isViewMode ? (
+                            <div className="readonly-field">{formatDate(schedule)}</div>
+                        ) : (
+                            <>
+                                <input
+                                    type="date"
+                                    value={schedule}
+                                    readOnly={!isEditMode}
+                                    style={isEditMode ? {} : { backgroundColor: '#f9f9f9', cursor: 'default' }}
+                                />
+                                <small>{formatDate(schedule)}</small>
+                            </>
+                        )}
                     </div>
-
-                    <small style={{ color: '#777', marginTop: '0.4rem', fontSize: '0.8rem'}}>
-                        Selected Date: {formatDateForDisplay(schedule)}
-                    </small>
 
                     <div className="modal__actions">
-                        <button type="submit" className="btn btn--primary">Add Task</button>
-                        <button type="button" className="btn btn--secondary" onClick={onClose}>Cancel</button>
+                        {isAddMode && (
+                            <>
+                                <button type="submit" className="btn btn--primary">Add Task</button>
+                            </>
+                        )}
+
+                        {isViewMode && (
+                            <>
+                                <button type="button" className="btn btn--primary" onClick={onSwitchToEdit}>Edit Task</button>
+                                <button type="button" className="btn btn--secondary">Swap Task</button>
+                            </>
+                        )}
+
+                        {isEditMode && (
+                            <>
+                                <button type="submit" className="btn btn--primary">Save Changes</button>
+                                <button type="button" className="btn btn--secondary" onClick={onClose}>Cancel</button>
+                            </>
+                        )}
                     </div>
                 </form>
             </div>

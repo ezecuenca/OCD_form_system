@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import AddTaskModal from './AddTaskModal';
+import { set } from 'lodash';
 
 function Schedule() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [tasks, setTasks] = useState([]);
     const [showTaskForm, setShowTaskForm] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedTask, setSelectedTask] = useState(null);
+    const [modalMode, setModalMode] = useState('add'); // 'add' | 'view' | 'edit'
 
     const daysInMonth = (date) => {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -59,6 +62,12 @@ function Schedule() {
     const handleAddTask = (taskData) => {
         setTasks([...tasks, taskData]);
         setShowTaskForm(false);
+    };
+
+    const handleTaskClick = (task) => {
+        setSelectedTask(task);
+        setModalMode('view');
+        setShowTaskForm(true);
     };
 
     const getTasksForDate = (day) => {
@@ -122,7 +131,14 @@ function Schedule() {
                                     <div className="schedule__day-number">{day}</div>
                                     <div className="schedule__day-tasks">
                                         {dayTasks.map((task, taskIndex) => (
-                                            <div key={taskIndex} className="schedule__task">
+                                            <div 
+                                                key={taskIndex} 
+                                                className="schedule__task"
+                                                onClick={() => handleTaskClick(task)}
+                                                role='button'
+                                                tabIndex={0}
+                                                style={{ cursor: 'pointer' }}
+                                                >
                                                 <div className="schedule__task-name">{task.name}</div>
                                             </div>
                                         ))}
@@ -132,7 +148,6 @@ function Schedule() {
                         })}
                     </div>
 
-                    {/* You can keep this button if you want a "Add for today" shortcut */}
                     <div className="schedule__actions">
                         <button
                         className="schedule__btn schedule__btn--primary"
@@ -152,10 +167,23 @@ function Schedule() {
 
             <AddTaskModal
                 isOpen={showTaskForm}
-                onClose={() => setShowTaskForm(false)}
+                onClose={() => {
+                    setShowTaskForm(false);
+                    setSelectedTask(null);
+                    setModalMode('add');
+                }}
                 selectedDate={selectedDate}
                 currentMonth={currentDate}
                 onAddTask={handleAddTask}
+                initialTask={selectedTask}
+                mode={modalMode}
+                onUpdateTask={(updateTask) => {
+                    setTask(prev => prev.map(t => t === selectedTask ? updateTask : t));
+                    setShowTaskForm(false);
+                    setSelectedTask(null);
+                    setModalMode('add');
+                }}
+                onSwitchToEdit={() => setModalMode('edit')}
             />
         </div>
     );
