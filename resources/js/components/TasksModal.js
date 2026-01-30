@@ -77,11 +77,11 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay">
-            <div className="modal">
+        <div className="modal-overlay" style={mode === 'swap' ? { opacity: 0, pointerEvents: 'none', transition: 'opacity 0.3s ease'} : {}}>
+            <div className="modal" style={mode === 'swap' ? { opacity: 0, transform: 'scale(0.8)',pointerEvents: 'none'} : {}}>
                 <div className="modal__header">
                     <h2>{isAddMode ? 'Add Task' : isViewMode ? 'View Task' : isEditMode ? 'Edit Task' : 'Swap Task'}</h2>
-                    <button className="modal__close" onClick={onClose}>×</button>
+                    <button className="modal__close" onClick={() => onClose()}>×</button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="modal__form">
@@ -123,7 +123,6 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                         </div>
                     </>
                     ) : isViewMode && (
-
                         <div className="view-task">
                             <div className="view-task__row">
                             <label>Name</label>
@@ -154,14 +153,14 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                         {isViewMode && (
                             <>
                                 <button type="button" className="btn btn--primary" onClick={() => onSwitchToEdit()}>Edit Task</button>
-                                <button type="button" className="btn btn--secondary" onClick={() => { onSwitchToSwap(); onClose(true); }}>Swap Task</button>
+                                <button type="button" className="btn btn--secondary" onClick={() => onSwitchToSwap()}>Swap Task</button>
                             </>
                         )}
 
                         {isEditMode && (
                             <>
                                 <button type="submit" className="btn btn--primary">Save Changes</button>
-                                <button type="button" className="btn btn--secondary" onClick={onClose}>Cancel</button>
+                                <button type="button" className="btn btn--secondary" onClick={() => onClose()}>Cancel</button>
                             </>
                         )}                        
                     </div>

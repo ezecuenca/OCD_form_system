@@ -65970,9 +65970,7 @@ function Schedule() {
       onClose: function onClose() {
         setShowTaskForm(false);
         setSelectedTask(null);
-        if (!isSwapClose) {
-          setModalMode('add');
-        }
+        setModalMode('add');
       },
       selectedDate: selectedDate,
       currentMonth: currentDate,
@@ -66564,15 +66562,27 @@ function TasksModal(_ref) {
   if (!isOpen) return null;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
     className: "modal-overlay",
+    style: mode === 'swap' ? {
+      opacity: 0,
+      pointerEvents: 'none',
+      transition: 'opacity 0.3s ease'
+    } : {},
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
       className: "modal",
+      style: mode === 'swap' ? {
+        opacity: 0,
+        transform: 'scale(0.8)',
+        pointerEvents: 'none'
+      } : {},
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         className: "modal__header",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h2", {
           children: isAddMode ? 'Add Task' : isViewMode ? 'View Task' : isEditMode ? 'Edit Task' : 'Swap Task'
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
           className: "modal__close",
-          onClick: onClose,
+          onClick: function onClick() {
+            return onClose();
+          },
           children: "\xD7"
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("form", {
@@ -66673,8 +66683,7 @@ function TasksModal(_ref) {
               type: "button",
               className: "btn btn--secondary",
               onClick: function onClick() {
-                onSwitchToSwap();
-                onClose(true);
+                return onSwitchToSwap();
               },
               children: "Swap Task"
             })]
@@ -66686,7 +66695,9 @@ function TasksModal(_ref) {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
               type: "button",
               className: "btn btn--secondary",
-              onClick: onClose,
+              onClick: function onClick() {
+                return onClose();
+              },
               children: "Cancel"
             })]
           })]

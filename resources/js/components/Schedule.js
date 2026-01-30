@@ -260,9 +260,7 @@ function Schedule() {
                 onClose={() => {
                     setShowTaskForm(false);
                     setSelectedTask(null);
-                    if (!isSwapClose) {
-                        setModalMode('add');
-                    }
+                    setModalMode('add');
                 }}
                 selectedDate={selectedDate}
                 currentMonth={currentDate}
