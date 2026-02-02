@@ -52,9 +52,9 @@ function SwapForm() {
 
     const getRequestDescription = (req) => {
         if (req.targetTaskName) {
-            return `Swap "${req.taskName}" (${formatDateOnly(req.fromDate)}) with "${req.targetTaskName}" (${formatDateOnly(req.toDate)})`;
+            return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) => "${req.targetTaskName}" (${formatDateOnly(req.toDate)})`;
         }
-        return `Move "${req.taskName}" from ${formatDateOnly(req.fromDate)} to ${formatDateOnly(req.toDate)}`;
+        return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) => (${formatDateOnly(req.toDate)})`;
     };
 
     return (

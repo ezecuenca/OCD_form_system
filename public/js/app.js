@@ -66533,9 +66533,9 @@ function SwapForm() {
   };
   var getRequestDescription = function getRequestDescription(req) {
     if (req.targetTaskName) {
-      return "Swap \"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") with \"").concat(req.targetTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
+      return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") => \"").concat(req.targetTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
     }
-    return "Move \"".concat(req.taskName, "\" from ").concat(formatDateOnly(req.fromDate), " to ").concat(formatDateOnly(req.toDate));
+    return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") => (").concat(formatDateOnly(req.toDate), ")");
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "swap-form",
