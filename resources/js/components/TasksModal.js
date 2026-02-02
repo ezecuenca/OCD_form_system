@@ -138,7 +138,21 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
 
                         <div className="view-task__row">
                             <label>Date</label>
-                            <div className="value date">{formatDate(schedule)}</div>
+                            <div className="value date" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                {formatDate(schedule)}
+                                {initialTask?.swappedAt && (
+                                    <span style={{
+                                        fontSize: '0.75rem',
+                                        padding: '2px 8px',
+                                        borderRadius: '4px',
+                                        backgroundColor: '#e8f5e9',
+                                        color: '#2e7d32',
+                                        fontWeight: 500
+                                    }}>
+                                        Swapped
+                                    </span>
+                                )}
+                            </div>
                         </div>
                     </div>
                 )}

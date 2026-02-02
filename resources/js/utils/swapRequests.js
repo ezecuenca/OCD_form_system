@@ -43,12 +43,13 @@ export function executeSwapRequest(id) {
 
     const targetTaskOnDate = tasks.find(t => t.date === req.toDate);
 
+    const swappedAt = new Date().toISOString();
     const newTasks = tasks.map(t => {
         if (t === sourceTask) {
-            return { ...t, date: req.toDate };
+            return { ...t, date: req.toDate, swappedAt };
         }
         if (targetTaskOnDate && t === targetTaskOnDate) {
-            return { ...t, date: req.fromDate };
+            return { ...t, date: req.fromDate, swappedAt };
         }
         return t;
     });

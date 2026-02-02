@@ -67094,9 +67094,25 @@ function TasksModal(_ref) {
             className: "view-task__row",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
               children: "Date"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
               className: "value date",
-              children: formatDate(schedule)
+              style: {
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                flexWrap: 'wrap'
+              },
+              children: [formatDate(schedule), (initialTask === null || initialTask === void 0 ? void 0 : initialTask.swappedAt) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+                style: {
+                  fontSize: '0.75rem',
+                  padding: '2px 8px',
+                  borderRadius: '4px',
+                  backgroundColor: '#e8f5e9',
+                  color: '#2e7d32',
+                  fontWeight: 500
+                },
+                children: "Swapped"
+              })]
             })]
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
@@ -67349,15 +67365,18 @@ function executeSwapRequest(id) {
   var targetTaskOnDate = tasks.find(function (t) {
     return t.date === req.toDate;
   });
+  var swappedAt = new Date().toISOString();
   var newTasks = tasks.map(function (t) {
     if (t === sourceTask) {
       return _objectSpread(_objectSpread({}, t), {}, {
-        date: req.toDate
+        date: req.toDate,
+        swappedAt: swappedAt
       });
     }
     if (targetTaskOnDate && t === targetTaskOnDate) {
       return _objectSpread(_objectSpread({}, t), {}, {
-        date: req.fromDate
+        date: req.fromDate,
+        swappedAt: swappedAt
       });
     }
     return t;
