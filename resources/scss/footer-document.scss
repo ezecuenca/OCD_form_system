@@ -1,0 +1,51 @@
+.footer-document {
+    padding: 1rem 0.75in 0.75in;
+    text-align: center;
+    flex-shrink: 0;
+    line-height: 1;
+
+    @media print {
+        padding: 0.5in 0.75in;
+    }
+}
+
+.footer-document__line {
+    height: 3px;
+    background: #2563eb;
+    margin: 0 0 0.5rem;
+    max-width: 100%;
+}
+
+.footer-document__slogan {
+    font-weight: bold;
+    font-size: 10pt;
+    margin: 0 0 0.2rem;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.footer-document__info {
+    font-size: 7pt;
+    margin: 0;
+    line-height: 1;
+
+    p {
+        margin: 0.1rem 0;
+    }
+}
+
+.footer-document__email {
+    text-decoration: underline;
+    color: #2563eb
+}
+
+/* Footer on sheet: top padding for spacing above footer; sides unchanged */
+.document-viewer__page--sheet .footer-document {
+    padding: 0.3in 0.6in;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.document-viewer__page--sheet .footer-document__slogan {
+    margin: 0 0 0.15rem;
+}

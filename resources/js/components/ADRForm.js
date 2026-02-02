@@ -113,10 +113,8 @@ function ADRForm() {
     
     const handleViewDocument = () => {
         if (isEditing && reportToEdit && reportToEdit.id) {
-            // If editing existing report, navigate to view
-            navigate(`/adr-reports/view/${reportToEdit.id}`, { state: { from: 'form' } });
+            navigate('/adr-reports', { state: { openDocumentId: reportToEdit.id, from: 'form' } });
         } else {
-            // If creating new, save first then view
             const formData = {
                 documentName,
                 forName,
@@ -145,7 +143,7 @@ function ADRForm() {
             };
             
             const newReport = addReport(formData);
-            navigate(`/adr-reports/view/${newReport.id}`, { state: { from: 'form' } });
+            navigate('/adr-reports', { state: { openDocumentId: newReport.id, from: 'form' } });
         }
     };
 
