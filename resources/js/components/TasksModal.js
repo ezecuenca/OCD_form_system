@@ -153,7 +153,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                         {isViewMode && (
                             <>
                                 <button type="button" className="btn btn--primary" onClick={() => onSwitchToEdit()}>Edit Task</button>
-                                <button type="button" className="btn btn--secondary" onClick={() => { onSwitchToSwap(); onClose(); }}>Swap Task</button>
+                                <button type="button" className="btn btn--secondary" onClick={() => onSwitchToSwap()}>Request Swap</button>
                             </>
                         )}
 

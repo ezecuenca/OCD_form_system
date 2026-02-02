@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import TasksModal from './TasksModal';
+import { saveSwapRequest } from '../utils/swapRequests';
 
 function Schedule() {
 
@@ -88,32 +90,21 @@ function Schedule() {
         if (!day || !taskToSwap || modalMode !== 'swap') return;
 
         const targetDateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
         const existingTaskOnTarget = tasks.find(t => t.date === targetDateStr);
 
-        setTasks(prevTasks => {
-            let newTasks = [...prevTasks];
+        const swapRequest = {
+            id: `swap-${Date.now()}`,
+            taskName: taskToSwap.name,
+            taskDescription: taskToSwap.task,
+            fromDate: taskToSwap.date,
+            toDate: targetDateStr,
+            targetTaskName: existingTaskOnTarget ? existingTaskOnTarget.name : null,
+            status: 'pending',
+            createdAt: new Date().toISOString()
+        };
 
-            if (existingTaskOnTarget) {
-                newTasks = newTasks.map(t => {
-                    if (t === taskToSwap) {
-                        return { ...t, date: targetDateStr };
-                    }
-                    if (t === existingTaskOnTarget) {
-                        return { ...t, date: taskToSwap.date };
-                    }
-                    return t;
-                });
-            } else {
-                newTasks = newTasks.map(t =>
-                    t === taskToSwap ? { ...t, date: targetDateStr } : t
-                );
-            }
+        saveSwapRequest(swapRequest);
 
-            return newTasks;
-        });
-
-        // Reset and close
         setShowTaskForm(false);
         setModalMode('add');
         setSelectedTask(null);
@@ -130,11 +121,9 @@ function Schedule() {
     const days = getDaysArray();
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-    console.log('Current modalMode:', modalMode);
-
     return (
         <div className="schedule">
-            {modalMode === 'swap' && (
+            {modalMode === 'swap' && taskToSwap && (
                 <div style={{
                     position: 'fixed',
                     top: '20px',
@@ -149,9 +138,8 @@ function Schedule() {
                     alignItems: 'center',
                     gap: '16px'
                 }}>
-                    {console.log('Banner is rendering now')}
                     <p style={{ margin: 0, fontWeight: 500 }}>
-                        Click a day to swap/move the task - Current: {formatDate(taskToSwap.date)}
+                        Request Swap: Click a day to select target date — Moving &quot;{taskToSwap?.name}&quot; from {formatDate(taskToSwap?.date)}
                     </p>
                     <button
                         onClick={() => {
@@ -260,8 +248,7 @@ function Schedule() {
                         >
                         Add Task (Today)
                         </button>
-                        <button className="schedule__btn schedule__btn--secondary">Swapping Form</button>
-                        <button className="schedule__btn schedule__btn--tertiary" onClick={() => window.location.href = '/swap-form'}>Swapping Form Requests</button>
+                        <Link to="/swap-form" className="schedule__btn schedule__btn--tertiary">Swapping Form Requests</Link>
                     </div>
                 </div>
             </div>
@@ -271,6 +258,7 @@ function Schedule() {
                 onClose={() => {
                     setModalMode('add');
                     setSelectedTask(null);
+                    setTaskToSwap(null);
                     setShowTaskForm(false);
                 }}
                 selectedDate={selectedDate}
@@ -286,8 +274,8 @@ function Schedule() {
                 }}
                 onSwitchToEdit={() => setModalMode('edit')}
                 onSwitchToSwap={() => {
-                    console.log('Swap mode triggered');
-                    setModalMode('swap')
+                    setModalMode('swap');
+                    setShowTaskForm(false);
                 }}
             />
         </div>
