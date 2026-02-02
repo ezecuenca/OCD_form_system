@@ -148,6 +148,9 @@ function Schedule() {
                     <button
                         onClick={() => {
                             setModalMode('add');
+                            setSelectedTask(null);
+                            setTaskToSwap(null);
+                            setShowTaskForm(false);
                         }}
                         style={{
                             background: '#e74c3c',
