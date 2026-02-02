@@ -9,6 +9,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
     const [name, setName] = useState('');
     const [task, setTask] = useState('');
     const [schedule, setSchedule] = useState('');
+    const [errors, setErrors] = useState({}); // New state for inline errors
 
     useEffect(() => {
         if (!isOpen) return;
@@ -22,11 +23,23 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
             setTask(initialTask.task || '');
             setSchedule(initialTask.date || '');
         }
+        setErrors({}); // Clear errors on open
     }, [isOpen, mode, initialTask, selectedDate]);
+
+    const validateForm = () => {
+        const newErrors = {};
+        if (!name.trim()) newErrors.name = 'Name is required';
+        if (!task.trim()) newErrors.task = 'Task description is required';
+        if (!schedule) newErrors.schedule = 'Date is required';
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (isViewMode) return;
+
+        if (!validateForm()) return;
 
         const taskData = {
             name: name.trim(),
@@ -42,27 +55,6 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
         onClose();
     }
 
-    const handleAddTask = (e) => {
-        e.preventDefault();
-        
-        if (!name.trim() || !task.trim() || !schedule) {
-            alert('Please fill in all fields');
-            return;
-        }
-
-        onAddTask({
-            name,
-            task,
-            date: schedule
-        });
-
-        // Reset form
-        setName('');
-        setTask('');
-        setSchedule(selectedDate || '');
-        onClose();
-    };
-
     const formatDate = (dateStr) => {
         if (!dateStr) return '—';
         const [y, m, d] = dateStr.split('-');
@@ -77,11 +69,11 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay" style={mode === 'swap' ? { opacity: 0, pointerEvents: 'none', transition: 'opacity 0.3s ease'} : {}}>
-            <div className="modal" style={mode === 'swap' ? { opacity: 0, transform: 'scale(0.8)',pointerEvents: 'none'} : {}}>
+        <div className="modal-overlay">
+            <div className="modal">
                 <div className="modal__header">
                     <h2>{isAddMode ? 'Add Task' : isViewMode ? 'View Task' : isEditMode ? 'Edit Task' : 'Swap Task'}</h2>
-                    <button className="modal__close" onClick={() => onClose()}>×</button>
+                    <button className="modal__close" onClick={onClose}>×</button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="modal__form">
@@ -95,7 +87,9 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                                 value={name}
                                 onChange={e => setName(e.target.value)}
                                 placeholder="Enter name"
+                                required
                             />
+                            {errors.name && <span className="error" style={{ color: 'red', fontSize: '0.8rem' }}>{errors.name}</span>}
                         </div>
 
                         <div className="form__group">
@@ -106,7 +100,9 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                                 onChange={e => setTask(e.target.value)}
                                 placeholder="Enter task details"
                                 rows="5"
+                                required
                             />
+                            {errors.task && <span className="error" style={{ color: 'red', fontSize: '0.8rem' }}>{errors.task}</span>}
                         </div>
 
                         <div className="form__group">
@@ -116,13 +112,17 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                                 value={schedule}
                                 readOnly={!isEditMode}
                                 style={isEditMode ? {} : { backgroundColor: '#f9f9f9', cursor: 'default' }}
+                                onChange={e => setSchedule(e.target.value)}
+                                required
                             />
                             <small style={{ color: '#666', marginTop: '0.4rem', display: 'block' }}>
                                 {formatDate(schedule)}
                             </small>
+                            {errors.schedule && <span className="error" style={{ color: 'red', fontSize: '0.8rem' }}>{errors.schedule}</span>}
                         </div>
                     </>
                     ) : isViewMode && (
+
                         <div className="view-task">
                             <div className="view-task__row">
                             <label>Name</label>
@@ -153,14 +153,14 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                         {isViewMode && (
                             <>
                                 <button type="button" className="btn btn--primary" onClick={() => onSwitchToEdit()}>Edit Task</button>
-                                <button type="button" className="btn btn--secondary" onClick={() => onSwitchToSwap()}>Swap Task</button>
+                                <button type="button" className="btn btn--secondary" onClick={() => { onSwitchToSwap(); onClose(); }}>Swap Task</button>
                             </>
                         )}
 
                         {isEditMode && (
                             <>
                                 <button type="submit" className="btn btn--primary">Save Changes</button>
-                                <button type="button" className="btn btn--secondary" onClick={() => onClose()}>Cancel</button>
+                                <button type="button" className="btn btn--secondary" onClick={onClose}>Cancel</button>
                             </>
                         )}                        
                     </div>

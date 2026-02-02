@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TasksModal from './TasksModal';
-import { set } from 'lodash';
 
 function Schedule() {
+
+    const [tasks, setTasks] = useState(() => {
+        const savedTasks = localStorage.getItem('scheduledTasks');
+        return savedTasks ? JSON.parse(savedTasks) : [];
+    });
+
+    useEffect(() => {
+        localStorage.setItem('scheduledTasks', JSON.stringify(tasks));
+    }, [tasks]);
+
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [tasks, setTasks] = useState([]);
     const [showTaskForm, setShowTaskForm] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTask, setSelectedTask] = useState(null);
