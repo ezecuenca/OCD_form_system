@@ -1,10 +1,16 @@
+@page {
+    size: A4;
+    margin: 0.5in;
+}
+
 .document-viewer {
     background: #f5f5f5;
     min-height: 100vh;
     padding: 2rem;
+    box-sizing: border-box;
     
     &__actions {
-        max-width: 8.5in;
+        max-width: 210mm;
         margin: 0 auto 1rem;
         display: flex;
         gap: 1rem;
@@ -51,103 +57,185 @@
         }
     }
     
-    &__header {
-        background: white;
-        width: 8.5in;
+    &__document {
         margin: 0 auto;
-        padding: 0.75in;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        max-width: 210mm;
+        position: relative;
         
         @media print {
             box-shadow: none;
-            padding: 0.5in;
         }
     }
     
-    &__header-content {
+    &__page {
+        background: white;
+        width: 210mm;
+        margin: 0 auto 1rem;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        
+        /* Only non-main pages (e.g. footer) get min height; main content flows to multiple pages */
+        &:not(&--main) {
+            min-height: 297mm;
+        }
+        
+        @media print {
+            margin-bottom: 0;
+            box-shadow: none;
+            page-break-after: always;
+            
+            &:last-child {
+                page-break-after: auto;
+            }
+        }
+    }
+    
+    &__page--main {
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        
+        @media print {
+            page-break-after: auto;
+        }
+    }
+    
+    /* Hidden off-screen for measuring header, body, footer heights and 297mm in px */
+    &__measure,
+    &__page-height-ref {
+        position: absolute !important;
+        left: -9999px !important;
+        top: 0 !important;
+        width: 210mm;
+        pointer-events: none;
+        visibility: hidden;
+        
+        @media print {
+            display: none !important;
+        }
+    }
+    
+    &__measure--layout {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        box-sizing: border-box;
+        padding-left: 0.5in;
+        & > * { flex-shrink: 0; }
     }
     
-    &__logos {
+    &__page-height-ref {
+        width: auto;
+        height: 297mm;
+    }
+    
+    /* Every page: header + body area + footer (flex column); 0.5in left margin on sheet only */
+    &__page--sheet {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        overflow: hidden;
+        box-sizing: border-box;
+        padding-left: 0.5in;
+        
+        @media print {
+            page-break-after: always;
+            &:last-child { page-break-after: auto; }
+        }
+    }
+
+    /* Modal: block layout (no flex) so content height matches exactly, avoids row cut-off */
+    &__page--sheet-no-flex {
+        display: block;
+    }
+
+    &__page--sheet-no-flex &__sheet-body {
+        flex: none;
+    }
+    
+    &__sheet-body {
+        flex: 1 1 0;
+        min-height: 0;
+        overflow: hidden;
         width: 100%;
-        margin-bottom: 0.5rem;
+        position: relative;
     }
     
-    &__logo-left,
-    &__logo-right {
-        width: 80px;
-        height: 80px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    &__logo-circle {
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-        border: 3px solid #1e3a8a;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-        font-size: 14px;
-        text-align: center;
-    }
-    
-    &__logo-bagong {
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #dc2626 0%, #fbbf24 50%, #2563eb 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-        font-size: 8px;
-        text-align: center;
-        padding: 5px;
-    }
-    
-    &__header-text {
-        text-align: center;
+    &__page-slice {
         width: 100%;
+        box-sizing: border-box;
     }
     
-    &__republic {
-        font-size: 9pt;
+    /* Repeated table header when table continues from previous page */
+    &__table--continued {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+        background: white;
         margin: 0;
-        font-weight: normal;
     }
     
-    &__department {
-        font-size: 9pt;
-        margin: 0;
-        font-weight: normal;
+    &__thead-repeated {
+        display: table-header-group;
     }
     
-    &__office {
-        font-size: 14pt;
-        font-weight: bold;
-        margin: 0.2rem 0;
+    /* Content sized to fit page with 0.5in left margin on sheet */
+    &__content--compact {
+        padding: 0.4in 0.5in !important;
+        font-size: 10.5pt !important;
+        line-height: 1.35 !important;
+        /* ↓ Adjust this to move content lower: increase value for more gap below header (e.g. 0.5rem, 1rem, 2rem) */
+        margin-top: -3.1rem !important;
+
+        .document-viewer__title {
+            font-size: 11.5pt !important;
+            margin-bottom: 1rem !important;
+        }
+        .document-viewer__metadata { margin: 0.6rem 0 !important; }
+        .document-viewer__field { margin-bottom: 0.55rem !important; font-size: 11pt !important; }
+        .document-viewer__label { width: 4.5rem !important; min-width: 4.5rem !important; font-size: 11pt !important; flex-shrink: 0 !important; }
+        .document-viewer__value,
+        .document-viewer__name,
+        .document-viewer__position,
+        .document-viewer__subject { font-size: 11.5pt !important; }
+        .document-viewer__colon { margin-right: 3rem !important; margin-left: 3 !important; flex-shrink: 0 !important; }
+        .document-viewer__divider { margin: 0.6rem 0 !important; }
+        /* Sections 1–4 and tables: minimized sizes */
+        .document-viewer__status-section,
+        .document-viewer__status-item { margin: 0.35rem 0 !important; font-size: 9pt !important; }
+        .document-viewer__section { margin: 0.5rem 0 !important; }
+        .document-viewer__section-title { font-size: 9pt !important; margin-bottom: 0.2rem !important; }
+        .document-viewer__subsection { margin: 0.35rem 0 !important; }
+        .document-viewer__subsection-title { font-size: 9pt !important; }
+        .document-viewer__table { font-size: 8pt !important; margin: 0.25rem 0 !important; }
+        .document-viewer__table thead th,
+        .document-viewer__table tbody td { padding: 0.2rem !important; }
+        .document-viewer__admin-note,
+        .document-viewer__admin-text,
+        .document-viewer__admin-list,
+        .document-viewer__endorsed-list { font-size: 9pt !important; }
+        .document-viewer__legend { font-size: 7.5pt !important; }
+        .document-viewer__signatures { margin: 1rem 0 !important; gap: 1rem 1.25rem !important; }
+        .document-viewer__signature-label { font-size: 10.5pt !important; margin-bottom: 1.5rem !important; }
+        .document-viewer__signature-name,
+        .document-viewer__signature-position { font-size: 10.5pt !important; }
     }
     
-    &__region {
-        font-size: 12pt;
-        font-weight: bold;
-        margin: 0.2rem 0;
+    /* Footer on sheets: see footer-document.scss */
+    
+    &__page--footer {
+        height: 297mm;
+        display: flex;
+        flex-direction: column;
+        
+        @media print {
+            page-break-before: always;
+        }
     }
     
-    &__address {
-        font-size: 8pt;
-        margin: 0.2rem 0;
+    &__page-footer-spacer {
+        flex: 1;
+        /* Adjust this min-height to move the footer down within the page (does not extend document) */
+        min-height: 2rem;
     }
     
     &__title {
@@ -158,18 +246,34 @@
     }
     
     &__content {
-        background: white;
-        width: 8.5in;
-        margin: 0 auto;
         padding: 0.75in;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
         font-family: Arial, sans-serif;
         font-size: 11pt;
         line-height: 1.4;
+        margin-top: -6rem;
         
         @media print {
-            box-shadow: none;
             padding: 0.5in;
+            overflow: visible;
+            /* Allow content to flow onto separate bond/A4 pages */
+            break-inside: auto;
+            page-break-inside: auto;
+        }
+    }
+    
+    &__section,
+    &__subsection,
+    &__signatures {
+        @media print {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+    }
+    
+    &__table {
+        @media print {
+            break-inside: auto;
+            page-break-inside: auto;
         }
     }
     
@@ -466,63 +570,55 @@
         margin: 0;
         font-weight: normal;
     }
-    
-    &__footer {
-        background: white;
-        width: 8.5in;
-        margin: 0 auto;
-        padding: 0.75in;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        text-align: center;
-        
-        @media print {
-            box-shadow: none;
-            padding: 0.5in;
-        }
-    }
-    
-    &__footer-line {
-        height: 2px;
-        background: #2563eb;
-        margin-bottom: 0.5rem;
-    }
-    
-    &__footer-slogan {
-        font-weight: bold;
-        font-size: 10pt;
-        margin: 0.5rem 0;
-    }
-    
-    &__footer-info {
-        font-size: 8pt;
-        margin-top: 0.5rem;
-        
-        p {
-            margin: 0.2rem 0;
-        }
-    }
 }
 
 @media print {
     @page {
-        size: letter;
+        size: A4;
         margin: 0.5in;
     }
     
+    html,
     body {
+        height: auto !important;
+        min-height: 0 !important;
         background: white;
     }
     
     .document-viewer {
         background: white;
         padding: 0;
+        min-height: 0 !important;
+        height: auto !important;
         
-        &__header,
-        &__content,
-        &__footer {
+        &__document {
+            width: 100%;
+            box-shadow: none;
+            height: auto !important;
+            min-height: 0 !important;
+        }
+        
+        &__page {
+            width: 100%;
+            box-shadow: none;
+        }
+        
+        /* Main page: do not constrain to one sheet; let content flow to multiple pages */
+        &__page--main {
+            height: auto !important;
+            min-height: 0 !important;
+            max-height: none !important;
+        }
+        
+        &__content {
             width: 100%;
             padding: 0;
             box-shadow: none;
+        }
+        
+        &__content {
+            height: auto !important;
+            max-height: none !important;
         }
     }
 }

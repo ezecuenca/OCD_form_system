@@ -43,7 +43,7 @@ function ArchivedReports() {
     }, []);
 
     const handleViewDocument = (id) => {
-        navigate(`/adr-reports/view/${id}`, { state: { from: 'archived' } });
+        navigate('/adr-reports', { state: { openDocumentId: id, from: 'archived' } });
     };
 
     const handleRestore = () => {
