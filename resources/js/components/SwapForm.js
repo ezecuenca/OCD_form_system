@@ -1,8 +1,61 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { getSwapRequests, updateSwapRequestStatus, executeSwapRequest } from '../utils/swapRequests';
+
+function formatDate(dateStr) {
+    if (!dateStr) return '—';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function formatDateOnly(dateStr) {
+    if (!dateStr) return '—';
+    const [y, m, d] = dateStr.split('-');
+    return new Date(y, m - 1, d).toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
+}
 
 function SwapForm() {
-    // No state, no effects, no handlers left
+    const [swapRequests, setSwapRequests] = useState([]);
+
+    useEffect(() => {
+        setSwapRequests(getSwapRequests());
+        const handleStorage = () => setSwapRequests(getSwapRequests());
+        window.addEventListener('storage', handleStorage);
+        return () => window.removeEventListener('storage', handleStorage);
+    }, []);
+
+    const handleDeny = (id) => {
+        if (window.confirm('Deny this swap request?')) {
+            updateSwapRequestStatus(id, 'denied');
+            setSwapRequests(getSwapRequests());
+        }
+    };
+
+    const handleApprove = (id) => {
+        const success = executeSwapRequest(id);
+        if (success) {
+            setSwapRequests(getSwapRequests());
+        } else {
+            alert('Could not execute swap. The task may have been modified or removed.');
+        }
+    };
+
+    const getRequestDescription = (req) => {
+        if (req.targetTaskName) {
+            return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) => "${req.targetTaskName}" (${formatDateOnly(req.toDate)})`;
+        }
+        return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) => (${formatDateOnly(req.toDate)})`;
+    };
 
     return (
         <div className="swap-form">
@@ -72,18 +125,88 @@ function SwapForm() {
                             <th>
                                 <input type="checkbox" disabled />
                             </th>
-                            <th>Actions</th>
-                            <th>Documents</th>
+                            <th>Task / Request</th>
                             <th>Status</th>
                             <th>Created at</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                No forms yet.
-                            </td>
-                        </tr>
+                        {swapRequests.length === 0 ? (
+                            <tr>
+                                <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                                    No swap requests yet. View a task on the Schedule and click &quot;Request Swap&quot; to create one.
+                                </td>
+                            </tr>
+                        ) : (
+                            swapRequests.map((req) => (
+                                <tr key={req.id}>
+                                    <td>
+                                        <input type="checkbox" disabled />
+                                    </td>
+                                    <td>
+                                        <div className="swap-form__table-document">
+                                            {getRequestDescription(req)}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span style={{
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            fontSize: '0.85rem',
+                                            backgroundColor: req.status === 'pending' ? '#fff8e1' : req.status === 'denied' ? '#ffebee' : '#e8f5e9',
+                                            color: req.status === 'pending' ? '#f57c00' : req.status === 'denied' ? '#c62828' : '#2e7d32'
+                                        }}>
+                                            {req.status}
+                                        </span>
+                                    </td>
+                                    <td className="swap-form__table-datetime">
+                                        {formatDate(req.createdAt)}
+                                    </td>
+                                    <td>
+                                        <div className="swap-form__table-actions" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                            {req.status === 'pending' ? (
+                                                <>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleApprove(req.id)}
+                                                        title="Approve &amp; swap task"
+                                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                                                    >
+                                                        <img src={`${window.location.origin}/images/approve_icon.svg`} alt="Approve" style={{ width: 20, height: 20 }} />
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleDeny(req.id)}
+                                                        title="Deny request"
+                                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                                                    >
+                                                        <img src={`${window.location.origin}/images/deny_icon.svg`} alt="Deny" style={{ width: 20, height: 20 }} />
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <button
+                                                        type="button"
+                                                        title="View"
+                                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                                                    >
+                                                        <img src={`${window.location.origin}/images/view_icon.svg`} alt="View" style={{ width: 20, height: 20 }} />
+                                                    </button>
+                                                    <button 
+                                                        type="button"
+                                                        title="Archive"
+                                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                                                    >
+                                                        <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Archive" style={{ width: 20, height: 20 }} />
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
