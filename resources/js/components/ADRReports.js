@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
 import ConfirmModal from './ConfirmModal';
 import SuccessNotification from './SuccessNotification';
+import DocumentViewModal from './DocumentViewModal';
 
 function ADRReports() {
     const navigate = useNavigate();
@@ -19,6 +20,8 @@ function ADRReports() {
     const [showSuccessNotification, setShowSuccessNotification] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
+    const [showDocumentModal, setShowDocumentModal] = useState(false);
+    const [selectedReportId, setSelectedReportId] = useState(null);
     const yearDropdownRef = useRef(null);
     const monthDropdownRef = useRef(null);
 
@@ -42,10 +45,19 @@ function ADRReports() {
         if (location.state?.success) {
             setSuccessMessage(location.state.message || 'Document saved successfully!');
             setShowSuccessNotification(true);
-            // Clear the state to prevent showing notification on refresh
             navigate(location.pathname, { replace: true, state: {} });
         }
     }, [location.state, navigate]);
+
+    // Open document modal when redirected from /adr-reports/view/:id or from form/archived
+    useEffect(() => {
+        const openId = location.state?.openDocumentId;
+        if (openId != null) {
+            setSelectedReportId(openId);
+            setShowDocumentModal(true);
+            navigate('/adr-reports', { replace: true, state: {} });
+        }
+    }, [location.state?.openDocumentId, navigate]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -60,7 +72,8 @@ function ADRReports() {
     };
     
     const handleViewDocument = (id) => {
-        navigate(`/adr-reports/view/${id}`, { state: { from: 'list' } });
+        setSelectedReportId(id);
+        setShowDocumentModal(true);
     };
     
     const handleEditReport = (id) => {
@@ -336,6 +349,15 @@ function ADRReports() {
                 message={successMessage}
                 isVisible={showSuccessNotification}
                 onClose={() => setShowSuccessNotification(false)}
+            />
+
+            <DocumentViewModal
+                isOpen={showDocumentModal}
+                reportId={selectedReportId}
+                onClose={() => {
+                    setShowDocumentModal(false);
+                    setSelectedReportId(null);
+                }}
             />
         </div>
     );
