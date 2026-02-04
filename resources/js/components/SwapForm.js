@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getSwapRequests, updateSwapRequestStatus, executeSwapRequest } from '../utils/swapRequests';
+import { getSwapRequests, updateSwapRequestStatus, executeSwapRequest, archiveSwapRequest } from '../utils/swapRequests';
 import { useNavigate } from 'react-router-dom';
 
 function formatDate(dateStr) {
@@ -34,9 +34,11 @@ function SwapForm() {
     const yearDropdownRef = useRef(null);
     const monthDropdownRef = useRef(null);
 
+    const loadSwapRequests = () => setSwapRequests(getSwapRequests().filter(r => r.status !== 'archived'));
+
     useEffect(() => {
-        setSwapRequests(getSwapRequests());
-        const handleStorage = () => setSwapRequests(getSwapRequests());
+        loadSwapRequests();
+        const handleStorage = () => loadSwapRequests();
         window.addEventListener('storage', handleStorage);
         return () => window.removeEventListener('storage', handleStorage);
     }, []);
@@ -64,17 +66,38 @@ function SwapForm() {
     const handleDeny = (id) => {
         if (window.confirm('Deny this swap request?')) {
             updateSwapRequestStatus(id, 'denied');
-            setSwapRequests(getSwapRequests());
+            loadSwapRequests();
         }
     };
 
     const handleApprove = (id) => {
         const success = executeSwapRequest(id);
         if (success) {
-            setSwapRequests(getSwapRequests());
+            loadSwapRequests();
         } else {
             alert('Could not execute swap. The task may have been modified or removed.');
         }
+    };
+
+    const handleArchive = (id) => {
+        if (archiveSwapRequest(id)) {
+            setSelectedRequests(prev => prev.filter(i => i !== id));
+            loadSwapRequests();
+        }
+    };
+
+    const handleBulkArchive = () => {
+        const toArchive = selectedRequests.filter(id => {
+            const req = swapRequests.find(r => r.id === id);
+            return req && (req.status === 'approved' || req.status === 'denied');
+        });
+        if (toArchive.length === 0) {
+            alert('Please select approved or denied requests to archive.');
+            return;
+        }
+        toArchive.forEach(id => archiveSwapRequest(id));
+        setSelectedRequests([]);
+        loadSwapRequests();
     };
 
     const handleSelectRequest = (id) => {
@@ -112,7 +135,13 @@ function SwapForm() {
 
             <div className="swap-form__controls">
                 <div className="swap-form__actions">
-                    <button disabled>
+                    <button
+                        onClick={handleBulkArchive}
+                        disabled={selectedRequests.length === 0 || !selectedRequests.some(id => {
+                            const req = swapRequests.find(r => r.id === id);
+                            return req && (req.status === 'approved' || req.status === 'denied');
+                        })}
+                    >
                         <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Archive" />
                         Archive
                     </button>
@@ -235,22 +264,14 @@ function SwapForm() {
                                                     </button>
                                                 </>
                                             ) : (
-                                                <>
-                                                    <button
-                                                        type="button"
-                                                        title="View"
-                                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
-                                                    >
-                                                        <img src={`${window.location.origin}/images/view_icon.svg`} alt="View" style={{ width: 20, height: 20 }} />
-                                                    </button>
-                                                    <button 
-                                                        type="button"
-                                                        title="Archive"
-                                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
-                                                    >
-                                                        <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Archive" style={{ width: 20, height: 20 }} />
-                                                    </button>
-                                                </>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleArchive(req.id)}
+                                                    title="Archive"
+                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                                                >
+                                                    <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Archive" style={{ width: 20, height: 20 }} />
+                                                </button>
                                             )}
                                         </div>
                                     </td>
