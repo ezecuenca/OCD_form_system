@@ -22,9 +22,10 @@
     &__container {
         position: relative;
         background: white;
-        width: 95vw;
-        max-width: 1400px;
-        height: 90vh;
+        width: min(calc(210mm + 2rem), 92vw);
+        max-width: 820px;
+        height: auto;
+        max-height: 85vh;
         border-radius: 12px;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         display: flex;
@@ -37,14 +38,14 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1.5rem 2rem;
+        padding: 1rem 1.25rem;
         border-bottom: 1px solid #e5e7eb;
         background: white;
         flex-shrink: 0;
 
         h2 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 600;
             color: #111827;
         }
@@ -115,19 +116,34 @@
     }
 
     &__content {
-        flex: 1;
+        flex: 1 1 auto;
+        min-height: 0;
         overflow-y: auto;
-        padding: 2rem;
+        padding: 0.75rem;
         background: #f9fafb;
+        /* Limit content height so modal stays compact */
+        max-height: calc(85vh - 3.5rem);
         
+        /* Match print layout: fixed A4 (210mm × 297mm), same as print preview */
         .document-viewer__document {
-            max-width: none;
+            width: 210mm;
+            max-width: 210mm;
+            min-width: 210mm;
             margin: 0 auto;
+            padding: 0;
         }
 
+        /* Each sheet = one A4 page (common print size), same as print preview */
         .document-viewer__page--sheet {
+            width: 210mm;
+            min-width: 210mm;
+            max-width: 210mm;
+            height: 297mm;
+            min-height: 297mm;
+            max-height: 297mm;
             margin-bottom: 1rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
         }
     }
 
@@ -166,12 +182,30 @@
 
 // Hide ALL page elements except document modal content when printing
 @media print {
+    @page {
+        size: 210mm 297mm;
+        margin: 0;
+    }
+
+    // Reset so print preview shows only the document at the top
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        background: white !important;
+    }
+
     // Hide everything first
     body * {
         visibility: hidden !important;
     }
 
-    // Show only modal and its contents
+    // Show only the document modal (rendered via portal as direct child of body) and its contents
+    body > .document-modal,
+    body > .document-modal *,
     .document-modal,
     .document-modal *,
     .document-modal__container,
@@ -185,13 +219,25 @@
         visibility: visible !important;
     }
 
-    // Position modal properly for print
+    // Position modal at top of print area – no extra space
     .document-modal {
-        position: absolute !important;
+        position: fixed !important;
         left: 0 !important;
         top: 0 !important;
+        right: 0 !important;
         width: 100% !important;
         height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+    }
+
+    .document-modal__container {
+        width: 100% !important;
+        max-width: none !important;
+        height: auto !important;
+        min-height: 0 !important;
         margin: 0 !important;
         padding: 0 !important;
     }
@@ -199,25 +245,61 @@
     .document-modal__content {
         display: block !important;
         overflow: visible !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .document-viewer__document {
+        width: 210mm !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
     }
 
     .document-viewer__page--sheet {
         display: flex !important;
+        flex-direction: column !important;
         page-break-after: always !important;
         page-break-inside: avoid !important;
         height: 297mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
         width: 210mm !important;
-        margin: 0 !important;
-        padding: 0 !important;
+        max-width: 210mm !important;
+        margin: 0 auto !important;
+        padding: 0.5in !important;
         box-sizing: border-box !important;
+        overflow: hidden !important;
 
         &:last-child {
             page-break-after: auto !important;
         }
     }
 
-    .document-viewer__document {
-        width: 210mm !important;
-        margin: 0 auto !important;
+    // Sheet body must clip content to one page's slice – keep overflow hidden
+    .document-viewer__sheet-body {
+        overflow: hidden !important;
+        min-height: 0 !important;
+    }
+
+    .document-viewer__page-slice {
+        overflow: hidden !important;
+    }
+
+    // Ensure header and footer are visible and take space
+    .document-viewer__page--sheet .header-document,
+    .document-viewer__page--sheet .footer-document {
+        flex-shrink: 0 !important;
+        visibility: visible !important;
+    }
+
+    // Ensure measure/hidden elements don't take space or show
+    .document-viewer__measure,
+    .document-viewer__page-height-ref {
+        display: none !important;
+        visibility: hidden !important;
+        position: absolute !important;
+        left: -9999px !important;
     }
 }
