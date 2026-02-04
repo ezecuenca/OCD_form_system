@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getSwapRequests, updateSwapRequestStatus, executeSwapRequest } from '../utils/swapRequests';
+import { useNavigate } from 'react-router-dom';
 
 function formatDate(dateStr) {
     if (!dateStr) return '—';
@@ -26,6 +27,12 @@ function formatDateOnly(dateStr) {
 
 function SwapForm() {
     const [swapRequests, setSwapRequests] = useState([]);
+    const navigate = useNavigate();
+    const [selectedRequests, setSelectedRequests] = useState([]);
+    const [showMonthDropdown, setShowMonthDropdown] = useState(false);
+    const [showYearDropdown, setShowYearDropdown] = useState(false);
+    const yearDropdownRef = useRef(null);
+    const monthDropdownRef = useRef(null);
 
     useEffect(() => {
         setSwapRequests(getSwapRequests());
@@ -33,6 +40,26 @@ function SwapForm() {
         window.addEventListener('storage', handleStorage);
         return () => window.removeEventListener('storage', handleStorage);
     }, []);
+
+    const handleReturn = () => {
+        navigate('/schedule');
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (yearDropdownRef.current && !yearDropdownRef.current.contains(event.target)) {
+                setShowYearDropdown(false);
+            }
+            if (monthDropdownRef.current && !monthDropdownRef.current.contains(event.target)) {
+                setShowMonthDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showYearDropdown, showMonthDropdown]);
 
     const handleDeny = (id) => {
         if (window.confirm('Deny this swap request?')) {
@@ -50,6 +77,15 @@ function SwapForm() {
         }
     };
 
+    const handleSelectRequest = (id) => {
+        setSelectedRequests(prev => {
+            if (prev.includes(id)) {
+                return prev.filter(i => i !== id);
+            }
+            return [...prev, id];
+        });
+    };
+
     const getRequestDescription = (req) => {
         if (req.targetTaskName) {
             return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) => "${req.targetTaskName}" (${formatDateOnly(req.toDate)})`;
@@ -65,11 +101,12 @@ function SwapForm() {
                     <input type="text" placeholder="Search..." disabled />
                 </div>
                 <div className="swap-form__datetime">
-                    <img src={`${window.location.origin}/images/date_time.svg`} alt="Date Time" className="swap-form__datetime-icon" />
-                    <span className="swap-form__datetime-text">
-                        <span className="swap-form__datetime-date">January 30, 2026</span>
-                        <span className="swap-form__datetime-time">11:22 AM</span>
-                    </span>
+                    <button className="adr-form__return-btn" onClick={handleReturn}>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Return
+                    </button>
                 </div>
             </div>
 
@@ -84,13 +121,12 @@ function SwapForm() {
                 <div className="swap-form__filters">
                     {/* Year dropdown - visual only */}
                     <div className="swap-form__filter-dropdown">
-                        <button disabled>
+                        <button onClick={() => setShowYearDropdown(!showYearDropdown)}>
                             Year
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                         </button>
-                        {/* Dropdown content shown statically for design preview */}
                         <div className="swap-form__dropdown-menu" style={{ display: 'none' }}>
                             <div className="swap-form__dropdown-item">All Years</div>
                             <div className="swap-form__dropdown-item">2026</div>
@@ -101,7 +137,7 @@ function SwapForm() {
 
                     {/* Month dropdown - visual only */}
                     <div className="swap-form__filter-dropdown">
-                        <button disabled>
+                        <button onClick={() => setShowMonthDropdown(!showMonthDropdown)}>
                             Month
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -123,7 +159,17 @@ function SwapForm() {
                     <thead>
                         <tr>
                             <th>
-                                <input type="checkbox" disabled />
+                                <input 
+                                type="checkbox" 
+                                checked={selectedRequests.length === swapRequests.length && swapRequests.length > 0}
+                                onChange={(e) => {
+                                    if (e.target.checked) {
+                                        setSelectedRequests(swapRequests.map(r => r.id));
+                                    } else {
+                                        setSelectedRequests([]);
+                                    }
+                                }}
+                                />
                             </th>
                             <th>Task / Request</th>
                             <th>Status</th>
@@ -142,7 +188,11 @@ function SwapForm() {
                             swapRequests.map((req) => (
                                 <tr key={req.id}>
                                     <td>
-                                        <input type="checkbox" disabled />
+                                        <input type="checkbox"
+                                            checked={selectedRequests.includes(req.id)}
+                                            onChange={() => handleSelectRequest(req.id)}
+                                            disabled={req.status !== 'approved' && req.status !== 'denied'}
+                                        />
                                     </td>
                                     <td>
                                         <div className="swap-form__table-document">
