@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
+import { getSwapRequests, restoreSwapRequest } from '../utils/swapRequests';
 import ConfirmModal from './ConfirmModal';
 
 function ArchivedReports() {
@@ -10,10 +11,13 @@ function ArchivedReports() {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
     const [confirmMessage, setConfirmMessage] = useState('');
+    const pendingRestoreSwapIdRef = useRef(null);
     const [showYearDropdown, setShowYearDropdown] = useState(false);
     const [showMonthDropdown, setShowMonthDropdown] = useState(false);
     const [selectedYear, setSelectedYear] = useState('All Years');
     const [selectedMonth, setSelectedMonth] = useState('All Months');
+    const [activeTab, setActiveTab] = useState('adr'); // 'adr' | 'swapped'
+    const [archivedSwapRequests, setArchivedSwapRequests] = useState([]);
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
     const yearDropdownRef = useRef(null);
     const monthDropdownRef = useRef(null);
@@ -41,6 +45,10 @@ function ArchivedReports() {
 
         return () => clearInterval(timer);
     }, []);
+
+    useEffect(() => {
+        setArchivedSwapRequests(getSwapRequests().filter(r => r.status === 'archived'));
+    }, [activeTab]);
 
     const handleViewDocument = (id) => {
         navigate('/adr-reports', { state: { openDocumentId: id, from: 'archived' } });
@@ -110,6 +118,39 @@ function ArchivedReports() {
         return { date: dateStr, time: timeStr };
     };
 
+    const formatDateOnly = (dateStr) => {
+        if (!dateStr) return '—';
+        const [y, m, d] = dateStr.split('-');
+        return new Date(y, m - 1, d).toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+    };
+
+    const getSwapRequestDescription = (req) => {
+        if (req.targetTaskName) {
+            return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) ⇄ "${req.targetTaskName}" (${formatDateOnly(req.toDate)})`;
+        }
+        return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) → (${formatDateOnly(req.toDate)})`;
+    };
+
+    const handleRestoreSwapRequest = (id) => {
+        pendingRestoreSwapIdRef.current = id;
+        setConfirmMessage('Are you sure you want to restore this swap request?');
+        setConfirmAction(() => () => {
+            const idToRestore = pendingRestoreSwapIdRef.current;
+            if (idToRestore) {
+                restoreSwapRequest(idToRestore);
+                setArchivedSwapRequests(getSwapRequests().filter(r => r.status === 'archived'));
+                pendingRestoreSwapIdRef.current = null;
+            }
+            setShowConfirmModal(false);
+        });
+        setShowConfirmModal(true);
+    };
+
     const years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
     const months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -141,8 +182,24 @@ function ArchivedReports() {
                 </div>
             </div>
 
+            <div className="archived-reports__tabs">
+                <button
+                    className={`archived-reports__tab ${activeTab === 'adr' ? 'archived-reports__tab--active' : ''}`}
+                    onClick={() => setActiveTab('adr')}
+                >
+                    ADR Reports
+                </button>
+                <button
+                    className={`archived-reports__tab ${activeTab === 'swapped' ? 'archived-reports__tab--active' : ''}`}
+                    onClick={() => setActiveTab('swapped')}
+                >
+                    Swapped Forms
+                </button>
+            </div>
+
             <div className="archived-reports__controls">
                 <div className="archived-reports__actions">
+                    {activeTab === 'adr' && (
                     <button onClick={handleRestore} disabled={selectedReports.length < 2}>
                         <svg width="15" height="15" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clipPath="url(#clip0_8_219)">
@@ -156,6 +213,7 @@ function ArchivedReports() {
                         </svg>
                         Restore
                     </button>
+                    )}
                 </div>
                 <div className="archived-reports__filters">
                     <div className="archived-reports__filter-dropdown" ref={yearDropdownRef}>
@@ -204,6 +262,7 @@ function ArchivedReports() {
             </div>
 
             <div className="archived-reports__table">
+                {activeTab === 'adr' ? (
                 <table>
                     <thead>
                         <tr>
@@ -274,6 +333,65 @@ function ArchivedReports() {
                         )}
                     </tbody>
                 </table>
+                ) : (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Actions</th>
+                            <th>Task / Request</th>
+                            <th>Status</th>
+                            <th>Created at</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {archivedSwapRequests.length === 0 ? (
+                            <tr>
+                                <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                                    No archived swap requests yet.
+                                </td>
+                            </tr>
+                        ) : (
+                            archivedSwapRequests.map(req => (
+                                <tr key={req.id}>
+                                    <td className="archived-reports__table-actions">
+                                        <div className="archived-reports__action-buttons">
+                                            <button 
+                                                className="archived-reports__action-btn archived-reports__action-btn--restore"
+                                                onClick={() => handleRestoreSwapRequest(req.id)}
+                                                title="Restore"
+                                            >
+                                                <img src={`${window.location.origin}/images/restore_icon.svg`} alt="Restore" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="archived-reports__table-document">
+                                            {getSwapRequestDescription(req)}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span style={{
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            fontSize: '0.85rem',
+                                            backgroundColor: req.archivedFromStatus === 'approved' ? '#e8f5e9' : '#ffebee',
+                                            color: req.archivedFromStatus === 'approved' ? '#2e7d32' : '#c62828'
+                                        }}>
+                                            {req.archivedFromStatus || '—'}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div className="archived-reports__table-datetime">
+                                            <div className="date">{formatDate(req.createdAt).date}</div>
+                                            <div className="time">{formatDate(req.createdAt).time}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+                )}
             </div>
 
             <div className="archived-reports__pagination">

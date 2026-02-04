@@ -21,11 +21,28 @@ export function removeSwapRequest(id) {
     localStorage.setItem(SWAP_REQUESTS_KEY, JSON.stringify(requests));
 }
 
-export function updateSwapRequestStatus(id, status) {
+export function updateSwapRequestStatus(id, status, extra = {}) {
     const requests = getSwapRequests().map(r =>
-        r.id === id ? { ...r, status } : r
+        r.id === id ? { ...r, status, ...extra } : r
     );
     localStorage.setItem(SWAP_REQUESTS_KEY, JSON.stringify(requests));
+}
+
+export function archiveSwapRequest(id) {
+    const requests = getSwapRequests();
+    const req = requests.find(r => r.id === id);
+    if (!req || (req.status !== 'approved' && req.status !== 'denied')) return false;
+    updateSwapRequestStatus(id, 'archived', { archivedFromStatus: req.status });
+    return true;
+}
+
+export function restoreSwapRequest(id) {
+    const requests = getSwapRequests();
+    const req = requests.find(r => r.id === id);
+    if (!req || req.status !== 'archived') return false;
+    const prevStatus = req.archivedFromStatus || 'denied';
+    updateSwapRequestStatus(id, prevStatus, { archivedFromStatus: undefined });
+    return true;
 }
 
 export function executeSwapRequest(id) {
