@@ -2,6 +2,38 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
 import ConfirmModal from './ConfirmModal';
+import DocumentViewModal from './DocumentViewModal';
+
+// Default data for new reports – Administrative Matters A to C (and endorsed). Editable, addable, removable.
+const getDefaultCommunicationRows = () => [
+    { id: 1, particulars: 'Hytera Digital Radio', noOfItems: 2, contact: 'LCL-Caraga / INRG-Caraga', status: 'Operational', contactAsBullets: false, statusAsBullets: false },
+    { id: 2, particulars: 'Hytera digital radio charger', noOfItems: 2, contact: '-', status: 'Operational', contactAsBullets: false, statusAsBullets: false },
+    { id: 3, particulars: 'Samsung mobile phone', noOfItems: 1, contact: '0947 946 8145 (SMART)', status: 'Bal 0.50 No call/text promo', contactAsBullets: false, statusAsBullets: false },
+    { id: 4, particulars: 'RedMi mobile phone', noOfItems: 1, contact: 'SIM 1: 096694832281 SIM 2: 091711637259 (GLOBE)', status: 'SIM 1 Postpaid SIM 2: Bal 0.50 No call/text promo', contactAsBullets: false, statusAsBullets: false },
+    { id: 5, particulars: 'TPLink Wifi (Temporary)', noOfItems: 1, contact: '-', status: 'Stable connection', contactAsBullets: false, statusAsBullets: false },
+    { id: 6, particulars: 'VoIP Line for Intercom', noOfItems: 2, contact: '1215. 1216', status: 'Stable Connection', contactAsBullets: false, statusAsBullets: false },
+    { id: 7, particulars: 'VoIP Line Inter Region and Central Office Connectivity', noOfItems: 2, contact: '926, 927', status: 'Stable Connection', contactAsBullets: false, statusAsBullets: false }
+];
+const getDefaultOtherItemsRows = () => [
+    { id: 1, particulars: '55-inch TV monitor (Sony)', noOfItems: 3, status: 'Wall-mounted inside OMCR; 1 at VIP Conference Room', statusAsBullets: false },
+    { id: 2, particulars: '65-inch TV monitor (TCL)', noOfItems: 1, status: 'Wall-mounted inside OMCR', statusAsBullets: false },
+    { id: 3, particulars: '40-inch TV monitors', noOfItems: 2, status: '1 unit wall-mounted outside OMCR; 1 unit wall-mounted at the lobby', statusAsBullets: false },
+    { id: 4, particulars: 'Desktop computers', noOfItems: 4, status: 'Workstations', statusAsBullets: false },
+    { id: 5, particulars: 'Portable Water Filtration Set', noOfItems: 2, status: 'Functional; At storage room near OS', statusAsBullets: false },
+    { id: 6, particulars: 'Solar Panel Power Source for Water Filter', noOfItems: 2, status: 'Functional; At storage room near OS', statusAsBullets: false },
+    { id: 7, particulars: 'Nissan Calibre', noOfItems: 1, status: 'Parked safely at GCCC', statusAsBullets: false },
+    { id: 8, particulars: 'Mitsubishi Pick-up', noOfItems: 1, status: 'Parked safely at GCCC', statusAsBullets: false },
+    { id: 9, particulars: 'Toyota Commuter Van', noOfItems: 1, status: 'Parked safely at GCCC', statusAsBullets: false },
+    { id: 10, particulars: 'Key - Nissan Calibre', noOfItems: 1, status: 'Under custody of security guard', statusAsBullets: false },
+    { id: 11, particulars: 'Key - Mitsubishi Pick-up', noOfItems: 1, status: 'Under custody of security guard', statusAsBullets: false },
+    { id: 12, particulars: 'Key - Toyota Commuter Van', noOfItems: 1, status: 'Under custody of security guard', statusAsBullets: false }
+];
+const getDefaultOtherAdminRows = () => [
+    { id: 1, concern: 'No untoward incident', concernAsBullets: false }
+];
+const getDefaultEndorsedItemsRows = () => [
+    { id: 1, item: '2 units of mobile phones', itemAsBullets: false }
+];
 
 function ADRForm() {
     const navigate = useNavigate();
@@ -26,11 +58,11 @@ function ADRForm() {
     const [dateTime, setDateTime] = useState(reportToEdit?.dateTime || '');
     
     // Status
-    const [status, setStatus] = useState(reportToEdit?.alertStatus || (reportToEdit?.status && reportToEdit?.status !== 'Active' && reportToEdit?.status !== 'Archived' ? reportToEdit?.status : 'WHITE ALERT'));
+    const [status, setStatus] = useState(reportToEdit?.alertStatus || (reportToEdit?.status && reportToEdit?.status !== 'Active' && reportToEdit?.status !== 'Archived' ? reportToEdit?.status : ''));
     
     // Attendance and Reports
-    const [attendanceItems, setAttendanceItems] = useState(reportToEdit?.attendanceItems || [{ id: 1, name: '', task: '' }]);
-    const [reportsItems, setReportsItems] = useState(reportToEdit?.reportsItems || [{ id: 1, report: '', remarks: '' }]);
+    const [attendanceItems, setAttendanceItems] = useState(reportToEdit?.attendanceItems || [{ id: 1, name: '', task: '', taskAsBullets: false }]);
+    const [reportsItems, setReportsItems] = useState(reportToEdit?.reportsItems || [{ id: 1, report: '', remarks: '', reportAsBullets: false }]);
     
     // Modals
     const [showCommunicationModal, setShowCommunicationModal] = useState(false);
@@ -42,20 +74,13 @@ function ADRForm() {
     const [showValidationModal, setShowValidationModal] = useState(false);
     const [validationMessage, setValidationMessage] = useState('');
     const [errorField, setErrorField] = useState('');
+    const [showPreviewModal, setShowPreviewModal] = useState(false);
     
-    // Communication and Other Items
-    const [communicationRows, setCommunicationRows] = useState(reportToEdit?.communicationRows || [
-        { id: 1, particulars: '', noOfItems: 0, contact: '', status: '' }
-    ]);
-    const [otherItemsRows, setOtherItemsRows] = useState(reportToEdit?.otherItemsRows || [
-        { id: 1, particulars: '', noOfItems: 0, status: '' }
-    ]);
-    const [otherAdminRows, setOtherAdminRows] = useState(reportToEdit?.otherAdminRows || [
-        { id: 1, concern: '' }
-    ]);
-    const [endorsedItemsRows, setEndorsedItemsRows] = useState(reportToEdit?.endorsedItemsRows || [
-        { id: 1, item: '' }
-    ]);
+    // Communication and Other Items – use default data for new reports (editable, addable, removable)
+    const [communicationRows, setCommunicationRows] = useState(reportToEdit?.communicationRows ?? getDefaultCommunicationRows());
+    const [otherItemsRows, setOtherItemsRows] = useState(reportToEdit?.otherItemsRows ?? getDefaultOtherItemsRows());
+    const [otherAdminRows, setOtherAdminRows] = useState(reportToEdit?.otherAdminRows ?? getDefaultOtherAdminRows());
+    const [endorsedItemsRows, setEndorsedItemsRows] = useState(reportToEdit?.endorsedItemsRows ?? getDefaultEndorsedItemsRows());
     
     // Signatures
     const [preparedBy, setPreparedBy] = useState(reportToEdit?.preparedBy || '');
@@ -112,45 +137,43 @@ function ADRForm() {
     };
     
     const handleViewDocument = () => {
-        if (isEditing && reportToEdit && reportToEdit.id) {
-            navigate('/adr-reports', { state: { openDocumentId: reportToEdit.id, from: 'form' } });
-        } else {
-            const formData = {
-                documentName,
-                forName,
-                forPosition,
-                thruName,
-                thruPosition,
-                fromName,
-                fromPosition,
-                subject,
-                dateTime,
-                status,
-                attendanceItems,
-                reportsItems,
-                communicationRows,
-                otherItemsRows,
-                otherAdminRows,
-                endorsedItemsRows,
-                preparedBy,
-                preparedPosition,
-                receivedBy,
-                receivedPosition,
-                notedBy,
-                notedPosition,
-                approvedBy,
-                approvedPosition
-            };
-            
-            const newReport = addReport(formData);
-            navigate('/adr-reports', { state: { openDocumentId: newReport.id, from: 'form' } });
-        }
+        setShowPreviewModal(true);
+    };
+
+    const getPreviewReport = () => {
+        const formData = {
+            documentName,
+            forName,
+            forPosition,
+            thruName,
+            thruPosition,
+            fromName,
+            fromPosition,
+            subject,
+            dateTime,
+            status,
+            attendanceItems,
+            reportsItems,
+            communicationRows,
+            otherItemsRows,
+            otherAdminRows,
+            endorsedItemsRows,
+            preparedBy,
+            preparedPosition,
+            receivedBy,
+            receivedPosition,
+            notedBy,
+            notedPosition,
+            approvedBy,
+            approvedPosition
+        };
+        return { ...formData, alertStatus: status || 'WHITE ALERT' };
     };
 
     const addAttendanceItem = () => {
         setAttendanceItems(prev => {
             const newId = Math.max(...prev.map(item => Number(item.id) || 0), 0) + 1;
-            return [...prev, { id: newId, name: '', task: '' }];
+            return [...prev, { id: newId, name: '', task: '', taskAsBullets: false }];
         });
     };
 
@@ -164,7 +187,7 @@ function ADRForm() {
     const addReportsItem = () => {
         setReportsItems(prev => {
             const newId = Math.max(...prev.map(item => Number(item.id) || 0), 0) + 1;
-            return [...prev, { id: newId, report: '', remarks: '' }];
+            return [...prev, { id: newId, report: '', remarks: '', reportAsBullets: false }];
         });
     };
 
@@ -177,7 +200,7 @@ function ADRForm() {
 
     const addCommunicationRow = () => {
         const newId = Math.max(...communicationRows.map(row => row.id), 0) + 1;
-        setCommunicationRows([...communicationRows, { id: newId, particulars: '', noOfItems: 0, contact: '', status: '' }]);
+        setCommunicationRows([...communicationRows, { id: newId, particulars: '', noOfItems: 0, contact: '', status: '', contactAsBullets: false, statusAsBullets: false }]);
     };
 
     const removeCommunicationRow = (id) => {
@@ -204,7 +227,7 @@ function ADRForm() {
 
     const addOtherItemsRow = () => {
         const newId = Math.max(...otherItemsRows.map(row => row.id), 0) + 1;
-        setOtherItemsRows([...otherItemsRows, { id: newId, particulars: '', noOfItems: 0, status: '' }]);
+        setOtherItemsRows([...otherItemsRows, { id: newId, particulars: '', noOfItems: 0, status: '', statusAsBullets: false }]);
     };
 
     const removeOtherItemsRow = (id) => {
@@ -231,7 +254,7 @@ function ADRForm() {
 
     const addOtherAdminRow = () => {
         const newId = Math.max(...otherAdminRows.map(row => row.id), 0) + 1;
-        setOtherAdminRows([...otherAdminRows, { id: newId, concern: '' }]);
+        setOtherAdminRows([...otherAdminRows, { id: newId, concern: '', concernAsBullets: false }]);
     };
 
     const removeOtherAdminRow = (id) => {
@@ -246,7 +269,7 @@ function ADRForm() {
 
     const addEndorsedItemsRow = () => {
         const newId = Math.max(...endorsedItemsRows.map(row => row.id), 0) + 1;
-        setEndorsedItemsRows([...endorsedItemsRows, { id: newId, item: '' }]);
+        setEndorsedItemsRows([...endorsedItemsRows, { id: newId, item: '', itemAsBullets: false }]);
     };
 
     const removeEndorsedItemsRow = (id) => {
@@ -359,9 +382,10 @@ function ADRForm() {
                 <div className="adr-form__section">
                     <label className="adr-form__section-label">1. Status</label>
                     <select className="adr-form__select" value={status} onChange={(e) => setStatus(e.target.value)}>
-                        <option>WHITE ALERT</option>
-                        <option>BLUE ALERT</option>
-                        <option>RED ALERT</option>
+                        <option value="">Choose a status</option>
+                        <option value="WHITE ALERT">WHITE ALERT</option>
+                        <option value="BLUE ALERT">BLUE ALERT</option>
+                        <option value="RED ALERT">RED ALERT</option>
                     </select>
                 </div>
 
@@ -477,10 +501,10 @@ function ADRForm() {
                                     {communicationRows.map((row) => (
                                         <tr className="adr-form__modal-table-row" key={row.id}>
                                             <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter particulars"
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
+                                                    placeholder="Enter particulars (new line to break)"
+                                                    rows="2"
                                                     value={row.particulars}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'particulars', e.target.value)}
                                                 />
@@ -511,19 +535,27 @@ function ADRForm() {
                                                 </div>
                                             </td>
                                             <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter contact/freq/channel"
+                                                <label className="adr-form__bullet-check">
+                                                    <input type="checkbox" checked={row.contactAsBullets ?? false} onChange={(e) => updateCommunicationRow(row.id, 'contactAsBullets', e.target.checked)} />
+                                                    <span>Bullet form</span>
+                                                </label>
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
+                                                    placeholder="Enter contact/freq/channel (new line to break)"
+                                                    rows="2"
                                                     value={row.contact}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'contact', e.target.value)}
                                                 />
                                             </td>
                                             <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter status/remarks"
+                                                <label className="adr-form__bullet-check">
+                                                    <input type="checkbox" checked={row.statusAsBullets ?? false} onChange={(e) => updateCommunicationRow(row.id, 'statusAsBullets', e.target.checked)} />
+                                                    <span>Bullet form</span>
+                                                </label>
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
+                                                    placeholder="Enter status/remarks (new line to break)"
+                                                    rows="2"
                                                     value={row.status}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'status', e.target.value)}
                                                 />
@@ -595,10 +627,20 @@ function ADRForm() {
                                                 />
                                             </td>
                                             <td>
+                                                <label className="adr-form__bullet-check">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={item.taskAsBullets ?? false}
+                                                        onChange={(e) => setAttendanceItems(prev => prev.map(i => 
+                                                            i.id === item.id ? { ...i, taskAsBullets: e.target.checked } : i
+                                                        ))}
+                                                    />
+                                                    <span>Bullet form</span>
+                                                </label>
                                                 <textarea 
                                                     className="adr-form__modal-input adr-form__modal-textarea" 
-                                                    placeholder="Enter task"
-                                                    rows="2"
+                                                    placeholder="Enter task (use new line for multiple items)"
+                                                    rows="3"
                                                     value={item.task}
                                                     onChange={(e) => {
                                                         const value = e.target.value;
@@ -661,9 +703,19 @@ function ADRForm() {
                                         <tr className="adr-form__modal-table-row" key={item.id}>
                                             <td className="adr-form__modal-table-number">{index + 1}</td>
                                             <td>
+                                                <label className="adr-form__bullet-check">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={item.reportAsBullets ?? false}
+                                                        onChange={(e) => setReportsItems(prev => prev.map(i => 
+                                                            i.id === item.id ? { ...i, reportAsBullets: e.target.checked } : i
+                                                        ))}
+                                                    />
+                                                    <span>Bullet form</span>
+                                                </label>
                                                 <textarea 
                                                     className="adr-form__modal-input adr-form__modal-textarea" 
-                                                    placeholder="Enter reports and advisories released"
+                                                    placeholder="Enter reports and advisories released (use new line to break text)"
                                                     rows="3"
                                                     value={item.report}
                                                     onChange={(e) => {
@@ -675,10 +727,10 @@ function ADRForm() {
                                                 ></textarea>
                                             </td>
                                             <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
                                                     placeholder="Enter remarks"
+                                                    rows="2"
                                                     value={item.remarks}
                                                     onChange={(e) => {
                                                         const value = e.target.value;
@@ -686,7 +738,7 @@ function ADRForm() {
                                                             i.id === item.id ? { ...i, remarks: value } : i
                                                         ));
                                                     }}
-                                                />
+                                                ></textarea>
                                             </td>
                                             <td>
                                                 <button 
@@ -740,10 +792,10 @@ function ADRForm() {
                                     {otherItemsRows.map((row) => (
                                         <tr className="adr-form__modal-table-row" key={row.id}>
                                             <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter particulars"
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
+                                                    placeholder="Enter particulars (new line to break)"
+                                                    rows="2"
                                                     value={row.particulars}
                                                     onChange={(e) => updateOtherItemsRow(row.id, 'particulars', e.target.value)}
                                                 />
@@ -774,10 +826,14 @@ function ADRForm() {
                                                 </div>
                                             </td>
                                             <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter status/remarks"
+                                                <label className="adr-form__bullet-check">
+                                                    <input type="checkbox" checked={row.statusAsBullets ?? false} onChange={(e) => updateOtherItemsRow(row.id, 'statusAsBullets', e.target.checked)} />
+                                                    <span>Bullet form</span>
+                                                </label>
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
+                                                    placeholder="Enter status/remarks (new line to break)"
+                                                    rows="2"
                                                     value={row.status}
                                                     onChange={(e) => updateOtherItemsRow(row.id, 'status', e.target.value)}
                                                 />
@@ -834,10 +890,14 @@ function ADRForm() {
                                         <tr key={row.id}>
                                             <td>•</td>
                                             <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter administrative concern"
+                                                <label className="adr-form__bullet-check">
+                                                    <input type="checkbox" checked={row.concernAsBullets ?? false} onChange={(e) => updateOtherAdminRow(row.id, 'concernAsBullets', e.target.checked)} />
+                                                    <span>Bullet form</span>
+                                                </label>
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea" 
+                                                    placeholder="Enter administrative concern (new line to break)"
+                                                    rows="3"
                                                     value={row.concern}
                                                     onChange={(e) => updateOtherAdminRow(row.id, 'concern', e.target.value)}
                                                 />
@@ -894,10 +954,14 @@ function ADRForm() {
                                         <tr key={row.id}>
                                             <td>1.{index + 1}</td>
                                             <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter item"
+                                                <label className="adr-form__bullet-check">
+                                                    <input type="checkbox" checked={row.itemAsBullets ?? false} onChange={(e) => updateEndorsedItemsRow(row.id, 'itemAsBullets', e.target.checked)} />
+                                                    <span>Bullet form</span>
+                                                </label>
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea" 
+                                                    placeholder="Enter item (new line to break)"
+                                                    rows="3"
                                                     value={row.item}
                                                     onChange={(e) => updateEndorsedItemsRow(row.id, 'item', e.target.value)}
                                                 />
@@ -930,6 +994,15 @@ function ADRForm() {
                     </div>
                 </div>
             )}
+
+            <DocumentViewModal
+                isOpen={showPreviewModal}
+                report={showPreviewModal ? getPreviewReport() : null}
+                onClose={() => {
+                    setShowPreviewModal(false);
+                    navigate('/adr-reports/create', { replace: true, state: isEditing && reportToEdit ? { report: reportToEdit } : {} });
+                }}
+            />
 
             <ConfirmModal
                 isOpen={showValidationModal}

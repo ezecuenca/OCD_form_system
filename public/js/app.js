@@ -62617,17 +62617,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
 /* harmony import */ var _ConfirmModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ConfirmModal */ "./resources/js/components/ConfirmModal.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _DocumentViewModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DocumentViewModal */ "./resources/js/components/DocumentViewModal.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -62639,8 +62640,159 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
+
+// Default data for new reports – Administrative Matters A to C (and endorsed). Editable, addable, removable.
+
+var getDefaultCommunicationRows = function getDefaultCommunicationRows() {
+  return [{
+    id: 1,
+    particulars: 'Hytera Digital Radio',
+    noOfItems: 2,
+    contact: 'LCL-Caraga / INRG-Caraga',
+    status: 'Operational',
+    contactAsBullets: false,
+    statusAsBullets: false
+  }, {
+    id: 2,
+    particulars: 'Hytera digital radio charger',
+    noOfItems: 2,
+    contact: '-',
+    status: 'Operational',
+    contactAsBullets: false,
+    statusAsBullets: false
+  }, {
+    id: 3,
+    particulars: 'Samsung mobile phone',
+    noOfItems: 1,
+    contact: '0947 946 8145 (SMART)',
+    status: 'Bal 0.50 No call/text promo',
+    contactAsBullets: false,
+    statusAsBullets: false
+  }, {
+    id: 4,
+    particulars: 'RedMi mobile phone',
+    noOfItems: 1,
+    contact: 'SIM 1: 096694832281 SIM 2: 091711637259 (GLOBE)',
+    status: 'SIM 1 Postpaid SIM 2: Bal 0.50 No call/text promo',
+    contactAsBullets: false,
+    statusAsBullets: false
+  }, {
+    id: 5,
+    particulars: 'TPLink Wifi (Temporary)',
+    noOfItems: 1,
+    contact: '-',
+    status: 'Stable connection',
+    contactAsBullets: false,
+    statusAsBullets: false
+  }, {
+    id: 6,
+    particulars: 'VoIP Line for Intercom',
+    noOfItems: 2,
+    contact: '1215. 1216',
+    status: 'Stable Connection',
+    contactAsBullets: false,
+    statusAsBullets: false
+  }, {
+    id: 7,
+    particulars: 'VoIP Line Inter Region and Central Office Connectivity',
+    noOfItems: 2,
+    contact: '926, 927',
+    status: 'Stable Connection',
+    contactAsBullets: false,
+    statusAsBullets: false
+  }];
+};
+var getDefaultOtherItemsRows = function getDefaultOtherItemsRows() {
+  return [{
+    id: 1,
+    particulars: '55-inch TV monitor (Sony)',
+    noOfItems: 3,
+    status: 'Wall-mounted inside OMCR; 1 at VIP Conference Room',
+    statusAsBullets: false
+  }, {
+    id: 2,
+    particulars: '65-inch TV monitor (TCL)',
+    noOfItems: 1,
+    status: 'Wall-mounted inside OMCR',
+    statusAsBullets: false
+  }, {
+    id: 3,
+    particulars: '40-inch TV monitors',
+    noOfItems: 2,
+    status: '1 unit wall-mounted outside OMCR; 1 unit wall-mounted at the lobby',
+    statusAsBullets: false
+  }, {
+    id: 4,
+    particulars: 'Desktop computers',
+    noOfItems: 4,
+    status: 'Workstations',
+    statusAsBullets: false
+  }, {
+    id: 5,
+    particulars: 'Portable Water Filtration Set',
+    noOfItems: 2,
+    status: 'Functional; At storage room near OS',
+    statusAsBullets: false
+  }, {
+    id: 6,
+    particulars: 'Solar Panel Power Source for Water Filter',
+    noOfItems: 2,
+    status: 'Functional; At storage room near OS',
+    statusAsBullets: false
+  }, {
+    id: 7,
+    particulars: 'Nissan Calibre',
+    noOfItems: 1,
+    status: 'Parked safely at GCCC',
+    statusAsBullets: false
+  }, {
+    id: 8,
+    particulars: 'Mitsubishi Pick-up',
+    noOfItems: 1,
+    status: 'Parked safely at GCCC',
+    statusAsBullets: false
+  }, {
+    id: 9,
+    particulars: 'Toyota Commuter Van',
+    noOfItems: 1,
+    status: 'Parked safely at GCCC',
+    statusAsBullets: false
+  }, {
+    id: 10,
+    particulars: 'Key - Nissan Calibre',
+    noOfItems: 1,
+    status: 'Under custody of security guard',
+    statusAsBullets: false
+  }, {
+    id: 11,
+    particulars: 'Key - Mitsubishi Pick-up',
+    noOfItems: 1,
+    status: 'Under custody of security guard',
+    statusAsBullets: false
+  }, {
+    id: 12,
+    particulars: 'Key - Toyota Commuter Van',
+    noOfItems: 1,
+    status: 'Under custody of security guard',
+    statusAsBullets: false
+  }];
+};
+var getDefaultOtherAdminRows = function getDefaultOtherAdminRows() {
+  return [{
+    id: 1,
+    concern: 'No untoward incident',
+    concernAsBullets: false
+  }];
+};
+var getDefaultEndorsedItemsRows = function getDefaultEndorsedItemsRows() {
+  return [{
+    id: 1,
+    item: '2 units of mobile phones',
+    itemAsBullets: false
+  }];
+};
 function ADRForm() {
-  var _location$state;
+  var _location$state, _reportToEdit$communi, _reportToEdit$otherIt, _reportToEdit$otherAd, _reportToEdit$endorse;
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useLocation)();
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
@@ -62693,7 +62845,7 @@ function ADRForm() {
     setDateTime = _useState16[1];
 
   // Status
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.alertStatus) || (reportToEdit !== null && reportToEdit !== void 0 && reportToEdit.status && (reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) !== 'Active' && (reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) !== 'Archived' ? reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status : 'WHITE ALERT')),
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.alertStatus) || (reportToEdit !== null && reportToEdit !== void 0 && reportToEdit.status && (reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) !== 'Active' && (reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) !== 'Archived' ? reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status : '')),
     _useState18 = _slicedToArray(_useState17, 2),
     status = _useState18[0],
     setStatus = _useState18[1];
@@ -62702,7 +62854,8 @@ function ADRForm() {
   var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.attendanceItems) || [{
       id: 1,
       name: '',
-      task: ''
+      task: '',
+      taskAsBullets: false
     }]),
     _useState20 = _slicedToArray(_useState19, 2),
     attendanceItems = _useState20[0],
@@ -62710,7 +62863,8 @@ function ADRForm() {
   var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.reportsItems) || [{
       id: 1,
       report: '',
-      remarks: ''
+      remarks: '',
+      reportAsBullets: false
     }]),
     _useState22 = _slicedToArray(_useState21, 2),
     reportsItems = _useState22[0],
@@ -62753,75 +62907,62 @@ function ADRForm() {
     _useState40 = _slicedToArray(_useState39, 2),
     errorField = _useState40[0],
     setErrorField = _useState40[1];
-
-  // Communication and Other Items
-  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.communicationRows) || [{
-      id: 1,
-      particulars: '',
-      noOfItems: 0,
-      contact: '',
-      status: ''
-    }]),
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState42 = _slicedToArray(_useState41, 2),
-    communicationRows = _useState42[0],
-    setCommunicationRows = _useState42[1];
-  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherItemsRows) || [{
-      id: 1,
-      particulars: '',
-      noOfItems: 0,
-      status: ''
-    }]),
+    showPreviewModal = _useState42[0],
+    setShowPreviewModal = _useState42[1];
+
+  // Communication and Other Items – use default data for new reports (editable, addable, removable)
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$communi = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.communicationRows) !== null && _reportToEdit$communi !== void 0 ? _reportToEdit$communi : getDefaultCommunicationRows()),
     _useState44 = _slicedToArray(_useState43, 2),
-    otherItemsRows = _useState44[0],
-    setOtherItemsRows = _useState44[1];
-  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherAdminRows) || [{
-      id: 1,
-      concern: ''
-    }]),
+    communicationRows = _useState44[0],
+    setCommunicationRows = _useState44[1];
+  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$otherIt = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherItemsRows) !== null && _reportToEdit$otherIt !== void 0 ? _reportToEdit$otherIt : getDefaultOtherItemsRows()),
     _useState46 = _slicedToArray(_useState45, 2),
-    otherAdminRows = _useState46[0],
-    setOtherAdminRows = _useState46[1];
-  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.endorsedItemsRows) || [{
-      id: 1,
-      item: ''
-    }]),
+    otherItemsRows = _useState46[0],
+    setOtherItemsRows = _useState46[1];
+  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$otherAd = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherAdminRows) !== null && _reportToEdit$otherAd !== void 0 ? _reportToEdit$otherAd : getDefaultOtherAdminRows()),
     _useState48 = _slicedToArray(_useState47, 2),
-    endorsedItemsRows = _useState48[0],
-    setEndorsedItemsRows = _useState48[1];
+    otherAdminRows = _useState48[0],
+    setOtherAdminRows = _useState48[1];
+  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$endorse = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.endorsedItemsRows) !== null && _reportToEdit$endorse !== void 0 ? _reportToEdit$endorse : getDefaultEndorsedItemsRows()),
+    _useState50 = _slicedToArray(_useState49, 2),
+    endorsedItemsRows = _useState50[0],
+    setEndorsedItemsRows = _useState50[1];
 
   // Signatures
-  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedBy) || ''),
-    _useState50 = _slicedToArray(_useState49, 2),
-    preparedBy = _useState50[0],
-    setPreparedBy = _useState50[1];
-  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedPosition) || ''),
+  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedBy) || ''),
     _useState52 = _slicedToArray(_useState51, 2),
-    preparedPosition = _useState52[0],
-    setPreparedPosition = _useState52[1];
-  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedBy) || ''),
+    preparedBy = _useState52[0],
+    setPreparedBy = _useState52[1];
+  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedPosition) || ''),
     _useState54 = _slicedToArray(_useState53, 2),
-    receivedBy = _useState54[0],
-    setReceivedBy = _useState54[1];
-  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedPosition) || ''),
+    preparedPosition = _useState54[0],
+    setPreparedPosition = _useState54[1];
+  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedBy) || ''),
     _useState56 = _slicedToArray(_useState55, 2),
-    receivedPosition = _useState56[0],
-    setReceivedPosition = _useState56[1];
-  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedBy) || ''),
+    receivedBy = _useState56[0],
+    setReceivedBy = _useState56[1];
+  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedPosition) || ''),
     _useState58 = _slicedToArray(_useState57, 2),
-    notedBy = _useState58[0],
-    setNotedBy = _useState58[1];
-  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedPosition) || ''),
+    receivedPosition = _useState58[0],
+    setReceivedPosition = _useState58[1];
+  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedBy) || ''),
     _useState60 = _slicedToArray(_useState59, 2),
-    notedPosition = _useState60[0],
-    setNotedPosition = _useState60[1];
-  var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedBy) || ''),
+    notedBy = _useState60[0],
+    setNotedBy = _useState60[1];
+  var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedPosition) || ''),
     _useState62 = _slicedToArray(_useState61, 2),
-    approvedBy = _useState62[0],
-    setApprovedBy = _useState62[1];
-  var _useState63 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedPosition) || ''),
+    notedPosition = _useState62[0],
+    setNotedPosition = _useState62[1];
+  var _useState63 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedBy) || ''),
     _useState64 = _slicedToArray(_useState63, 2),
-    approvedPosition = _useState64[0],
-    setApprovedPosition = _useState64[1];
+    approvedBy = _useState64[0],
+    setApprovedBy = _useState64[1];
+  var _useState65 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedPosition) || ''),
+    _useState66 = _slicedToArray(_useState65, 2),
+    approvedPosition = _useState66[0],
+    setApprovedPosition = _useState66[1];
   var handleReturn = function handleReturn() {
     navigate('/adr-reports');
   };
@@ -62874,48 +63015,38 @@ function ADRForm() {
     }
   };
   var handleViewDocument = function handleViewDocument() {
-    if (isEditing && reportToEdit && reportToEdit.id) {
-      navigate('/adr-reports', {
-        state: {
-          openDocumentId: reportToEdit.id,
-          from: 'form'
-        }
-      });
-    } else {
-      var formData = {
-        documentName: documentName,
-        forName: forName,
-        forPosition: forPosition,
-        thruName: thruName,
-        thruPosition: thruPosition,
-        fromName: fromName,
-        fromPosition: fromPosition,
-        subject: subject,
-        dateTime: dateTime,
-        status: status,
-        attendanceItems: attendanceItems,
-        reportsItems: reportsItems,
-        communicationRows: communicationRows,
-        otherItemsRows: otherItemsRows,
-        otherAdminRows: otherAdminRows,
-        endorsedItemsRows: endorsedItemsRows,
-        preparedBy: preparedBy,
-        preparedPosition: preparedPosition,
-        receivedBy: receivedBy,
-        receivedPosition: receivedPosition,
-        notedBy: notedBy,
-        notedPosition: notedPosition,
-        approvedBy: approvedBy,
-        approvedPosition: approvedPosition
-      };
-      var newReport = addReport(formData);
-      navigate('/adr-reports', {
-        state: {
-          openDocumentId: newReport.id,
-          from: 'form'
-        }
-      });
-    }
+    setShowPreviewModal(true);
+  };
+  var getPreviewReport = function getPreviewReport() {
+    var formData = {
+      documentName: documentName,
+      forName: forName,
+      forPosition: forPosition,
+      thruName: thruName,
+      thruPosition: thruPosition,
+      fromName: fromName,
+      fromPosition: fromPosition,
+      subject: subject,
+      dateTime: dateTime,
+      status: status,
+      attendanceItems: attendanceItems,
+      reportsItems: reportsItems,
+      communicationRows: communicationRows,
+      otherItemsRows: otherItemsRows,
+      otherAdminRows: otherAdminRows,
+      endorsedItemsRows: endorsedItemsRows,
+      preparedBy: preparedBy,
+      preparedPosition: preparedPosition,
+      receivedBy: receivedBy,
+      receivedPosition: receivedPosition,
+      notedBy: notedBy,
+      notedPosition: notedPosition,
+      approvedBy: approvedBy,
+      approvedPosition: approvedPosition
+    };
+    return _objectSpread(_objectSpread({}, formData), {}, {
+      alertStatus: status || 'WHITE ALERT'
+    });
   };
   var addAttendanceItem = function addAttendanceItem() {
     setAttendanceItems(function (prev) {
@@ -62925,7 +63056,8 @@ function ADRForm() {
       return [].concat(_toConsumableArray(prev), [{
         id: newId,
         name: '',
-        task: ''
+        task: '',
+        taskAsBullets: false
       }]);
     });
   };
@@ -62945,7 +63077,8 @@ function ADRForm() {
       return [].concat(_toConsumableArray(prev), [{
         id: newId,
         report: '',
-        remarks: ''
+        remarks: '',
+        reportAsBullets: false
       }]);
     });
   };
@@ -62966,7 +63099,9 @@ function ADRForm() {
       particulars: '',
       noOfItems: 0,
       contact: '',
-      status: ''
+      status: '',
+      contactAsBullets: false,
+      statusAsBullets: false
     }]));
   };
   var removeCommunicationRow = function removeCommunicationRow(id) {
@@ -63001,7 +63136,8 @@ function ADRForm() {
       id: newId,
       particulars: '',
       noOfItems: 0,
-      status: ''
+      status: '',
+      statusAsBullets: false
     }]));
   };
   var removeOtherItemsRow = function removeOtherItemsRow(id) {
@@ -63034,7 +63170,8 @@ function ADRForm() {
     })).concat([0])) + 1;
     setOtherAdminRows([].concat(_toConsumableArray(otherAdminRows), [{
       id: newId,
-      concern: ''
+      concern: '',
+      concernAsBullets: false
     }]));
   };
   var removeOtherAdminRow = function removeOtherAdminRow(id) {
@@ -63053,7 +63190,8 @@ function ADRForm() {
     })).concat([0])) + 1;
     setEndorsedItemsRows([].concat(_toConsumableArray(endorsedItemsRows), [{
       id: newId,
-      item: ''
+      item: '',
+      itemAsBullets: false
     }]));
   };
   var removeEndorsedItemsRow = function removeEndorsedItemsRow(id) {
@@ -63066,16 +63204,16 @@ function ADRForm() {
       return row.id === id ? _objectSpread(_objectSpread({}, row), {}, _defineProperty({}, field, value)) : row;
     }));
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     className: "adr-form",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "adr-form__top",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__top-left",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h1", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h1", {
           className: "adr-form__title",
           children: "RDRRMOC DUTY REPORT"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
           type: "text",
           className: "adr-form__document-name ".concat(errorField === 'documentName' ? 'adr-form__input-error' : ''),
           placeholder: "Enter document name...",
@@ -63085,16 +63223,16 @@ function ADRForm() {
             if (errorField === 'documentName') setErrorField('');
           }
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__top-right",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
           className: "adr-form__return-btn",
           onClick: handleReturn,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
             viewBox: "0 0 24 24",
             fill: "none",
             xmlns: "http://www.w3.org/2000/svg",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
               d: "M19 12H5M5 12L12 19M5 12L12 5",
               stroke: "currentColor",
               strokeWidth: "2",
@@ -63102,31 +63240,31 @@ function ADRForm() {
               strokeLinejoin: "round"
             })
           }), "Return"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__actions",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
             className: "adr-form__action-btn adr-form__action-btn--confirm",
             onClick: handleConfirm,
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
               src: "".concat(window.location.origin, "/images/confirm_icon.svg"),
               alt: "Confirm"
             }), isEditing ? 'Update' : 'Confirm']
-          }), !isEditing && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
+          }), !isEditing && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
             className: "adr-form__action-btn adr-form__action-btn--view",
             onClick: handleViewDocument,
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("svg", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
               width: "16",
               height: "16",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                 d: "M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z",
                 stroke: "currentColor",
                 strokeWidth: "2",
                 strokeLinecap: "round",
                 strokeLinejoin: "round"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("circle", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("circle", {
                 cx: "12",
                 cy: "12",
                 r: "3",
@@ -63139,17 +63277,17 @@ function ADRForm() {
           })]
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "adr-form__content",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__top-fields",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__field-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "adr-form__field",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
               children: "For:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
               type: "text",
               className: errorField === 'forName' ? 'adr-form__input-error' : '',
               value: forName,
@@ -63158,7 +63296,7 @@ function ADRForm() {
                 if (errorField === 'forName') setErrorField('');
               }
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
             placeholder: "(Position)",
             rows: "2",
@@ -63167,13 +63305,13 @@ function ADRForm() {
               return setForPosition(e.target.value);
             }
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__field-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "adr-form__field",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
               children: "Thru:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
               type: "text",
               className: errorField === 'thruName' ? 'adr-form__input-error' : '',
               value: thruName,
@@ -63182,7 +63320,7 @@ function ADRForm() {
                 if (errorField === 'thruName') setErrorField('');
               }
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
             placeholder: "(Position)",
             rows: "2",
@@ -63191,13 +63329,13 @@ function ADRForm() {
               return setThruPosition(e.target.value);
             }
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__field-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "adr-form__field",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
               children: "From:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
               type: "text",
               className: errorField === 'fromName' ? 'adr-form__input-error' : '',
               value: fromName,
@@ -63206,7 +63344,7 @@ function ADRForm() {
                 if (errorField === 'fromName') setErrorField('');
               }
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
             placeholder: "(Position)",
             rows: "2",
@@ -63215,16 +63353,16 @@ function ADRForm() {
               return setFromPosition(e.target.value);
             }
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__field-group adr-form__field-group--subject",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "adr-form__subject-header",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
               children: "Subject:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
               className: "adr-form__subject-text",
               children: "After Duty Report for the Period Covered"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
               type: "text",
               className: "adr-form__subject-input",
               placeholder: "Date and Time",
@@ -63235,35 +63373,41 @@ function ADRForm() {
             })]
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__section",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
           className: "adr-form__section-label",
           children: "1. Status"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("select", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("select", {
           className: "adr-form__select",
           value: status,
           onChange: function onChange(e) {
             return setStatus(e.target.value);
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+            value: "",
+            children: "Choose a status"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+            value: "WHITE ALERT",
             children: "WHITE ALERT"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+            value: "BLUE ALERT",
             children: "BLUE ALERT"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+            value: "RED ALERT",
             children: "RED ALERT"
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__section",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
           className: "adr-form__section-label",
           children: "3. Reports and Advisories:"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__customize-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
             children: "Reports and Advisories List"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__customize-btn",
             type: "button",
             onClick: function onClick() {
@@ -63272,16 +63416,16 @@ function ADRForm() {
             children: "CUSTOMIZE"
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__section",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
           className: "adr-form__section-label",
           children: "2. Attendance:"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__customize-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
             children: "Attendance List"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__customize-btn",
             type: "button",
             onClick: function onClick() {
@@ -63290,16 +63434,16 @@ function ADRForm() {
             children: "CUSTOMIZE"
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__section",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
           className: "adr-form__section-label",
           children: "4. Administrative Matters:"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__customize-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
             children: "A. Status of Communication Lines"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__customize-btn",
             type: "button",
             onClick: function onClick() {
@@ -63307,11 +63451,11 @@ function ADRForm() {
             },
             children: "CUSTOMIZE"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__customize-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
             children: "B. Status of Other Items"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__customize-btn",
             type: "button",
             onClick: function onClick() {
@@ -63319,11 +63463,11 @@ function ADRForm() {
             },
             children: "CUSTOMIZE"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__customize-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
             children: "C. Other Administrative Matters:"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__customize-btn",
             type: "button",
             onClick: function onClick() {
@@ -63331,18 +63475,18 @@ function ADRForm() {
             },
             children: "CUSTOMIZE"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__other-admin-content",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
             className: "adr-form__other-admin-item",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
               children: "(List down administrative concerns such as but not limited to: Duty driver on-call, vehicle activities, internet or other ICT equipment issues, parcel or documents received/delivered, untoward incidents that should be elevated to the management level)."
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "adr-form__other-admin-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
               children: "1. The following were endorsed to incoming Operations Duty Staff:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
               className: "adr-form__customize-btn",
               type: "button",
               onClick: function onClick() {
@@ -63350,29 +63494,29 @@ function ADRForm() {
               },
               children: "CUSTOMIZE"
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
             className: "adr-form__other-admin-item",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
               children: "2. For information of the OCD Officer-In-Charge."
             })
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__signature-fields",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__signature-item",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "adr-form__field",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
               children: "Prepared By:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
               type: "text",
               value: preparedBy,
               onChange: function onChange(e) {
                 return setPreparedBy(e.target.value);
               }
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
             placeholder: "(Position)",
             rows: "2",
@@ -63381,20 +63525,20 @@ function ADRForm() {
               return setPreparedPosition(e.target.value);
             }
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__signature-item",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "adr-form__field",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
               children: "Received By:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
               type: "text",
               value: receivedBy,
               onChange: function onChange(e) {
                 return setReceivedBy(e.target.value);
               }
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
             placeholder: "(Position)",
             rows: "2",
@@ -63403,20 +63547,20 @@ function ADRForm() {
               return setReceivedPosition(e.target.value);
             }
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__signature-item",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "adr-form__field",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
               children: "Noted By:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
               type: "text",
               value: notedBy,
               onChange: function onChange(e) {
                 return setNotedBy(e.target.value);
               }
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
             placeholder: "(Position)",
             rows: "2",
@@ -63425,20 +63569,20 @@ function ADRForm() {
               return setNotedPosition(e.target.value);
             }
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__signature-item",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "adr-form__field",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
               children: "Approved:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
               type: "text",
               value: approvedBy,
               onChange: function onChange(e) {
                 return setApprovedBy(e.target.value);
               }
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
             placeholder: "(Position)",
             rows: "2",
@@ -63449,21 +63593,21 @@ function ADRForm() {
           })]
         })]
       })]
-    }), showCommunicationModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    }), showCommunicationModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       className: "adr-form__modal adr-form__modal--active",
       onClick: function onClick() {
         return setShowCommunicationModal(false);
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__modal-content",
         onClick: function onClick(e) {
           return e.stopPropagation();
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-header",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h2", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
             children: "Status of Communication Lines"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-close",
             type: "button",
             onClick: function onClick() {
@@ -63471,50 +63615,51 @@ function ADRForm() {
             },
             children: "\xD7"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-body",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
             className: "adr-form__modal-table",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Particulars"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "No. of Items"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Contact No. / Freq / Channel"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Status / Remarks"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Actions"
                 })]
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
               children: communicationRows.map(function (row) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+                var _row$contactAsBullets, _row$statusAsBullets;
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter particulars",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
+                      placeholder: "Enter particulars (new line to break)",
+                      rows: "2",
                       value: row.particulars,
                       onChange: function onChange(e) {
                         return updateCommunicationRow(row.id, 'particulars', e.target.value);
                       }
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
                       className: "adr-form__counter",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                         className: "adr-form__counter-btn",
                         type: "button",
                         onClick: function onClick() {
                           return decrementCounter(row.id);
                         },
                         children: "\u2212"
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
                         type: "number",
                         className: "adr-form__counter-input",
                         value: row.noOfItems,
@@ -63522,7 +63667,7 @@ function ADRForm() {
                         onChange: function onChange(e) {
                           return updateCommunicationRow(row.id, 'noOfItems', parseInt(e.target.value) || 0);
                         }
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                         className: "adr-form__counter-btn",
                         type: "button",
                         onClick: function onClick() {
@@ -63531,46 +63676,68 @@ function ADRForm() {
                         children: "+"
                       })]
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter contact/freq/channel",
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
+                      className: "adr-form__bullet-check",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                        type: "checkbox",
+                        checked: (_row$contactAsBullets = row.contactAsBullets) !== null && _row$contactAsBullets !== void 0 ? _row$contactAsBullets : false,
+                        onChange: function onChange(e) {
+                          return updateCommunicationRow(row.id, 'contactAsBullets', e.target.checked);
+                        }
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                        children: "Bullet form"
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
+                      placeholder: "Enter contact/freq/channel (new line to break)",
+                      rows: "2",
                       value: row.contact,
                       onChange: function onChange(e) {
                         return updateCommunicationRow(row.id, 'contact', e.target.value);
                       }
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter status/remarks",
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
+                      className: "adr-form__bullet-check",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                        type: "checkbox",
+                        checked: (_row$statusAsBullets = row.statusAsBullets) !== null && _row$statusAsBullets !== void 0 ? _row$statusAsBullets : false,
+                        onChange: function onChange(e) {
+                          return updateCommunicationRow(row.id, 'statusAsBullets', e.target.checked);
+                        }
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                        children: "Bullet form"
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
+                      placeholder: "Enter status/remarks (new line to break)",
+                      rows: "2",
                       value: row.status,
                       onChange: function onChange(e) {
                         return updateCommunicationRow(row.id, 'status', e.target.value);
                       }
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                       className: "adr-form__modal-action-btn",
                       type: "button",
                       onClick: function onClick() {
                         return removeCommunicationRow(row.id);
                       },
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("svg", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
                         viewBox: "0 0 24 24",
                         fill: "none",
                         xmlns: "http://www.w3.org/2000/svg",
                         width: "16",
                         height: "16",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                           d: "M3 6H5H21",
                           stroke: "currentColor",
                           strokeWidth: "2",
                           strokeLinecap: "round",
                           strokeLinejoin: "round"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                           d: "M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z",
                           stroke: "currentColor",
                           strokeWidth: "2",
@@ -63583,15 +63750,15 @@ function ADRForm() {
                 }, row.id);
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-add-row",
             type: "button",
             onClick: addCommunicationRow,
             children: "Add Row"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__modal-footer",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-confirm",
             type: "button",
             onClick: function onClick() {
@@ -63601,21 +63768,21 @@ function ADRForm() {
           })
         })]
       })
-    }), showAttendanceModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    }), showAttendanceModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       className: "adr-form__modal adr-form__modal--active",
       onClick: function onClick() {
         return setShowAttendanceModal(false);
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__modal-content",
         onClick: function onClick(e) {
           return e.stopPropagation();
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-header",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h2", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
             children: "Attendance List"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-close",
             type: "button",
             onClick: function onClick() {
@@ -63623,33 +63790,34 @@ function ADRForm() {
             },
             children: "\xD7"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-body",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
             className: "adr-form__modal-table",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   className: "adr-form__modal-table-number",
                   children: "#"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Name"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Task"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Actions"
                 })]
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
               children: attendanceItems.map(function (item, index) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+                var _item$taskAsBullets;
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                     className: "adr-form__modal-table-number",
                     children: index + 1
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
                       type: "text",
                       className: "adr-form__modal-input",
                       placeholder: "Enter name",
@@ -63665,11 +63833,28 @@ function ADRForm() {
                         });
                       }
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
+                      className: "adr-form__bullet-check",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                        type: "checkbox",
+                        checked: (_item$taskAsBullets = item.taskAsBullets) !== null && _item$taskAsBullets !== void 0 ? _item$taskAsBullets : false,
+                        onChange: function onChange(e) {
+                          return setAttendanceItems(function (prev) {
+                            return prev.map(function (i) {
+                              return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
+                                taskAsBullets: e.target.checked
+                              }) : i;
+                            });
+                          });
+                        }
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                        children: "Bullet form"
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
                       className: "adr-form__modal-input adr-form__modal-textarea",
-                      placeholder: "Enter task",
-                      rows: "2",
+                      placeholder: "Enter task (use new line for multiple items)",
+                      rows: "3",
                       value: item.task,
                       onChange: function onChange(e) {
                         var value = e.target.value;
@@ -63681,27 +63866,27 @@ function ADRForm() {
                           });
                         });
                       }
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                       className: "adr-form__modal-action-btn",
                       type: "button",
                       onClick: function onClick() {
                         return removeAttendanceItem(item.id);
                       },
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("svg", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
                         viewBox: "0 0 24 24",
                         fill: "none",
                         xmlns: "http://www.w3.org/2000/svg",
                         width: "16",
                         height: "16",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                           d: "M3 6H5H21",
                           stroke: "currentColor",
                           strokeWidth: "2",
                           strokeLinecap: "round",
                           strokeLinejoin: "round"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                           d: "M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z",
                           stroke: "currentColor",
                           strokeWidth: "2",
@@ -63714,15 +63899,15 @@ function ADRForm() {
                 }, item.id);
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-add-row",
             type: "button",
             onClick: addAttendanceItem,
             children: "Add Row"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__modal-footer",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-confirm",
             type: "button",
             onClick: function onClick() {
@@ -63732,21 +63917,21 @@ function ADRForm() {
           })
         })]
       })
-    }), showReportsModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    }), showReportsModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       className: "adr-form__modal adr-form__modal--active",
       onClick: function onClick() {
         return setShowReportsModal(false);
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__modal-content",
         onClick: function onClick(e) {
           return e.stopPropagation();
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-header",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h2", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
             children: "Reports and Advisories"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-close",
             type: "button",
             onClick: function onClick() {
@@ -63754,35 +63939,53 @@ function ADRForm() {
             },
             children: "\xD7"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-body",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
             className: "adr-form__modal-table",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   className: "adr-form__modal-table-number",
                   children: "#"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Reports and Advisories Released"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Remarks"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Actions"
                 })]
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
               children: reportsItems.map(function (item, index) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+                var _item$reportAsBullets;
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                     className: "adr-form__modal-table-number",
                     children: index + 1
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("textarea", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
+                      className: "adr-form__bullet-check",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                        type: "checkbox",
+                        checked: (_item$reportAsBullets = item.reportAsBullets) !== null && _item$reportAsBullets !== void 0 ? _item$reportAsBullets : false,
+                        onChange: function onChange(e) {
+                          return setReportsItems(function (prev) {
+                            return prev.map(function (i) {
+                              return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
+                                reportAsBullets: e.target.checked
+                              }) : i;
+                            });
+                          });
+                        }
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                        children: "Bullet form"
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
                       className: "adr-form__modal-input adr-form__modal-textarea",
-                      placeholder: "Enter reports and advisories released",
+                      placeholder: "Enter reports and advisories released (use new line to break text)",
                       rows: "3",
                       value: item.report,
                       onChange: function onChange(e) {
@@ -63795,12 +63998,12 @@ function ADRForm() {
                           });
                         });
                       }
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
                       placeholder: "Enter remarks",
+                      rows: "2",
                       value: item.remarks,
                       onChange: function onChange(e) {
                         var value = e.target.value;
@@ -63813,26 +64016,26 @@ function ADRForm() {
                         });
                       }
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                       className: "adr-form__modal-action-btn",
                       type: "button",
                       onClick: function onClick() {
                         return removeReportsItem(item.id);
                       },
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("svg", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
                         viewBox: "0 0 24 24",
                         fill: "none",
                         xmlns: "http://www.w3.org/2000/svg",
                         width: "16",
                         height: "16",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                           d: "M3 6H5H21",
                           stroke: "currentColor",
                           strokeWidth: "2",
                           strokeLinecap: "round",
                           strokeLinejoin: "round"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                           d: "M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z",
                           stroke: "currentColor",
                           strokeWidth: "2",
@@ -63845,15 +64048,15 @@ function ADRForm() {
                 }, item.id);
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-add-row",
             type: "button",
             onClick: addReportsItem,
             children: "Add Row"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__modal-footer",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-confirm",
             type: "button",
             onClick: function onClick() {
@@ -63863,21 +64066,21 @@ function ADRForm() {
           })
         })]
       })
-    }), showOtherItemsModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    }), showOtherItemsModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       className: "adr-form__modal adr-form__modal--active",
       onClick: function onClick() {
         return setShowOtherItemsModal(false);
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__modal-content",
         onClick: function onClick(e) {
           return e.stopPropagation();
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-header",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h2", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
             children: "Status of Other Items"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-close",
             type: "button",
             onClick: function onClick() {
@@ -63885,48 +64088,49 @@ function ADRForm() {
             },
             children: "\xD7"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-body",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
             className: "adr-form__modal-table",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Particulars"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "No. of Items"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Status / Remarks"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Actions"
                 })]
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
               children: otherItemsRows.map(function (row) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+                var _row$statusAsBullets2;
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter particulars",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
+                      placeholder: "Enter particulars (new line to break)",
+                      rows: "2",
                       value: row.particulars,
                       onChange: function onChange(e) {
                         return updateOtherItemsRow(row.id, 'particulars', e.target.value);
                       }
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
                       className: "adr-form__counter",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                         className: "adr-form__counter-btn",
                         type: "button",
                         onClick: function onClick() {
                           return decrementOtherItemsCounter(row.id);
                         },
                         children: "\u2212"
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
                         type: "number",
                         className: "adr-form__counter-input",
                         value: row.noOfItems,
@@ -63934,7 +64138,7 @@ function ADRForm() {
                         onChange: function onChange(e) {
                           return updateOtherItemsRow(row.id, 'noOfItems', parseInt(e.target.value) || 0);
                         }
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                         className: "adr-form__counter-btn",
                         type: "button",
                         onClick: function onClick() {
@@ -63943,36 +64147,47 @@ function ADRForm() {
                         children: "+"
                       })]
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter status/remarks",
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
+                      className: "adr-form__bullet-check",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                        type: "checkbox",
+                        checked: (_row$statusAsBullets2 = row.statusAsBullets) !== null && _row$statusAsBullets2 !== void 0 ? _row$statusAsBullets2 : false,
+                        onChange: function onChange(e) {
+                          return updateOtherItemsRow(row.id, 'statusAsBullets', e.target.checked);
+                        }
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                        children: "Bullet form"
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
+                      placeholder: "Enter status/remarks (new line to break)",
+                      rows: "2",
                       value: row.status,
                       onChange: function onChange(e) {
                         return updateOtherItemsRow(row.id, 'status', e.target.value);
                       }
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                       className: "adr-form__modal-action-btn",
                       type: "button",
                       onClick: function onClick() {
                         return removeOtherItemsRow(row.id);
                       },
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("svg", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
                         viewBox: "0 0 24 24",
                         fill: "none",
                         xmlns: "http://www.w3.org/2000/svg",
                         width: "16",
                         height: "16",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                           d: "M3 6H5H21",
                           stroke: "currentColor",
                           strokeWidth: "2",
                           strokeLinecap: "round",
                           strokeLinejoin: "round"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                           d: "M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z",
                           stroke: "currentColor",
                           strokeWidth: "2",
@@ -63985,15 +64200,15 @@ function ADRForm() {
                 }, row.id);
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-add-row",
             type: "button",
             onClick: addOtherItemsRow,
             children: "Add Row"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__modal-footer",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-confirm",
             type: "button",
             onClick: function onClick() {
@@ -64003,21 +64218,21 @@ function ADRForm() {
           })
         })]
       })
-    }), showOtherAdminModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    }), showOtherAdminModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       className: "adr-form__modal adr-form__modal--active",
       onClick: function onClick() {
         return setShowOtherAdminModal(false);
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__modal-content",
         onClick: function onClick(e) {
           return e.stopPropagation();
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-header",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h2", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
             children: "Administrative Concerns"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-close",
             type: "button",
             onClick: function onClick() {
@@ -64025,60 +64240,72 @@ function ADRForm() {
             },
             children: "\xD7"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-body",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
             className: "adr-form__modal-table",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   style: {
                     width: '50px'
                   }
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Concern"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   style: {
                     width: '60px'
                   },
                   children: "Action"
                 })]
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               children: otherAdminRows.map(function (row, index) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                var _row$concernAsBullets;
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                     children: "\u2022"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter administrative concern",
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
+                      className: "adr-form__bullet-check",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                        type: "checkbox",
+                        checked: (_row$concernAsBullets = row.concernAsBullets) !== null && _row$concernAsBullets !== void 0 ? _row$concernAsBullets : false,
+                        onChange: function onChange(e) {
+                          return updateOtherAdminRow(row.id, 'concernAsBullets', e.target.checked);
+                        }
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                        children: "Bullet form"
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea",
+                      placeholder: "Enter administrative concern (new line to break)",
+                      rows: "3",
                       value: row.concern,
                       onChange: function onChange(e) {
                         return updateOtherAdminRow(row.id, 'concern', e.target.value);
                       }
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                       className: "adr-form__modal-action-btn",
                       type: "button",
                       onClick: function onClick() {
                         return removeOtherAdminRow(row.id);
                       },
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("svg", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
                         viewBox: "0 0 24 24",
                         fill: "none",
                         xmlns: "http://www.w3.org/2000/svg",
                         width: "16",
                         height: "16",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                           d: "M3 6H5H21",
                           stroke: "currentColor",
                           strokeWidth: "2",
                           strokeLinecap: "round",
                           strokeLinejoin: "round"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                           d: "M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z",
                           stroke: "currentColor",
                           strokeWidth: "2",
@@ -64091,15 +64318,15 @@ function ADRForm() {
                 }, row.id);
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-add-row",
             type: "button",
             onClick: addOtherAdminRow,
             children: "Add Row"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__modal-footer",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-confirm",
             type: "button",
             onClick: function onClick() {
@@ -64109,21 +64336,21 @@ function ADRForm() {
           })
         })]
       })
-    }), showEndorsedItemsModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    }), showEndorsedItemsModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       className: "adr-form__modal adr-form__modal--active",
       onClick: function onClick() {
         return setShowEndorsedItemsModal(false);
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__modal-content",
         onClick: function onClick(e) {
           return e.stopPropagation();
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-header",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h2", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
             children: "Endorsed to Incoming Operations Duty Staff"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-close",
             type: "button",
             onClick: function onClick() {
@@ -64131,60 +64358,72 @@ function ADRForm() {
             },
             children: "\xD7"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-body",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
             className: "adr-form__modal-table",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   style: {
                     width: '70px'
                   }
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Item"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   style: {
                     width: '60px'
                   },
                   children: "Action"
                 })]
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               children: endorsedItemsRows.map(function (row, index) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("td", {
+                var _row$itemAsBullets;
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
                     children: ["1.", index + 1]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter item",
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
+                      className: "adr-form__bullet-check",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                        type: "checkbox",
+                        checked: (_row$itemAsBullets = row.itemAsBullets) !== null && _row$itemAsBullets !== void 0 ? _row$itemAsBullets : false,
+                        onChange: function onChange(e) {
+                          return updateEndorsedItemsRow(row.id, 'itemAsBullets', e.target.checked);
+                        }
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                        children: "Bullet form"
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea",
+                      placeholder: "Enter item (new line to break)",
+                      rows: "3",
                       value: row.item,
                       onChange: function onChange(e) {
                         return updateEndorsedItemsRow(row.id, 'item', e.target.value);
                       }
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                       className: "adr-form__modal-action-btn",
                       type: "button",
                       onClick: function onClick() {
                         return removeEndorsedItemsRow(row.id);
                       },
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("svg", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
                         viewBox: "0 0 24 24",
                         fill: "none",
                         xmlns: "http://www.w3.org/2000/svg",
                         width: "16",
                         height: "16",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                           d: "M3 6H5H21",
                           stroke: "currentColor",
                           strokeWidth: "2",
                           strokeLinecap: "round",
                           strokeLinejoin: "round"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                           d: "M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z",
                           stroke: "currentColor",
                           strokeWidth: "2",
@@ -64197,15 +64436,15 @@ function ADRForm() {
                 }, row.id);
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-add-row",
             type: "button",
             onClick: addEndorsedItemsRow,
             children: "Add Row"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__modal-footer",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-confirm",
             type: "button",
             onClick: function onClick() {
@@ -64215,7 +64454,19 @@ function ADRForm() {
           })
         })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ConfirmModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_DocumentViewModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      isOpen: showPreviewModal,
+      report: showPreviewModal ? getPreviewReport() : null,
+      onClose: function onClose() {
+        setShowPreviewModal(false);
+        navigate('/adr-reports/create', {
+          replace: true,
+          state: isEditing && reportToEdit ? {
+            report: reportToEdit
+          } : {}
+        });
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_ConfirmModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
       isOpen: showValidationModal,
       message: validationMessage,
       onConfirm: function onConfirm() {
@@ -65434,37 +65685,96 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
-/* harmony import */ var _HeaderDocument__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./HeaderDocument */ "./resources/js/components/HeaderDocument.js");
-/* harmony import */ var _FooterDocument__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FooterDocument */ "./resources/js/components/FooterDocument.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
+/* harmony import */ var _HeaderDocument__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HeaderDocument */ "./resources/js/components/HeaderDocument.js");
+/* harmony import */ var _FooterDocument__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./FooterDocument */ "./resources/js/components/FooterDocument.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+
 
 
 
 
 
 var PAGE_HEIGHT_MM = 297;
+var PAGE_HEIGHT_PX_FALLBACK = Math.round(297 * 96 / 25.4);
+var HEADER_HEIGHT_PX = 165;
+var FOOTER_HEIGHT_PX = 100;
+var CONTENT_AREA_FALLBACK = PAGE_HEIGHT_PX_FALLBACK - HEADER_HEIGHT_PX - FOOTER_HEIGHT_PX;
+function getBreakPoints(contentEl, bodyHeight) {
+  if (!contentEl || bodyHeight <= 0) return [0, bodyHeight];
+  var contentRect = contentEl.getBoundingClientRect();
+  var breakSet = new Set([0]);
+  contentEl.querySelectorAll('[data-break-point]').forEach(function (el) {
+    var elRect = el.getBoundingClientRect();
+    var top = Math.round(elRect.top - contentRect.top);
+    var bottom = Math.round(elRect.bottom - contentRect.top) + 6;
+    if (top > 0 && top < bodyHeight) breakSet.add(top);
+    if (bottom > 0 && bottom < bodyHeight) breakSet.add(bottom);
+  });
+  breakSet.add(bodyHeight);
+  return _toConsumableArray(breakSet).sort(function (a, b) {
+    return a - b;
+  });
+}
+function computePageRanges(bodyHeight, contentArea, breakPoints) {
+  if (bodyHeight <= 0 || contentArea <= 0) return [{
+    start: 0,
+    end: bodyHeight
+  }];
+  var minFillRatio = 0.5;
+  var ranges = [];
+  var start = 0;
+  var _loop = function _loop() {
+    var candidates = breakPoints.filter(function (b) {
+      return b > start && b <= start + contentArea;
+    });
+    var end = candidates.length ? Math.max.apply(Math, _toConsumableArray(candidates)) : Math.min(start + contentArea, bodyHeight);
+    if (candidates.length > 0 && end - start < contentArea * minFillRatio) {
+      var nextCandidates = breakPoints.filter(function (b) {
+        return b > end && b <= start + contentArea;
+      });
+      if (nextCandidates.length > 0) end = Math.max.apply(Math, _toConsumableArray(nextCandidates));
+    }
+    var actualEnd = Math.max(end, start + 1);
+    ranges.push({
+      start: start,
+      end: actualEnd
+    });
+    start = actualEnd;
+  };
+  while (start < bodyHeight) {
+    _loop();
+  }
+  if (ranges.length === 0) ranges.push({
+    start: 0,
+    end: bodyHeight
+  });
+  return ranges;
+}
 function DocumentViewModal(_ref) {
   var isOpen = _ref.isOpen,
     reportId = _ref.reportId,
+    reportProp = _ref.report,
     onClose = _ref.onClose;
-  var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_1__.useFormContext)(),
+  var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     getReport = _useFormContext.getReport;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
-    report = _useState2[0],
-    setReport = _useState2[1];
+    reportFromId = _useState2[0],
+    setReportFromId = _useState2[1];
   var measureRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var measureWrapperRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var headerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var footerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var pageHeightRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -65484,185 +65794,263 @@ function DocumentViewModal(_ref) {
     _useState0 = _slicedToArray(_useState9, 2),
     pageRanges = _useState0[0],
     setPageRanges = _useState0[1];
+  var report = reportProp != null ? reportProp : reportFromId;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (isOpen && reportId) {
+    if (isOpen && reportId && reportProp == null) {
       var foundReport = getReport(reportId);
-      setReport(foundReport);
+      setReportFromId(foundReport);
     } else {
-      setReport(null);
+      setReportFromId(null);
     }
-  }, [isOpen, reportId, getReport]);
+  }, [isOpen, reportId, reportProp, getReport]);
   var updatePages = function updatePages() {
-    if (!measureRef.current || !pageHeightRef.current || !headerRef.current || !footerRef.current) return;
+    var _pageHeightRef$curren, _pageHeightRef$curren2;
+    if (!measureRef.current) return;
     var measureWrapper = measureRef.current;
     var contentEl = measureWrapper.querySelector('.document-viewer__content');
     if (!contentEl) return;
-    var bodyHeight = contentEl.offsetHeight;
-    var pH = pageHeightRef.current.offsetHeight;
-    var headerH = headerRef.current.offsetHeight;
-    var footerH = footerRef.current.offsetHeight;
-    // Buffer so content never cuts into footer; enough for padding + line + borders
-    var footerPaddingBuffer = 35;
-    var contentArea = Math.max(1, pH - headerH - footerH - footerPaddingBuffer);
-    if (pH <= 0) return;
-    var breakEls = contentEl.querySelectorAll('[data-break-point]');
-    var contentRect = contentEl.getBoundingClientRect();
-    var breakSet = new Set([0]);
-    breakEls.forEach(function (el) {
-      var elRect = el.getBoundingClientRect();
-      // Add buffer so full row/element shows; avoid any partial cut at bottom
-      var bottom = Math.round(elRect.bottom - contentRect.top) + 6;
-      if (bottom > 0 && bottom < bodyHeight) breakSet.add(bottom);
-    });
-    breakSet.add(bodyHeight);
-    var breakPoints = _toConsumableArray(breakSet).sort(function (a, b) {
-      return a - b;
-    });
-    var ranges = [];
-    var start = 0;
-    while (start < bodyHeight) {
-      var candidates = breakPoints.filter(function (b) {
-        return b > start && b <= start + contentArea;
-      });
-      var end = candidates.length ? Math.max.apply(Math, _toConsumableArray(candidates)) : Math.min(start + contentArea, bodyHeight);
-      var actualEnd = Math.max(end, start + 1);
-      ranges.push({
-        start: start,
-        end: actualEnd
-      });
-      start = actualEnd;
-    }
-    if (ranges.length === 0) ranges.push({
-      start: 0,
-      end: bodyHeight
-    });
-    setPageHeightPx(pH);
+    var docRoot = document.querySelector('.document-modal .document-viewer__document');
+    var visibleContent = docRoot === null || docRoot === void 0 ? void 0 : docRoot.querySelector('.document-viewer__page--sheet:not(.document-viewer__measure) .document-viewer__page-slice .document-viewer__content');
+    var fromMeasure = Math.max(contentEl.scrollHeight || 0, contentEl.offsetHeight || 0);
+    var fromVisible = visibleContent ? Math.max(visibleContent.scrollHeight || 0, visibleContent.offsetHeight || 0) : 0;
+    var bodyHeight = Math.max(fromMeasure, fromVisible, 1);
+    var pH = (_pageHeightRef$curren = (_pageHeightRef$curren2 = pageHeightRef.current) === null || _pageHeightRef$curren2 === void 0 ? void 0 : _pageHeightRef$curren2.offsetHeight) !== null && _pageHeightRef$curren !== void 0 ? _pageHeightRef$curren : 0;
+    var pageHeight = pH > 0 ? pH : PAGE_HEIGHT_PX_FALLBACK;
+    var contentArea = Math.max(1, pageHeight - HEADER_HEIGHT_PX - FOOTER_HEIGHT_PX);
+    if (pageHeight <= 0) return;
+    var breakPoints = getBreakPoints(contentEl, bodyHeight);
+    var ranges = computePageRanges(bodyHeight, contentArea, breakPoints);
+    setPageHeightPx(pageHeight);
     setContentAreaHeightPx(contentArea);
     setTotalPages(ranges.length);
     setPageRanges(ranges);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (!report) return;
-    var timer = setTimeout(updatePages, 100);
+    var t1 = setTimeout(updatePages, 50);
+    var t2 = setTimeout(updatePages, 250);
+    var t3 = setTimeout(updatePages, 600);
+    var t4 = setTimeout(updatePages, 1200);
     return function () {
-      return clearTimeout(timer);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
     };
   }, [report]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (!report) return;
     var observer = new ResizeObserver(updatePages);
     if (measureRef.current) observer.observe(measureRef.current);
+    if (measureWrapperRef.current) observer.observe(measureWrapperRef.current);
     if (pageHeightRef.current) observer.observe(pageHeightRef.current);
     return function () {
       return observer.disconnect();
     };
   }, [report]);
   var handlePrint = function handlePrint() {
-    window.print();
+    var docRoot = document.querySelector('.document-modal .document-viewer__document');
+    var measureContent = docRoot === null || docRoot === void 0 ? void 0 : docRoot.querySelector('.document-viewer__measure .document-viewer__content');
+    var firstSheet = docRoot === null || docRoot === void 0 ? void 0 : docRoot.querySelector('.document-viewer__page--sheet:not(.document-viewer__measure)');
+    var contentSource = measureContent || (firstSheet === null || firstSheet === void 0 ? void 0 : firstSheet.querySelector('.document-viewer__page-slice .document-viewer__content'));
+    if (!contentSource || !firstSheet) {
+      updatePages();
+      setTimeout(function () {
+        return window.print();
+      }, 300);
+      return;
+    }
+    var bodyHeight = Math.max(contentSource.scrollHeight, contentSource.offsetHeight, 1);
+    var contentArea = Math.max(1, CONTENT_AREA_FALLBACK);
+    var breakPoints = getBreakPoints(contentSource, bodyHeight);
+    var ranges = computePageRanges(bodyHeight, contentArea, breakPoints);
+    var headerEl = firstSheet.querySelector('.header-document');
+    var footerEl = firstSheet.querySelector('.footer-document');
+    var headerHTML = headerEl ? headerEl.outerHTML : '';
+    var footerHTML = footerEl ? footerEl.outerHTML : '';
+    var contentHTML = contentSource.innerHTML;
+    var stylesheetLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(function (l) {
+      return l.href;
+    }).filter(function (href) {
+      return href && (href.startsWith('http') || href.startsWith('//'));
+    });
+    if (stylesheetLinks.length === 0) {
+      stylesheetLinks.push("".concat(window.location.origin, "/css/app.css"));
+    }
+    var styleTags = stylesheetLinks.map(function (href) {
+      return "<link rel=\"stylesheet\" href=\"".concat(href, "\">");
+    }).join('\n');
+    var SLICE_TOP_BUFFER_PX = 12;
+    var pageBlocks = ranges.map(function (range, index) {
+      var SLICE_SAFETY_PX = 8;
+      var startAdjusted = index > 0 ? Math.max(0, range.start - SLICE_TOP_BUFFER_PX) : range.start;
+      var sliceHeightPx = range.end - startAdjusted;
+      var sliceHeightCapped = Math.min(sliceHeightPx, Math.max(1, contentArea - SLICE_SAFETY_PX));
+      return "\n            <div class=\"document-viewer__page document-viewer__page--sheet document-viewer__page--print\" style=\"display:flex;flex-direction:column;position:relative;height:".concat(PAGE_HEIGHT_MM, "mm;box-sizing:border-box;padding-left:0.5in;overflow:hidden;\">\n                <div class=\"page-header-fixed\" style=\"flex:0 0 ").concat(HEADER_HEIGHT_PX, "px;max-height:").concat(HEADER_HEIGHT_PX, "px;overflow:hidden;\">").concat(headerHTML, "</div>\n                <div class=\"page-content-area\" style=\"flex:1 1 0;min-height:0;overflow:hidden;position:relative;\">\n                    <div class=\"document-viewer__sheet-body\" style=\"height:").concat(sliceHeightCapped, "px;max-height:100%;overflow:hidden;position:relative;\">\n                        <div class=\"document-viewer__page-slice\" style=\"transform:translateY(-").concat(startAdjusted, "px);position:relative;width:100%;\">\n                            <div class=\"document-viewer__content document-viewer__content--compact\">").concat(contentHTML, "</div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"page-footer-fixed\" style=\"flex:0 0 ").concat(FOOTER_HEIGHT_PX, "px;max-height:").concat(FOOTER_HEIGHT_PX, "px;overflow:hidden;\">").concat(footerHTML, "</div>\n            </div>");
+    }).join('');
+    var printDoc = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n<base href=\"".concat(window.location.origin, "/\">\n<title>RDRRMC Duty Report</title>\n").concat(styleTags, "\n<style>\n@page{size:210mm 297mm;margin:0;}\n*,*::before,*::after{box-sizing:border-box;}\nhtml,body{margin:0!important;padding:0!important;background:#fff!important;font-family:Arial,sans-serif!important;width:210mm!important;}\nbody.document-print-source{max-width:210mm!important;margin:0 auto!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}\n.document-viewer__document{width:210mm!important;max-width:210mm!important;margin:0 auto!important;padding:0!important;background:white!important;}\n.document-viewer__page--sheet{\n    position:relative!important;\n    height:297mm!important;\n    min-height:297mm!important;\n    max-height:297mm!important;\n    width:210mm!important;\n    margin:0!important;\n    padding-left:0.5in!important;\n    box-sizing:border-box!important;\n    overflow:hidden!important;\n    page-break-after:always!important;\n    page-break-inside:avoid!important;\n    background:white;\n}\n.document-viewer__page--sheet:last-child{page-break-after:auto!important;}\n.document-viewer__page--print.document-viewer__page--sheet{display:flex!important;flex-direction:column!important;}\n.document-viewer__page--print .page-header-fixed{\n    position:relative!important;top:auto!important;left:auto!important;right:auto!important;\n    flex:0 0 165px!important;max-height:165px!important;overflow:hidden!important;width:100%!important;z-index:10!important;\n}\n.document-viewer__page--print .page-content-area{\n    flex:1 1 0!important;min-height:0!important;\n    height:calc(297mm - 165px - 100px)!important;\n    max-height:calc(297mm - 165px - 100px)!important;\n    overflow:hidden!important;\n}\n.document-viewer__page--print .page-footer-fixed{\n    position:relative!important;bottom:auto!important;left:auto!important;right:auto!important;\n    flex:0 0 100px!important;max-height:100px!important;overflow:hidden!important;width:100%!important;z-index:10!important;\n}\n.page-header-fixed{\n    position:absolute!important;\n    top:0!important;\n    left:0!important;\n    right:0!important;\n    width:100%!important;\n    z-index:10!important;\n}\n.page-header-fixed .header-document{\n    padding:0.3in 0.6in 0.28in!important;\n}\n.page-header-fixed .header-document__line{\n    height:3px!important;background:#2563eb!important;margin:0.35rem auto 0.25rem!important;max-width:410px!important;\n    -webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;\n}\n.page-header-fixed .header-document__republic,.page-header-fixed .header-document__department{font-size:9pt!important;}\n.page-header-fixed .header-document__office{font-size:18pt!important;}\n.page-header-fixed .header-document__region{font-size:14pt!important;}\n.page-header-fixed .header-document__address{font-size:9pt!important;}\n.page-content-area{\n    position:relative!important;\n    z-index:1!important;\n    box-sizing:border-box!important;\n}\n.document-viewer__content--compact{padding:0.4in 0.5in!important;font-size:10pt!important;line-height:1.35!important;}\nbody.document-print-source .document-viewer__content--compact{padding-top:0.28in!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__title{font-size:11pt!important;margin-top:-0.3rem!important;margin-bottom:1rem!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__metadata{margin:0.6rem 0!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__field{margin-bottom:0.55rem!important;font-size:10.5pt!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__label{width:4.5rem!important;min-width:4.5rem!important;font-size:10.5pt!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__value,\nbody.document-print-source .document-viewer__content--compact .document-viewer__name,\nbody.document-print-source .document-viewer__content--compact .document-viewer__position,\nbody.document-print-source .document-viewer__content--compact .document-viewer__subject{font-size:11pt!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__divider{margin:0.6rem 0!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__section{margin:0.5rem 0!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__section-title{font-size:9pt!important;margin-bottom:0.4rem!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__subsection{margin:0.5rem 0!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__subsection-title{font-size:9pt!important;margin-bottom:0.35rem!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__status-section,\nbody.document-print-source .document-viewer__content--compact .document-viewer__status-item{margin:0.35rem 0!important;font-size:9pt!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__admin-note,\nbody.document-print-source .document-viewer__content--compact .document-viewer__admin-text,\nbody.document-print-source .document-viewer__content--compact .document-viewer__admin-list,\nbody.document-print-source .document-viewer__content--compact .document-viewer__endorsed-list{font-size:9pt!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__legend{font-size:7.5pt!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__table{font-size:8pt!important;margin:0.25rem 0 0.65rem 0!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__table thead th,\nbody.document-print-source .document-viewer__content--compact .document-viewer__table tbody td{padding:0.2rem!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__signatures{margin:1rem 0!important;gap:1rem 1.25rem!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__signature-label{margin-bottom:4rem!important;}\n.document-viewer__sheet-body{overflow:hidden!important;position:relative!important;}\n.document-viewer__page-slice{position:relative!important;width:100%!important;}\n.page-footer-fixed{\n    position:absolute!important;\n    bottom:0!important;\n    left:0!important;\n    right:0!important;\n    width:100%!important;\n    z-index:10!important;\n}\n.page-footer-fixed .footer-document{\n    break-inside:avoid!important;\n    page-break-inside:avoid!important;\n    padding:0.2in 0.6in 0.2in!important;\n    margin:0!important;\n}\n.document-viewer__page--print .page-footer-fixed .footer-document{padding:0.2in 0.6in 0.2in!important;}\n.document-viewer__page--sheet .footer-document__line{height:2px!important;margin:0 0 0.25rem!important;background:#2563eb!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}\n.document-viewer__page--sheet .footer-document__slogan{margin:0 0 0.12rem!important;font-size:9pt!important;font-weight:bold!important;line-height:1.2!important;}\n.document-viewer__page--sheet .footer-document__info{font-size:6.5pt!important;margin:0!important;line-height:1.25!important;}\n.document-viewer__page--sheet .footer-document__info p{margin:0.06rem 0!important;}\n.document-viewer__page--sheet .document-viewer__signature-item{page-break-inside:avoid!important;}\n.document-viewer__page--sheet .document-viewer__signature-label{font-size:9pt!important;visibility:visible!important;display:block!important;min-height:1em!important;}\n.document-viewer__page--sheet .document-viewer__signature-name{font-size:11pt!important;font-weight:bold!important;line-height:1!important;margin-bottom:0.15rem!important;}\n.document-viewer__page--sheet .document-viewer__signature-position{font-size:9pt!important;line-height:1!important;margin-top:0!important;margin-bottom:0!important;}\n.document-viewer__page--sheet .document-viewer__table tbody td,.document-viewer__page--sheet .document-viewer__table thead th{line-height:1!important;}\n.document-viewer__page--sheet .document-viewer__table .document-viewer__task-list,.document-viewer__page--sheet .document-viewer__table .document-viewer__report-text{line-height:1!important;}\n.document-viewer__page--sheet .document-viewer__table .document-viewer__task-list li{margin-bottom:0.1rem!important;line-height:1!important;}\n.document-viewer__page--sheet .document-viewer__table .document-viewer__report-text div{margin-bottom:0.1rem!important;}\n@media print{\nhtml,body{margin:0!important;padding:0!important;}\n.document-viewer__document{width:210mm!important;margin:0 auto!important;}\n}\n</style></head><body class=\"document-print-source\"><div class=\"document-viewer__document\">").concat(pageBlocks, "</div></body></html>");
+    var iframe = document.createElement('iframe');
+    iframe.setAttribute('title', 'Print');
+    iframe.style.cssText = 'position:absolute;left:-9999px;width:210mm;height:4000px;border:none;visibility:hidden;';
+    document.body.appendChild(iframe);
+    var iframeWin = iframe.contentWindow;
+    iframeWin.document.open();
+    iframeWin.document.write(printDoc);
+    iframeWin.document.close();
+    var doPrint = function doPrint() {
+      try {
+        iframeWin.print();
+      } finally {
+        document.body.removeChild(iframe);
+      }
+    };
+    if (iframeWin.document.readyState === 'complete') {
+      setTimeout(doPrint, 600);
+    } else {
+      iframeWin.onload = function () {
+        return setTimeout(doPrint, 600);
+      };
+    }
   };
   var dash = function dash(val) {
     return val && String(val).trim() !== '' ? val : '-';
   };
+  var signatureNameDisplay = function signatureNameDisplay(report, slots) {
+    var seen = new Set();
+    return slots.map(function (name) {
+      var n = name ? String(name).trim() : '';
+      if (!n || n === '-') return dash(name);
+      var key = n.toUpperCase();
+      if (seen.has(key)) return '—';
+      seen.add(key);
+      return name;
+    });
+  };
+  var renderMultiline = function renderMultiline(text, asBullets) {
+    if (!(text !== null && text !== void 0 && text.trim())) return '-';
+    if (asBullets) {
+      var items = text.split(/[;\n]/).filter(function (s) {
+        return s.trim();
+      });
+      if (items.length === 0) return '-';
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("ul", {
+        className: "document-viewer__task-list",
+        children: items.map(function (item, i) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("li", {
+            children: item.trim()
+          }, i);
+        })
+      });
+    }
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      className: "document-viewer__report-text",
+      children: text.split(/\n/).map(function (line, i) {
+        return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+          children: line.trim()
+        }, i) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("br", {}, i);
+      })
+    });
+  };
   var renderBodyContent = function renderBodyContent() {
     var _report$forPosition, _report$thruPosition, _report$fromPosition, _report$subject;
     if (!report) return null;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "document-viewer__content document-viewer__content--compact",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h2", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
         className: "document-viewer__title",
         "data-break-point": true,
         children: "RDRRMC DUTY REPORT"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "document-viewer__metadata",
         "data-break-point": true,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "document-viewer__field",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
             className: "document-viewer__label",
             children: "FOR"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
             className: "document-viewer__colon",
             children: ":"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "document-viewer__value",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__name",
               children: dash(report.forName)
             }), (_report$forPosition = report.forPosition) !== null && _report$forPosition !== void 0 && _report$forPosition.trim() ? report.forPosition.split('\n').map(function (line, index) {
-              return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 className: "document-viewer__position",
                 children: line.trim()
               }, index) : null;
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__position",
               children: "-"
             })]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "document-viewer__field",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
             className: "document-viewer__label",
             children: "THRU"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
             className: "document-viewer__colon",
             children: ":"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "document-viewer__value",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__name",
               children: dash(report.thruName)
             }), (_report$thruPosition = report.thruPosition) !== null && _report$thruPosition !== void 0 && _report$thruPosition.trim() ? report.thruPosition.split('\n').map(function (line, index) {
-              return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 className: "document-viewer__position",
                 children: line.trim()
               }, index) : null;
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__position",
               children: "-"
             })]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "document-viewer__field",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
             className: "document-viewer__label",
             children: "FROM"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
             className: "document-viewer__colon",
             children: ":"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "document-viewer__value",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__name",
               children: dash(report.fromName)
             }), (_report$fromPosition = report.fromPosition) !== null && _report$fromPosition !== void 0 && _report$fromPosition.trim() ? report.fromPosition.split('\n').map(function (line, index) {
-              return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 className: "document-viewer__position",
                 children: line.trim()
               }, index) : null;
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__position",
               children: "-"
             })]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "document-viewer__field",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
             className: "document-viewer__label",
             children: "SUBJECT"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
             className: "document-viewer__colon",
             children: ":"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
             className: "document-viewer__value",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__subject",
-              children: (_report$subject = report.subject) !== null && _report$subject !== void 0 && _report$subject.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
-                children: [report.subject, " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+              children: (_report$subject = report.subject) !== null && _report$subject !== void 0 && _report$subject.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("span", {
+                children: [report.subject, " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
                   className: "document-viewer__datetime-bold",
                   children: dash(report.dateTime)
                 })]
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
-                children: [" After Duty Report for the Period Covered ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("span", {
+                children: [" After Duty Report for the Period Covered ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
                   className: "document-viewer__datetime-bold",
                   children: dash(report.dateTime)
                 })]
@@ -65670,64 +66058,71 @@ function DocumentViewModal(_ref) {
             })
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         className: "document-viewer__divider",
         "data-break-point": true
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         className: "document-viewer__status-section",
         "data-break-point": true,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "document-viewer__status-item",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
             className: "document-viewer__status-number",
             children: "1."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("span", {
             className: "document-viewer__status-text",
-            children: ["RDRRMC Operations Center is on ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            children: ["RDRRMC Operations Center is on ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
               className: "document-viewer__status-alert",
               children: dash(report.alertStatus) === '-' ? 'WHITE ALERT' : report.alertStatus
             }), "."]
           })]
         })
-      }), report.attendanceItems && report.attendanceItems.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), report.attendanceItems && report.attendanceItems.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "document-viewer__section",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h3", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h3", {
           className: "document-viewer__section-title",
           "data-break-point": true,
           children: "2. Attendance:"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
           className: "document-viewer__table",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                 className: "document-viewer__table-num"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                 className: "document-viewer__table-name",
                 children: "Name"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                 className: "document-viewer__table-tasks",
                 children: "Tasks"
               })]
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
             children: report.attendanceItems.map(function (item, index) {
               var _item$task;
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                 "data-break-point": true,
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                   className: "document-viewer__table-num",
                   children: index + 1
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                   className: "document-viewer__table-name",
                   children: dash(item.name)
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                   className: "document-viewer__table-tasks",
-                  children: (_item$task = item.task) !== null && _item$task !== void 0 && _item$task.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("ul", {
+                  children: (_item$task = item.task) !== null && _item$task !== void 0 && _item$task.trim() ? item.taskAsBullets ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("ul", {
                     className: "document-viewer__task-list",
                     children: item.task.split(/[;\n]/).map(function (task, i) {
-                      return task.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
+                      return task.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("li", {
                         children: task.trim()
                       }, i) : null;
+                    })
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                    className: "document-viewer__report-text",
+                    children: item.task.split(/\n/).map(function (line, i) {
+                      return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                        children: line.trim()
+                      }, i) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("br", {}, i);
                     })
                   }) : '-'
                 })]
@@ -65735,46 +66130,53 @@ function DocumentViewModal(_ref) {
             })
           })]
         })]
-      }), report.reportsItems && report.reportsItems.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), report.reportsItems && report.reportsItems.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "document-viewer__section",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h3", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h3", {
           className: "document-viewer__section-title",
           "data-break-point": true,
           children: "3. Reports and Advisories released and issued (NDRRMC Dashboard, Website, SMS, E-mail, Viber, social media)"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
           className: "document-viewer__table document-viewer__table--reports",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                 className: "document-viewer__table-num",
                 children: "#"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                 className: "document-viewer__table-report",
                 children: "Reports and Advisories released"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                 className: "document-viewer__table-remarks",
                 children: "Remarks"
               })]
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
             children: report.reportsItems.map(function (item, index) {
               var _item$report;
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                 "data-break-point": true,
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                   className: "document-viewer__table-num",
                   children: index + 1
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                   className: "document-viewer__table-report",
-                  children: (_item$report = item.report) !== null && _item$report !== void 0 && _item$report.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  children: (_item$report = item.report) !== null && _item$report !== void 0 && _item$report.trim() ? item.reportAsBullets ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("ul", {
+                    className: "document-viewer__task-list",
+                    children: item.report.split(/[;\n]/).map(function (line, i) {
+                      return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("li", {
+                        children: line.trim()
+                      }, i) : null;
+                    })
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                     className: "document-viewer__report-text",
                     children: item.report.split(/\n/).map(function (line, i) {
-                      return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                      return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                         children: line.trim()
-                      }, i) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("br", {}, i);
+                      }, i) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("br", {}, i);
                     })
                   }) : '-'
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                   className: "document-viewer__table-remarks",
                   children: dash(item.remarks)
                 })]
@@ -65782,212 +66184,225 @@ function DocumentViewModal(_ref) {
             })
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "document-viewer__section",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h3", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h3", {
           className: "document-viewer__section-title",
           "data-break-point": true,
           children: "4. Administrative Matters:"
-        }), report.communicationRows && report.communicationRows.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), report.communicationRows && report.communicationRows.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "document-viewer__subsection",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h4", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h4", {
             className: "document-viewer__subsection-title",
             "data-break-point": true,
             children: "A. Status of Communication Lines"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
             className: "document-viewer__table document-viewer__table--communication",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Particulars"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   className: "document-viewer__table-items",
                   children: "No. of Items"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Contact No. / Freq / Channel"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Status / Remarks"
                 })]
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               children: report.communicationRows.map(function (row, index) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   "data-break-point": true,
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: dash(row.particulars)
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: renderMultiline(row.particulars, false)
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                     className: "document-viewer__table-items",
                     children: row.noOfItems !== undefined && row.noOfItems !== null && row.noOfItems !== '' ? row.noOfItems : '-'
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: dash(row.contact)
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: dash(row.status)
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: renderMultiline(row.contact, row.contactAsBullets)
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: renderMultiline(row.status, row.statusAsBullets)
                   })]
                 }, row.id || index);
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
             className: "document-viewer__legend",
             "data-break-point": true,
             children: "Legend: Status - operational / non-operational / prepaid status of mobile phones"
           })]
-        }), report.otherItemsRows && report.otherItemsRows.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), report.otherItemsRows && report.otherItemsRows.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "document-viewer__subsection",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h4", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h4", {
             className: "document-viewer__subsection-title",
             "data-break-point": true,
             children: "B. Status of Other Items"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
             className: "document-viewer__table document-viewer__table--other-items",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Particulars"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   className: "document-viewer__table-items",
                   children: "No. of Items"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Status / Remarks"
                 })]
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               children: report.otherItemsRows.map(function (row, index) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   "data-break-point": true,
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: dash(row.particulars)
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: renderMultiline(row.particulars, false)
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                     className: "document-viewer__table-items",
                     children: row.noOfItems !== undefined && row.noOfItems !== null && row.noOfItems !== '' ? row.noOfItems : '-'
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-                    children: dash(row.status)
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: renderMultiline(row.status, row.statusAsBullets)
                   })]
                 }, row.id || index);
               })
             })]
           })]
-        }), report.otherAdminRows && report.otherAdminRows.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), report.otherAdminRows && report.otherAdminRows.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "document-viewer__subsection",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h4", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h4", {
             className: "document-viewer__subsection-title",
             "data-break-point": true,
             children: "C. Other Administrative Matters:"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
             className: "document-viewer__admin-note",
             "data-break-point": true,
             children: "(List down administrative concerns such as but not limited to: Duty driver on-call, vehicle activities, internet or other ICT equipment issues, parcel or documents received/delivered, untoward incidents that should be elevated to the management level)."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("ul", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("ul", {
             className: "document-viewer__admin-list",
+            "data-break-point": true,
             children: report.otherAdminRows.map(function (row, index) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
-                children: dash(row.concern)
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("li", {
+                children: renderMultiline(row.concern, false)
               }, row.id || index);
             })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "document-viewer__subsection",
-          "data-break-point": true,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
             className: "document-viewer__admin-text",
+            "data-break-point": true,
             children: "1. The following were endorsed to incoming Operations Duty Staff:"
-          }), report.endorsedItemsRows && report.endorsedItemsRows.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("ol", {
+          }), report.endorsedItemsRows && report.endorsedItemsRows.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("ol", {
             className: "document-viewer__endorsed-list",
             children: report.endorsedItemsRows.map(function (row, index) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
-                children: dash(row.item)
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("li", {
+                "data-break-point": true,
+                children: renderMultiline(row.item, row.itemAsBullets)
               }, row.id || index);
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
             className: "document-viewer__admin-text",
+            "data-break-point": true,
             children: "2. For information of the OCD Officer-In-Charge."
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "document-viewer__signatures",
-        "data-break-point": true,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          className: "document-viewer__signature-row",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-            className: "document-viewer__signature-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "document-viewer__signature-label",
-              children: "Prepared by:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "document-viewer__signature-name",
-              children: dash(report.preparedBy)
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "document-viewer__signature-position",
-              children: dash(report.preparedPosition)
+      }), function () {
+        var sigNames = signatureNameDisplay(report, [report.preparedBy, report.receivedBy, report.notedBy, report.approvedBy]);
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          className: "document-viewer__signatures",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+            className: "document-viewer__signature-row",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+              className: "document-viewer__signature-item",
+              "data-break-point": true,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                className: "document-viewer__signature-label",
+                "data-break-point": true,
+                children: "Prepared by:"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                className: "document-viewer__signature-name",
+                children: sigNames[0]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                className: "document-viewer__signature-position",
+                children: dash(report.preparedPosition)
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+              className: "document-viewer__signature-item",
+              "data-break-point": true,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                className: "document-viewer__signature-label",
+                "data-break-point": true,
+                children: "Received by:"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                className: "document-viewer__signature-name",
+                children: sigNames[1]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                className: "document-viewer__signature-position",
+                children: dash(report.receivedPosition)
+              })]
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-            className: "document-viewer__signature-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+            className: "document-viewer__signature-item document-viewer__signature-item--full",
+            "data-break-point": true,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__signature-label",
-              children: "Received by:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              "data-break-point": true,
+              children: "Noted by:"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__signature-name",
-              children: dash(report.receivedBy)
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              children: sigNames[2]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__signature-position",
-              children: dash(report.receivedPosition)
+              children: dash(report.notedPosition)
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+            className: "document-viewer__signature-item document-viewer__signature-item--full",
+            "data-break-point": true,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+              className: "document-viewer__signature-label",
+              "data-break-point": true,
+              children: "Approved:"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+              className: "document-viewer__signature-name",
+              children: sigNames[3]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+              className: "document-viewer__signature-position",
+              children: dash(report.approvedPosition)
             })]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          className: "document-viewer__signature-item document-viewer__signature-item--full",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: "document-viewer__signature-label",
-            children: "Noted by:"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: "document-viewer__signature-name",
-            children: dash(report.notedBy)
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: "document-viewer__signature-position",
-            children: dash(report.notedPosition)
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          className: "document-viewer__signature-item document-viewer__signature-item--full",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: "document-viewer__signature-label",
-            children: "Approved:"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: "document-viewer__signature-name",
-            children: dash(report.approvedBy)
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: "document-viewer__signature-position",
-            children: dash(report.approvedPosition)
-          })]
-        })]
-      })]
+        });
+      }()]
     });
   };
   if (!isOpen || !report) return null;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+  var modalContent = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     className: "document-modal",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       className: "document-modal__overlay",
       onClick: onClose
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "document-modal__container",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "document-modal__header",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h2", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
           children: "Document Preview"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "document-modal__actions",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
             onClick: handlePrint,
             className: "document-modal__print-btn",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("svg", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                 d: "M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2",
                 stroke: "currentColor",
                 strokeWidth: "2",
                 strokeLinecap: "round",
                 strokeLinejoin: "round"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                 d: "M6 14h12v8H6z",
                 stroke: "currentColor",
                 strokeWidth: "2",
@@ -65995,14 +66410,14 @@ function DocumentViewModal(_ref) {
                 strokeLinejoin: "round"
               })]
             }), "Print / PDF"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             onClick: onClose,
             className: "document-modal__close-btn",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
                 d: "M18 6L6 18M6 6l12 12",
                 stroke: "currentColor",
                 strokeWidth: "2",
@@ -66012,23 +66427,24 @@ function DocumentViewModal(_ref) {
             })
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         className: "document-modal__content",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "document-viewer__document",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+            ref: measureWrapperRef,
             className: "document-viewer__measure document-viewer__measure--layout document-viewer__page--sheet",
             "aria-hidden": "true",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_HeaderDocument__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_HeaderDocument__WEBPACK_IMPORTED_MODULE_3__["default"], {
               ref: headerRef,
               compact: true
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               ref: measureRef,
               children: renderBodyContent()
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_FooterDocument__WEBPACK_IMPORTED_MODULE_3__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_FooterDocument__WEBPACK_IMPORTED_MODULE_4__["default"], {
               ref: footerRef
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
             ref: pageHeightRef,
             className: "document-viewer__page-height-ref",
             style: {
@@ -66043,43 +66459,66 @@ function DocumentViewModal(_ref) {
             var useRange = range && contentAreaHeightPx != null;
             var height = useRange ? range.end - range.start : contentAreaHeightPx !== null && contentAreaHeightPx !== void 0 ? contentAreaHeightPx : undefined;
             var transform = useRange ? "translateY(-".concat(range.start, "px)") : contentAreaHeightPx != null ? "translateY(-".concat(i * contentAreaHeightPx, "px)") : undefined;
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
               className: "document-viewer__page document-viewer__page--sheet",
               style: {
+                position: 'relative',
+                width: '210mm',
                 height: "".concat(PAGE_HEIGHT_MM, "mm"),
-                display: 'flex',
-                flexDirection: 'column'
+                overflow: 'hidden',
+                boxSizing: 'border-box',
+                paddingLeft: '0.5in'
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_HeaderDocument__WEBPACK_IMPORTED_MODULE_2__["default"], {
-                compact: true
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-                className: "document-viewer__sheet-body",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 style: {
-                  flex: "0 0 ".concat((_ref2 = height !== null && height !== void 0 ? height : contentAreaHeightPx) !== null && _ref2 !== void 0 ? _ref2 : 0, "px"),
-                  overflow: 'hidden',
-                  position: 'relative',
-                  minHeight: 0
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  zIndex: 10
                 },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-                  className: "document-viewer__page-slice",
-                  style: {
-                    transform: transform !== null && transform !== void 0 ? transform : 'translateY(0)',
-                    position: 'relative',
-                    width: '100%'
-                  },
-                  children: renderBodyContent()
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_HeaderDocument__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                  compact: true
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 style: {
-                  flex: '1 0 0'
-                }
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_FooterDocument__WEBPACK_IMPORTED_MODULE_3__["default"], {})]
+                  paddingTop: "".concat(HEADER_HEIGHT_PX, "px"),
+                  paddingBottom: "".concat(FOOTER_HEIGHT_PX, "px")
+                },
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                  className: "document-viewer__sheet-body",
+                  style: {
+                    height: "".concat((_ref2 = height !== null && height !== void 0 ? height : contentAreaHeightPx) !== null && _ref2 !== void 0 ? _ref2 : 0, "px"),
+                    overflow: 'hidden',
+                    position: 'relative'
+                  },
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                    className: "document-viewer__page-slice",
+                    style: {
+                      transform: transform !== null && transform !== void 0 ? transform : 'translateY(0)',
+                      position: 'relative',
+                      width: '100%'
+                    },
+                    children: renderBodyContent()
+                  })
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                style: {
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  zIndex: 10
+                },
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_FooterDocument__WEBPACK_IMPORTED_MODULE_4__["default"], {})
+              })]
             }, i);
           })]
         })
       })]
     })]
   });
+  return /*#__PURE__*/(0,react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal)(modalContent, document.body);
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DocumentViewModal);
 
@@ -67582,10 +68021,17 @@ var useFormContext = function useFormContext() {
 var sameId = function sameId(a, b) {
   return a == null && b == null || Number(a) === Number(b);
 };
+
+// One-time reset: clear all reports to declutter (remove this block after first load if you want to keep data again)
+var RESET_REPORTS_ONCE_KEY = 'adr_reports_reset_done';
 var FormProvider = function FormProvider(_ref) {
   var children = _ref.children;
-  // Load reports from localStorage on initialization
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
+      if (!localStorage.getItem(RESET_REPORTS_ONCE_KEY)) {
+        localStorage.removeItem('adr_reports');
+        localStorage.setItem(RESET_REPORTS_ONCE_KEY, '1');
+        return [];
+      }
       var savedReports = localStorage.getItem('adr_reports');
       return savedReports ? JSON.parse(savedReports) : [];
     }),
