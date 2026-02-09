@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getSwapRequests, updateSwapRequestStatus, executeSwapRequest, archiveSwapRequest } from '../utils/swapRequests';
 import { useNavigate } from 'react-router-dom';
+import ConfirmModal from './ConfirmModal';
 
 function formatDate(dateStr) {
     if (!dateStr) return '—';
@@ -33,6 +34,11 @@ function SwapForm() {
     const [showYearDropdown, setShowYearDropdown] = useState(false);
     const yearDropdownRef = useRef(null);
     const monthDropdownRef = useRef(null);
+    const [confirmState, setConfirmState] = useState({
+        isOpen: false,
+        message: '',
+        onConfirm: null
+    });
 
     const loadSwapRequests = () => setSwapRequests(getSwapRequests().filter(r => r.status !== 'archived'));
 
@@ -80,10 +86,17 @@ function SwapForm() {
     };
 
     const handleArchive = (id) => {
-        if (archiveSwapRequest(id)) {
-            setSelectedRequests(prev => prev.filter(i => i !== id));
-            loadSwapRequests();
-        }
+        setConfirmState({
+            isOpen: true,
+            message: 'Archive this swap request?',
+            onConfirm: () => {
+                if (archiveSwapRequest(id)) {
+                    setSelectedRequests(prev => prev.filter(i => i !== id));
+                    loadSwapRequests();
+                }
+                setConfirmState({ isOpen: false, message: '', onConfirm: null });
+            }
+        });
     };
 
     const handleBulkArchive = () => {
@@ -95,9 +108,16 @@ function SwapForm() {
             alert('Please select approved or denied requests to archive.');
             return;
         }
-        toArchive.forEach(id => archiveSwapRequest(id));
-        setSelectedRequests([]);
-        loadSwapRequests();
+        setConfirmState({
+            isOpen: true,
+            message: `Archive ${toArchive.length} request${toArchive.length === 1 ? '' : 's'}?`,
+            onConfirm: () => {
+                toArchive.forEach(id => archiveSwapRequest(id));
+                setSelectedRequests([]);
+                loadSwapRequests();
+                setConfirmState({ isOpen: false, message: '', onConfirm: null });
+            }
+        });
     };
 
     const handleSelectRequest = (id) => {
@@ -306,7 +326,12 @@ function SwapForm() {
             </div>
 
             {/* Modals kept but permanently closed */}
-            {/* <ConfirmModal isOpen={false} message="" onConfirm={() => {}} onCancel={() => {}} /> */}
+            <ConfirmModal
+                isOpen={confirmState.isOpen}
+                message={confirmState.message}
+                onConfirm={confirmState.onConfirm || (() => {})}
+                onCancel={() => setConfirmState({ isOpen: false, message: '', onConfirm: null })}
+            />
             {/* <SuccessNotification message="" isVisible={false} onClose={() => {}} /> */}
         </div>
     );
