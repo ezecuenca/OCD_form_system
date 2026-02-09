@@ -66685,40 +66685,17 @@ function Schedule() {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     className: "schedule",
     children: [modalMode === 'swap' && taskToSwap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      style: {
-        position: 'fixed',
-        top: '20px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        background: '#fff8e1',
-        padding: '12px 24px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        zIndex: 9999,
-        display: 'flex',
-        alignItems: 'center',
-        gap: '16px'
-      },
+      className: "schedule__swap-banner",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("p", {
-        style: {
-          margin: 0,
-          fontWeight: 500
-        },
+        className: "schedule__swap-banner-text",
         children: ["Request Swap: Click a day to select target date \u2014 Moving \"", taskToSwap === null || taskToSwap === void 0 ? void 0 : taskToSwap.name, "\" from ", formatDate(taskToSwap === null || taskToSwap === void 0 ? void 0 : taskToSwap.date)]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+        className: "schedule__swap-cancel",
         onClick: function onClick() {
           setModalMode('add');
           setSelectedTask(null);
           setTaskToSwap(null);
           setShowTaskForm(false);
-        },
-        style: {
-          background: '#e74c3c',
-          color: 'white',
-          border: 'none',
-          padding: '6px 12px',
-          borderRadius: '6px',
-          cursor: 'pointer'
         },
         children: "Cancel"
       })]
@@ -66786,9 +66763,6 @@ function Schedule() {
                     },
                     role: "button",
                     tabIndex: 0,
-                    style: {
-                      cursor: 'pointer'
-                    },
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                       className: "schedule__task-name",
                       children: task.name

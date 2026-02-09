@@ -124,37 +124,17 @@ function Schedule() {
     return (
         <div className="schedule">
             {modalMode === 'swap' && taskToSwap && (
-                <div style={{
-                    position: 'fixed',
-                    top: '20px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    background: '#fff8e1',
-                    padding: '12px 24px',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                    zIndex: 9999,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '16px'
-                }}>
-                    <p style={{ margin: 0, fontWeight: 500 }}>
+                <div className="schedule__swap-banner">
+                    <p className="schedule__swap-banner-text">
                         Request Swap: Click a day to select target date — Moving &quot;{taskToSwap?.name}&quot; from {formatDate(taskToSwap?.date)}
                     </p>
                     <button
+                        className="schedule__swap-cancel"
                         onClick={() => {
                             setModalMode('add');
                             setSelectedTask(null);
                             setTaskToSwap(null);
                             setShowTaskForm(false);
-                        }}
-                        style={{
-                            background: '#e74c3c',
-                            color: 'white',
-                            border: 'none',
-                            padding: '6px 12px',
-                            borderRadius: '6px',
-                            cursor: 'pointer',
                         }}
                     >
                         Cancel
@@ -225,7 +205,6 @@ function Schedule() {
                                                 onClick={() => handleTaskClick(task)}
                                                 role='button'
                                                 tabIndex={0}
-                                                style={{ cursor: 'pointer' }}
                                                 >
                                                 <div className="schedule__task-name">{task.name}</div>
                                             </div>

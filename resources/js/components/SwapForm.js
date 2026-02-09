@@ -183,7 +183,6 @@ function SwapForm() {
                 </div>
 
                 <div className="swap-form__filters">
-                    {/* Year dropdown - visual only */}
                     <div className="swap-form__filter-dropdown" ref={yearDropdownRef}>
                         <button onClick={() => setShowYearDropdown(!showYearDropdown)}>
                             Year
@@ -206,7 +205,6 @@ function SwapForm() {
                         )}
                     </div>
 
-                    {/* Month dropdown - visual only */}
                     <div className="swap-form__filter-dropdown" ref={monthDropdownRef}>
                         <button onClick={() => setShowMonthDropdown(!showMonthDropdown)}>
                             Month
@@ -353,14 +351,12 @@ function SwapForm() {
                 </button>
             </div>
 
-            {/* Modals kept but permanently closed */}
             <ConfirmModal
                 isOpen={confirmState.isOpen}
                 message={confirmState.message}
                 onConfirm={confirmState.onConfirm || (() => {})}
                 onCancel={() => setConfirmState({ isOpen: false, message: '', onConfirm: null })}
             />
-            {/* <SuccessNotification message="" isVisible={false} onClose={() => {}} /> */}
         </div>
     );
 }
