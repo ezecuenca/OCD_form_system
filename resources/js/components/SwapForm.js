@@ -32,6 +32,8 @@ function SwapForm() {
     const [selectedRequests, setSelectedRequests] = useState([]);
     const [showMonthDropdown, setShowMonthDropdown] = useState(false);
     const [showYearDropdown, setShowYearDropdown] = useState(false);
+    const [selectedYear, setSelectedYear] = useState('All Years');
+    const [selectedMonth, setSelectedMonth] = useState('All Months');
     const yearDropdownRef = useRef(null);
     const monthDropdownRef = useRef(null);
     const [confirmState, setConfirmState] = useState({
@@ -129,6 +131,19 @@ function SwapForm() {
         });
     };
 
+    const years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
+    const months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    const handleYearSelect = (year) => {
+        setSelectedYear(year);
+        setShowYearDropdown(false);
+    };
+
+    const handleMonthSelect = (month) => {
+        setSelectedMonth(month);
+        setShowMonthDropdown(false);
+    };
+
     const getRequestDescription = (req) => {
         if (req.targetTaskName) {
             return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) => "${req.targetTaskName}" (${formatDateOnly(req.toDate)})`;
@@ -169,36 +184,49 @@ function SwapForm() {
 
                 <div className="swap-form__filters">
                     {/* Year dropdown - visual only */}
-                    <div className="swap-form__filter-dropdown">
+                    <div className="swap-form__filter-dropdown" ref={yearDropdownRef}>
                         <button onClick={() => setShowYearDropdown(!showYearDropdown)}>
                             Year
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                         </button>
-                        <div className="swap-form__dropdown-menu" style={{ display: 'none' }}>
-                            <div className="swap-form__dropdown-item">All Years</div>
-                            <div className="swap-form__dropdown-item">2026</div>
-                            <div className="swap-form__dropdown-item">2025</div>
-                            <div className="swap-form__dropdown-item">2024</div>
-                        </div>
+                        {showYearDropdown && (
+                            <div className="swap-form__dropdown-menu">
+                                {years.map((year) => (
+                                    <div
+                                        key={year}
+                                        className="swap-form__dropdown-item"
+                                        onClick={() => handleYearSelect(year)}
+                                    >
+                                        {year}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Month dropdown - visual only */}
-                    <div className="swap-form__filter-dropdown">
+                    <div className="swap-form__filter-dropdown" ref={monthDropdownRef}>
                         <button onClick={() => setShowMonthDropdown(!showMonthDropdown)}>
                             Month
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                         </button>
-                        {/* Dropdown content shown statically for design preview */}
-                        <div className="swap-form__dropdown-menu" style={{ display: 'none' }}>
-                            <div className="swap-form__dropdown-item">All Months</div>
-                            <div className="swap-form__dropdown-item">January</div>
-                            <div className="swap-form__dropdown-item">February</div>
-                            <div className="swap-form__dropdown-item">March</div>
-                        </div>
+                        {showMonthDropdown && (
+                            <div className="swap-form__dropdown-menu">
+                                {months.map((month) => (
+                                    <div
+                                        key={month}
+                                        className="swap-form__dropdown-item"
+                                        onClick={() => handleMonthSelect(month)}
+                                    >
+                                        {month}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

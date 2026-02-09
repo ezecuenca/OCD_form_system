@@ -67136,16 +67136,24 @@ function SwapForm() {
     _useState8 = _slicedToArray(_useState7, 2),
     showYearDropdown = _useState8[0],
     setShowYearDropdown = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('All Years'),
+    _useState0 = _slicedToArray(_useState9, 2),
+    selectedYear = _useState0[0],
+    setSelectedYear = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('All Months'),
+    _useState10 = _slicedToArray(_useState1, 2),
+    selectedMonth = _useState10[0],
+    setSelectedMonth = _useState10[1];
   var yearDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var monthDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       isOpen: false,
       message: '',
       onConfirm: null
     }),
-    _useState0 = _slicedToArray(_useState9, 2),
-    confirmState = _useState0[0],
-    setConfirmState = _useState0[1];
+    _useState12 = _slicedToArray(_useState11, 2),
+    confirmState = _useState12[0],
+    setConfirmState = _useState12[1];
   var loadSwapRequests = function loadSwapRequests() {
     return setSwapRequests((0,_utils_swapRequests__WEBPACK_IMPORTED_MODULE_1__.getSwapRequests)().filter(function (r) {
       return r.status !== 'archived';
@@ -67251,6 +67259,16 @@ function SwapForm() {
       return [].concat(_toConsumableArray(prev), [id]);
     });
   };
+  var years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
+  var months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var handleYearSelect = function handleYearSelect(year) {
+    setSelectedYear(year);
+    setShowYearDropdown(false);
+  };
+  var handleMonthSelect = function handleMonthSelect(month) {
+    setSelectedMonth(month);
+    setShowMonthDropdown(false);
+  };
   var getRequestDescription = function getRequestDescription(req) {
     if (req.targetTaskName) {
       return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") => \"").concat(req.targetTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
@@ -67311,6 +67329,7 @@ function SwapForm() {
         className: "swap-form__filters",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "swap-form__filter-dropdown",
+          ref: yearDropdownRef,
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
             onClick: function onClick() {
               return setShowYearDropdown(!showYearDropdown);
@@ -67327,27 +67346,21 @@ function SwapForm() {
                 strokeLinejoin: "round"
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          }), showYearDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: "swap-form__dropdown-menu",
-            style: {
-              display: 'none'
-            },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "swap-form__dropdown-item",
-              children: "All Years"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "swap-form__dropdown-item",
-              children: "2026"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "swap-form__dropdown-item",
-              children: "2025"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "swap-form__dropdown-item",
-              children: "2024"
-            })]
+            children: years.map(function (year) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                className: "swap-form__dropdown-item",
+                onClick: function onClick() {
+                  return handleYearSelect(year);
+                },
+                children: year
+              }, year);
+            })
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "swap-form__filter-dropdown",
+          ref: monthDropdownRef,
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
             onClick: function onClick() {
               return setShowMonthDropdown(!showMonthDropdown);
@@ -67364,24 +67377,17 @@ function SwapForm() {
                 strokeLinejoin: "round"
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          }), showMonthDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: "swap-form__dropdown-menu",
-            style: {
-              display: 'none'
-            },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "swap-form__dropdown-item",
-              children: "All Months"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "swap-form__dropdown-item",
-              children: "January"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "swap-form__dropdown-item",
-              children: "February"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "swap-form__dropdown-item",
-              children: "March"
-            })]
+            children: months.map(function (month) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                className: "swap-form__dropdown-item",
+                onClick: function onClick() {
+                  return handleMonthSelect(month);
+                },
+                children: month
+              }, month);
+            })
           })]
         })]
       })]
