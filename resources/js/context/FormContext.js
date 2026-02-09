@@ -13,9 +13,16 @@ export const useFormContext = () => {
 // Normalize id so string "123" and number 123 match (e.g. from URL vs state)
 const sameId = (a, b) => (a == null && b == null) || (Number(a) === Number(b));
 
+// One-time reset: clear all reports to declutter (remove this block after first load if you want to keep data again)
+const RESET_REPORTS_ONCE_KEY = 'adr_reports_reset_done';
+
 export const FormProvider = ({ children }) => {
-    // Load reports from localStorage on initialization
     const [reports, setReports] = useState(() => {
+        if (!localStorage.getItem(RESET_REPORTS_ONCE_KEY)) {
+            localStorage.removeItem('adr_reports');
+            localStorage.setItem(RESET_REPORTS_ONCE_KEY, '1');
+            return [];
+        }
         const savedReports = localStorage.getItem('adr_reports');
         return savedReports ? JSON.parse(savedReports) : [];
     });

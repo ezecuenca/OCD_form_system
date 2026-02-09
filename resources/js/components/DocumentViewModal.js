@@ -1,73 +1,104 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useFormContext } from '../context/FormContext';
 import HeaderDocument from './HeaderDocument';
 import FooterDocument from './FooterDocument';
 
 const PAGE_HEIGHT_MM = 297;
+const PAGE_HEIGHT_PX_FALLBACK = Math.round((297 * 96) / 25.4);
+const HEADER_HEIGHT_PX = 165;
+const FOOTER_HEIGHT_PX = 100;
+const CONTENT_AREA_FALLBACK = PAGE_HEIGHT_PX_FALLBACK - HEADER_HEIGHT_PX - FOOTER_HEIGHT_PX;
 
-function DocumentViewModal({ isOpen, reportId, onClose }) {
+function getBreakPoints(contentEl, bodyHeight) {
+    if (!contentEl || bodyHeight <= 0) return [0, bodyHeight];
+    const contentRect = contentEl.getBoundingClientRect();
+    const breakSet = new Set([0]);
+    contentEl.querySelectorAll('[data-break-point]').forEach((el) => {
+        const elRect = el.getBoundingClientRect();
+        const top = Math.round(elRect.top - contentRect.top);
+        const bottom = Math.round(elRect.bottom - contentRect.top) + 6;
+        if (top > 0 && top < bodyHeight) breakSet.add(top);
+        if (bottom > 0 && bottom < bodyHeight) breakSet.add(bottom);
+    });
+    breakSet.add(bodyHeight);
+    return [...breakSet].sort((a, b) => a - b);
+}
+
+function computePageRanges(bodyHeight, contentArea, breakPoints) {
+    if (bodyHeight <= 0 || contentArea <= 0) return [{ start: 0, end: bodyHeight }];
+    const minFillRatio = 0.5;
+    const ranges = [];
+    let start = 0;
+    while (start < bodyHeight) {
+        const candidates = breakPoints.filter((b) => b > start && b <= start + contentArea);
+        let end = candidates.length ? Math.max(...candidates) : Math.min(start + contentArea, bodyHeight);
+        if (candidates.length > 0 && (end - start) < contentArea * minFillRatio) {
+            const nextCandidates = breakPoints.filter((b) => b > end && b <= start + contentArea);
+            if (nextCandidates.length > 0) end = Math.max(...nextCandidates);
+        }
+        const actualEnd = Math.max(end, start + 1);
+        ranges.push({ start, end: actualEnd });
+        start = actualEnd;
+    }
+    if (ranges.length === 0) ranges.push({ start: 0, end: bodyHeight });
+    return ranges;
+}
+
+function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
     const { getReport } = useFormContext();
-    const [report, setReport] = useState(null);
-    
+    const [reportFromId, setReportFromId] = useState(null);
+    const [exportLoading, setExportLoading] = useState(false);
+    const [exportError, setExportError] = useState(null);
     const measureRef = useRef(null);
+    const measureWrapperRef = useRef(null);
     const headerRef = useRef(null);
     const footerRef = useRef(null);
     const pageHeightRef = useRef(null);
+    const exportInProgressRef = useRef(false);
     const [totalPages, setTotalPages] = useState(1);
     const [pageHeightPx, setPageHeightPx] = useState(null);
     const [contentAreaHeightPx, setContentAreaHeightPx] = useState(null);
     const [pageRanges, setPageRanges] = useState([]);
 
+    const report = reportProp != null ? reportProp : reportFromId;
+
     useEffect(() => {
-        if (isOpen && reportId) {
+        if (isOpen && reportId && reportProp == null) {
             const foundReport = getReport(reportId);
-            setReport(foundReport);
+            setReportFromId(foundReport);
         } else {
-            setReport(null);
+            setReportFromId(null);
         }
-    }, [isOpen, reportId, getReport]);
+    }, [isOpen, reportId, reportProp, getReport]);
+
+    useEffect(() => {
+        if (!isOpen) {
+            exportInProgressRef.current = false;
+        }
+    }, [isOpen]);
 
     const updatePages = () => {
-        if (!measureRef.current || !pageHeightRef.current || !headerRef.current || !footerRef.current) return;
+        if (!measureRef.current) return;
         const measureWrapper = measureRef.current;
         const contentEl = measureWrapper.querySelector('.document-viewer__content');
         if (!contentEl) return;
-        
-        const bodyHeight = contentEl.offsetHeight;
-        const pH = pageHeightRef.current.offsetHeight;
-        const headerH = headerRef.current.offsetHeight;
-        const footerH = footerRef.current.offsetHeight;
-        // Buffer so content never cuts into footer; enough for padding + line + borders
-        const footerPaddingBuffer = 35;
-        const contentArea = Math.max(1, pH - headerH - footerH - footerPaddingBuffer);
-        if (pH <= 0) return;
 
-        const breakEls = contentEl.querySelectorAll('[data-break-point]');
-        const contentRect = contentEl.getBoundingClientRect();
-        const breakSet = new Set([0]);
-        breakEls.forEach((el) => {
-            const elRect = el.getBoundingClientRect();
-            // Add buffer so full row/element shows; avoid any partial cut at bottom
-            const bottom = Math.round(elRect.bottom - contentRect.top) + 6;
-            if (bottom > 0 && bottom < bodyHeight) breakSet.add(bottom);
-        });
-        breakSet.add(bodyHeight);
-        const breakPoints = [...breakSet].sort((a, b) => a - b);
+        const docRoot = document.querySelector('.document-modal .document-viewer__document');
+        const visibleContent = docRoot?.querySelector('.document-viewer__page--sheet:not(.document-viewer__measure) .document-viewer__page-slice .document-viewer__content');
+        const fromMeasure = Math.max(contentEl.scrollHeight || 0, contentEl.offsetHeight || 0);
+        const fromVisible = visibleContent ? Math.max(visibleContent.scrollHeight || 0, visibleContent.offsetHeight || 0) : 0;
+        const bodyHeight = Math.max(fromMeasure, fromVisible, 1);
 
-        const ranges = [];
-        let start = 0;
-        while (start < bodyHeight) {
-            const candidates = breakPoints.filter((b) => b > start && b <= start + contentArea);
-            const end = candidates.length
-                ? Math.max(...candidates)
-                : Math.min(start + contentArea, bodyHeight);
-            const actualEnd = Math.max(end, start + 1);
-            ranges.push({ start, end: actualEnd });
-            start = actualEnd;
-        }
-        if (ranges.length === 0) ranges.push({ start: 0, end: bodyHeight });
+        const pH = pageHeightRef.current?.offsetHeight ?? 0;
+        const pageHeight = pH > 0 ? pH : PAGE_HEIGHT_PX_FALLBACK;
+        const contentArea = Math.max(1, pageHeight - HEADER_HEIGHT_PX - FOOTER_HEIGHT_PX);
+        if (pageHeight <= 0) return;
 
-        setPageHeightPx(pH);
+        const breakPoints = getBreakPoints(contentEl, bodyHeight);
+        const ranges = computePageRanges(bodyHeight, contentArea, breakPoints);
+
+        setPageHeightPx(pageHeight);
         setContentAreaHeightPx(contentArea);
         setTotalPages(ranges.length);
         setPageRanges(ranges);
@@ -75,23 +106,88 @@ function DocumentViewModal({ isOpen, reportId, onClose }) {
 
     useEffect(() => {
         if (!report) return;
-        const timer = setTimeout(updatePages, 100);
-        return () => clearTimeout(timer);
+        const t1 = setTimeout(updatePages, 50);
+        const t2 = setTimeout(updatePages, 250);
+        const t3 = setTimeout(updatePages, 600);
+        const t4 = setTimeout(updatePages, 1200);
+        return () => {
+            clearTimeout(t1);
+            clearTimeout(t2);
+            clearTimeout(t3);
+            clearTimeout(t4);
+        };
     }, [report]);
 
     useEffect(() => {
         if (!report) return;
         const observer = new ResizeObserver(updatePages);
         if (measureRef.current) observer.observe(measureRef.current);
+        if (measureWrapperRef.current) observer.observe(measureWrapperRef.current);
         if (pageHeightRef.current) observer.observe(pageHeightRef.current);
         return () => observer.disconnect();
     }, [report]);
 
-    const handlePrint = () => {
-        window.print();
+    const handleExportWord = () => {
+        if (!report) return;
+        if (exportInProgressRef.current) return;
+        exportInProgressRef.current = true;
+        setExportError(null);
+        setExportLoading(true);
+        const reportPayload = {
+            ...report,
+            alertStatus: report.alertStatus || report.status || 'WHITE ALERT'
+        };
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/api/adr/export-docx';
+        form.target = '_self';
+        form.style.display = 'none';
+        form.setAttribute('accept-charset', 'UTF-8');
+        const input = document.createElement('input');
+        input.name = 'report';
+        input.type = 'hidden';
+        input.value = JSON.stringify(reportPayload);
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+        form.remove();
+        setExportLoading(false);
+        exportInProgressRef.current = false;
     };
 
     const dash = (val) => (val && String(val).trim() !== '') ? val : '-';
+
+    const signatureNameDisplay = (report, slots) => {
+        const seen = new Set();
+        return slots.map((name) => {
+            const n = name ? String(name).trim() : '';
+            if (!n || n === '-') return dash(name);
+            const key = n.toUpperCase();
+            if (seen.has(key)) return '—';
+            seen.add(key);
+            return name;
+        });
+    };
+
+    const renderMultiline = (text, asBullets) => {
+        if (!text?.trim()) return '-';
+        if (asBullets) {
+            const items = text.split(/[;\n]/).filter(s => s.trim());
+            if (items.length === 0) return '-';
+            return (
+                <ul className="document-viewer__task-list">
+                    {items.map((item, i) => <li key={i}>{item.trim()}</li>)}
+                </ul>
+            );
+        }
+        return (
+            <div className="document-viewer__report-text">
+                {text.split(/\n/).map((line, i) => (
+                    line.trim() ? <div key={i}>{line.trim()}</div> : <br key={i} />
+                ))}
+            </div>
+        );
+    };
 
     const renderBodyContent = () => {
         if (!report) return null;
@@ -175,11 +271,19 @@ function DocumentViewModal({ isOpen, reportId, onClose }) {
                                         <td className="document-viewer__table-name">{dash(item.name)}</td>
                                         <td className="document-viewer__table-tasks">
                                             {item.task?.trim() ? (
-                                                <ul className="document-viewer__task-list">
-                                                    {item.task.split(/[;\n]/).map((task, i) => (
-                                                        task.trim() ? <li key={i}>{task.trim()}</li> : null
-                                                    ))}
-                                                </ul>
+                                                item.taskAsBullets ? (
+                                                    <ul className="document-viewer__task-list">
+                                                        {item.task.split(/[;\n]/).map((task, i) => (
+                                                            task.trim() ? <li key={i}>{task.trim()}</li> : null
+                                                        ))}
+                                                    </ul>
+                                                ) : (
+                                                    <div className="document-viewer__report-text">
+                                                        {item.task.split(/\n/).map((line, i) => (
+                                                            line.trim() ? <div key={i}>{line.trim()}</div> : <br key={i} />
+                                                        ))}
+                                                    </div>
+                                                )
                                             ) : '-'}
                                         </td>
                                     </tr>
@@ -206,11 +310,19 @@ function DocumentViewModal({ isOpen, reportId, onClose }) {
                                         <td className="document-viewer__table-num">{index + 1}</td>
                                         <td className="document-viewer__table-report">
                                             {item.report?.trim() ? (
-                                                <div className="document-viewer__report-text">
-                                                    {item.report.split(/\n/).map((line, i) => (
-                                                        line.trim() ? <div key={i}>{line.trim()}</div> : <br key={i} />
-                                                    ))}
-                                                </div>
+                                                item.reportAsBullets ? (
+                                                    <ul className="document-viewer__task-list">
+                                                        {item.report.split(/[;\n]/).map((line, i) => (
+                                                            line.trim() ? <li key={i}>{line.trim()}</li> : null
+                                                        ))}
+                                                    </ul>
+                                                ) : (
+                                                    <div className="document-viewer__report-text">
+                                                        {item.report.split(/\n/).map((line, i) => (
+                                                            line.trim() ? <div key={i}>{line.trim()}</div> : <br key={i} />
+                                                        ))}
+                                                    </div>
+                                                )
                                             ) : '-'}
                                         </td>
                                         <td className="document-viewer__table-remarks">{dash(item.remarks)}</td>
@@ -239,10 +351,10 @@ function DocumentViewModal({ isOpen, reportId, onClose }) {
                                 <tbody>
                                     {report.communicationRows.map((row, index) => (
                                         <tr key={row.id || index} data-break-point>
-                                            <td>{dash(row.particulars)}</td>
+                                            <td>{renderMultiline(row.particulars, false)}</td>
                                             <td className="document-viewer__table-items">{row.noOfItems !== undefined && row.noOfItems !== null && row.noOfItems !== '' ? row.noOfItems : '-'}</td>
-                                            <td>{dash(row.contact)}</td>
-                                            <td>{dash(row.status)}</td>
+                                            <td>{renderMultiline(row.contact, row.contactAsBullets)}</td>
+                                            <td>{renderMultiline(row.status, row.statusAsBullets)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -265,85 +377,90 @@ function DocumentViewModal({ isOpen, reportId, onClose }) {
                                 <tbody>
                                     {report.otherItemsRows.map((row, index) => (
                                         <tr key={row.id || index} data-break-point>
-                                            <td>{dash(row.particulars)}</td>
+                                            <td>{renderMultiline(row.particulars, false)}</td>
                                             <td className="document-viewer__table-items">{row.noOfItems !== undefined && row.noOfItems !== null && row.noOfItems !== '' ? row.noOfItems : '-'}</td>
-                                            <td>{dash(row.status)}</td>
+                                            <td>{renderMultiline(row.status, row.statusAsBullets)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
                     )}
-
                     {report.otherAdminRows && report.otherAdminRows.length > 0 && (
                         <div className="document-viewer__subsection">
                             <h4 className="document-viewer__subsection-title" data-break-point>C. Other Administrative Matters:</h4>
                             <p className="document-viewer__admin-note" data-break-point>(List down administrative concerns such as but not limited to: Duty driver on-call, vehicle activities, internet or other ICT equipment issues, parcel or documents received/delivered, untoward incidents that should be elevated to the management level).</p>
-                            <ul className="document-viewer__admin-list">
+                            <ul className="document-viewer__admin-list" data-break-point>
                                 {report.otherAdminRows.map((row, index) => (
-                                    <li key={row.id || index}>{dash(row.concern)}</li>
+                                    <li key={row.id || index}>{renderMultiline(row.concern, false)}</li>
                                 ))}
                             </ul>
                         </div>
                     )}
 
-                    <div className="document-viewer__subsection" data-break-point>
-                        <p className="document-viewer__admin-text">1. The following were endorsed to incoming Operations Duty Staff:</p>
+                    <div className="document-viewer__subsection">
+                        <p className="document-viewer__admin-text" data-break-point>1. The following were endorsed to incoming Operations Duty Staff:</p>
                         {report.endorsedItemsRows && report.endorsedItemsRows.length > 0 && (
                             <ol className="document-viewer__endorsed-list">
                                 {report.endorsedItemsRows.map((row, index) => (
-                                    <li key={row.id || index}>{dash(row.item)}</li>
+                                    <li key={row.id || index} data-break-point>{renderMultiline(row.item, row.itemAsBullets)}</li>
                                 ))}
                             </ol>
                         )}
-                        <p className="document-viewer__admin-text">2. For information of the OCD Officer-In-Charge.</p>
+                        <p className="document-viewer__admin-text" data-break-point>2. For information of the OCD Officer-In-Charge.</p>
                     </div>
                 </div>
 
-                <div className="document-viewer__signatures" data-break-point>
+                {(() => {
+                    const sigNames = signatureNameDisplay(report, [report.preparedBy, report.receivedBy, report.notedBy, report.approvedBy]);
+                    return (
+                <div className="document-viewer__signatures">
                     <div className="document-viewer__signature-row">
-                        <div className="document-viewer__signature-item">
-                            <div className="document-viewer__signature-label">Prepared by:</div>
-                            <div className="document-viewer__signature-name">{dash(report.preparedBy)}</div>
+                        <div className="document-viewer__signature-item" data-break-point>
+                            <div className="document-viewer__signature-label" data-break-point>Prepared by:</div>
+                            <div className="document-viewer__signature-name">{sigNames[0]}</div>
                             <div className="document-viewer__signature-position">{dash(report.preparedPosition)}</div>
                         </div>
-                        <div className="document-viewer__signature-item">
-                            <div className="document-viewer__signature-label">Received by:</div>
-                            <div className="document-viewer__signature-name">{dash(report.receivedBy)}</div>
+                        <div className="document-viewer__signature-item" data-break-point>
+                            <div className="document-viewer__signature-label" data-break-point>Received by:</div>
+                            <div className="document-viewer__signature-name">{sigNames[1]}</div>
                             <div className="document-viewer__signature-position">{dash(report.receivedPosition)}</div>
                         </div>
                     </div>
-                    <div className="document-viewer__signature-item document-viewer__signature-item--full">
-                        <div className="document-viewer__signature-label">Noted by:</div>
-                        <div className="document-viewer__signature-name">{dash(report.notedBy)}</div>
+                    <div className="document-viewer__signature-item document-viewer__signature-item--full" data-break-point>
+                        <div className="document-viewer__signature-label" data-break-point>Noted by:</div>
+                        <div className="document-viewer__signature-name">{sigNames[2]}</div>
                         <div className="document-viewer__signature-position">{dash(report.notedPosition)}</div>
                     </div>
-                    <div className="document-viewer__signature-item document-viewer__signature-item--full">
-                        <div className="document-viewer__signature-label">Approved:</div>
-                        <div className="document-viewer__signature-name">{dash(report.approvedBy)}</div>
+                    <div className="document-viewer__signature-item document-viewer__signature-item--full" data-break-point>
+                        <div className="document-viewer__signature-label" data-break-point>Approved:</div>
+                        <div className="document-viewer__signature-name">{sigNames[3]}</div>
                         <div className="document-viewer__signature-position">{dash(report.approvedPosition)}</div>
                     </div>
                 </div>
+                    );
+                })()}
             </div>
         );
     };
 
     if (!isOpen || !report) return null;
 
-    return (
+    const modalContent = (
         <div className="document-modal">
             <div className="document-modal__overlay" onClick={onClose}></div>
             <div className="document-modal__container">
                 <div className="document-modal__header">
                     <h2>Document Preview</h2>
                     <div className="document-modal__actions">
-                        <button onClick={handlePrint} className="document-modal__print-btn">
+                        <button onClick={handleExportWord} className="document-modal__print-btn" disabled={exportLoading || !report} title="Export as Word document">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M6 14h12v8H6z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
-                            Print / PDF
+                            {exportLoading ? 'Exporting…' : 'Export as Word'}
                         </button>
+                        {exportError && <span className="document-modal__export-error" role="alert">{exportError}</span>}
                         <button onClick={onClose} className="document-modal__close-btn">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -353,7 +470,7 @@ function DocumentViewModal({ isOpen, reportId, onClose }) {
                 </div>
                 <div className="document-modal__content">
                     <div className="document-viewer__document">
-                        <div className="document-viewer__measure document-viewer__measure--layout document-viewer__page--sheet" aria-hidden="true">
+                        <div ref={measureWrapperRef} className="document-viewer__measure document-viewer__measure--layout document-viewer__page--sheet" aria-hidden="true">
                             <HeaderDocument ref={headerRef} compact />
                             <div ref={measureRef}>{renderBodyContent()}</div>
                             <FooterDocument ref={footerRef} />
@@ -375,31 +492,35 @@ function DocumentViewModal({ isOpen, reportId, onClose }) {
                                 <div
                                     key={i}
                                     className="document-viewer__page document-viewer__page--sheet"
-                                    style={{ height: `${PAGE_HEIGHT_MM}mm`, display: 'flex', flexDirection: 'column' }}
+                                    style={{ position: 'relative', width: '210mm', height: `${PAGE_HEIGHT_MM}mm`, overflow: 'hidden', boxSizing: 'border-box', paddingLeft: '0.5in' }}
                                 >
-                                    <HeaderDocument compact />
-                                    <div
-                                        className="document-viewer__sheet-body"
-                                        style={{
-                                            flex: `0 0 ${height ?? contentAreaHeightPx ?? 0}px`,
-                                            overflow: 'hidden',
-                                            position: 'relative',
-                                            minHeight: 0
-                                        }}
-                                    >
+                                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+                                        <HeaderDocument compact />
+                                    </div>
+                                    <div style={{ paddingTop: `${HEADER_HEIGHT_PX}px`, paddingBottom: `${FOOTER_HEIGHT_PX}px` }}>
                                         <div
-                                            className="document-viewer__page-slice"
+                                            className="document-viewer__sheet-body"
                                             style={{
-                                                transform: transform ?? 'translateY(0)',
-                                                position: 'relative',
-                                                width: '100%'
+                                                height: `${height ?? contentAreaHeightPx ?? 0}px`,
+                                                overflow: 'hidden',
+                                                position: 'relative'
                                             }}
                                         >
-                                            {renderBodyContent()}
+                                            <div
+                                                className="document-viewer__page-slice"
+                                                style={{
+                                                    transform: transform ?? 'translateY(0)',
+                                                    position: 'relative',
+                                                    width: '100%'
+                                                }}
+                                            >
+                                                {renderBodyContent()}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div style={{ flex: '1 0 0' }} />
-                                    <FooterDocument />
+                                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 10 }}>
+                                        <FooterDocument />
+                                    </div>
                                 </div>
                             );
                         })}
@@ -408,6 +529,8 @@ function DocumentViewModal({ isOpen, reportId, onClose }) {
             </div>
         </div>
     );
+
+    return createPortal(modalContent, document.body);
 }
 
 export default DocumentViewModal;

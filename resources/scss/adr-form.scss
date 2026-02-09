@@ -572,14 +572,36 @@
         min-height: 60px;
         resize: vertical;
         font-family: inherit;
-        background: #f7f7f7;        
+        background: #f7f7f7;
 
         &:focus {
             outline: none;
             border-color: $form-purple;
             box-shadow: 0 0 0 2px rgba(41, 0, 129, 0.1);
         }
-        
+
+        &--sm {
+            min-height: 44px;
+            rows: 2;
+        }
+    }
+
+    &__bullet-check {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-top: 0.35rem;
+        font-size: 0.75rem;
+        color: #555;
+        cursor: pointer;
+        user-select: none;
+
+        input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            accent-color: $form-purple;
+            cursor: pointer;
+        }
     }
 
     &__modal {
