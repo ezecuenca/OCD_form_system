@@ -44,6 +44,12 @@ function Schedule() {
             days.push(i);
         }
 
+        // Add empty cells after month ends to complete the final week
+        const remaining = (7 - (days.length % 7)) % 7;
+        for (let i = 0; i < remaining; i++) {
+            days.push(null);
+        }
+
         return days;
     };
 

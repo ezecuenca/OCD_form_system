@@ -66609,6 +66609,12 @@ function Schedule() {
     for (var _i = 1; _i <= totalDays; _i++) {
       days.push(_i);
     }
+
+    // Add empty cells after month ends to complete the final week
+    var remaining = (7 - days.length % 7) % 7;
+    for (var _i2 = 0; _i2 < remaining; _i2++) {
+      days.push(null);
+    }
     return days;
   };
   var previousMonth = function previousMonth() {
