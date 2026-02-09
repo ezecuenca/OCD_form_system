@@ -1,30 +1,16 @@
 @echo off
-REM Batch script to start Laravel server and open in Brave browser
+REM Batch script to start Laravel server and open in Microsoft Edge
 
 echo Starting Laravel development server...
+echo.
 
-REM Start server in background and open Brave
-start /B php artisan serve
-timeout /t 2 /nobreak >nul
+REM Start server in a new window so it keeps running; wait, then open Edge
+start "Laravel Server" cmd /k "php artisan serve"
+timeout /t 3 /nobreak >nul
 
-REM Try to find and open Brave browser
-set "BRAVE_PATH="
-
-if exist "%LOCALAPPDATA%\BraveSoftware\Brave-Browser\Application\brave.exe" (
-    set "BRAVE_PATH=%LOCALAPPDATA%\BraveSoftware\Brave-Browser\Application\brave.exe"
-) else if exist "%ProgramFiles%\BraveSoftware\Brave-Browser\Application\brave.exe" (
-    set "BRAVE_PATH=%ProgramFiles%\BraveSoftware\Brave-Browser\Application\brave.exe"
-) else if exist "%ProgramFiles(x86)%\BraveSoftware\Brave-Browser\Application\brave.exe" (
-    set "BRAVE_PATH=%ProgramFiles(x86)%\BraveSoftware\Brave-Browser\Application\brave.exe"
-)
-
-if defined BRAVE_PATH (
-    echo Opening http://localhost:8000 in Brave browser...
-    start "" "%BRAVE_PATH%" "http://localhost:8000"
-) else (
-    echo Brave browser not found. Please open http://localhost:8000 manually.
-)
+echo Opening http://127.0.0.1:8000 in Microsoft Edge...
+start msedge http://127.0.0.1:8000
 
 echo.
-echo Server is running. Press Ctrl+C to stop.
-php artisan serve
+echo Server is running in the other window. Close that window or press Ctrl+C there to stop.
+pause

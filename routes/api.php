@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExportDocxController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/adr/export-docx', ExportDocxController::class)->name('api.adr.export-docx');
+Route::get('/adr/export-docx/{token}', [ExportDocxController::class, 'download'])->name('api.adr.export-docx.download');

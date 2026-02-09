@@ -26,7 +26,7 @@ class ServeWithBrowser extends Command
      *
      * @var string
      */
-    protected $description = 'Start the Laravel development server and open in Brave browser';
+    protected $description = 'Start the Laravel development server and open in Microsoft Edge';
 
     /**
      * Execute the console command.
@@ -41,13 +41,10 @@ class ServeWithBrowser extends Command
 
         $this->info("Starting Laravel development server on {$url}...");
 
-        // Find Brave browser path
-        $bravePath = $this->findBraveBrowser();
-
         // Start the PHP built-in server (same as Laravel's serve command)
         $publicPath = $this->laravel->basePath('public');
         $serverFile = $this->laravel->basePath('server.php');
-        
+
         $process = new Process([
             PHP_BINARY,
             '-S',
@@ -58,24 +55,23 @@ class ServeWithBrowser extends Command
         ], $this->laravel->basePath());
 
         $process->setTimeout(null);
-        
+
         // Start the server
         $process->start(function ($type, $buffer) {
             $this->output->write($buffer);
         });
 
-        // Wait a moment for server to start, then open browser (only once)
-        if ($bravePath && !self::$browserOpened) {
+        // Wait a moment for server to start, then open Microsoft Edge (only once)
+        if (!self::$browserOpened) {
             sleep(2);
-            $this->info("Opening {$url} in Brave browser...");
-            
+            $this->info("Opening {$url} in Microsoft Edge...");
+
             if (PHP_OS_FAMILY === 'Windows') {
-                // Use exec to open URL - this will reuse existing Brave window if open
-                @exec("start \"\" \"{$bravePath}\" \"{$url}\"");
+                @exec('start msedge "' . $url . '"');
                 self::$browserOpened = true;
+            } else {
+                $this->warn("Auto-open in Edge is supported on Windows. Please open {$url} in your browser.");
             }
-        } elseif (!$bravePath) {
-            $this->warn("Brave browser not found. Please open {$url} manually.");
         }
 
         $this->info("Server started successfully. Press Ctrl+C to stop.");
@@ -83,33 +79,5 @@ class ServeWithBrowser extends Command
         $process->wait();
 
         return 0;
-    }
-
-    /**
-     * Find Brave browser executable path
-     *
-     * @return string|null
-     */
-    protected function findBraveBrowser()
-    {
-        $possiblePaths = [
-            getenv('LOCALAPPDATA') . '\\BraveSoftware\\Brave-Browser\\Application\\brave.exe',
-            getenv('ProgramFiles') . '\\BraveSoftware\\Brave-Browser\\Application\\brave.exe',
-            getenv('ProgramFiles(x86)') . '\\BraveSoftware\\Brave-Browser\\Application\\brave.exe',
-        ];
-
-        foreach ($possiblePaths as $path) {
-            if (file_exists($path)) {
-                return $path;
-            }
-        }
-
-        // Check if BROWSER_PATH is set in .env
-        $browserPath = env('BROWSER_PATH');
-        if ($browserPath && file_exists($browserPath)) {
-            return $browserPath;
-        }
-
-        return null;
     }
 }

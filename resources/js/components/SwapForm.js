@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { getSwapRequests, updateSwapRequestStatus, executeSwapRequest } from '../utils/swapRequests';
+import React, { useState, useEffect, useRef } from 'react';
+import { getSwapRequests, updateSwapRequestStatus, executeSwapRequest, archiveSwapRequest } from '../utils/swapRequests';
+import { useNavigate } from 'react-router-dom';
 
 function formatDate(dateStr) {
     if (!dateStr) return '—';
@@ -26,28 +27,86 @@ function formatDateOnly(dateStr) {
 
 function SwapForm() {
     const [swapRequests, setSwapRequests] = useState([]);
+    const navigate = useNavigate();
+    const [selectedRequests, setSelectedRequests] = useState([]);
+    const [showMonthDropdown, setShowMonthDropdown] = useState(false);
+    const [showYearDropdown, setShowYearDropdown] = useState(false);
+    const yearDropdownRef = useRef(null);
+    const monthDropdownRef = useRef(null);
+
+    const loadSwapRequests = () => setSwapRequests(getSwapRequests().filter(r => r.status !== 'archived'));
 
     useEffect(() => {
-        setSwapRequests(getSwapRequests());
-        const handleStorage = () => setSwapRequests(getSwapRequests());
+        loadSwapRequests();
+        const handleStorage = () => loadSwapRequests();
         window.addEventListener('storage', handleStorage);
         return () => window.removeEventListener('storage', handleStorage);
     }, []);
 
+    const handleReturn = () => {
+        navigate('/schedule');
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (yearDropdownRef.current && !yearDropdownRef.current.contains(event.target)) {
+                setShowYearDropdown(false);
+            }
+            if (monthDropdownRef.current && !monthDropdownRef.current.contains(event.target)) {
+                setShowMonthDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showYearDropdown, showMonthDropdown]);
+
     const handleDeny = (id) => {
         if (window.confirm('Deny this swap request?')) {
             updateSwapRequestStatus(id, 'denied');
-            setSwapRequests(getSwapRequests());
+            loadSwapRequests();
         }
     };
 
     const handleApprove = (id) => {
         const success = executeSwapRequest(id);
         if (success) {
-            setSwapRequests(getSwapRequests());
+            loadSwapRequests();
         } else {
             alert('Could not execute swap. The task may have been modified or removed.');
         }
+    };
+
+    const handleArchive = (id) => {
+        if (archiveSwapRequest(id)) {
+            setSelectedRequests(prev => prev.filter(i => i !== id));
+            loadSwapRequests();
+        }
+    };
+
+    const handleBulkArchive = () => {
+        const toArchive = selectedRequests.filter(id => {
+            const req = swapRequests.find(r => r.id === id);
+            return req && (req.status === 'approved' || req.status === 'denied');
+        });
+        if (toArchive.length === 0) {
+            alert('Please select approved or denied requests to archive.');
+            return;
+        }
+        toArchive.forEach(id => archiveSwapRequest(id));
+        setSelectedRequests([]);
+        loadSwapRequests();
+    };
+
+    const handleSelectRequest = (id) => {
+        setSelectedRequests(prev => {
+            if (prev.includes(id)) {
+                return prev.filter(i => i !== id);
+            }
+            return [...prev, id];
+        });
     };
 
     const getRequestDescription = (req) => {
@@ -65,17 +124,24 @@ function SwapForm() {
                     <input type="text" placeholder="Search..." disabled />
                 </div>
                 <div className="swap-form__datetime">
-                    <img src={`${window.location.origin}/images/date_time.svg`} alt="Date Time" className="swap-form__datetime-icon" />
-                    <span className="swap-form__datetime-text">
-                        <span className="swap-form__datetime-date">January 30, 2026</span>
-                        <span className="swap-form__datetime-time">11:22 AM</span>
-                    </span>
+                    <button className="adr-form__return-btn" onClick={handleReturn}>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Return
+                    </button>
                 </div>
             </div>
 
             <div className="swap-form__controls">
                 <div className="swap-form__actions">
-                    <button disabled>
+                    <button
+                        onClick={handleBulkArchive}
+                        disabled={selectedRequests.length === 0 || !selectedRequests.some(id => {
+                            const req = swapRequests.find(r => r.id === id);
+                            return req && (req.status === 'approved' || req.status === 'denied');
+                        })}
+                    >
                         <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Archive" />
                         Archive
                     </button>
@@ -84,13 +150,12 @@ function SwapForm() {
                 <div className="swap-form__filters">
                     {/* Year dropdown - visual only */}
                     <div className="swap-form__filter-dropdown">
-                        <button disabled>
+                        <button onClick={() => setShowYearDropdown(!showYearDropdown)}>
                             Year
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                         </button>
-                        {/* Dropdown content shown statically for design preview */}
                         <div className="swap-form__dropdown-menu" style={{ display: 'none' }}>
                             <div className="swap-form__dropdown-item">All Years</div>
                             <div className="swap-form__dropdown-item">2026</div>
@@ -101,7 +166,7 @@ function SwapForm() {
 
                     {/* Month dropdown - visual only */}
                     <div className="swap-form__filter-dropdown">
-                        <button disabled>
+                        <button onClick={() => setShowMonthDropdown(!showMonthDropdown)}>
                             Month
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -123,7 +188,17 @@ function SwapForm() {
                     <thead>
                         <tr>
                             <th>
-                                <input type="checkbox" disabled />
+                                <input 
+                                type="checkbox" 
+                                checked={selectedRequests.length === swapRequests.length && swapRequests.length > 0}
+                                onChange={(e) => {
+                                    if (e.target.checked) {
+                                        setSelectedRequests(swapRequests.map(r => r.id));
+                                    } else {
+                                        setSelectedRequests([]);
+                                    }
+                                }}
+                                />
                             </th>
                             <th>Task / Request</th>
                             <th>Status</th>
@@ -142,7 +217,11 @@ function SwapForm() {
                             swapRequests.map((req) => (
                                 <tr key={req.id}>
                                     <td>
-                                        <input type="checkbox" disabled />
+                                        <input type="checkbox"
+                                            checked={selectedRequests.includes(req.id)}
+                                            onChange={() => handleSelectRequest(req.id)}
+                                            disabled={req.status !== 'approved' && req.status !== 'denied'}
+                                        />
                                     </td>
                                     <td>
                                         <div className="swap-form__table-document">
@@ -185,22 +264,14 @@ function SwapForm() {
                                                     </button>
                                                 </>
                                             ) : (
-                                                <>
-                                                    <button
-                                                        type="button"
-                                                        title="View"
-                                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
-                                                    >
-                                                        <img src={`${window.location.origin}/images/view_icon.svg`} alt="View" style={{ width: 20, height: 20 }} />
-                                                    </button>
-                                                    <button 
-                                                        type="button"
-                                                        title="Archive"
-                                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
-                                                    >
-                                                        <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Archive" style={{ width: 20, height: 20 }} />
-                                                    </button>
-                                                </>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleArchive(req.id)}
+                                                    title="Archive"
+                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                                                >
+                                                    <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Archive" style={{ width: 20, height: 20 }} />
+                                                </button>
                                             )}
                                         </div>
                                     </td>
