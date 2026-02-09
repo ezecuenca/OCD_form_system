@@ -65832,6 +65832,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _HeaderDocument__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HeaderDocument */ "./resources/js/components/HeaderDocument.js");
 /* harmony import */ var _FooterDocument__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./FooterDocument */ "./resources/js/components/FooterDocument.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
@@ -65915,27 +65921,36 @@ function DocumentViewModal(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     reportFromId = _useState2[0],
     setReportFromId = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState4 = _slicedToArray(_useState3, 2),
+    exportLoading = _useState4[0],
+    setExportLoading = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState6 = _slicedToArray(_useState5, 2),
+    exportError = _useState6[0],
+    setExportError = _useState6[1];
   var measureRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var measureWrapperRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var headerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var footerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var pageHeightRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1),
-    _useState4 = _slicedToArray(_useState3, 2),
-    totalPages = _useState4[0],
-    setTotalPages = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState6 = _slicedToArray(_useState5, 2),
-    pageHeightPx = _useState6[0],
-    setPageHeightPx = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+  var exportInProgressRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(false);
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1),
     _useState8 = _slicedToArray(_useState7, 2),
-    contentAreaHeightPx = _useState8[0],
-    setContentAreaHeightPx = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    totalPages = _useState8[0],
+    setTotalPages = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState0 = _slicedToArray(_useState9, 2),
-    pageRanges = _useState0[0],
-    setPageRanges = _useState0[1];
+    pageHeightPx = _useState0[0],
+    setPageHeightPx = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState10 = _slicedToArray(_useState1, 2),
+    contentAreaHeightPx = _useState10[0],
+    setContentAreaHeightPx = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState12 = _slicedToArray(_useState11, 2),
+    pageRanges = _useState12[0],
+    setPageRanges = _useState12[1];
   var report = reportProp != null ? reportProp : reportFromId;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (isOpen && reportId && reportProp == null) {
@@ -65945,6 +65960,11 @@ function DocumentViewModal(_ref) {
       setReportFromId(null);
     }
   }, [isOpen, reportId, reportProp, getReport]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (!isOpen) {
+      exportInProgressRef.current = false;
+    }
+  }, [isOpen]);
   var updatePages = function updatePages() {
     var _pageHeightRef$curren, _pageHeightRef$curren2;
     if (!measureRef.current) return;
@@ -65990,69 +66010,31 @@ function DocumentViewModal(_ref) {
       return observer.disconnect();
     };
   }, [report]);
-  var handlePrint = function handlePrint() {
-    var docRoot = document.querySelector('.document-modal .document-viewer__document');
-    var measureContent = docRoot === null || docRoot === void 0 ? void 0 : docRoot.querySelector('.document-viewer__measure .document-viewer__content');
-    var firstSheet = docRoot === null || docRoot === void 0 ? void 0 : docRoot.querySelector('.document-viewer__page--sheet:not(.document-viewer__measure)');
-    var contentSource = measureContent || (firstSheet === null || firstSheet === void 0 ? void 0 : firstSheet.querySelector('.document-viewer__page-slice .document-viewer__content'));
-    if (!contentSource || !firstSheet) {
-      updatePages();
-      setTimeout(function () {
-        return window.print();
-      }, 300);
-      return;
-    }
-    var bodyHeight = Math.max(contentSource.scrollHeight, contentSource.offsetHeight, 1);
-    var contentArea = Math.max(1, CONTENT_AREA_FALLBACK);
-    var breakPoints = getBreakPoints(contentSource, bodyHeight);
-    var ranges = computePageRanges(bodyHeight, contentArea, breakPoints);
-    var headerEl = firstSheet.querySelector('.header-document');
-    var footerEl = firstSheet.querySelector('.footer-document');
-    var headerHTML = headerEl ? headerEl.outerHTML : '';
-    var footerHTML = footerEl ? footerEl.outerHTML : '';
-    var contentHTML = contentSource.innerHTML;
-    var stylesheetLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(function (l) {
-      return l.href;
-    }).filter(function (href) {
-      return href && (href.startsWith('http') || href.startsWith('//'));
+  var handleExportWord = function handleExportWord() {
+    if (!report) return;
+    if (exportInProgressRef.current) return;
+    exportInProgressRef.current = true;
+    setExportError(null);
+    setExportLoading(true);
+    var reportPayload = _objectSpread(_objectSpread({}, report), {}, {
+      alertStatus: report.alertStatus || report.status || 'WHITE ALERT'
     });
-    if (stylesheetLinks.length === 0) {
-      stylesheetLinks.push("".concat(window.location.origin, "/css/app.css"));
-    }
-    var styleTags = stylesheetLinks.map(function (href) {
-      return "<link rel=\"stylesheet\" href=\"".concat(href, "\">");
-    }).join('\n');
-    var SLICE_TOP_BUFFER_PX = 12;
-    var pageBlocks = ranges.map(function (range, index) {
-      var SLICE_SAFETY_PX = 8;
-      var startAdjusted = index > 0 ? Math.max(0, range.start - SLICE_TOP_BUFFER_PX) : range.start;
-      var sliceHeightPx = range.end - startAdjusted;
-      var sliceHeightCapped = Math.min(sliceHeightPx, Math.max(1, contentArea - SLICE_SAFETY_PX));
-      return "\n            <div class=\"document-viewer__page document-viewer__page--sheet document-viewer__page--print\" style=\"display:flex;flex-direction:column;position:relative;height:".concat(PAGE_HEIGHT_MM, "mm;box-sizing:border-box;padding-left:0.5in;overflow:hidden;\">\n                <div class=\"page-header-fixed\" style=\"flex:0 0 ").concat(HEADER_HEIGHT_PX, "px;max-height:").concat(HEADER_HEIGHT_PX, "px;overflow:hidden;\">").concat(headerHTML, "</div>\n                <div class=\"page-content-area\" style=\"flex:1 1 0;min-height:0;overflow:hidden;position:relative;\">\n                    <div class=\"document-viewer__sheet-body\" style=\"height:").concat(sliceHeightCapped, "px;max-height:100%;overflow:hidden;position:relative;\">\n                        <div class=\"document-viewer__page-slice\" style=\"transform:translateY(-").concat(startAdjusted, "px);position:relative;width:100%;\">\n                            <div class=\"document-viewer__content document-viewer__content--compact\">").concat(contentHTML, "</div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"page-footer-fixed\" style=\"flex:0 0 ").concat(FOOTER_HEIGHT_PX, "px;max-height:").concat(FOOTER_HEIGHT_PX, "px;overflow:hidden;\">").concat(footerHTML, "</div>\n            </div>");
-    }).join('');
-    var printDoc = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n<base href=\"".concat(window.location.origin, "/\">\n<title>RDRRMC Duty Report</title>\n").concat(styleTags, "\n<style>\n@page{size:210mm 297mm;margin:0;}\n*,*::before,*::after{box-sizing:border-box;}\nhtml,body{margin:0!important;padding:0!important;background:#fff!important;font-family:Arial,sans-serif!important;width:210mm!important;}\nbody.document-print-source{max-width:210mm!important;margin:0 auto!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}\n.document-viewer__document{width:210mm!important;max-width:210mm!important;margin:0 auto!important;padding:0!important;background:white!important;}\n.document-viewer__page--sheet{\n    position:relative!important;\n    height:297mm!important;\n    min-height:297mm!important;\n    max-height:297mm!important;\n    width:210mm!important;\n    margin:0!important;\n    padding-left:0.5in!important;\n    box-sizing:border-box!important;\n    overflow:hidden!important;\n    page-break-after:always!important;\n    page-break-inside:avoid!important;\n    background:white;\n}\n.document-viewer__page--sheet:last-child{page-break-after:auto!important;}\n.document-viewer__page--print.document-viewer__page--sheet{display:flex!important;flex-direction:column!important;}\n.document-viewer__page--print .page-header-fixed{\n    position:relative!important;top:auto!important;left:auto!important;right:auto!important;\n    flex:0 0 165px!important;max-height:165px!important;overflow:hidden!important;width:100%!important;z-index:10!important;\n}\n.document-viewer__page--print .page-content-area{\n    flex:1 1 0!important;min-height:0!important;\n    height:calc(297mm - 165px - 100px)!important;\n    max-height:calc(297mm - 165px - 100px)!important;\n    overflow:hidden!important;\n}\n.document-viewer__page--print .page-footer-fixed{\n    position:relative!important;bottom:auto!important;left:auto!important;right:auto!important;\n    flex:0 0 100px!important;max-height:100px!important;overflow:hidden!important;width:100%!important;z-index:10!important;\n}\n.page-header-fixed{\n    position:absolute!important;\n    top:0!important;\n    left:0!important;\n    right:0!important;\n    width:100%!important;\n    z-index:10!important;\n}\n.page-header-fixed .header-document{\n    padding:0.3in 0.6in 0.28in!important;\n}\n.page-header-fixed .header-document__line{\n    height:3px!important;background:#2563eb!important;margin:0.35rem auto 0.25rem!important;max-width:410px!important;\n    -webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;\n}\n.page-header-fixed .header-document__republic,.page-header-fixed .header-document__department{font-size:9pt!important;}\n.page-header-fixed .header-document__office{font-size:18pt!important;}\n.page-header-fixed .header-document__region{font-size:14pt!important;}\n.page-header-fixed .header-document__address{font-size:9pt!important;}\n.page-content-area{\n    position:relative!important;\n    z-index:1!important;\n    box-sizing:border-box!important;\n}\n.document-viewer__content--compact{padding:0.4in 0.5in!important;font-size:10pt!important;line-height:1.35!important;}\nbody.document-print-source .document-viewer__content--compact{padding-top:0.28in!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__title{font-size:11pt!important;margin-top:-0.3rem!important;margin-bottom:1rem!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__metadata{margin:0.6rem 0!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__field{margin-bottom:0.55rem!important;font-size:10.5pt!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__label{width:4.5rem!important;min-width:4.5rem!important;font-size:10.5pt!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__value,\nbody.document-print-source .document-viewer__content--compact .document-viewer__name,\nbody.document-print-source .document-viewer__content--compact .document-viewer__position,\nbody.document-print-source .document-viewer__content--compact .document-viewer__subject{font-size:11pt!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__divider{margin:0.6rem 0!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__section{margin:0.5rem 0!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__section-title{font-size:9pt!important;margin-bottom:0.4rem!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__subsection{margin:0.5rem 0!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__subsection-title{font-size:9pt!important;margin-bottom:0.35rem!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__status-section,\nbody.document-print-source .document-viewer__content--compact .document-viewer__status-item{margin:0.35rem 0!important;font-size:9pt!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__admin-note,\nbody.document-print-source .document-viewer__content--compact .document-viewer__admin-text,\nbody.document-print-source .document-viewer__content--compact .document-viewer__admin-list,\nbody.document-print-source .document-viewer__content--compact .document-viewer__endorsed-list{font-size:9pt!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__legend{font-size:7.5pt!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__table{font-size:8pt!important;margin:0.25rem 0 0.65rem 0!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__table thead th,\nbody.document-print-source .document-viewer__content--compact .document-viewer__table tbody td{padding:0.2rem!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__signatures{margin:1rem 0!important;gap:1rem 1.25rem!important;}\nbody.document-print-source .document-viewer__content--compact .document-viewer__signature-label{margin-bottom:4rem!important;}\n.document-viewer__sheet-body{overflow:hidden!important;position:relative!important;}\n.document-viewer__page-slice{position:relative!important;width:100%!important;}\n.page-footer-fixed{\n    position:absolute!important;\n    bottom:0!important;\n    left:0!important;\n    right:0!important;\n    width:100%!important;\n    z-index:10!important;\n}\n.page-footer-fixed .footer-document{\n    break-inside:avoid!important;\n    page-break-inside:avoid!important;\n    padding:0.2in 0.6in 0.2in!important;\n    margin:0!important;\n}\n.document-viewer__page--print .page-footer-fixed .footer-document{padding:0.2in 0.6in 0.2in!important;}\n.document-viewer__page--sheet .footer-document__line{height:2px!important;margin:0 0 0.25rem!important;background:#2563eb!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}\n.document-viewer__page--sheet .footer-document__slogan{margin:0 0 0.12rem!important;font-size:9pt!important;font-weight:bold!important;line-height:1.2!important;}\n.document-viewer__page--sheet .footer-document__info{font-size:6.5pt!important;margin:0!important;line-height:1.25!important;}\n.document-viewer__page--sheet .footer-document__info p{margin:0.06rem 0!important;}\n.document-viewer__page--sheet .document-viewer__signature-item{page-break-inside:avoid!important;}\n.document-viewer__page--sheet .document-viewer__signature-label{font-size:9pt!important;visibility:visible!important;display:block!important;min-height:1em!important;}\n.document-viewer__page--sheet .document-viewer__signature-name{font-size:11pt!important;font-weight:bold!important;line-height:1!important;margin-bottom:0.15rem!important;}\n.document-viewer__page--sheet .document-viewer__signature-position{font-size:9pt!important;line-height:1!important;margin-top:0!important;margin-bottom:0!important;}\n.document-viewer__page--sheet .document-viewer__table tbody td,.document-viewer__page--sheet .document-viewer__table thead th{line-height:1!important;}\n.document-viewer__page--sheet .document-viewer__table .document-viewer__task-list,.document-viewer__page--sheet .document-viewer__table .document-viewer__report-text{line-height:1!important;}\n.document-viewer__page--sheet .document-viewer__table .document-viewer__task-list li{margin-bottom:0.1rem!important;line-height:1!important;}\n.document-viewer__page--sheet .document-viewer__table .document-viewer__report-text div{margin-bottom:0.1rem!important;}\n@media print{\nhtml,body{margin:0!important;padding:0!important;}\n.document-viewer__document{width:210mm!important;margin:0 auto!important;}\n}\n</style></head><body class=\"document-print-source\"><div class=\"document-viewer__document\">").concat(pageBlocks, "</div></body></html>");
-    var iframe = document.createElement('iframe');
-    iframe.setAttribute('title', 'Print');
-    iframe.style.cssText = 'position:absolute;left:-9999px;width:210mm;height:4000px;border:none;visibility:hidden;';
-    document.body.appendChild(iframe);
-    var iframeWin = iframe.contentWindow;
-    iframeWin.document.open();
-    iframeWin.document.write(printDoc);
-    iframeWin.document.close();
-    var doPrint = function doPrint() {
-      try {
-        iframeWin.print();
-      } finally {
-        document.body.removeChild(iframe);
-      }
-    };
-    if (iframeWin.document.readyState === 'complete') {
-      setTimeout(doPrint, 600);
-    } else {
-      iframeWin.onload = function () {
-        return setTimeout(doPrint, 600);
-      };
-    }
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/api/adr/export-docx';
+    form.target = '_self';
+    form.style.display = 'none';
+    form.setAttribute('accept-charset', 'UTF-8');
+    var input = document.createElement('input');
+    input.name = 'report';
+    input.type = 'hidden';
+    input.value = JSON.stringify(reportPayload);
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+    form.remove();
+    setExportLoading(false);
+    exportInProgressRef.current = false;
   };
   var dash = function dash(val) {
     return val && String(val).trim() !== '' ? val : '-';
@@ -66532,26 +66514,32 @@ function DocumentViewModal(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "document-modal__actions",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
-            onClick: handlePrint,
+            onClick: handleExportWord,
             className: "document-modal__print-btn",
+            disabled: exportLoading || !report,
+            title: "Export as Word document",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
-                d: "M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2",
+                d: "M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z",
                 stroke: "currentColor",
                 strokeWidth: "2",
                 strokeLinecap: "round",
                 strokeLinejoin: "round"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
-                d: "M6 14h12v8H6z",
+                d: "M14 2v6h6M16 13H8M16 17H8M10 9H8",
                 stroke: "currentColor",
                 strokeWidth: "2",
                 strokeLinecap: "round",
                 strokeLinejoin: "round"
               })]
-            }), "Print / PDF"]
+            }), exportLoading ? 'Exporting…' : 'Export as Word']
+          }), exportError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+            className: "document-modal__export-error",
+            role: "alert",
+            children: exportError
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             onClick: onClose,
             className: "document-modal__close-btn",

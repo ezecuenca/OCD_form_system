@@ -48,11 +48,14 @@ function computePageRanges(bodyHeight, contentArea, breakPoints) {
 function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
     const { getReport } = useFormContext();
     const [reportFromId, setReportFromId] = useState(null);
+    const [exportLoading, setExportLoading] = useState(false);
+    const [exportError, setExportError] = useState(null);
     const measureRef = useRef(null);
     const measureWrapperRef = useRef(null);
     const headerRef = useRef(null);
     const footerRef = useRef(null);
     const pageHeightRef = useRef(null);
+    const exportInProgressRef = useRef(false);
     const [totalPages, setTotalPages] = useState(1);
     const [pageHeightPx, setPageHeightPx] = useState(null);
     const [contentAreaHeightPx, setContentAreaHeightPx] = useState(null);
@@ -68,6 +71,12 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
             setReportFromId(null);
         }
     }, [isOpen, reportId, reportProp, getReport]);
+
+    useEffect(() => {
+        if (!isOpen) {
+            exportInProgressRef.current = false;
+        }
+    }, [isOpen]);
 
     const updatePages = () => {
         if (!measureRef.current) return;
@@ -118,200 +127,32 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
         return () => observer.disconnect();
     }, [report]);
 
-    const handlePrint = () => {
-        const docRoot = document.querySelector('.document-modal .document-viewer__document');
-        const measureContent = docRoot?.querySelector('.document-viewer__measure .document-viewer__content');
-        const firstSheet = docRoot?.querySelector('.document-viewer__page--sheet:not(.document-viewer__measure)');
-        const contentSource = measureContent || firstSheet?.querySelector('.document-viewer__page-slice .document-viewer__content');
-        if (!contentSource || !firstSheet) {
-            updatePages();
-            setTimeout(() => window.print(), 300);
-            return;
-        }
-        const bodyHeight = Math.max(contentSource.scrollHeight, contentSource.offsetHeight, 1);
-        const contentArea = Math.max(1, CONTENT_AREA_FALLBACK);
-        const breakPoints = getBreakPoints(contentSource, bodyHeight);
-        const ranges = computePageRanges(bodyHeight, contentArea, breakPoints);
-        const headerEl = firstSheet.querySelector('.header-document');
-        const footerEl = firstSheet.querySelector('.footer-document');
-        const headerHTML = headerEl ? headerEl.outerHTML : '';
-        const footerHTML = footerEl ? footerEl.outerHTML : '';
-        const contentHTML = contentSource.innerHTML;
-        const stylesheetLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
-            .map((l) => l.href)
-            .filter((href) => href && (href.startsWith('http') || href.startsWith('//')));
-        if (stylesheetLinks.length === 0) {
-            stylesheetLinks.push(`${window.location.origin}/css/app.css`);
-        }
-        const styleTags = stylesheetLinks.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n');
-        const SLICE_TOP_BUFFER_PX = 12;
-        const pageBlocks = ranges.map((range, index) => {
-            const SLICE_SAFETY_PX = 8;
-            const startAdjusted = index > 0 ? Math.max(0, range.start - SLICE_TOP_BUFFER_PX) : range.start;
-            const sliceHeightPx = range.end - startAdjusted;
-            const sliceHeightCapped = Math.min(sliceHeightPx, Math.max(1, contentArea - SLICE_SAFETY_PX));
-            return `
-            <div class="document-viewer__page document-viewer__page--sheet document-viewer__page--print" style="display:flex;flex-direction:column;position:relative;height:${PAGE_HEIGHT_MM}mm;box-sizing:border-box;padding-left:0.5in;overflow:hidden;">
-                <div class="page-header-fixed" style="flex:0 0 ${HEADER_HEIGHT_PX}px;max-height:${HEADER_HEIGHT_PX}px;overflow:hidden;">${headerHTML}</div>
-                <div class="page-content-area" style="flex:1 1 0;min-height:0;overflow:hidden;position:relative;">
-                    <div class="document-viewer__sheet-body" style="height:${sliceHeightCapped}px;max-height:100%;overflow:hidden;position:relative;">
-                        <div class="document-viewer__page-slice" style="transform:translateY(-${startAdjusted}px);position:relative;width:100%;">
-                            <div class="document-viewer__content document-viewer__content--compact">${contentHTML}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-footer-fixed" style="flex:0 0 ${FOOTER_HEIGHT_PX}px;max-height:${FOOTER_HEIGHT_PX}px;overflow:hidden;">${footerHTML}</div>
-            </div>`;
-        }).join('');
-        const printDoc = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<base href="${window.location.origin}/">
-<title>RDRRMC Duty Report</title>
-${styleTags}
-<style>
-@page{size:210mm 297mm;margin:0;}
-*,*::before,*::after{box-sizing:border-box;}
-html,body{margin:0!important;padding:0!important;background:#fff!important;font-family:Arial,sans-serif!important;width:210mm!important;}
-body.document-print-source{max-width:210mm!important;margin:0 auto!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
-.document-viewer__document{width:210mm!important;max-width:210mm!important;margin:0 auto!important;padding:0!important;background:white!important;}
-.document-viewer__page--sheet{
-    position:relative!important;
-    height:297mm!important;
-    min-height:297mm!important;
-    max-height:297mm!important;
-    width:210mm!important;
-    margin:0!important;
-    padding-left:0.5in!important;
-    box-sizing:border-box!important;
-    overflow:hidden!important;
-    page-break-after:always!important;
-    page-break-inside:avoid!important;
-    background:white;
-}
-.document-viewer__page--sheet:last-child{page-break-after:auto!important;}
-.document-viewer__page--print.document-viewer__page--sheet{display:flex!important;flex-direction:column!important;}
-.document-viewer__page--print .page-header-fixed{
-    position:relative!important;top:auto!important;left:auto!important;right:auto!important;
-    flex:0 0 165px!important;max-height:165px!important;overflow:hidden!important;width:100%!important;z-index:10!important;
-}
-.document-viewer__page--print .page-content-area{
-    flex:1 1 0!important;min-height:0!important;
-    height:calc(297mm - 165px - 100px)!important;
-    max-height:calc(297mm - 165px - 100px)!important;
-    overflow:hidden!important;
-}
-.document-viewer__page--print .page-footer-fixed{
-    position:relative!important;bottom:auto!important;left:auto!important;right:auto!important;
-    flex:0 0 100px!important;max-height:100px!important;overflow:hidden!important;width:100%!important;z-index:10!important;
-}
-.page-header-fixed{
-    position:absolute!important;
-    top:0!important;
-    left:0!important;
-    right:0!important;
-    width:100%!important;
-    z-index:10!important;
-}
-.page-header-fixed .header-document{
-    padding:0.3in 0.6in 0.28in!important;
-}
-.page-header-fixed .header-document__line{
-    height:3px!important;background:#2563eb!important;margin:0.35rem auto 0.25rem!important;max-width:410px!important;
-    -webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;
-}
-.page-header-fixed .header-document__republic,.page-header-fixed .header-document__department{font-size:9pt!important;}
-.page-header-fixed .header-document__office{font-size:18pt!important;}
-.page-header-fixed .header-document__region{font-size:14pt!important;}
-.page-header-fixed .header-document__address{font-size:9pt!important;}
-.page-content-area{
-    position:relative!important;
-    z-index:1!important;
-    box-sizing:border-box!important;
-}
-.document-viewer__content--compact{padding:0.4in 0.5in!important;font-size:10pt!important;line-height:1.35!important;}
-body.document-print-source .document-viewer__content--compact{padding-top:0.28in!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__title{font-size:11pt!important;margin-top:-0.3rem!important;margin-bottom:1rem!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__metadata{margin:0.6rem 0!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__field{margin-bottom:0.55rem!important;font-size:10.5pt!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__label{width:4.5rem!important;min-width:4.5rem!important;font-size:10.5pt!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__value,
-body.document-print-source .document-viewer__content--compact .document-viewer__name,
-body.document-print-source .document-viewer__content--compact .document-viewer__position,
-body.document-print-source .document-viewer__content--compact .document-viewer__subject{font-size:11pt!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__divider{margin:0.6rem 0!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__section{margin:0.5rem 0!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__section-title{font-size:9pt!important;margin-bottom:0.4rem!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__subsection{margin:0.5rem 0!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__subsection-title{font-size:9pt!important;margin-bottom:0.35rem!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__status-section,
-body.document-print-source .document-viewer__content--compact .document-viewer__status-item{margin:0.35rem 0!important;font-size:9pt!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__admin-note,
-body.document-print-source .document-viewer__content--compact .document-viewer__admin-text,
-body.document-print-source .document-viewer__content--compact .document-viewer__admin-list,
-body.document-print-source .document-viewer__content--compact .document-viewer__endorsed-list{font-size:9pt!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__legend{font-size:7.5pt!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__table{font-size:8pt!important;margin:0.25rem 0 0.65rem 0!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__table thead th,
-body.document-print-source .document-viewer__content--compact .document-viewer__table tbody td{padding:0.2rem!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__signatures{margin:1rem 0!important;gap:1rem 1.25rem!important;}
-body.document-print-source .document-viewer__content--compact .document-viewer__signature-label{margin-bottom:4rem!important;}
-.document-viewer__sheet-body{overflow:hidden!important;position:relative!important;}
-.document-viewer__page-slice{position:relative!important;width:100%!important;}
-.page-footer-fixed{
-    position:absolute!important;
-    bottom:0!important;
-    left:0!important;
-    right:0!important;
-    width:100%!important;
-    z-index:10!important;
-}
-.page-footer-fixed .footer-document{
-    break-inside:avoid!important;
-    page-break-inside:avoid!important;
-    padding:0.2in 0.6in 0.2in!important;
-    margin:0!important;
-}
-.document-viewer__page--print .page-footer-fixed .footer-document{padding:0.2in 0.6in 0.2in!important;}
-.document-viewer__page--sheet .footer-document__line{height:2px!important;margin:0 0 0.25rem!important;background:#2563eb!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
-.document-viewer__page--sheet .footer-document__slogan{margin:0 0 0.12rem!important;font-size:9pt!important;font-weight:bold!important;line-height:1.2!important;}
-.document-viewer__page--sheet .footer-document__info{font-size:6.5pt!important;margin:0!important;line-height:1.25!important;}
-.document-viewer__page--sheet .footer-document__info p{margin:0.06rem 0!important;}
-.document-viewer__page--sheet .document-viewer__signature-item{page-break-inside:avoid!important;}
-.document-viewer__page--sheet .document-viewer__signature-label{font-size:9pt!important;visibility:visible!important;display:block!important;min-height:1em!important;}
-.document-viewer__page--sheet .document-viewer__signature-name{font-size:11pt!important;font-weight:bold!important;line-height:1!important;margin-bottom:0.15rem!important;}
-.document-viewer__page--sheet .document-viewer__signature-position{font-size:9pt!important;line-height:1!important;margin-top:0!important;margin-bottom:0!important;}
-.document-viewer__page--sheet .document-viewer__table tbody td,.document-viewer__page--sheet .document-viewer__table thead th{line-height:1!important;}
-.document-viewer__page--sheet .document-viewer__table .document-viewer__task-list,.document-viewer__page--sheet .document-viewer__table .document-viewer__report-text{line-height:1!important;}
-.document-viewer__page--sheet .document-viewer__table .document-viewer__task-list li{margin-bottom:0.1rem!important;line-height:1!important;}
-.document-viewer__page--sheet .document-viewer__table .document-viewer__report-text div{margin-bottom:0.1rem!important;}
-@media print{
-html,body{margin:0!important;padding:0!important;}
-.document-viewer__document{width:210mm!important;margin:0 auto!important;}
-}
-</style></head><body class="document-print-source"><div class="document-viewer__document">${pageBlocks}</div></body></html>`;
-        const iframe = document.createElement('iframe');
-        iframe.setAttribute('title', 'Print');
-        iframe.style.cssText = 'position:absolute;left:-9999px;width:210mm;height:4000px;border:none;visibility:hidden;';
-        document.body.appendChild(iframe);
-        const iframeWin = iframe.contentWindow;
-        iframeWin.document.open();
-        iframeWin.document.write(printDoc);
-        iframeWin.document.close();
-        const doPrint = () => {
-            try {
-                iframeWin.print();
-            } finally {
-                document.body.removeChild(iframe);
-            }
+    const handleExportWord = () => {
+        if (!report) return;
+        if (exportInProgressRef.current) return;
+        exportInProgressRef.current = true;
+        setExportError(null);
+        setExportLoading(true);
+        const reportPayload = {
+            ...report,
+            alertStatus: report.alertStatus || report.status || 'WHITE ALERT'
         };
-        if (iframeWin.document.readyState === 'complete') {
-            setTimeout(doPrint, 600);
-        } else {
-            iframeWin.onload = () => setTimeout(doPrint, 600);
-        }
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/api/adr/export-docx';
+        form.target = '_self';
+        form.style.display = 'none';
+        form.setAttribute('accept-charset', 'UTF-8');
+        const input = document.createElement('input');
+        input.name = 'report';
+        input.type = 'hidden';
+        input.value = JSON.stringify(reportPayload);
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+        form.remove();
+        setExportLoading(false);
+        exportInProgressRef.current = false;
     };
 
     const dash = (val) => (val && String(val).trim() !== '') ? val : '-';
@@ -545,7 +386,6 @@ html,body{margin:0!important;padding:0!important;}
                             </table>
                         </div>
                     )}
-
                     {report.otherAdminRows && report.otherAdminRows.length > 0 && (
                         <div className="document-viewer__subsection">
                             <h4 className="document-viewer__subsection-title" data-break-point>C. Other Administrative Matters:</h4>
@@ -613,13 +453,14 @@ html,body{margin:0!important;padding:0!important;}
                 <div className="document-modal__header">
                     <h2>Document Preview</h2>
                     <div className="document-modal__actions">
-                        <button onClick={handlePrint} className="document-modal__print-btn">
+                        <button onClick={handleExportWord} className="document-modal__print-btn" disabled={exportLoading || !report} title="Export as Word document">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M6 14h12v8H6z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
-                            Print / PDF
+                            {exportLoading ? 'Exporting…' : 'Export as Word'}
                         </button>
+                        {exportError && <span className="document-modal__export-error" role="alert">{exportError}</span>}
                         <button onClick={onClose} className="document-modal__close-btn">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

@@ -7,9 +7,11 @@
         "watch-poll": "npx mix watch -- --watch-options-poll=1000",
         "hot": "npx mix watch --hot",
         "prod": "npm run production",
-        "production": "npx mix --production"
+        "production": "npx mix --production",
+        "open-edge": "start msedge http://127.0.0.1:8000"
     },
     "dependencies": {
+        "docx-preview": "^0.3.7",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-router-dom": "^6.8.0"
