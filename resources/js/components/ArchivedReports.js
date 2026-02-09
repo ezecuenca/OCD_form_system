@@ -8,6 +8,7 @@ function ArchivedReports() {
     const navigate = useNavigate();
     const { reports, deleteReport, restoreReport } = useFormContext();
     const [selectedReports, setSelectedReports] = useState([]);
+    const [selectedSwapRequests, setSelectedSwapRequests] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
     const [confirmMessage, setConfirmMessage] = useState('');
@@ -48,6 +49,7 @@ function ArchivedReports() {
 
     useEffect(() => {
         setArchivedSwapRequests(getSwapRequests().filter(r => r.status === 'archived'));
+        setSelectedSwapRequests([]);
     }, [activeTab]);
 
     const handleViewDocument = (id) => {
@@ -69,6 +71,22 @@ function ArchivedReports() {
         setShowConfirmModal(true);
     };
 
+    const handleRestoreSwapRequests = () => {
+        if (selectedSwapRequests.length === 0) {
+            alert('Please select swap requests to restore');
+            return;
+        }
+
+        setConfirmMessage(`Are you sure you want to restore (${selectedSwapRequests.length}) swap request${selectedSwapRequests.length === 1 ? '' : 's'}?`);
+        setConfirmAction(() => () => {
+            selectedSwapRequests.forEach(id => restoreSwapRequest(id));
+            setArchivedSwapRequests(getSwapRequests().filter(r => r.status === 'archived'));
+            setSelectedSwapRequests([]);
+            setShowConfirmModal(false);
+        });
+        setShowConfirmModal(true);
+    };
+
     const handleRestoreSingle = (id) => {
         setConfirmMessage('Are you sure you want to restore (1) document?');
         setConfirmAction(() => () => {
@@ -85,6 +103,15 @@ function ArchivedReports() {
             } else {
                 return [...prev, id];
             }
+        });
+    };
+
+    const handleSelectSwapRequest = (id) => {
+        setSelectedSwapRequests(prev => {
+            if (prev.includes(id)) {
+                return prev.filter(requestId => requestId !== id);
+            }
+            return [...prev, id];
         });
     };
 
@@ -144,6 +171,7 @@ function ArchivedReports() {
             if (idToRestore) {
                 restoreSwapRequest(idToRestore);
                 setArchivedSwapRequests(getSwapRequests().filter(r => r.status === 'archived'));
+                setSelectedSwapRequests(prev => prev.filter(requestId => requestId !== idToRestore));
                 pendingRestoreSwapIdRef.current = null;
             }
             setShowConfirmModal(false);
@@ -201,6 +229,21 @@ function ArchivedReports() {
                 <div className="archived-reports__actions">
                     {activeTab === 'adr' && (
                     <button onClick={handleRestore} disabled={selectedReports.length < 2}>
+                        <svg width="15" height="15" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clipPath="url(#clip0_8_219)">
+                                <path fillRule="evenodd" clipRule="evenodd" d="M14 9C14 7.9 13.1 7 12 7C10.9 7 10 7.9 10 9C10 10.1 10.9 11 12 11C13.1 11 14 10.1 14 9ZM12 0C7.03 0 3 4.03 3 9H0L4 13L8 9H5C5 5.13 8.13 2 12 2C15.87 2 19 5.13 19 9C19 12.87 15.87 16 12 16C10.49 16 9.09 15.51 7.94 14.7L6.52 16.14C8.04 17.3 9.94 18 12 18C16.97 18 21 13.97 21 9C21 4.03 16.97 0 12 0Z" fill="currentColor"/>
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_8_219">
+                                    <rect width="21" height="18" fill="white"/>
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        Restore
+                    </button>
+                    )}
+                    {activeTab === 'swapped' && (
+                    <button onClick={handleRestoreSwapRequests} disabled={selectedSwapRequests.length < 2}>
                         <svg width="15" height="15" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clipPath="url(#clip0_8_219)">
                                 <path fillRule="evenodd" clipRule="evenodd" d="M14 9C14 7.9 13.1 7 12 7C10.9 7 10 7.9 10 9C10 10.1 10.9 11 12 11C13.1 11 14 10.1 14 9ZM12 0C7.03 0 3 4.03 3 9H0L4 13L8 9H5C5 5.13 8.13 2 12 2C15.87 2 19 5.13 19 9C19 12.87 15.87 16 12 16C10.49 16 9.09 15.51 7.94 14.7L6.52 16.14C8.04 17.3 9.94 18 12 18C16.97 18 21 13.97 21 9C21 4.03 16.97 0 12 0Z" fill="currentColor"/>
@@ -337,6 +380,19 @@ function ArchivedReports() {
                 <table>
                     <thead>
                         <tr>
+                            <th>
+                                <input
+                                    type="checkbox"
+                                    checked={selectedSwapRequests.length === archivedSwapRequests.length && archivedSwapRequests.length > 0}
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setSelectedSwapRequests(archivedSwapRequests.map(r => r.id));
+                                        } else {
+                                            setSelectedSwapRequests([]);
+                                        }
+                                    }}
+                                />
+                            </th>
                             <th>Actions</th>
                             <th>Task / Request</th>
                             <th>Status</th>
@@ -346,13 +402,20 @@ function ArchivedReports() {
                     <tbody>
                         {archivedSwapRequests.length === 0 ? (
                             <tr>
-                                <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                                <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
                                     No archived swap requests yet.
                                 </td>
                             </tr>
                         ) : (
                             archivedSwapRequests.map(req => (
                                 <tr key={req.id}>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedSwapRequests.includes(req.id)}
+                                            onChange={() => handleSelectSwapRequest(req.id)}
+                                        />
+                                    </td>
                                     <td className="archived-reports__table-actions">
                                         <div className="archived-reports__action-buttons">
                                             <button 
