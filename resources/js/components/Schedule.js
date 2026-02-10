@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import TasksModal from './TasksModal';
-import { saveSwapRequest } from '../utils/swapRequests';
+import { saveSwapRequest, getSwapRequests } from '../utils/swapRequests';
 
 function Schedule() {
 
@@ -14,12 +14,30 @@ function Schedule() {
         localStorage.setItem('scheduledTasks', JSON.stringify(tasks));
     }, [tasks]);
 
+    // Load and count pending swap requests
+    useEffect(() => {
+        const updatePendingCount = () => {
+            const requests = getSwapRequests();
+            const pendingCount = requests.filter(r => r.status === 'pending').length;
+            setPendingSwapCount(pendingCount);
+        };
+        
+        updatePendingCount();
+        
+        // Listen for storage changes to update count dynamically
+        const handleStorage = () => updatePendingCount();
+        window.addEventListener('storage', handleStorage);
+        
+        return () => window.removeEventListener('storage', handleStorage);
+    }, []);
+
     const [currentDate, setCurrentDate] = useState(new Date());
     const [showTaskForm, setShowTaskForm] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTask, setSelectedTask] = useState(null);
     const [modalMode, setModalMode] = useState('add'); // 'add' | 'view' | 'edit' | 'swap'
     const [taskToSwap, setTaskToSwap] = useState(null);
+    const [pendingSwapCount, setPendingSwapCount] = useState(0);
 
     const daysInMonth = (date) => {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -233,7 +251,12 @@ function Schedule() {
                         >
                         Add Task (Today)
                         </button>
-                        <Link to="/swap-form" className="schedule__btn schedule__btn--tertiary">Swapping Form Requests</Link>
+                        <div className="schedule__swap-btn-container">
+                            <Link to="/swap-form" className="schedule__btn schedule__btn--tertiary">Swapping Form Requests</Link>
+                            {pendingSwapCount > 0 && (
+                                <span className="schedule__notification-badge">{pendingSwapCount}</span>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
