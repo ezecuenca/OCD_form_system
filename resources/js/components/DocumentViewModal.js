@@ -50,12 +50,18 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
     const [reportFromId, setReportFromId] = useState(null);
     const [exportLoading, setExportLoading] = useState(false);
     const [exportError, setExportError] = useState(null);
+    const [viewMode, setViewMode] = useState('pdf');
+    const [pdfViewUrl, setPdfViewUrl] = useState(null);
+    const [pdfLoading, setPdfLoading] = useState(false);
+    const [pdfError, setPdfError] = useState(null);
     const measureRef = useRef(null);
     const measureWrapperRef = useRef(null);
     const headerRef = useRef(null);
     const footerRef = useRef(null);
     const pageHeightRef = useRef(null);
     const exportInProgressRef = useRef(false);
+    const pdfViewUrlRef = useRef(null);
+    const pdfCacheRef = useRef(Object.create(null)); // reportId -> blob URL for instant reopen
     const [totalPages, setTotalPages] = useState(1);
     const [pageHeightPx, setPageHeightPx] = useState(null);
     const [contentAreaHeightPx, setContentAreaHeightPx] = useState(null);
@@ -73,10 +79,74 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
     }, [isOpen, reportId, reportProp, getReport]);
 
     useEffect(() => {
+        pdfViewUrlRef.current = pdfViewUrl;
+    }, [pdfViewUrl]);
+
+    useEffect(() => {
         if (!isOpen) {
             exportInProgressRef.current = false;
+            if (pdfViewUrlRef.current) {
+                URL.revokeObjectURL(pdfViewUrlRef.current);
+                pdfViewUrlRef.current = null;
+            }
+            setPdfViewUrl(null);
+            setPdfError(null);
+            setPdfLoading(false);
+            const cache = pdfCacheRef.current;
+            Object.keys(cache).forEach((id) => {
+                try { URL.revokeObjectURL(cache[id]); } catch (_) {}
+            });
+            pdfCacheRef.current = Object.create(null);
         }
     }, [isOpen]);
+
+    // When modal opens with a report, show cached PDF immediately if available, then fetch for latest
+    useEffect(() => {
+        if (!isOpen || !report) return;
+        const id = report?.id ?? reportId ?? 'single';
+        setViewMode('pdf');
+        setPdfError(null);
+        const reportPayload = {
+            ...report,
+            alertStatus: report.alertStatus || report.status || 'WHITE ALERT'
+        };
+        const cached = pdfCacheRef.current[id];
+        if (cached) {
+            setPdfViewUrl(cached);
+            setPdfLoading(false);
+        } else {
+            setPdfLoading(true);
+            setPdfViewUrl((prev) => {
+                if (prev) URL.revokeObjectURL(prev);
+                return null;
+            });
+        }
+        fetch('/api/adr/export-pdf', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/pdf', 'X-Requested-With': 'XMLHttpRequest' },
+            body: JSON.stringify({ report: reportPayload })
+        })
+            .then((res) => {
+                if (!res.ok) return res.text().then((t) => { throw new Error(res.status === 503 ? 'PDF preview requires LibreOffice.' : t || 'Failed to load PDF'); });
+                return res.blob();
+            })
+            .then((blob) => {
+                if (blob.type && blob.type.includes('pdf')) {
+                    const url = URL.createObjectURL(blob);
+                    const old = pdfCacheRef.current[id];
+                    if (old) try { URL.revokeObjectURL(old); } catch (_) {}
+                    pdfCacheRef.current[id] = url;
+                    setPdfViewUrl(url);
+                    setPdfError(null);
+                } else {
+                    setPdfError('Unexpected response.');
+                }
+            })
+            .catch((err) => {
+                setPdfError(err.message || 'Could not load PDF preview.');
+            })
+            .finally(() => setPdfLoading(false));
+    }, [isOpen, report?.id, reportId]);
 
     const updatePages = () => {
         if (!measureRef.current) return;
@@ -151,6 +221,50 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
         document.body.appendChild(form);
         form.submit();
         form.remove();
+        setExportLoading(false);
+        exportInProgressRef.current = false;
+    };
+
+    const handleExportPdf = async () => {
+        if (!report) return;
+        if (exportInProgressRef.current) return;
+        exportInProgressRef.current = true;
+        setExportError(null);
+        setExportLoading(true);
+        const reportPayload = {
+            ...report,
+            alertStatus: report.alertStatus || report.status || 'WHITE ALERT'
+        };
+        try {
+            const res = await fetch('/api/adr/export-pdf', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/pdf', 'X-Requested-With': 'XMLHttpRequest' },
+                body: JSON.stringify({ report: reportPayload })
+            });
+            const contentType = res.headers.get('Content-Type') || '';
+            if (!res.ok) {
+                const text = await res.text();
+                let msg = res.status === 503 ? 'PDF export requires LibreOffice. Install LibreOffice and set LIBREOFFICE_PATH if needed.' : (res.status === 422 ? 'No report data.' : 'Export failed.');
+                try {
+                    const j = JSON.parse(text);
+                    if (j && j.error) msg = j.error;
+                } catch (_) {}
+                setExportError(msg);
+                setExportLoading(false);
+                exportInProgressRef.current = false;
+                return;
+            }
+            if (contentType.includes('application/pdf')) {
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                window.location.assign(url);
+                URL.revokeObjectURL(url);
+            } else {
+                setExportError('Unexpected response from server.');
+            }
+        } catch (e) {
+            setExportError(e.message || 'Export failed.');
+        }
         setExportLoading(false);
         exportInProgressRef.current = false;
     };
@@ -460,6 +574,14 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
                             </svg>
                             {exportLoading ? 'Exporting…' : 'Export as Word'}
                         </button>
+                        <button onClick={handleExportPdf} className="document-modal__print-btn" disabled={exportLoading || !report} title="Open PDF in browser for printing">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M6 18V9a1 1 0 011-1h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M14 2v6h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            {exportLoading ? 'Exporting…' : 'Print / Export PDF'}
+                        </button>
                         {exportError && <span className="document-modal__export-error" role="alert">{exportError}</span>}
                         <button onClick={onClose} className="document-modal__close-btn">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -469,6 +591,28 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
                     </div>
                 </div>
                 <div className="document-modal__content">
+                    {viewMode === 'pdf' && pdfViewUrl && (
+                        <iframe
+                            src={`${pdfViewUrl}#page=1`}
+                            title="Document PDF"
+                            className="document-modal__pdf-iframe"
+                            style={{ width: '100%', height: '100%', minHeight: '70vh', border: 'none' }}
+                        />
+                    )}
+                    {viewMode === 'pdf' && pdfLoading && !pdfViewUrl && (
+                        <div className="document-modal__pdf-loading" aria-live="polite">
+                            Loading PDF…
+                        </div>
+                    )}
+                    {viewMode === 'pdf' && pdfError && !pdfLoading && (
+                        <div className="document-modal__pdf-error">
+                            <p>{pdfError}</p>
+                            <button type="button" className="document-modal__pdf-show-layout" onClick={() => setViewMode('layout')}>
+                                Show layout instead
+                            </button>
+                        </div>
+                    )}
+                    {viewMode === 'layout' && (
                     <div className="document-viewer__document">
                         <div ref={measureWrapperRef} className="document-viewer__measure document-viewer__measure--layout document-viewer__page--sheet" aria-hidden="true">
                             <HeaderDocument ref={headerRef} compact />
@@ -525,6 +669,7 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
                             );
                         })}
                     </div>
+                    )}
                 </div>
             </div>
         </div>

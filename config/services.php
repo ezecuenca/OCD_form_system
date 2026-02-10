@@ -30,4 +30,22 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | LibreOffice (for DOCX to PDF export)
+    |--------------------------------------------------------------------------
+    | Full path to soffice.exe (Windows) or libreoffice/soffice (Linux) for
+    | converting exported DOCX to PDF. Optional; if not set, the app will
+    | look in default install locations and PATH.
+    |
+    | For faster conversion, run a LibreOffice listener and use unoconv:
+    | 1. Start listener: soffice --headless --accept="socket,host=127.0.0.1,port=2083;urp;StarOffice.ServiceManager"
+    | 2. Set libreoffice_use_listener=true and optionally unoconv_path (or have unoconv in PATH).
+    */
+    'libreoffice_path' => env('LIBREOFFICE_PATH'),
+    'libreoffice_use_listener' => env('LIBREOFFICE_USE_LISTENER', false),
+    'libreoffice_listener_host' => env('LIBREOFFICE_LISTENER_HOST', '127.0.0.1'),
+    'libreoffice_listener_port' => env('LIBREOFFICE_LISTENER_PORT', '2083'),
+    'unoconv_path' => env('UNOCONV_PATH'),
+
 ];

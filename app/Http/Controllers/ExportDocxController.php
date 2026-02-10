@@ -40,6 +40,7 @@ class ExportDocxController extends Controller
         }
 
         $templatePath = resource_path('templates/ADR_template.docx');
+        clearstatcache(true, $templatePath);
         if (!is_readable($templatePath)) {
             Log::error('ADR template not found or not readable: ' . $templatePath);
             return response()->json(['error' => 'Export template not found.'], 500);
@@ -108,15 +109,215 @@ class ExportDocxController extends Controller
     }
 
     /**
+     * POST: Generate report as PDF (DOCX from template, then convert to PDF via LibreOffice).
+     * Returns PDF inline so the browser can open it and the user can print.
+     * If LibreOffice is not available, returns JSON error or 503.
+     */
+    public function exportPdf(Request $request)
+    {
+        $report = $request->input('report');
+        if (is_string($report)) {
+            $report = json_decode($report, true);
+        }
+        if (!is_array($report) || empty($report)) {
+            $report = $request->all();
+        }
+        if (empty($report)) {
+            return response()->json(['error' => 'No report data provided.'], 422);
+        }
+        try {
+            $docxContent = $this->generateDocxContent($report);
+            $pdfContent = $this->convertDocxToPdf($docxContent);
+            if ($pdfContent === null) {
+                Log::warning('PDF conversion failed or LibreOffice not available');
+                return response()->json([
+                    'error' => 'PDF export requires LibreOffice. Install LibreOffice and ensure soffice is in PATH, or set LIBREOFFICE_PATH in .env.',
+                ], 503);
+            }
+            $baseName = pathinfo($this->filename($report), PATHINFO_FILENAME);
+            $pdfFilename = $baseName . '.pdf';
+            $safeFilename = preg_replace('/[^\w\s\-\.]/', '_', $pdfFilename);
+            $isFormPost = !$request->wantsJson() && $request->header('X-Requested-With') !== 'XMLHttpRequest';
+            $disposition = $isFormPost ? 'inline' : 'attachment';
+            return response($pdfContent, 200, [
+                'Content-Type'               => 'application/pdf',
+                'Content-Disposition'        => $disposition . '; filename="' . $safeFilename . '"',
+                'Content-Length'             => (string) strlen($pdfContent),
+                'Cache-Control'              => 'no-cache, no-store, must-revalidate',
+                'X-Content-Type-Options'     => 'nosniff',
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('PDF export failed: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            return response()->json(['error' => 'Export failed: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Convert DOCX binary content to PDF.
+     * If a LibreOffice listener is configured and unoconv is available, uses that (faster).
+     * Otherwise uses soffice --headless --convert-to (slower, starts LibreOffice each time).
+     * Returns PDF content or null if conversion fails.
+     */
+    private function convertDocxToPdf(string $docxContent): ?string
+    {
+        $tmpDir = sys_get_temp_dir() . '/adr_pdf_' . Str::random(8);
+        if (!@mkdir($tmpDir, 0755, true)) {
+            Log::warning('Could not create temp dir for PDF conversion: ' . $tmpDir);
+            return null;
+        }
+        $docxPath = $tmpDir . '/document.docx';
+        if (file_put_contents($docxPath, $docxContent) === false) {
+            $this->cleanupTempDir($tmpDir);
+            return null;
+        }
+
+        $pdfContent = null;
+        if (config('services.libreoffice_use_listener')) {
+            $pdfContent = $this->convertDocxToPdfViaUnoconv($docxPath, $tmpDir);
+        }
+        if ($pdfContent === null) {
+            $pdfContent = $this->convertDocxToPdfViaSoffice($docxPath, $tmpDir);
+        }
+
+        $this->cleanupTempDir($tmpDir);
+        return $pdfContent ?: null;
+    }
+
+    /**
+     * Convert DOCX to PDF using unoconv and a running LibreOffice listener (faster).
+     */
+    private function convertDocxToPdfViaUnoconv(string $docxPath, string $tmpDir): ?string
+    {
+        $unoconv = $this->getUnoconvPath();
+        if ($unoconv === null) {
+            return null;
+        }
+        $host = config('services.libreoffice_listener_host', '127.0.0.1');
+        $port = config('services.libreoffice_listener_port', '2083');
+        $connection = 'socket,host=' . $host . ',port=' . $port . ';urp;StarOffice.ComponentContext';
+        $pdfPath = $tmpDir . '/document.pdf';
+        $cmd = $unoconv . ' --connection ' . escapeshellarg($connection) . ' -f pdf -o ' . escapeshellarg($pdfPath) . ' ' . escapeshellarg($docxPath) . ' 2>&1';
+        exec($cmd, $output, $returnCode);
+        if ($returnCode === 0 && is_readable($pdfPath)) {
+            return file_get_contents($pdfPath);
+        }
+        if (config('app.debug')) {
+            Log::debug('unoconv conversion failed', ['returnCode' => $returnCode, 'output' => $output]);
+        }
+        return null;
+    }
+
+    /**
+     * Convert DOCX to PDF by starting soffice --headless (slower, one process per conversion).
+     */
+    private function convertDocxToPdfViaSoffice(string $docxPath, string $tmpDir): ?string
+    {
+        $outDir = $tmpDir . '/out';
+        if (!@mkdir($outDir, 0755, true)) {
+            return null;
+        }
+        $soffice = $this->getLibreOfficePath();
+        if ($soffice === null) {
+            return null;
+        }
+        $outDirQuoted = escapeshellarg($outDir);
+        $docxPathQuoted = escapeshellarg($docxPath);
+        $cmd = $soffice . ' --headless --convert-to "pdf:writer_pdf_Export" --outdir ' . $outDirQuoted . ' ' . $docxPathQuoted . ' 2>&1';
+        exec($cmd, $output, $returnCode);
+        $pdfPath = $outDir . '/document.pdf';
+        if ($returnCode === 0 && is_readable($pdfPath)) {
+            return file_get_contents($pdfPath);
+        }
+        return null;
+    }
+
+    /**
+     * Path to unoconv executable, or null if not available.
+     */
+    private function getUnoconvPath(): ?string
+    {
+        $path = config('services.unoconv_path') ?? env('UNOCONV_PATH');
+        if ($path && file_exists($path)) {
+            return escapeshellarg($path);
+        }
+        $which = PHP_OS_FAMILY === 'Windows' ? 'where unoconv 2>nul' : 'which unoconv 2>/dev/null';
+        $line = @trim(shell_exec($which) ?: '');
+        if ($line !== '') {
+            $first = preg_split('/\s+/', $line, 2)[0];
+            if ($first && file_exists($first)) {
+                return escapeshellarg($first);
+            }
+        }
+        return null;
+    }
+
+    private function cleanupTempDir(string $dir): void
+    {
+        $files = @scandir($dir);
+        if ($files) {
+            foreach ($files as $f) {
+                if ($f === '.' || $f === '..') {
+                    continue;
+                }
+                $path = $dir . '/' . $f;
+                if (is_dir($path)) {
+                    $this->cleanupTempDir($path);
+                } else {
+                    @unlink($path);
+                }
+            }
+        }
+        @rmdir($dir);
+    }
+
+    /**
+     * Path to LibreOffice soffice executable, or null if not available.
+     */
+    private function getLibreOfficePath(): ?string
+    {
+        $path = config('services.libreoffice_path') ?? env('LIBREOFFICE_PATH');
+        if ($path && file_exists($path)) {
+            return escapeshellarg($path);
+        }
+        if (PHP_OS_FAMILY === 'Windows') {
+            $candidates = [
+                getenv('ProgramFiles') . '\\LibreOffice\\program\\soffice.exe',
+                getenv('ProgramFiles(x86)') . '\\LibreOffice\\program\\soffice.exe',
+            ];
+            foreach ($candidates as $c) {
+                if ($c && file_exists($c)) {
+                    return escapeshellarg($c);
+                }
+            }
+        }
+        $which = PHP_OS_FAMILY === 'Windows' ? 'where soffice 2>nul' : 'which libreoffice soffice 2>/dev/null';
+        $line = @trim(shell_exec($which) ?: '');
+        if ($line !== '') {
+            $first = preg_split('/\s+/', $line, 2)[0];
+            if ($first && file_exists($first)) {
+                return escapeshellarg($first);
+            }
+        }
+        return null;
+    }
+
+    /**
      * Generate filled DOCX content from report data. Returns binary string.
      */
     private function generateDocxContent(array $report): string
     {
         $templatePath = resource_path('templates/ADR_template.docx');
+        clearstatcache(true, $templatePath);
         if (!is_readable($templatePath)) {
             throw new \RuntimeException('Export template not found.');
         }
         $originalTemplatePath = $templatePath;
+        if (config('app.debug')) {
+            Log::debug('ADR export using template', [
+                'path' => $templatePath,
+                'modified' => @filemtime($templatePath) ? date('Y-m-d H:i:s', filemtime($templatePath)) : null,
+            ]);
+        }
         $templatePath = $this->expandTemplateTableRows($templatePath, $report);
 
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
