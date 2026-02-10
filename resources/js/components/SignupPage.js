@@ -10,13 +10,11 @@ function SignupPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         
-        // Basic validation
         if (password !== confirmPassword) {
             alert('Passwords do not match!');
             return;
         }
         
-        // Add your signup logic here
         console.log('Signup attempt:', { username, email, password });
     };
 

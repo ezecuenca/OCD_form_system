@@ -1572,6 +1572,37 @@ body {
   border-color: #E99745;
   text-decoration: none;
 }
+.schedule__swap-btn-container {
+  position: relative;
+  display: inline-block;
+  margin-left: auto;
+}
+.schedule__notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
 
 .modal-overlay {
   position: fixed;
@@ -3962,7 +3993,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #18004C 0%, #290081 100%);
+  background: linear-gradient(135deg, #18004C 0%, #E99745 100%);
   font-family: "Inter", sans-serif;
   z-index: 9999;
 }

@@ -67001,7 +67001,6 @@ function LoginPage() {
     setPassword = _useState4[1];
   var handleSubmit = function handleSubmit(e) {
     e.preventDefault();
-    // Add your login logic here
     console.log('Login attempt:', {
       username: username,
       password: password
@@ -67120,6 +67119,27 @@ function Schedule() {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     localStorage.setItem('scheduledTasks', JSON.stringify(tasks));
   }, [tasks]);
+
+  // Load and count pending swap requests
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var updatePendingCount = function updatePendingCount() {
+      var requests = (0,_utils_swapRequests__WEBPACK_IMPORTED_MODULE_3__.getSwapRequests)();
+      var pendingCount = requests.filter(function (r) {
+        return r.status === 'pending';
+      }).length;
+      setPendingSwapCount(pendingCount);
+    };
+    updatePendingCount();
+
+    // Listen for storage changes to update count dynamically
+    var handleStorage = function handleStorage() {
+      return updatePendingCount();
+    };
+    window.addEventListener('storage', handleStorage);
+    return function () {
+      return window.removeEventListener('storage', handleStorage);
+    };
+  }, []);
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
     _useState4 = _slicedToArray(_useState3, 2),
     currentDate = _useState4[0],
@@ -67144,6 +67164,10 @@ function Schedule() {
     _useState12 = _slicedToArray(_useState11, 2),
     taskToSwap = _useState12[0],
     setTaskToSwap = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState14 = _slicedToArray(_useState13, 2),
+    pendingSwapCount = _useState14[0],
+    setPendingSwapCount = _useState14[1];
   var daysInMonth = function daysInMonth(date) {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -67344,10 +67368,16 @@ function Schedule() {
               setShowTaskForm(true);
             },
             children: "Add Task (Today)"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.Link, {
-            to: "/swap-form",
-            className: "schedule__btn schedule__btn--tertiary",
-            children: "Swapping Form Requests"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            className: "schedule__swap-btn-container",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.Link, {
+              to: "/swap-form",
+              className: "schedule__btn schedule__btn--tertiary",
+              children: "Swapping Form Requests"
+            }), pendingSwapCount > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+              className: "schedule__notification-badge",
+              children: pendingSwapCount
+            })]
           })]
         })]
       })
@@ -67577,14 +67607,10 @@ function SignupPage() {
     setConfirmPassword = _useState8[1];
   var handleSubmit = function handleSubmit(e) {
     e.preventDefault();
-
-    // Basic validation
     if (password !== confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-
-    // Add your signup logic here
     console.log('Signup attempt:', {
       username: username,
       email: email,
