@@ -1,0 +1,135 @@
+.login-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #18004C 0%, #290081 100%);
+    font-family: 'Inter', sans-serif;
+    z-index: 9999;
+}
+
+.login-container {
+    background: white;
+    border-radius: 12px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+.login-logo {
+    margin-bottom: 1.5rem;
+    
+    img {
+        width: 120px;
+        height: auto;
+    }
+}
+
+.login-title {
+    margin-bottom: 2rem;
+    
+    h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #290081;
+        margin-bottom: 0.3rem;
+        letter-spacing: 0.5px;
+    }
+    
+    h2 {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #666;
+        margin: 0;
+    }
+}
+
+.signup-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #290081;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.login-form {
+    &__group {
+        margin-bottom: 1.5rem;
+        text-align: left;
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.3s ease;
+            
+            &:focus {
+                outline: none;
+                border-color: #290081;
+            }
+            
+            &::placeholder {
+                color: #999;
+            }
+        }
+    }
+    
+    &__button {
+        width: 100%;
+        padding: 0.85rem;
+        background: linear-gradient(135deg, #18004C 0%, #290081 100%);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        margin-top: 0.5rem;
+        
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(41, 0, 129, 0.3);
+        }
+        
+        &:active {
+            transform: translateY(0);
+        }
+    }
+    
+    &__signup {
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+        color: #666;
+        text-align: center;
+        
+        &-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            
+            &:hover {
+                color: #1d4ed8;
+                text-decoration: underline;
+            }
+        }
+    }
+}
