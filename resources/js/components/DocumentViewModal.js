@@ -100,6 +100,22 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
         }
     }, [isOpen]);
 
+    // Lock background scroll when modal is open (html, body, and main content area)
+    useEffect(() => {
+        if (!isOpen) return;
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        const root = document.documentElement;
+        const body = document.body;
+        root.classList.add('document-modal-open');
+        body.classList.add('document-modal-open');
+        body.style.paddingRight = scrollbarWidth > 0 ? `${scrollbarWidth}px` : '';
+        return () => {
+            root.classList.remove('document-modal-open');
+            body.classList.remove('document-modal-open');
+            body.style.paddingRight = '';
+        };
+    }, [isOpen]);
+
     // When modal opens with a report, show cached PDF immediately if available, then fetch for latest
     useEffect(() => {
         if (!isOpen || !report) return;
