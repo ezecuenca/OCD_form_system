@@ -4159,3 +4159,123 @@ body {
   color: #1d4ed8;
   text-decoration: underline;
 }
+
+.settings {
+  padding: 32px 40px;
+  background: linear-gradient(135deg, #f5f7fb 0%, #eef2f7 100%);
+  min-height: 100vh;
+}
+
+.settings__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.settings__title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.settings__content {
+  max-width: 920px;
+}
+
+.settings__section {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  padding: 24px;
+}
+
+.settings__section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+.settings__section-description {
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.settings__section-body {
+  display: grid;
+  gap: 16px;
+}
+
+.settings__card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px 18px;
+  background: #f9fafb;
+}
+
+.settings__card-header {
+  margin-bottom: 10px;
+}
+
+.settings__card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.settings__card-body {
+  display: grid;
+  gap: 12px;
+}
+
+.settings__muted {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.settings__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.settings__button {
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #111827;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.settings__button:hover {
+  border-color: #9ca3af;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
+}
+
+.settings__button--primary {
+  background: #1f6feb;
+  color: #ffffff;
+  border-color: #1f6feb;
+}
+
+.settings__button--primary:hover {
+  box-shadow: 0 8px 18px rgba(31, 111, 235, 0.28);
+}
+
+@media (max-width: 640px) {
+  .settings {
+    padding: 24px 18px;
+  }
+  .settings__title {
+    font-size: 24px;
+  }
+  .settings__section {
+    padding: 18px;
+  }
+}
