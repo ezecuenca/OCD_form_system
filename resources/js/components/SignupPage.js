@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+const departmentOptions = [
+    { value: '', label: 'No available departments' },
+];
+
 function SignupPage() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+    const [department, setDepartment] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -15,7 +20,7 @@ function SignupPage() {
             return;
         }
         
-        console.log('Signup attempt:', { username, email, password });
+        console.log('Signup attempt:', { username, email, department, password });
     };
 
     return (
@@ -33,6 +38,19 @@ function SignupPage() {
                             placeholder="Enter your username"
                             required
                         />
+                    </div>
+                    <div className="login-form__group">
+                        <label htmlFor="department">Department</label>
+                        <select
+                            id="department"
+                            value={department}
+                            onChange={(e) => setDepartment(e.target.value)}
+                            className="login-form__select"
+                        >
+                            {departmentOptions.map((opt) => (
+                                <option key={opt.value || 'blank'} value={opt.value}>{opt.label}</option>
+                            ))}
+                        </select>
                     </div>
                     <div className="login-form__group">
                         <label htmlFor="email">Email</label>

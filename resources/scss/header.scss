@@ -36,24 +36,104 @@ $header-height: 50px;
         }
     }
 
+    &__user-wrap {
+        position: relative;
+        margin-right: 0rem;
+    }
+
     &__user {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
         cursor: pointer;
+    }
 
-        &-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+    &__profile-wrap {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        overflow: hidden;
+        transition: box-shadow 0.2s ease;
+
+        &--default .header__profile-img {
             object-fit: cover;
+            transform: scale(1.9);
         }
+    }
 
-        &-arrow {
-            width: 16px;
-            height: 16px;
-            color: #FFE3C2;
+    &__user:hover &__profile-wrap {
+        box-shadow: 0 0 0 2px #E99745;
+    }
+
+    &__profile-img {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    &__profile-icon {
+        width: 28px;
+        height: 28px;
+        object-fit: contain;
+        filter: brightness(0) invert(1);
+    }
+
+    &__dropdown {
+        position: absolute;
+        top: 100%;
+        right: 5px;
+        margin-top: 0.5rem;
+        min-width: 160px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 0.25rem;
+        z-index: 1000;
+
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            right: 0.35rem;
+            border: 6px solid transparent;
+            border-bottom-color: white;
+            margin-bottom: -1px;
         }
+    }
+
+    &__dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.6rem 1rem;
+        border: none;
+        border-radius: 6px;
+        background: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #290081;
+        text-align: left;
+        cursor: pointer;
+        transition: text-decoration 0.2s;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    &__dropdown-icon {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        /* Match dropdown text color #290081 */
+        filter: brightness(0) saturate(100%) invert(16%) sepia(100%) saturate(5000%) hue-rotate(258deg) brightness(0.55) contrast(101%);
     }
 }
 

@@ -64580,6 +64580,10 @@ function ADRReports() {
     _useState24 = _slicedToArray(_useState23, 2),
     selectedReportId = _useState24[0],
     setSelectedReportId = _useState24[1];
+  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState26 = _slicedToArray(_useState25, 2),
+    searchQuery = _useState26[0],
+    setSearchQuery = _useState26[1];
   var yearDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var monthDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -64732,6 +64736,23 @@ function ADRReports() {
   var activeReports = reports.filter(function (r) {
     return r.status === 'Active';
   });
+  var filteredReports = activeReports.filter(function (report) {
+    var created = new Date(report.createdAt);
+    var reportYear = created.getFullYear().toString();
+    var reportMonthIndex = created.getMonth();
+    var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var reportMonthName = monthNames[reportMonthIndex];
+    if (selectedYear !== 'All Years' && reportYear !== selectedYear) return false;
+    if (selectedMonth !== 'All Months' && reportMonthName !== selectedMonth) return false;
+    if (searchQuery.trim()) {
+      var q = searchQuery.toLowerCase().trim();
+      var docName = (report.documentName || 'Untitled Document').toLowerCase();
+      var dateStr = formatDate(report.createdAt).date.toLowerCase();
+      var timeStr = formatDate(report.createdAt).time.toLowerCase();
+      if (!docName.includes(q) && !dateStr.includes(q) && !timeStr.includes(q)) return false;
+    }
+    return true;
+  });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
     className: "adr-reports",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
@@ -64743,7 +64764,11 @@ function ADRReports() {
           alt: "Search"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
           type: "text",
-          placeholder: "Search..."
+          placeholder: "Search...",
+          value: searchQuery,
+          onChange: function onChange(e) {
+            return setSearchQuery(e.target.value);
+          }
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
         className: "adr-reports__datetime",
@@ -64855,10 +64880,10 @@ function ADRReports() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
                 type: "checkbox",
-                checked: selectedReports.length === activeReports.length && activeReports.length > 0,
+                checked: selectedReports.length === filteredReports.length && filteredReports.length > 0,
                 onChange: function onChange(e) {
                   if (e.target.checked) {
-                    setSelectedReports(activeReports.map(function (r) {
+                    setSelectedReports(filteredReports.map(function (r) {
                       return r.id;
                     }));
                   } else {
@@ -64875,7 +64900,7 @@ function ADRReports() {
             })]
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tbody", {
-          children: activeReports.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tr", {
+          children: filteredReports.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tr", {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
               colSpan: "4",
               style: {
@@ -64883,9 +64908,9 @@ function ADRReports() {
                 padding: '2rem',
                 color: '#666'
               },
-              children: "No reports yet. Click \"Create New\" to add one."
+              children: activeReports.length === 0 ? 'No reports yet. Click "Create New" to add one.' : 'No reports match the current filters.'
             })
-          }) : activeReports.map(function (report) {
+          }) : filteredReports.map(function (report) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
@@ -65054,9 +65079,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SwapForm__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./SwapForm */ "./resources/js/components/SwapForm.js");
 /* harmony import */ var _ArchivedReports__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./ArchivedReports */ "./resources/js/components/ArchivedReports.js");
 /* harmony import */ var _Settings__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Settings */ "./resources/js/components/Settings.js");
-/* harmony import */ var _LoginPage__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./LoginPage */ "./resources/js/components/LoginPage.js");
-/* harmony import */ var _SignupPage__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./SignupPage */ "./resources/js/components/SignupPage.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _Profile__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Profile */ "./resources/js/components/Profile.js");
+/* harmony import */ var _LoginPage__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./LoginPage */ "./resources/js/components/LoginPage.js");
+/* harmony import */ var _SignupPage__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./SignupPage */ "./resources/js/components/SignupPage.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -65071,7 +65097,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// Redirect old /adr-reports/view/:id to list with modal open (modal-only flow)
 
 function ViewRedirect() {
   var _useParams = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useParams)(),
@@ -65087,62 +65112,68 @@ function ViewRedirect() {
   }, [id, navigate]);
   return null;
 }
-function AppContent() {
-  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useLocation)();
-  var isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {
-    children: [!isAuthPage && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_4__["default"], {}), !isAuthPage && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_Header__WEBPACK_IMPORTED_MODULE_5__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("main", {
-      className: isAuthPage ? "" : "main-content",
+function AppLayout() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Sidebar__WEBPACK_IMPORTED_MODULE_4__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Header__WEBPACK_IMPORTED_MODULE_5__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("main", {
+      className: "main-content",
       id: "app-content",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Routes, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Routes, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Navigate, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Navigate, {
             to: "/adr-reports",
             replace: true
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/dashboard",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Navigate, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Navigate, {
             to: "/adr-reports",
             replace: true
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/adr-reports",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_ADRReports__WEBPACK_IMPORTED_MODULE_6__["default"], {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_ADRReports__WEBPACK_IMPORTED_MODULE_6__["default"], {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/adr-reports/create",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_ADRForm__WEBPACK_IMPORTED_MODULE_7__["default"], {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_ADRForm__WEBPACK_IMPORTED_MODULE_7__["default"], {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/adr-reports/view/:id",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(ViewRedirect, {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(ViewRedirect, {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/schedule",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_Schedule__WEBPACK_IMPORTED_MODULE_8__["default"], {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Schedule__WEBPACK_IMPORTED_MODULE_8__["default"], {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/swap-form",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_SwapForm__WEBPACK_IMPORTED_MODULE_9__["default"], {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_SwapForm__WEBPACK_IMPORTED_MODULE_9__["default"], {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/archived-reports",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_ArchivedReports__WEBPACK_IMPORTED_MODULE_10__["default"], {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_ArchivedReports__WEBPACK_IMPORTED_MODULE_10__["default"], {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          path: "/profile",
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Profile__WEBPACK_IMPORTED_MODULE_12__["default"], {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
           path: "/settings",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_Settings__WEBPACK_IMPORTED_MODULE_11__["default"], {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
-          path: "/login",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_LoginPage__WEBPACK_IMPORTED_MODULE_12__["default"], {})
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
-          path: "/signup",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_SignupPage__WEBPACK_IMPORTED_MODULE_13__["default"], {})
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_Settings__WEBPACK_IMPORTED_MODULE_11__["default"], {})
         })]
       })
     })]
   });
 }
 function App() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_context_FormContext__WEBPACK_IMPORTED_MODULE_3__.FormProvider, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.BrowserRouter, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(AppContent, {})
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_context_FormContext__WEBPACK_IMPORTED_MODULE_3__.FormProvider, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.BrowserRouter, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Routes, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          path: "/login",
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_LoginPage__WEBPACK_IMPORTED_MODULE_13__["default"], {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          path: "/signup",
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_SignupPage__WEBPACK_IMPORTED_MODULE_14__["default"], {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Route, {
+          path: "/*",
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(AppLayout, {})
+        })]
+      })
     })
   });
 }
@@ -65239,6 +65270,10 @@ function ArchivedReports() {
     _useState22 = _slicedToArray(_useState21, 2),
     currentDateTime = _useState22[0],
     setCurrentDateTime = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState24 = _slicedToArray(_useState23, 2),
+    searchQuery = _useState24[0],
+    setSearchQuery = _useState24[1];
   var yearDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var monthDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -65436,6 +65471,37 @@ function ArchivedReports() {
   var archivedReports = reports.filter(function (r) {
     return r.status === 'Archived';
   });
+  var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var filteredArchivedReports = archivedReports.filter(function (report) {
+    var created = new Date(report.createdAt);
+    var reportYear = created.getFullYear().toString();
+    var reportMonthName = monthNames[created.getMonth()];
+    if (selectedYear !== 'All Years' && reportYear !== selectedYear) return false;
+    if (selectedMonth !== 'All Months' && reportMonthName !== selectedMonth) return false;
+    if (searchQuery.trim()) {
+      var q = searchQuery.toLowerCase().trim();
+      var docName = (report.documentName || 'Untitled Document').toLowerCase();
+      var dateStr = formatDate(report.createdAt).date.toLowerCase();
+      var timeStr = formatDate(report.createdAt).time.toLowerCase();
+      if (!docName.includes(q) && !dateStr.includes(q) && !timeStr.includes(q)) return false;
+    }
+    return true;
+  });
+  var filteredArchivedSwapRequests = archivedSwapRequests.filter(function (req) {
+    var created = new Date(req.createdAt);
+    var reportYear = created.getFullYear().toString();
+    var reportMonthName = monthNames[created.getMonth()];
+    if (selectedYear !== 'All Years' && reportYear !== selectedYear) return false;
+    if (selectedMonth !== 'All Months' && reportMonthName !== selectedMonth) return false;
+    if (searchQuery.trim()) {
+      var q = searchQuery.toLowerCase().trim();
+      var desc = getSwapRequestDescription(req).toLowerCase();
+      var dateStr = formatDate(req.createdAt).date.toLowerCase();
+      var timeStr = formatDate(req.createdAt).time.toLowerCase();
+      if (!desc.includes(q) && !dateStr.includes(q) && !timeStr.includes(q)) return false;
+    }
+    return true;
+  });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     className: "archived-reports",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
@@ -65447,7 +65513,11 @@ function ArchivedReports() {
           alt: "Search"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
           type: "text",
-          placeholder: "Search..."
+          placeholder: "Search...",
+          value: searchQuery,
+          onChange: function onChange(e) {
+            return setSearchQuery(e.target.value);
+          }
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "archived-reports__datetime",
@@ -65616,10 +65686,10 @@ function ArchivedReports() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
                 type: "checkbox",
-                checked: selectedReports.length === archivedReports.length && archivedReports.length > 0,
+                checked: selectedReports.length === filteredArchivedReports.length && filteredArchivedReports.length > 0,
                 onChange: function onChange(e) {
                   if (e.target.checked) {
-                    setSelectedReports(archivedReports.map(function (r) {
+                    setSelectedReports(filteredArchivedReports.map(function (r) {
                       return r.id;
                     }));
                   } else {
@@ -65636,7 +65706,7 @@ function ArchivedReports() {
             })]
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
-          children: archivedReports.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tr", {
+          children: filteredArchivedReports.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tr", {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
               colSpan: "4",
               style: {
@@ -65644,9 +65714,9 @@ function ArchivedReports() {
                 padding: '2rem',
                 color: '#666'
               },
-              children: "No archived reports yet."
+              children: archivedReports.length === 0 ? 'No archived reports yet.' : 'No reports match the current filters.'
             })
-          }) : archivedReports.map(function (report) {
+          }) : filteredArchivedReports.map(function (report) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
@@ -65705,10 +65775,10 @@ function ArchivedReports() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
                 type: "checkbox",
-                checked: selectedSwapRequests.length === archivedSwapRequests.length && archivedSwapRequests.length > 0,
+                checked: selectedSwapRequests.length === filteredArchivedSwapRequests.length && filteredArchivedSwapRequests.length > 0,
                 onChange: function onChange(e) {
                   if (e.target.checked) {
-                    setSelectedSwapRequests(archivedSwapRequests.map(function (r) {
+                    setSelectedSwapRequests(filteredArchivedSwapRequests.map(function (r) {
                       return r.id;
                     }));
                   } else {
@@ -65727,7 +65797,7 @@ function ArchivedReports() {
             })]
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
-          children: archivedSwapRequests.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tr", {
+          children: filteredArchivedSwapRequests.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tr", {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
               colSpan: "5",
               style: {
@@ -65735,9 +65805,9 @@ function ArchivedReports() {
                 padding: '2rem',
                 color: '#666'
               },
-              children: "No archived swap requests yet."
+              children: archivedSwapRequests.length === 0 ? 'No archived swap requests yet.' : 'No swap requests match the current filters.'
             })
-          }) : archivedSwapRequests.map(function (req) {
+          }) : filteredArchivedSwapRequests.map(function (req) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
@@ -66110,6 +66180,22 @@ function DocumentViewModal(_ref) {
       });
       pdfCacheRef.current = Object.create(null);
     }
+  }, [isOpen]);
+
+  // Lock background scroll when modal is open (html, body, and main content area)
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (!isOpen) return;
+    var scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    var root = document.documentElement;
+    var body = document.body;
+    root.classList.add('document-modal-open');
+    body.classList.add('document-modal-open');
+    body.style.paddingRight = scrollbarWidth > 0 ? "".concat(scrollbarWidth, "px") : '';
+    return function () {
+      root.classList.remove('document-modal-open');
+      body.classList.remove('document-modal-open');
+      body.style.paddingRight = '';
+    };
   }, [isOpen]);
 
   // When modal opens with a report, show cached PDF immediately if available, then fetch for latest
@@ -67069,43 +67155,110 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
+
 
 
 function Header() {
-  var handleUserClick = function handleUserClick() {
-    console.log('User icon clicked');
+  var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
+    profileImageUrl = _useFormContext.profileImageUrl;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    dropdownOpen = _useState2[0],
+    setDropdownOpen = _useState2[1];
+  var dropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var handleClickOutside = function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return function () {
+      return document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+  var handleUserClick = function handleUserClick(e) {
+    e.stopPropagation();
+    setDropdownOpen(function (prev) {
+      return !prev;
+    });
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("header", {
+  var handleLogout = function handleLogout() {
+    setDropdownOpen(false);
+    navigate('/login');
+  };
+  var handleViewProfile = function handleViewProfile() {
+    setDropdownOpen(false);
+    navigate('/profile');
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("header", {
     className: "header",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
       className: "header__title",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
         className: "header__title-main",
         children: "OFFICE OF CIVIL DEFENSE"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
         className: "header__title-sub",
         children: "Caraga Region"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-      className: "header__user",
-      onClick: handleUserClick,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
-        src: "/images/user_icon.svg",
-        alt: "User",
-        className: "header__user-icon"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
-        className: "header__user-arrow",
-        viewBox: "0 0 24 24",
-        fill: "none",
-        xmlns: "http://www.w3.org/2000/svg",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
-          d: "M6 9L12 15L18 9",
-          stroke: "currentColor",
-          strokeWidth: "2",
-          strokeLinecap: "round",
-          strokeLinejoin: "round"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      className: "header__user-wrap",
+      ref: dropdownRef,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        className: "header__user",
+        onClick: handleUserClick,
+        role: "button",
+        "aria-haspopup": "true",
+        "aria-expanded": dropdownOpen,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          className: "header__profile-wrap ".concat(!profileImageUrl ? 'header__profile-wrap--default' : ''),
+          "aria-hidden": true,
+          children: profileImageUrl ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
+            src: profileImageUrl,
+            alt: "Profile",
+            className: "header__profile-img"
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
+            src: "/images/default_profile.png",
+            alt: "",
+            className: "header__profile-img",
+            "aria-hidden": true
+          })
         })
+      }), dropdownOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        className: "header__dropdown",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
+          type: "button",
+          className: "header__dropdown-item",
+          onClick: handleViewProfile,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
+            src: "/images/user_icon.svg",
+            alt: "",
+            className: "header__dropdown-icon",
+            "aria-hidden": true
+          }), "View Profile"]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("button", {
+          type: "button",
+          className: "header__dropdown-item",
+          onClick: handleLogout,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
+            src: "/images/logout_icon.svg",
+            alt: "",
+            className: "header__dropdown-icon",
+            "aria-hidden": true
+          }), "Logout"]
+        })]
       })]
     })]
   });
@@ -67315,6 +67468,383 @@ function LoginPage() {
   });
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LoginPage);
+
+/***/ },
+
+/***/ "./resources/js/components/Profile.js"
+/*!********************************************!*\
+  !*** ./resources/js/components/Profile.js ***!
+  \********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
+
+
+function Profile() {
+  var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_1__.useFormContext)(),
+    profileImageUrl = _useFormContext.profileImageUrl,
+    setProfileImageUrl = _useFormContext.setProfileImageUrl;
+  var fileInputRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    dropdownOpen = _useState2[0],
+    setDropdownOpen = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState4 = _slicedToArray(_useState3, 2),
+    viewerOpen = _useState4[0],
+    setViewerOpen = _useState4[1];
+  var dropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var editRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var profileImgSrc = profileImageUrl || '/images/default_profile.png';
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
+      return localStorage.getItem('adr_profile_name') || 'Your Name';
+    }),
+    _useState6 = _slicedToArray(_useState5, 2),
+    displayName = _useState6[0],
+    setDisplayName = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
+      return localStorage.getItem('adr_profile_section') || '';
+    }),
+    _useState8 = _slicedToArray(_useState7, 2),
+    displaySection = _useState8[0],
+    setDisplaySection = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
+      return localStorage.getItem('adr_profile_address') || '';
+    }),
+    _useState0 = _slicedToArray(_useState9, 2),
+    address = _useState0[0],
+    setAddress = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
+      return localStorage.getItem('adr_profile_email') || '';
+    }),
+    _useState10 = _slicedToArray(_useState1, 2),
+    email = _useState10[0],
+    setEmail = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState12 = _slicedToArray(_useState11, 2),
+    isEditing = _useState12[0],
+    setIsEditing = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState14 = _slicedToArray(_useState13, 2),
+    editName = _useState14[0],
+    setEditName = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState16 = _slicedToArray(_useState15, 2),
+    editSection = _useState16[0],
+    setEditSection = _useState16[1];
+  var departmentOptions = [{
+    value: '',
+    label: 'No available departments'
+  }];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var handleClickOutside = function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return function () {
+      return document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (!isEditing) return;
+    var handleClickOutsideEdit = function handleClickOutsideEdit(e) {
+      if (editRef.current && !editRef.current.contains(e.target)) {
+        setIsEditing(false);
+      }
+    };
+    var onKeyDown = function onKeyDown(e) {
+      if (e.key === 'Escape') setIsEditing(false);
+    };
+    // Delay so the click that opened edit mode doesn't immediately trigger close (button is unmounted after open)
+    var t = setTimeout(function () {
+      document.addEventListener('click', handleClickOutsideEdit);
+      document.addEventListener('keydown', onKeyDown);
+    }, 0);
+    return function () {
+      clearTimeout(t);
+      document.removeEventListener('click', handleClickOutsideEdit);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isEditing]);
+  var handleFileChange = function handleFileChange(e) {
+    var _e$target$files;
+    var file = (_e$target$files = e.target.files) === null || _e$target$files === void 0 ? void 0 : _e$target$files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      setProfileImageUrl(reader.result);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+    setDropdownOpen(false);
+  };
+  var handleChangePhoto = function handleChangePhoto() {
+    var _fileInputRef$current;
+    (_fileInputRef$current = fileInputRef.current) === null || _fileInputRef$current === void 0 || _fileInputRef$current.click();
+  };
+  var handleRemovePhoto = function handleRemovePhoto() {
+    setProfileImageUrl(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    setDropdownOpen(false);
+  };
+  var openViewer = function openViewer(e) {
+    if (e.target.closest('.profile__photo-plus')) return;
+    setViewerOpen(true);
+  };
+  var startEditing = function startEditing() {
+    setEditName(displayName);
+    setEditSection(displaySection);
+    setIsEditing(true);
+  };
+  var saveEditing = function saveEditing() {
+    setDisplayName(editName.trim() || 'Your Name');
+    setDisplaySection(editSection);
+    localStorage.setItem('adr_profile_name', editName.trim() || 'Your Name');
+    localStorage.setItem('adr_profile_section', editSection);
+    setIsEditing(false);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    className: "profile",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: "profile__header",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
+        className: "profile__title",
+        children: "Personal Info"
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "profile__content",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "profile__card",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "profile__photo-wrap",
+          ref: dropdownRef,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "profile__photo-preview ".concat(!profileImageUrl ? 'profile__photo-preview--default' : '', " profile__photo-preview--clickable"),
+            onClick: openViewer,
+            role: "button",
+            tabIndex: 0,
+            onKeyDown: function onKeyDown(e) {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openViewer(e);
+              }
+            },
+            "aria-label": "View profile picture",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+              src: profileImgSrc,
+              alt: "Profile",
+              className: "profile__photo-img"
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+            ref: fileInputRef,
+            type: "file",
+            accept: "image/jpeg,image/jpg,image/png,image/gif,image/webp,image/bmp,image/svg+xml,image/*",
+            onChange: handleFileChange,
+            className: "profile__photo-input",
+            id: "profile-photo-input"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            type: "button",
+            className: "profile__photo-plus",
+            title: "Profile options",
+            "aria-label": "Profile options",
+            "aria-haspopup": "true",
+            "aria-expanded": dropdownOpen,
+            onClick: function onClick(e) {
+              e.stopPropagation();
+              setDropdownOpen(function (prev) {
+                return !prev;
+              });
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+              className: "profile__photo-plus-icon",
+              children: "+"
+            })
+          }), dropdownOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            className: "profile__photo-dropdown",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+              type: "button",
+              className: "profile__photo-dropdown-item",
+              onClick: handleChangePhoto,
+              children: "Change profile picture"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+              type: "button",
+              className: "profile__photo-dropdown-item",
+              onClick: handleRemovePhoto,
+              children: "Remove profile picture"
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          className: "profile__info",
+          ref: editRef,
+          children: isEditing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "profile__name-row",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                className: "profile__name-cell profile__name-cell--field",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                  type: "text",
+                  className: "profile__name-input",
+                  value: editName,
+                  onChange: function onChange(e) {
+                    return setEditName(e.target.value);
+                  },
+                  placeholder: "Your name",
+                  autoFocus: true
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                  type: "button",
+                  className: "profile__check-btn",
+                  onClick: saveEditing,
+                  "aria-label": "Save",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+                    src: "/images/check_icon.svg",
+                    alt: "",
+                    className: "profile__check-icon"
+                  })
+                })]
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "profile__section-cell",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("select", {
+                className: "profile__department-select",
+                value: editSection,
+                onChange: function onChange(e) {
+                  return setEditSection(e.target.value);
+                },
+                "aria-label": "Department",
+                children: departmentOptions.map(function (opt) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                    value: opt.value,
+                    children: opt.label
+                  }, opt.value || 'blank');
+                })
+              })
+            })]
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+              className: "profile__name-row",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                className: "profile__name-cell",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                  className: "profile__name",
+                  children: displayName
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                type: "button",
+                className: "profile__edit-btn",
+                onClick: startEditing,
+                "aria-label": "Edit profile",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+                  src: "/images/edit_icon.svg",
+                  alt: "",
+                  className: "profile__edit-icon"
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "profile__section-cell",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+                className: "profile__section ".concat(!displaySection ? 'profile__section--empty' : ''),
+                children: displaySection || 'No department'
+              })
+            })]
+          })
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "profile__fields",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "profile__field",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+            className: "profile__field-label",
+            htmlFor: "profile-email",
+            children: "EMAIL"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+            id: "profile-email",
+            type: "email",
+            className: "profile__field-input",
+            value: email,
+            onChange: function onChange(e) {
+              setEmail(e.target.value);
+              localStorage.setItem('adr_profile_email', e.target.value);
+            },
+            placeholder: "Email"
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "profile__field",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+            className: "profile__field-label",
+            htmlFor: "profile-address",
+            children: "ADDRESS"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+            id: "profile-address",
+            type: "text",
+            className: "profile__field-input",
+            value: address,
+            onChange: function onChange(e) {
+              setAddress(e.target.value);
+              localStorage.setItem('adr_profile_address', e.target.value);
+            },
+            placeholder: "Street address"
+          })]
+        })]
+      })]
+    }), viewerOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "profile__viewer",
+      onClick: function onClick() {
+        return setViewerOpen(false);
+      },
+      role: "dialog",
+      "aria-modal": "true",
+      "aria-label": "Profile picture full size",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+        type: "button",
+        className: "profile__viewer-close",
+        onClick: function onClick() {
+          return setViewerOpen(false);
+        },
+        "aria-label": "Close",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
+          viewBox: "0 0 24 24",
+          fill: "none",
+          xmlns: "http://www.w3.org/2000/svg",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
+            d: "M18 6L6 18M6 6l12 12",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            strokeLinecap: "round",
+            strokeLinejoin: "round"
+          })
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: "profile__viewer-frame",
+        onClick: function onClick(e) {
+          return e.stopPropagation();
+        },
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+          src: profileImgSrc,
+          alt: "Profile full size",
+          className: "profile__viewer-img"
+        })
+      })]
+    })]
+  });
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Profile);
 
 /***/ },
 
@@ -67728,26 +68258,9 @@ function Sidebar() {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("nav", {
       className: "sidebar__nav",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.NavLink, {
-        to: "/schedule",
+        to: "/adr-reports",
         className: function className(_ref) {
           var isActive = _ref.isActive;
-          return "sidebar__link ".concat(isActive ? 'sidebar__link--active' : '');
-        },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-          className: "sidebar__link-icon",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
-            src: "/images/calendar_icon.svg",
-            alt: "Schedule",
-            className: "sidebar__link-icon-img"
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-          className: "sidebar__link-text",
-          children: "Schedule"
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.NavLink, {
-        to: "/adr-reports",
-        className: function className(_ref2) {
-          var isActive = _ref2.isActive;
           return "sidebar__link ".concat(isActive ? 'sidebar__link--active' : '');
         },
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
@@ -67760,6 +68273,23 @@ function Sidebar() {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
           className: "sidebar__link-text",
           children: "ADR Reports"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.NavLink, {
+        to: "/schedule",
+        className: function className(_ref2) {
+          var isActive = _ref2.isActive;
+          return "sidebar__link ".concat(isActive ? 'sidebar__link--active' : '');
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          className: "sidebar__link-icon",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+            src: "/images/calendar_icon.svg",
+            alt: "Schedule",
+            className: "sidebar__link-icon-img"
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          className: "sidebar__link-text",
+          children: "Schedule"
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.NavLink, {
         to: "/archived-reports",
@@ -67830,6 +68360,10 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
+var departmentOptions = [{
+  value: '',
+  label: 'No available departments'
+}];
 function SignupPage() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState2 = _slicedToArray(_useState, 2),
@@ -67841,12 +68375,16 @@ function SignupPage() {
     setEmail = _useState4[1];
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState6 = _slicedToArray(_useState5, 2),
-    password = _useState6[0],
-    setPassword = _useState6[1];
+    department = _useState6[0],
+    setDepartment = _useState6[1];
   var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState8 = _slicedToArray(_useState7, 2),
-    confirmPassword = _useState8[0],
-    setConfirmPassword = _useState8[1];
+    password = _useState8[0],
+    setPassword = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState0 = _slicedToArray(_useState9, 2),
+    confirmPassword = _useState0[0],
+    setConfirmPassword = _useState0[1];
   var handleSubmit = function handleSubmit(e) {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -67856,6 +68394,7 @@ function SignupPage() {
     console.log('Signup attempt:', {
       username: username,
       email: email,
+      department: department,
       password: password
     });
   };
@@ -67883,6 +68422,25 @@ function SignupPage() {
             },
             placeholder: "Enter your username",
             required: true
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "login-form__group",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+            htmlFor: "department",
+            children: "Department"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("select", {
+            id: "department",
+            value: department,
+            onChange: function onChange(e) {
+              return setDepartment(e.target.value);
+            },
+            className: "login-form__select",
+            children: departmentOptions.map(function (opt) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                value: opt.value,
+                children: opt.label
+              }, opt.value || 'blank');
+            })
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "login-form__group",
@@ -68905,9 +69463,24 @@ var sameId = function sameId(a, b) {
 
 // One-time reset: clear all reports to declutter (remove this block after first load if you want to keep data again)
 var RESET_REPORTS_ONCE_KEY = 'adr_reports_reset_done';
+var PROFILE_IMAGE_KEY = 'adr_profile_image';
 var FormProvider = function FormProvider(_ref) {
   var children = _ref.children;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
+      return localStorage.getItem(PROFILE_IMAGE_KEY) || null;
+    }),
+    _useState2 = _slicedToArray(_useState, 2),
+    profileImageUrl = _useState2[0],
+    setProfileImageUrlState = _useState2[1];
+  var setProfileImageUrl = function setProfileImageUrl(url) {
+    if (url) {
+      localStorage.setItem(PROFILE_IMAGE_KEY, url);
+    } else {
+      localStorage.removeItem(PROFILE_IMAGE_KEY);
+    }
+    setProfileImageUrlState(url);
+  };
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
       if (!localStorage.getItem(RESET_REPORTS_ONCE_KEY)) {
         localStorage.removeItem('adr_reports');
         localStorage.setItem(RESET_REPORTS_ONCE_KEY, '1');
@@ -68916,9 +69489,9 @@ var FormProvider = function FormProvider(_ref) {
       var savedReports = localStorage.getItem('adr_reports');
       return savedReports ? JSON.parse(savedReports) : [];
     }),
-    _useState2 = _slicedToArray(_useState, 2),
-    reports = _useState2[0],
-    setReports = _useState2[1];
+    _useState4 = _slicedToArray(_useState3, 2),
+    reports = _useState4[0],
+    setReports = _useState4[1];
 
   // Save reports to localStorage whenever they change
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -68994,7 +69567,9 @@ var FormProvider = function FormProvider(_ref) {
       getReport: getReport,
       deleteReport: deleteReport,
       archiveReport: archiveReport,
-      restoreReport: restoreReport
+      restoreReport: restoreReport,
+      profileImageUrl: profileImageUrl,
+      setProfileImageUrl: setProfileImageUrl
     },
     children: children
   });

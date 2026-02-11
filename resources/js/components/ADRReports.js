@@ -22,6 +22,7 @@ function ADRReports() {
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
     const [showDocumentModal, setShowDocumentModal] = useState(false);
     const [selectedReportId, setSelectedReportId] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
     const yearDropdownRef = useRef(null);
     const monthDropdownRef = useRef(null);
 
@@ -162,12 +163,37 @@ function ADRReports() {
 
     const activeReports = reports.filter(r => r.status === 'Active');
 
+    const filteredReports = activeReports.filter((report) => {
+        const created = new Date(report.createdAt);
+        const reportYear = created.getFullYear().toString();
+        const reportMonthIndex = created.getMonth();
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const reportMonthName = monthNames[reportMonthIndex];
+
+        if (selectedYear !== 'All Years' && reportYear !== selectedYear) return false;
+        if (selectedMonth !== 'All Months' && reportMonthName !== selectedMonth) return false;
+
+        if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase().trim();
+            const docName = (report.documentName || 'Untitled Document').toLowerCase();
+            const dateStr = formatDate(report.createdAt).date.toLowerCase();
+            const timeStr = formatDate(report.createdAt).time.toLowerCase();
+            if (!docName.includes(q) && !dateStr.includes(q) && !timeStr.includes(q)) return false;
+        }
+        return true;
+    });
+
     return (
         <div className="adr-reports">
             <div className="adr-reports__search-bar">
                 <div className="adr-reports__search-bar-input">
                     <img src={`${window.location.origin}/images/search_icon.svg`} alt="Search" />
-                    <input type="text" placeholder="Search..." />
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
                 </div>
                 <div className="adr-reports__datetime">
                     <img src={`${window.location.origin}/images/date_time.svg`} alt="Date Time" className="adr-reports__datetime-icon" />
@@ -242,10 +268,10 @@ function ADRReports() {
                             <th>
                                 <input 
                                     type="checkbox" 
-                                    checked={selectedReports.length === activeReports.length && activeReports.length > 0}
+                                    checked={selectedReports.length === filteredReports.length && filteredReports.length > 0}
                                     onChange={(e) => {
                                         if (e.target.checked) {
-                                            setSelectedReports(activeReports.map(r => r.id));
+                                            setSelectedReports(filteredReports.map(r => r.id));
                                         } else {
                                             setSelectedReports([]);
                                         }
@@ -258,14 +284,14 @@ function ADRReports() {
                         </tr>
                     </thead>
                     <tbody>
-                        {activeReports.length === 0 ? (
+                        {filteredReports.length === 0 ? (
                             <tr>
                                 <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                    No reports yet. Click "Create New" to add one.
+                                    {activeReports.length === 0 ? 'No reports yet. Click "Create New" to add one.' : 'No reports match the current filters.'}
                                 </td>
                             </tr>
                         ) : (
-                            activeReports.map(report => (
+                            filteredReports.map(report => (
                                 <tr key={report.id}>
                                     <td>
                                         <input 
