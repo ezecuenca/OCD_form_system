@@ -15,8 +15,22 @@ const sameId = (a, b) => (a == null && b == null) || (Number(a) === Number(b));
 
 // One-time reset: clear all reports to declutter (remove this block after first load if you want to keep data again)
 const RESET_REPORTS_ONCE_KEY = 'adr_reports_reset_done';
+const PROFILE_IMAGE_KEY = 'adr_profile_image';
 
 export const FormProvider = ({ children }) => {
+    const [profileImageUrl, setProfileImageUrlState] = useState(() => {
+        return localStorage.getItem(PROFILE_IMAGE_KEY) || null;
+    });
+
+    const setProfileImageUrl = (url) => {
+        if (url) {
+            localStorage.setItem(PROFILE_IMAGE_KEY, url);
+        } else {
+            localStorage.removeItem(PROFILE_IMAGE_KEY);
+        }
+        setProfileImageUrlState(url);
+    };
+
     const [reports, setReports] = useState(() => {
         if (!localStorage.getItem(RESET_REPORTS_ONCE_KEY)) {
             localStorage.removeItem('adr_reports');
@@ -82,7 +96,7 @@ export const FormProvider = ({ children }) => {
     };
 
     return (
-        <FormContext.Provider value={{ reports, addReport, updateReport, getReport, deleteReport, archiveReport, restoreReport }}>
+        <FormContext.Provider value={{ reports, addReport, updateReport, getReport, deleteReport, archiveReport, restoreReport, profileImageUrl, setProfileImageUrl }}>
             {children}
         </FormContext.Provider>
     );

@@ -9,16 +9,6 @@ function Sidebar() {
             </div>
 
             <nav className="sidebar__nav">
-                <NavLink
-                    to="/schedule" 
-                    className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
-                >
-                    <span className="sidebar__link-icon">
-                        <img src="/images/calendar_icon.svg" alt="Schedule" className="sidebar__link-icon-img" />
-                    </span>
-                    <span className="sidebar__link-text">Schedule</span>
-                </NavLink>
-
                 <NavLink 
                     to="/adr-reports" 
                     className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
@@ -27,6 +17,16 @@ function Sidebar() {
                         <img src="/images/adr_report_logo.svg" alt="ADR Reports" className="sidebar__link-icon-img" />
                     </span>
                     <span className="sidebar__link-text">ADR Reports</span>
+                </NavLink>
+
+                <NavLink
+                    to="/schedule" 
+                    className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
+                >
+                    <span className="sidebar__link-icon">
+                        <img src="/images/calendar_icon.svg" alt="Schedule" className="sidebar__link-icon-img" />
+                    </span>
+                    <span className="sidebar__link-text">Schedule</span>
                 </NavLink>
 
                 <NavLink 

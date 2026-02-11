@@ -1,3 +1,15 @@
+/* When document preview modal is open, prevent any background scroll */
+html.document-modal-open,
+body.document-modal-open {
+    overflow: hidden !important;
+    height: 100% !important;
+}
+
+body.document-modal-open .main-content {
+    overflow: hidden !important;
+    touch-action: none; /* prevent pull-to-refresh / touch scroll on mobile */
+}
+
 .document-modal {
     position: fixed;
     top: 0;

@@ -245,4 +245,13 @@ This reports which placeholders exist in `ADR_template.docx` and which are missi
 - **Export as Word**: Document Preview → "Export as Word" downloads the filled DOCX.
 - **Print / Export PDF**: Document Preview → "Print / Export PDF" generates the same document, converts it to PDF (via LibreOffice), and opens the PDF in the browser so you can print (Ctrl+P) or save.
 - **Server requirement for PDF**: Install [LibreOffice](https://www.libreoffice.org/) on the server. Optionally set `LIBREOFFICE_PATH` in `.env` (e.g. `C:\Program Files\LibreOffice\program\soffice.exe` on Windows). If LibreOffice is not available, the PDF button shows an error and you can still use "Export as Word" and print from Word.
-- **Faster PDF conversion (optional):** To reduce the delay when generating PDFs, run LibreOffice once as a listener and use [unoconv](https://github.com/dagwieers/unoconv). In `.env` set `LIBREOFFICE_USE_LISTENER=true`, then start the listener (e.g. `soffice --headless --accept="socket,host=127.0.0.1,port=2083;urp;StarOffice.ServiceManager"`) in a separate terminal or as a service. Install unoconv and leave it in PATH (or set `UNOCONV_PATH`). The app will use the listener when available and fall back to starting LibreOffice per conversion otherwise.
+- **Get ~2 second PDF conversion:** Without the listener, each PDF takes 5–10+ seconds because LibreOffice starts from scratch. To get **about 2 seconds** per conversion:
+  1. **Start the listener** (once): Double‑click **`start-libreoffice-listener.bat`** in the project folder, or in a terminal run:  
+     `"C:\Program Files\LibreOffice\program\soffice.exe" --headless --accept="socket,host=127.0.0.1,port=2083;urp;StarOffice.ServiceManager"`  
+     Leave that window open while you use the app.
+  2. **Install unoconv** (talks to the listener):  
+     - **Windows:** Install [Python](https://www.python.org/) if needed, then run `pip install unoconv`. Or use a [Windows build](https://github.com/dagwieers/unoconv) if available.  
+     - **Linux:** `sudo apt install unoconv` (or your package manager).
+  3. **Turn on the listener in the app:** In `.env` add or set:  
+     `LIBREOFFICE_USE_LISTENER=true`  
+     Restart `php artisan serve`. The app will use the listener when unoconv is available and fall back to the slower method otherwise.

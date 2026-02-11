@@ -20,6 +20,7 @@ function ArchivedReports() {
     const [activeTab, setActiveTab] = useState('adr'); // 'adr' | 'swapped'
     const [archivedSwapRequests, setArchivedSwapRequests] = useState([]);
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
+    const [searchQuery, setSearchQuery] = useState('');
     const yearDropdownRef = useRef(null);
     const monthDropdownRef = useRef(null);
 
@@ -194,12 +195,51 @@ function ArchivedReports() {
 
     const archivedReports = reports.filter(r => r.status === 'Archived');
 
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    const filteredArchivedReports = archivedReports.filter((report) => {
+        const created = new Date(report.createdAt);
+        const reportYear = created.getFullYear().toString();
+        const reportMonthName = monthNames[created.getMonth()];
+        if (selectedYear !== 'All Years' && reportYear !== selectedYear) return false;
+        if (selectedMonth !== 'All Months' && reportMonthName !== selectedMonth) return false;
+        if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase().trim();
+            const docName = (report.documentName || 'Untitled Document').toLowerCase();
+            const dateStr = formatDate(report.createdAt).date.toLowerCase();
+            const timeStr = formatDate(report.createdAt).time.toLowerCase();
+            if (!docName.includes(q) && !dateStr.includes(q) && !timeStr.includes(q)) return false;
+        }
+        return true;
+    });
+
+    const filteredArchivedSwapRequests = archivedSwapRequests.filter((req) => {
+        const created = new Date(req.createdAt);
+        const reportYear = created.getFullYear().toString();
+        const reportMonthName = monthNames[created.getMonth()];
+        if (selectedYear !== 'All Years' && reportYear !== selectedYear) return false;
+        if (selectedMonth !== 'All Months' && reportMonthName !== selectedMonth) return false;
+        if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase().trim();
+            const desc = getSwapRequestDescription(req).toLowerCase();
+            const dateStr = formatDate(req.createdAt).date.toLowerCase();
+            const timeStr = formatDate(req.createdAt).time.toLowerCase();
+            if (!desc.includes(q) && !dateStr.includes(q) && !timeStr.includes(q)) return false;
+        }
+        return true;
+    });
+
     return (
         <div className="archived-reports">
             <div className="archived-reports__search-bar">
                 <div className="archived-reports__search-bar-input">
                     <img src={`${window.location.origin}/images/search_icon.svg`} alt="Search" />
-                    <input type="text" placeholder="Search..." />
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
                 </div>
                 <div className="archived-reports__datetime">
                     <img src={`${window.location.origin}/images/date_time.svg`} alt="Date Time" className="archived-reports__datetime-icon" />
@@ -312,10 +352,10 @@ function ArchivedReports() {
                             <th>
                                 <input 
                                     type="checkbox" 
-                                    checked={selectedReports.length === archivedReports.length && archivedReports.length > 0}
+                                    checked={selectedReports.length === filteredArchivedReports.length && filteredArchivedReports.length > 0}
                                     onChange={(e) => {
                                         if (e.target.checked) {
-                                            setSelectedReports(archivedReports.map(r => r.id));
+                                            setSelectedReports(filteredArchivedReports.map(r => r.id));
                                         } else {
                                             setSelectedReports([]);
                                         }
@@ -328,14 +368,14 @@ function ArchivedReports() {
                         </tr>
                     </thead>
                     <tbody>
-                        {archivedReports.length === 0 ? (
+                        {filteredArchivedReports.length === 0 ? (
                             <tr>
                                 <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                    No archived reports yet.
+                                    {archivedReports.length === 0 ? 'No archived reports yet.' : 'No reports match the current filters.'}
                                 </td>
                             </tr>
                         ) : (
-                            archivedReports.map(report => (
+                            filteredArchivedReports.map(report => (
                                 <tr key={report.id}>
                                     <td>
                                         <input 
@@ -383,10 +423,10 @@ function ArchivedReports() {
                             <th>
                                 <input
                                     type="checkbox"
-                                    checked={selectedSwapRequests.length === archivedSwapRequests.length && archivedSwapRequests.length > 0}
+                                    checked={selectedSwapRequests.length === filteredArchivedSwapRequests.length && filteredArchivedSwapRequests.length > 0}
                                     onChange={(e) => {
                                         if (e.target.checked) {
-                                            setSelectedSwapRequests(archivedSwapRequests.map(r => r.id));
+                                            setSelectedSwapRequests(filteredArchivedSwapRequests.map(r => r.id));
                                         } else {
                                             setSelectedSwapRequests([]);
                                         }
@@ -400,14 +440,14 @@ function ArchivedReports() {
                         </tr>
                     </thead>
                     <tbody>
-                        {archivedSwapRequests.length === 0 ? (
+                        {filteredArchivedSwapRequests.length === 0 ? (
                             <tr>
                                 <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                    No archived swap requests yet.
+                                    {archivedSwapRequests.length === 0 ? 'No archived swap requests yet.' : 'No swap requests match the current filters.'}
                                 </td>
                             </tr>
                         ) : (
-                            archivedSwapRequests.map(req => (
+                            filteredArchivedSwapRequests.map(req => (
                                 <tr key={req.id}>
                                     <td>
                                         <input
