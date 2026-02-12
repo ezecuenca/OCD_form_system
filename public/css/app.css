@@ -2138,7 +2138,17 @@ body {
 .swap-form__pagination {
   margin-top: 1.5rem;
   display: flex;
+  align-items: center;
   gap: 0.5rem;
+}
+.swap-form__pagination-info {
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  color: #333;
+  font-weight: 500;
+  margin: 0 0.5rem;
+  display: flex;
+  align-items: center;
 }
 .swap-form__pagination button {
   padding: 0.5rem 1rem;
@@ -4360,6 +4370,13 @@ body.document-modal-open .main-content {
   padding: 1rem;
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
+}
+
+.settings__table thead th:nth-child(3),
+.settings__table thead th:nth-child(4),
+.settings__table tbody td:nth-child(3),
+.settings__table tbody td:nth-child(4) {
+  padding-left: 6.5rem;
 }
 
 .settings__table tbody tr {

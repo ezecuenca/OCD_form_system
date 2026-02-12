@@ -4,6 +4,105 @@ function Settings() {
     const accounts = [];
     const [activeSection, setActiveSection] = useState('accounts');
 
+    let sectionContent;
+    switch (activeSection) {
+        case 'accounts':
+            sectionContent = (
+                <>
+                    <div className="settings__panel-header">
+                        <h2 id="accounts-title" className="settings__section-title">Account Management</h2>
+                    </div>
+                    <div className="settings__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th className="settings__table-check">
+                                        <input type="checkbox" aria-label="Select all accounts" />
+                                    </th>
+                                    <th>User</th>
+                                    <th>Status</th>
+                                    <th>Role</th>
+                                    <th className="settings__table-actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {accounts.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                                            No accounts yet. Add an account to get started.
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    accounts.map((account) => (
+                                        <tr key={account.id}>
+                                            <td className="settings__table-check">
+                                                <input type="checkbox" aria-label={`Select ${account.name}`} />
+                                            </td>
+                                            <td>{account.name}</td>
+                                            <td>
+                                                <span className="settings__status settings__status--online">{account.status}</span>
+                                            </td>
+                                            <td>{account.role}</td>
+                                            <td className="settings__table-actions">
+                                                <button type="button" className="settings__icon-button" aria-label="Edit account">
+                                                    <img src="/images/edit_icon.svg" alt="" aria-hidden="true" />
+                                                </button>
+                                                <button type="button" className="settings__icon-button" aria-label="Disable account">
+                                                    <img src="/images/disable_icon.svg" alt="" aria-hidden="true" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </>
+            );
+            break;
+        case 'templates':
+            sectionContent = (
+                <>
+                    <div className="settings__panel-header">
+                        <h2 id="templates-title" className="settings__section-title">Templates</h2>
+                    </div>
+                    <div className="settings__table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                                        Templates page placeholder.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </>
+            );
+            break;
+        case 'departments':
+        default:
+            sectionContent = (
+                <>
+                    <div className="settings__panel-header">
+                        <h2 id="departments-title" className="settings__section-title">Departments</h2>
+                    </div>
+                    <div className="settings__table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                                        Departments page placeholder.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </>
+            );
+            break;
+    }
+
     return (
         <div className="settings">
             <div className="settings__header">
@@ -27,78 +126,17 @@ function Settings() {
                         >
                             Templates
                         </button>
+                        <button
+                            type="button"
+                            className={`settings__subnav-item ${activeSection === 'departments' ? 'settings__subnav-item--active' : ''}`}
+                            onClick={() => setActiveSection('departments')}
+                        >
+                            Departments
+                        </button>
                     </aside>
 
                     <div className="settings__panel-body">
-                        {activeSection === 'accounts' ? (
-                            <>
-                                <div className="settings__panel-header">
-                                    <h2 id="accounts-title" className="settings__section-title">Account Management</h2>
-                                </div>
-                                <div className="settings__table">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th className="settings__table-check">
-                                                    <input type="checkbox" aria-label="Select all accounts" />
-                                                </th>
-                                                <th>User</th>
-                                                <th>Status</th>
-                                                <th>Role</th>
-                                                <th className="settings__table-actions">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {accounts.length === 0 ? (
-                                                <tr>
-                                                    <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                                        No accounts yet. Add an account to get started.
-                                                    </td>
-                                                </tr>
-                                            ) : (
-                                                accounts.map((account) => (
-                                                    <tr key={account.id}>
-                                                        <td className="settings__table-check">
-                                                            <input type="checkbox" aria-label={`Select ${account.name}`} />
-                                                        </td>
-                                                        <td>{account.name}</td>
-                                                        <td>
-                                                            <span className="settings__status settings__status--online">{account.status}</span>
-                                                        </td>
-                                                        <td>{account.role}</td>
-                                                        <td className="settings__table-actions">
-                                                            <button type="button" className="settings__icon-button" aria-label="Edit account">
-                                                                <img src="/images/edit_icon.svg" alt="" aria-hidden="true" />
-                                                            </button>
-                                                            <button type="button" className="settings__icon-button" aria-label="Disable account">
-                                                                <img src="/images/disable_icon.svg" alt="" aria-hidden="true" />
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                ))
-                                            )}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <div className="settings__panel-header">
-                                    <h2 id="templates-title" className="settings__section-title">Templates</h2>
-                                </div>
-                                <div className="settings__table">
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <td style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                                    Templates page placeholder.
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </>
-                        )}
+                        {sectionContent}
                     </div>
                 </section>
             </div>
