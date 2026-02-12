@@ -488,6 +488,23 @@
         }
     }
 
+    &__other-admin-extra {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    &__other-admin-extra-row {
+        display: flex;
+        gap: 0.5rem;
+        align-items: flex-start;
+
+        .adr-form__modal-textarea {
+            flex: 1;
+        }
+    }
+
     &__signature-fields {
         grid-column: 1 / -1;
         display: grid;
@@ -671,6 +688,12 @@
             padding: 1.5rem;
             overflow-y: auto;
             flex: 1;
+        }
+
+        &-hint {
+            font-size: 0.8rem;
+            color: #555;
+            margin: 0 0 0.75rem 0;
         }
 
         &-table {

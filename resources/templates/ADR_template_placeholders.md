@@ -79,26 +79,33 @@ You only need **one data row** per table. The export duplicates that row so ever
 | Section              | Placeholders filled | Max rows supported |
 | -------------------- | ------------------- | ------------------- |
 | Attendance           | `${ATT_NUM#1}` … `#50`, `${ATT_NAME#1}` … `#50`, `${ATT_TASK#1}` … `#50` | 50 |
-| Reports              | `${REP_REPORT#1}` … `#50`, `${REP_REMARKS#1}` … `#50` | 50 |
+| Reports              | `${REP_NUM#1}` … `#50`, `${REP_REPORT#1}` … `#50`, `${REP_REMARKS#1}` … `#50` | 50 |
 | Communication (4A)   | `${COMM_PARTICULARS#1}` … `#50`, etc. | 50 |
 | Other items (4)      | `${OTH_PARTICULARS#1}` … `#50`, etc. | 50 |
 | Other admin (4B)     | `${ADM_CONCERN#1}` … `#30` | 30 |
-| Endorsed items (5)   | `${END_ITEM#1}` … `#30` | 30 |
+| Endorsed items (5)   | `${END_NUM#1}` … `#30`, `${END_ITEM#1}` … `#30` | 30 |
 
 ### 1. Attendance (Section 2)
 
 Use **exactly one data row** in the table. The export duplicates it for each attendee and removes any extra rows. Do not add a second row with `${ATT_NAME#2}` etc. by hand.
 
+**Row number column:** Put the placeholder **`${ATT_NUM}`** in the first cell of the data row (do not type the digit 1). The export will replace it and fill **1, 2, 3, …** automatically for each row.
+
 | Placeholder      | Form input        |
 | ---------------- | ----------------- |
-| `${ATT_NUM}` or `${ATT_NUM#1}` | Row number (1, 2, 3 …). Use in the first column so each row shows the correct index. |
+| **`${ATT_NUM}`** (recommended) or `${ATT_NUM#1}` | Row number. Use **`${ATT_NUM}`** in the template so each row gets the correct index (1, 2, 3 …). |
 | `${ATT_NAME#1}` … `${ATT_NAME#50}` | Name (any trailing `#1` in data is stripped) |
 | `${ATT_TASK#1}` … `${ATT_TASK#50}` | Task / assignment (if "bullet form" is checked, tasks are exported as bullet lines) |
 
 ### 2. Reports (Section 3)
 
+Use **exactly one data row** in the table. The export duplicates it for each report row.
+
+**Row number column:** Put the placeholder **`${REP_NUM}`** in the # column (do not type the digit 1). The export will fill **1, 2, 3, …** for each row.
+
 | Placeholder       | Form input |
 | ----------------- | ---------- |
+| **`${REP_NUM}`** | Row number (1, 2, 3 …). Use in the # column so each row shows the correct index. |
 | `${REP_REPORT#1}` … `${REP_REPORT#50}`  | Report     |
 | `${REP_REMARKS#1}` … `${REP_REMARKS#50}` | Remarks    |
 
@@ -121,15 +128,21 @@ Use **exactly one data row** in the table. The export duplicates it for each att
 
 ### 5. Other administrative matters (Section 4B)
 
+Use **one** placeholder in **one** cell or one continuous run of text. If the placeholder is split (e.g. into separate table columns or Word “runs”), the exported text can appear with words spread across the line. Type `${ADM_CONCERN}` once where the full bullet list should go.
+
 | Placeholder        | Form input       |
 | ------------------ | ---------------- |
-| `${ADM_CONCERN#1}` … `${ADM_CONCERN#30}` | Concern / matter |
+| **`${ADM_CONCERN}`** (first row) and `${ADM_CONCERN#1}` … `${ADM_CONCERN#30}` | Concern / matter (one text block; Enter = new bullet in the form). Export normalizes spaces so one run in the template shows correctly. |
 
-### 6. Endorsed items (Section 5)
+### 6. Endorsed items (Section 5) – “1. The following were endorsed…”
+
+Use **one data row** with both placeholders. The export duplicates the row and fills numbers 1.1, 1.2, 1.3, … and the item text.
 
 | Placeholder     | Form input                |
 | --------------- | ------------------------- |
-| `${END_ITEM#1}` … `${END_ITEM#30}` | Endorsed item description |
+| **`${END_NUM}`** or `${END_NUM#1}` | Sub-number under “1.”: **1.1**, 1.2, 1.3, … (use `${END_NUM}` in the template so the first row gets 1.1). |
+| `${END_NUM#1}` … `${END_NUM#30}` | Same: 1.1, 1.2, 1.3, … for each row. |
+| `${END_ITEM#1}` … `${END_ITEM#30}` | Endorsed item description (e.g. “2 units of mobile phones”). |
 
 ---
 
@@ -139,9 +152,23 @@ Add a table with a **header row** and **exactly one data row**:
 
 | #   | Name          | Tasks         |
 | --- | ------------- | ------------- |
-| `${ATT_NUM}` | `${ATT_NAME}` | `${ATT_TASK}` |
+| **`${ATT_NUM}`** | `${ATT_NAME}` | `${ATT_TASK}` |
 
-(or `${ATT_NUM#1}`, `${ATT_NAME#1}`, `${ATT_TASK#1}`). When you export, that single row is duplicated so each attendee gets a row; any other data rows in the template that contain these placeholders are removed. **Do not add a second row with `${ATT_NAME#2}` etc.**
+- **Number column:** Use the placeholder **`${ATT_NUM}`** (not the digit 1). The export fills 1, 2, 3, … for each row.
+- When you export, that single row is duplicated so each attendee gets a row; any other data rows in the template that contain these placeholders are removed. **Do not add a second row with `${ATT_NAME#2}` etc.**
+
+---
+
+## Example for Reports and Advisories table (Section 3)
+
+Add a table with a **header row** and **exactly one data row**:
+
+| #   | Reports and Advisories released | Remarks |
+| --- | --------------------------------- | ------- |
+| **`${REP_NUM}`** | `${REP_REPORT}` | `${REP_REMARKS}` |
+
+- **Number column:** Use the placeholder **`${REP_NUM}`** (not the digit 1). The export fills 1, 2, 3, … for each row.
+- When you export, that single row is duplicated for each report; any other data rows that contain these placeholders are removed.
 
 ---
 

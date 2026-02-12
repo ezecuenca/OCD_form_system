@@ -1,5 +1,5 @@
 $header-color-start: #18004C;
-$header-color-end: #290081;
+$header-color-end: #3a1499;
 $sidebar-width: 240px;
 $header-height: 50px;
 
@@ -95,6 +95,8 @@ $header-height: 50px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         padding: 0.25rem;
         z-index: 1000;
+        outline: 1px solid #290081;
+        outline-offset: 0;
 
         &::before {
             content: '';

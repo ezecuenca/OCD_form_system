@@ -1,11 +1,12 @@
 $sidebar-bg: #E99745;
+$sidebar-bg-bottom: #b86b20;
 $sidebar-text: #FFE3C2;
 $sidebar-highlight: #825A2C;
 $sidebar-width: 240px;
 
 .sidebar {
     width: $sidebar-width;
-    background-color: $sidebar-bg;
+    background: linear-gradient(180deg, $sidebar-bg 0%, $sidebar-bg 40%, $sidebar-bg-bottom 100%);
     color: $sidebar-text;
     display: flex;
     flex-direction: column;

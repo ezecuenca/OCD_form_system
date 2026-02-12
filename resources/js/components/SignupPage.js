@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const departmentOptions = [
-    { value: '', label: 'No available departments' },
+const sectionOptions = [
+    { value: '', label: 'Choose your section' },
 ];
 
 function SignupPage() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
-    const [department, setDepartment] = useState('');
+    const [section, setSection] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -20,14 +20,14 @@ function SignupPage() {
             return;
         }
         
-        console.log('Signup attempt:', { username, email, department, password });
+        console.log('Signup attempt:', { username, email, section, password });
     };
 
     return (
         <div className="login-page">
-            <div className="login-container">
+            <div className="login-container login-container--signup">
                 <h2 className="signup-title">Create Account</h2>
-                <form className="login-form" onSubmit={handleSubmit}>
+                <form className="login-form login-form--signup" onSubmit={handleSubmit}>
                     <div className="login-form__group">
                         <label htmlFor="username">Username</label>
                         <input
@@ -40,14 +40,14 @@ function SignupPage() {
                         />
                     </div>
                     <div className="login-form__group">
-                        <label htmlFor="department">Department</label>
+                        <label htmlFor="section">Section</label>
                         <select
-                            id="department"
-                            value={department}
-                            onChange={(e) => setDepartment(e.target.value)}
+                            id="section"
+                            value={section}
+                            onChange={(e) => setSection(e.target.value)}
                             className="login-form__select"
                         >
-                            {departmentOptions.map((opt) => (
+                            {sectionOptions.map((opt) => (
                                 <option key={opt.value || 'blank'} value={opt.value}>{opt.label}</option>
                             ))}
                         </select>
