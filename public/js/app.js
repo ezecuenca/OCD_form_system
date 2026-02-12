@@ -68961,7 +68961,23 @@ function SwapForm() {
       return [].concat(_toConsumableArray(prev), [id]);
     });
   };
-  var years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
+
+  // Generate dynamic years based on swap requests
+  var getYearsFromRequests = function getYearsFromRequests() {
+    var currentYear = new Date().getFullYear();
+    var yearsSet = new Set([currentYear]);
+    swapRequests.forEach(function (req) {
+      if (req.createdAt) {
+        var year = new Date(req.createdAt).getFullYear();
+        yearsSet.add(year);
+      }
+    });
+    var sortedYears = Array.from(yearsSet).sort(function (a, b) {
+      return b - a;
+    });
+    return ['All Years'].concat(_toConsumableArray(sortedYears.map(String)));
+  };
+  var years = getYearsFromRequests();
   var months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var handleYearSelect = function handleYearSelect(year) {
     setSelectedYear(year);

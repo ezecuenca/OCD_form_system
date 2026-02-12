@@ -133,7 +133,23 @@ function SwapForm() {
         });
     };
 
-    const years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
+    // Generate dynamic years based on swap requests
+    const getYearsFromRequests = () => {
+        const currentYear = new Date().getFullYear();
+        const yearsSet = new Set([currentYear]);
+        
+        swapRequests.forEach(req => {
+            if (req.createdAt) {
+                const year = new Date(req.createdAt).getFullYear();
+                yearsSet.add(year);
+            }
+        });
+        
+        const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
+        return ['All Years', ...sortedYears.map(String)];
+    };
+
+    const years = getYearsFromRequests();
     const months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     const handleYearSelect = (year) => {
