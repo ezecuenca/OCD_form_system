@@ -308,6 +308,8 @@
         padding: 0.35rem;
         z-index: 100;
         border: 1px solid #c0c0c0;
+        outline: 1px solid #290081;
+        outline-offset: 0;
 
         /* Arrow on left pointing toward the plus button */
         &::before {

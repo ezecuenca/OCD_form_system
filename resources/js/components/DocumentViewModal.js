@@ -116,10 +116,11 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
         };
     }, [isOpen]);
 
-    // When modal opens with a report, show cached PDF immediately if available, then fetch for latest
+    // When modal opens with a report, show cached PDF immediately if available, then fetch for latest.
+    // For form preview (no report.id), use a content-based cache key so added rows (e.g. endorsed items) get a fresh PDF.
     useEffect(() => {
         if (!isOpen || !report) return;
-        const id = report?.id ?? reportId ?? 'single';
+        const id = report?.id ?? reportId ?? `form-${report?.endorsedItemsRows?.length ?? 0}-${report?.attendanceItems?.length ?? 0}-${report?.otherAdminRows?.length ?? 0}`;
         setViewMode('pdf');
         setPdfError(null);
         const reportPayload = {
@@ -301,12 +302,18 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
 
     const renderMultiline = (text, asBullets) => {
         if (!text?.trim()) return '-';
-        if (asBullets) {
-            const items = text.split(/[;\n]/).filter(s => s.trim());
+        // Show as bullets when checkbox was set OR when user used Enter (text has newlines) – only lines with real content become bullets
+        const useBullets = asBullets || (text && text.includes('\n'));
+        if (useBullets) {
+            const skipAsBullet = ['and', 'or', 'the'];
+            const items = text
+                .split(/[;\n]/)
+                .map(s => s.trim())
+                .filter(s => s.length > 0 && !skipAsBullet.includes(s.toLowerCase()));
             if (items.length === 0) return '-';
             return (
                 <ul className="document-viewer__task-list">
-                    {items.map((item, i) => <li key={i}>{item.trim()}</li>)}
+                    {items.map((item, i) => <li key={i}>{item}</li>)}
                 </ul>
             );
         }
@@ -396,7 +403,7 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
                             </thead>
                             <tbody>
                                 {report.attendanceItems.map((item, index) => (
-                                    <tr key={item.id || index} data-break-point>
+                                    <tr key={`attendance-${index}-${item.id ?? ''}`} data-break-point>
                                         <td className="document-viewer__table-num">{index + 1}</td>
                                         <td className="document-viewer__table-name">{dash(item.name)}</td>
                                         <td className="document-viewer__table-tasks">
@@ -436,23 +443,15 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
                             </thead>
                             <tbody>
                                 {report.reportsItems.map((item, index) => (
-                                    <tr key={item.id || index} data-break-point>
+                                    <tr key={`reports-${index}-${item.id ?? ''}`} data-break-point>
                                         <td className="document-viewer__table-num">{index + 1}</td>
                                         <td className="document-viewer__table-report">
                                             {item.report?.trim() ? (
-                                                item.reportAsBullets ? (
-                                                    <ul className="document-viewer__task-list">
-                                                        {item.report.split(/[;\n]/).map((line, i) => (
-                                                            line.trim() ? <li key={i}>{line.trim()}</li> : null
-                                                        ))}
-                                                    </ul>
-                                                ) : (
-                                                    <div className="document-viewer__report-text">
-                                                        {item.report.split(/\n/).map((line, i) => (
-                                                            line.trim() ? <div key={i}>{line.trim()}</div> : <br key={i} />
-                                                        ))}
-                                                    </div>
-                                                )
+                                                <div className="document-viewer__report-text">
+                                                    {item.report.split(/\n/).map((line, i) => (
+                                                        line.trim() ? <div key={i}>{line.trim()}</div> : <br key={i} />
+                                                    ))}
+                                                </div>
                                             ) : '-'}
                                         </td>
                                         <td className="document-viewer__table-remarks">{dash(item.remarks)}</td>
@@ -522,7 +521,7 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
                             <p className="document-viewer__admin-note" data-break-point>(List down administrative concerns such as but not limited to: Duty driver on-call, vehicle activities, internet or other ICT equipment issues, parcel or documents received/delivered, untoward incidents that should be elevated to the management level).</p>
                             <ul className="document-viewer__admin-list" data-break-point>
                                 {report.otherAdminRows.map((row, index) => (
-                                    <li key={row.id || index}>{renderMultiline(row.concern, false)}</li>
+                                    <li key={row.id || index}>{renderMultiline(row.concern, true)}</li>
                                 ))}
                             </ul>
                         </div>
@@ -589,14 +588,6 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
                                 <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                             {exportLoading ? 'Exporting…' : 'Export as Word'}
-                        </button>
-                        <button onClick={handleExportPdf} className="document-modal__print-btn" disabled={exportLoading || !report} title="Open PDF in browser for printing">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M6 18V9a1 1 0 011-1h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M14 2v6h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            {exportLoading ? 'Exporting…' : 'Print / Export PDF'}
                         </button>
                         {exportError && <span className="document-modal__export-error" role="alert">{exportError}</span>}
                         <button onClick={onClose} className="document-modal__close-btn">

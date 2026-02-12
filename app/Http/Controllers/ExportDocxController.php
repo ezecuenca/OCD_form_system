@@ -404,7 +404,7 @@ class ExportDocxController extends Controller
             [
                 'marker'  => 'REP_REPORT',
                 'count'   => min(count($report['reportsItems'] ?? []), self::MAX_REPORTS) ?: 1,
-                'placeholders' => [['REP_REPORT', 'REP_REMARKS']],
+                'placeholders' => [['REP_NUM', 'REP_REPORT', 'REP_REMARKS']],
             ],
             [
                 'marker'  => 'COMM_PARTICULARS',
@@ -424,7 +424,7 @@ class ExportDocxController extends Controller
             [
                 'marker'  => 'END_ITEM',
                 'count'   => min(count($report['endorsedItemsRows'] ?? []), self::MAX_ENDORSED) ?: 1,
-                'placeholders' => [['END_ITEM']],
+                'placeholders' => [['END_ITEM', 'END_NUM']],
             ],
         ];
 
@@ -543,11 +543,23 @@ class ExportDocxController extends Controller
      */
     private function repairDocumentXml(string $xml): string
     {
-        return preg_replace(
+        $xml = preg_replace(
             '/&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)/u',
             '&amp;',
             $xml
         );
+        // Prevent justified alignment from spreading text across the line (bullets • or endorsed items 1.1, 1.2)
+        $bullet = "\xE2\x80\xA2"; // U+2022
+        $xml = preg_replace_callback('/<w:p\s[^>]*>.*?<\/w:p>/s', function (array $m) use ($bullet): string {
+            $block = $m[0];
+            $hasBullet = strpos($block, $bullet) !== false || strpos($block, '&#x2022;') !== false || strpos($block, '&#8226;') !== false;
+            $hasEndorsedNum = preg_match('/1\.\d/', $block) === 1; // e.g. 1.1, 1.2 in endorsed items
+            if ($hasBullet || $hasEndorsedNum) {
+                $block = preg_replace('/<w:jc w:val="both"\s*\/>/', '<w:jc w:val="left"/>', $block);
+            }
+            return $block;
+        }, $xml);
+        return $xml;
     }
 
     private function filename(array $report): string
@@ -619,7 +631,27 @@ class ExportDocxController extends Controller
     }
 
     /**
-     * Format attendance task for DOCX: if taskAsBullets, split by ; or newline and prefix each line with bullet.
+     * Lines that should not appear as their own bullet (conjunctions, etc.).
+     */
+    private static function bulletSkipWords(): array
+    {
+        return ['and', 'or', 'the'];
+    }
+
+    /**
+     * Split text by ; or newline, trim, and keep only non-empty lines that are not skip words.
+     */
+    private function filterBulletLines(string $text): array
+    {
+        $lines = preg_split('/[;\n]+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+        $skip = self::bulletSkipWords();
+        return array_values(array_filter(array_map('trim', $lines), function ($line) use ($skip) {
+            return $line !== '' && !in_array(strtolower($line), $skip, true);
+        }));
+    }
+
+    /**
+     * Format attendance task for DOCX: if taskAsBullets or text has newlines, split and prefix each line with bullet (skip empty and "and"/"or"/"the").
      */
     private function formatTaskForDocx(array $row): string
     {
@@ -627,9 +659,9 @@ class ExportDocxController extends Controller
         if (trim($task) === '') {
             return '-';
         }
-        if (!empty($row['taskAsBullets'])) {
-            $lines = preg_split('/[;\n]+/', $task, -1, PREG_SPLIT_NO_EMPTY);
-            $lines = array_map('trim', array_filter($lines));
+        $useBullets = !empty($row['taskAsBullets']) || strpos($task, "\n") !== false;
+        if ($useBullets) {
+            $lines = $this->filterBulletLines($task);
             if ($lines === []) {
                 return '-';
             }
@@ -645,34 +677,25 @@ class ExportDocxController extends Controller
     {
         $rows = $report['reportsItems'] ?? [];
         $first = $rows[0] ?? null;
+        $this->setValue($tp, 'REP_NUM', $first ? (string) 1 : '-');
         $this->setValue($tp, 'REP_REPORT', $first ? $this->formatReportForDocx($first) : '-');
         $this->setValue($tp, 'REP_REMARKS', $first ? $this->clean($first['remarks'] ?? '') : '-');
         for ($i = 1; $i <= self::MAX_REPORTS; $i++) {
             $r = $rows[$i - 1] ?? null;
+            $this->setValue($tp, 'REP_NUM#' . $i, $r ? (string) $i : '-');
             $this->setValue($tp, 'REP_REPORT#' . $i, $r ? $this->formatReportForDocx($r) : '-');
             $this->setValue($tp, 'REP_REMARKS#' . $i, $r ? $this->clean($r['remarks'] ?? '') : '-');
         }
     }
 
     /**
-     * Format reports row "report" field for DOCX: if reportAsBullets, split by ; or newline and prefix with bullet.
+     * Format reports row "report" field for DOCX: plain text only (no bullet form; bullet form is only for Attendance).
      */
     private function formatReportForDocx(array $row): string
     {
         $report = (string) ($row['report'] ?? '');
         if (trim($report) === '') {
             return '-';
-        }
-        if (!empty($row['reportAsBullets'])) {
-            $lines = preg_split('/[;\n]+/', $report, -1, PREG_SPLIT_NO_EMPTY);
-            $lines = array_map('trim', array_filter($lines));
-            if ($lines === []) {
-                return '-';
-            }
-            $bullet = "\xE2\x80\xA2";
-            return $this->clean(implode("\n", array_map(function ($line) use ($bullet) {
-                return $bullet . ' ' . $line;
-            }, $lines)));
         }
         return $this->clean($report);
     }
@@ -709,14 +732,37 @@ class ExportDocxController extends Controller
         }
     }
 
+    /**
+     * Format administrative concern for DOCX: always as bullet list (single line = one bullet, multiple lines = multiple bullets).
+     * Normalize tabs and multiple spaces to single space so Word does not show text in separate columns.
+     */
+    private function formatConcernForDocx(array $row): string
+    {
+        $concern = (string) ($row['concern'] ?? '');
+        // Normalize tabs and multiple spaces to single space (keep newlines for bullet lines)
+        $concern = preg_replace('/[^\S\n]+/u', ' ', $concern);
+        $concern = trim($concern);
+        if ($concern === '') {
+            return '-';
+        }
+        $lines = $this->filterBulletLines($concern);
+        if ($lines === []) {
+            return '-';
+        }
+        $bullet = "\xE2\x80\xA2";
+        return $this->clean(implode("\n", array_map(function ($line) use ($bullet) {
+            return $bullet . ' ' . trim($line);
+        }, $lines)));
+    }
+
     private function setOtherAdminRows(\PhpOffice\PhpWord\TemplateProcessor $tp, array $report): void
     {
         $rows = $report['otherAdminRows'] ?? [];
         $first = $rows[0] ?? null;
-        $this->setValue($tp, 'ADM_CONCERN', $first ? $this->clean($first['concern'] ?? '') : '-');
+        $this->setValue($tp, 'ADM_CONCERN', $first ? $this->formatConcernForDocx($first) : '-');
         for ($i = 1; $i <= self::MAX_OTHER_ADMIN; $i++) {
             $r = $rows[$i - 1] ?? null;
-            $this->setValue($tp, 'ADM_CONCERN#' . $i, $r ? $this->clean($r['concern'] ?? '') : '-');
+            $this->setValue($tp, 'ADM_CONCERN#' . $i, $r ? $this->formatConcernForDocx($r) : '-');
         }
     }
 
@@ -724,9 +770,21 @@ class ExportDocxController extends Controller
     {
         $rows = $report['endorsedItemsRows'] ?? [];
         $first = $rows[0] ?? null;
-        $this->setValue($tp, 'END_ITEM', $first ? $this->clean($first['item'] ?? '') : '-');
+        // First row / single placeholder: use combined list when multiple items so a template with one ${END_ITEM} shows all
+        $endItemFirst = $first ? $this->clean($first['item'] ?? '') : '-';
+        if (count($rows) > 1) {
+            $lines = [];
+            foreach ($rows as $i => $r) {
+                $num = '1.' . ($i + 1);
+                $lines[] = $num . ' ' . $this->clean($r['item'] ?? '');
+            }
+            $endItemFirst = implode("\n", $lines);
+        }
+        $this->setValue($tp, 'END_ITEM', $endItemFirst);
+        $this->setValue($tp, 'END_NUM', $first ? '1.1' : '-');
         for ($i = 1; $i <= self::MAX_ENDORSED; $i++) {
             $r = $rows[$i - 1] ?? null;
+            $this->setValue($tp, 'END_NUM#' . $i, $r ? '1.' . $i : '-');
             $this->setValue($tp, 'END_ITEM#' . $i, $r ? $this->clean($r['item'] ?? '') : '-');
         }
     }
