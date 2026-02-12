@@ -2159,7 +2159,17 @@ body {
 .swap-form__pagination {
   margin-top: 1.5rem;
   display: flex;
+  align-items: center;
   gap: 0.5rem;
+}
+.swap-form__pagination-info {
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  color: #333;
+  font-weight: 500;
+  margin: 0 0.5rem;
+  display: flex;
+  align-items: center;
 }
 .swap-form__pagination button {
   padding: 0.5rem 1rem;

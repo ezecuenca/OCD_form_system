@@ -41,6 +41,8 @@ function SwapForm() {
         message: '',
         onConfirm: null
     });
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     const loadSwapRequests = () => setSwapRequests(getSwapRequests().filter(r => r.status !== 'archived'));
 
@@ -131,7 +133,23 @@ function SwapForm() {
         });
     };
 
-    const years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
+    // Generate dynamic years based on swap requests
+    const getYearsFromRequests = () => {
+        const currentYear = new Date().getFullYear();
+        const yearsSet = new Set([currentYear]);
+        
+        swapRequests.forEach(req => {
+            if (req.createdAt) {
+                const year = new Date(req.createdAt).getFullYear();
+                yearsSet.add(year);
+            }
+        });
+        
+        const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
+        return ['All Years', ...sortedYears.map(String)];
+    };
+
+    const years = getYearsFromRequests();
     const months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     const handleYearSelect = (year) => {
@@ -143,6 +161,23 @@ function SwapForm() {
         setSelectedMonth(month);
         setShowMonthDropdown(false);
     };
+
+    // Pagination calculations
+    const totalPages = Math.ceil(swapRequests.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedRequests = swapRequests.slice(startIndex, endIndex);
+
+    const goToFirstPage = () => setCurrentPage(1);
+    const goToPrevPage = () => setCurrentPage(prev => Math.max(1, prev - 1));
+    const goToNextPage = () => setCurrentPage(prev => Math.min(totalPages, prev + 1));
+    const goToLastPage = () => setCurrentPage(totalPages);
+
+    useEffect(() => {
+        if (currentPage > totalPages && totalPages > 0) {
+            setCurrentPage(totalPages);
+        }
+    }, [swapRequests.length, currentPage, totalPages]);
 
     const getRequestDescription = (req) => {
         if (req.targetTaskName) {
@@ -156,7 +191,7 @@ function SwapForm() {
             <div className="swap-form__search-bar">
                 <div className="swap-form__search-bar-input">
                     <img src={`${window.location.origin}/images/search_icon.svg`} alt="Search" />
-                    <input type="text" placeholder="Search..." disabled />
+                    <input type="text" placeholder="Search..." />
                 </div>
                 <div className="swap-form__datetime">
                     <button className="adr-form__return-btn" onClick={handleReturn}>
@@ -236,10 +271,10 @@ function SwapForm() {
                             <th>
                                 <input 
                                 type="checkbox" 
-                                checked={selectedRequests.length === swapRequests.length && swapRequests.length > 0}
+                                checked={selectedRequests.length === paginatedRequests.length && paginatedRequests.length > 0}
                                 onChange={(e) => {
                                     if (e.target.checked) {
-                                        setSelectedRequests(swapRequests.map(r => r.id));
+                                        setSelectedRequests(paginatedRequests.map(r => r.id));
                                     } else {
                                         setSelectedRequests([]);
                                     }
@@ -260,7 +295,7 @@ function SwapForm() {
                                 </td>
                             </tr>
                         ) : (
-                            swapRequests.map((req) => (
+                            paginatedRequests.map((req) => (
                                 <tr key={req.id}>
                                     <td>
                                         <input type="checkbox"
@@ -329,22 +364,23 @@ function SwapForm() {
             </div>
 
             <div className="swap-form__pagination">
-                <button disabled>
+                <button onClick={goToFirstPage} disabled={currentPage === 1} title="First page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11 17L6 12L11 7M18 17L13 12L18 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <button disabled>
+                <button onClick={goToPrevPage} disabled={currentPage === 1} title="Previous page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <button disabled>
+                <span className="swap-form__pagination-info">{swapRequests.length > 0 ? `Page ${currentPage} of ${totalPages}` : 'No data'}</span>
+                <button onClick={goToNextPage} disabled={currentPage === totalPages || swapRequests.length === 0} title="Next page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <button disabled>
+                <button onClick={goToLastPage} disabled={currentPage === totalPages || swapRequests.length === 0} title="Last page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13 17L18 12L13 7M6 17L11 12L6 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>

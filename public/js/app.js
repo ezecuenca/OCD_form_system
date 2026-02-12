@@ -68072,21 +68072,210 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 function Settings() {
+  var accounts = [];
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('accounts'),
+    _useState2 = _slicedToArray(_useState, 2),
+    activeSection = _useState2[0],
+    setActiveSection = _useState2[1];
+  var sectionContent;
+  switch (activeSection) {
+    case 'accounts':
+      sectionContent = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          className: "settings__panel-header",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h2", {
+            id: "accounts-title",
+            className: "settings__section-title",
+            children: "Account Management"
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          className: "settings__table",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("table", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("thead", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("tr", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("th", {
+                  className: "settings__table-check",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
+                    type: "checkbox",
+                    "aria-label": "Select all accounts"
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("th", {
+                  children: "User"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("th", {
+                  children: "Status"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("th", {
+                  children: "Role"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("th", {
+                  className: "settings__table-actions",
+                  children: "Actions"
+                })]
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("tbody", {
+              children: accounts.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("tr", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+                  colSpan: "5",
+                  style: {
+                    textAlign: 'center',
+                    padding: '2rem',
+                    color: '#666'
+                  },
+                  children: "No accounts yet. Add an account to get started."
+                })
+              }) : accounts.map(function (account) {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("tr", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+                    className: "settings__table-check",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
+                      type: "checkbox",
+                      "aria-label": "Select ".concat(account.name)
+                    })
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+                    children: account.name
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+                      className: "settings__status settings__status--online",
+                      children: account.status
+                    })
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+                    children: account.role
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("td", {
+                    className: "settings__table-actions",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+                      type: "button",
+                      className: "settings__icon-button",
+                      "aria-label": "Edit account",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
+                        src: "/images/edit_icon.svg",
+                        alt: "",
+                        "aria-hidden": "true"
+                      })
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+                      type: "button",
+                      className: "settings__icon-button",
+                      "aria-label": "Disable account",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
+                        src: "/images/disable_icon.svg",
+                        alt: "",
+                        "aria-hidden": "true"
+                      })
+                    })]
+                  })]
+                }, account.id);
+              })
+            })]
+          })
+        })]
+      });
+      break;
+    case 'templates':
+      sectionContent = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          className: "settings__panel-header",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h2", {
+            id: "templates-title",
+            className: "settings__section-title",
+            children: "Templates"
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          className: "settings__table",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("table", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("tbody", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("tr", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+                  style: {
+                    textAlign: 'center',
+                    padding: '2rem',
+                    color: '#666'
+                  },
+                  children: "Templates page placeholder."
+                })
+              })
+            })
+          })
+        })]
+      });
+      break;
+    case 'departments':
+    default:
+      sectionContent = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          className: "settings__panel-header",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h2", {
+            id: "departments-title",
+            className: "settings__section-title",
+            children: "Departments"
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          className: "settings__table",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("table", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("tbody", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("tr", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
+                  style: {
+                    textAlign: 'center',
+                    padding: '2rem',
+                    color: '#666'
+                  },
+                  children: "Departments page placeholder."
+                })
+              })
+            })
+          })
+        })]
+      });
+      break;
+  }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
     className: "settings",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
       className: "settings__header",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h1", {
         className: "settings__title",
-        children: "Settings"
+        children: "Admin Settings"
       })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
       className: "settings__content",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
-        children: "Settings content will go here."
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("section", {
+        className: "settings__panel",
+        "aria-label": "Admin settings",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("aside", {
+          className: "settings__subnav",
+          "aria-label": "Settings sections",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+            type: "button",
+            className: "settings__subnav-item ".concat(activeSection === 'accounts' ? 'settings__subnav-item--active' : ''),
+            onClick: function onClick() {
+              return setActiveSection('accounts');
+            },
+            children: "Accounts"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+            type: "button",
+            className: "settings__subnav-item ".concat(activeSection === 'templates' ? 'settings__subnav-item--active' : ''),
+            onClick: function onClick() {
+              return setActiveSection('templates');
+            },
+            children: "Templates"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+            type: "button",
+            className: "settings__subnav-item ".concat(activeSection === 'departments' ? 'settings__subnav-item--active' : ''),
+            onClick: function onClick() {
+              return setActiveSection('departments');
+            },
+            children: "Departments"
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          className: "settings__panel-body",
+          children: sectionContent
+        })]
       })
     })]
   });
@@ -68530,6 +68719,11 @@ function SwapForm() {
     _useState12 = _slicedToArray(_useState11, 2),
     confirmState = _useState12[0],
     setConfirmState = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1),
+    _useState14 = _slicedToArray(_useState13, 2),
+    currentPage = _useState14[0],
+    setCurrentPage = _useState14[1];
+  var itemsPerPage = 10;
   var loadSwapRequests = function loadSwapRequests() {
     return setSwapRequests((0,_utils_swapRequests__WEBPACK_IMPORTED_MODULE_1__.getSwapRequests)().filter(function (r) {
       return r.status !== 'archived';
@@ -68635,7 +68829,23 @@ function SwapForm() {
       return [].concat(_toConsumableArray(prev), [id]);
     });
   };
-  var years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
+
+  // Generate dynamic years based on swap requests
+  var getYearsFromRequests = function getYearsFromRequests() {
+    var currentYear = new Date().getFullYear();
+    var yearsSet = new Set([currentYear]);
+    swapRequests.forEach(function (req) {
+      if (req.createdAt) {
+        var year = new Date(req.createdAt).getFullYear();
+        yearsSet.add(year);
+      }
+    });
+    var sortedYears = Array.from(yearsSet).sort(function (a, b) {
+      return b - a;
+    });
+    return ['All Years'].concat(_toConsumableArray(sortedYears.map(String)));
+  };
+  var years = getYearsFromRequests();
   var months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   var handleYearSelect = function handleYearSelect(year) {
     setSelectedYear(year);
@@ -68645,6 +68855,33 @@ function SwapForm() {
     setSelectedMonth(month);
     setShowMonthDropdown(false);
   };
+
+  // Pagination calculations
+  var totalPages = Math.ceil(swapRequests.length / itemsPerPage);
+  var startIndex = (currentPage - 1) * itemsPerPage;
+  var endIndex = startIndex + itemsPerPage;
+  var paginatedRequests = swapRequests.slice(startIndex, endIndex);
+  var goToFirstPage = function goToFirstPage() {
+    return setCurrentPage(1);
+  };
+  var goToPrevPage = function goToPrevPage() {
+    return setCurrentPage(function (prev) {
+      return Math.max(1, prev - 1);
+    });
+  };
+  var goToNextPage = function goToNextPage() {
+    return setCurrentPage(function (prev) {
+      return Math.min(totalPages, prev + 1);
+    });
+  };
+  var goToLastPage = function goToLastPage() {
+    return setCurrentPage(totalPages);
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [swapRequests.length, currentPage, totalPages]);
   var getRequestDescription = function getRequestDescription(req) {
     if (req.targetTaskName) {
       return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") => \"").concat(req.targetTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
@@ -68662,8 +68899,7 @@ function SwapForm() {
           alt: "Search"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
           type: "text",
-          placeholder: "Search...",
-          disabled: true
+          placeholder: "Search..."
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "swap-form__datetime",
@@ -68775,10 +69011,10 @@ function SwapForm() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
                 type: "checkbox",
-                checked: selectedRequests.length === swapRequests.length && swapRequests.length > 0,
+                checked: selectedRequests.length === paginatedRequests.length && paginatedRequests.length > 0,
                 onChange: function onChange(e) {
                   if (e.target.checked) {
-                    setSelectedRequests(swapRequests.map(function (r) {
+                    setSelectedRequests(paginatedRequests.map(function (r) {
                       return r.id;
                     }));
                   } else {
@@ -68807,7 +69043,7 @@ function SwapForm() {
               },
               children: "No swap requests yet. View a task on the Schedule and click \"Request Swap\" to create one."
             })
-          }) : swapRequests.map(function (req) {
+          }) : paginatedRequests.map(function (req) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
@@ -68917,7 +69153,9 @@ function SwapForm() {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       className: "swap-form__pagination",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
-        disabled: true,
+        onClick: goToFirstPage,
+        disabled: currentPage === 1,
+        title: "First page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
@@ -68931,7 +69169,9 @@ function SwapForm() {
           })
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
-        disabled: true,
+        onClick: goToPrevPage,
+        disabled: currentPage === 1,
+        title: "Previous page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
@@ -68944,8 +69184,13 @@ function SwapForm() {
             strokeLinejoin: "round"
           })
         })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        className: "swap-form__pagination-info",
+        children: swapRequests.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'No data'
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
-        disabled: true,
+        onClick: goToNextPage,
+        disabled: currentPage === totalPages || swapRequests.length === 0,
+        title: "Next page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
@@ -68959,7 +69204,9 @@ function SwapForm() {
           })
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
-        disabled: true,
+        onClick: goToLastPage,
+        disabled: currentPage === totalPages || swapRequests.length === 0,
+        title: "Last page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
