@@ -19,7 +19,7 @@ body {
 
 .sidebar {
   width: 240px;
-  background-color: #E99745;
+  background: linear-gradient(180deg, #E99745 0%, #E99745 40%, #b86b20 100%);
   color: #FFE3C2;
   display: flex;
   flex-direction: column;
@@ -112,7 +112,7 @@ body {
   left: 240px;
   right: 0;
   height: 50px;
-  background: linear-gradient(135deg, #18004C 0%, #290081 100%);
+  background: linear-gradient(135deg, #18004C 0%, #3a1499 100%);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -191,6 +191,8 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 0.25rem;
   z-index: 1000;
+  outline: 1px solid #290081;
+  outline-offset: 0;
 }
 .header__dropdown::before {
   content: "";
@@ -1080,6 +1082,20 @@ body {
   font-weight: 500;
   font-style: normal;
 }
+.adr-form__other-admin-extra {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.adr-form__other-admin-extra-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.adr-form__other-admin-extra-row .adr-form__modal-textarea {
+  flex: 1;
+}
 .adr-form__signature-fields {
   grid-column: 1/-1;
   display: grid;
@@ -1246,6 +1262,11 @@ body {
   padding: 1.5rem;
   overflow-y: auto;
   flex: 1;
+}
+.adr-form__modal-hint {
+  font-size: 0.8rem;
+  color: #555;
+  margin: 0 0 0.75rem 0;
 }
 .adr-form__modal-table {
   width: 100%;
@@ -4146,6 +4167,10 @@ body.document-modal-open .main-content {
   max-width: 520px;
   text-align: center;
 }
+.login-container--signup {
+  max-width: 580px;
+  padding: 1.75rem 1.5rem;
+}
 
 .login-logo {
   margin-bottom: 1.5rem;
@@ -4173,13 +4198,44 @@ body.document-modal-open .main-content {
 }
 
 .signup-title {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #290081;
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
   text-align: center;
 }
 
+.login-form__two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+.login-form__two-col .login-form__group {
+  margin-bottom: 0;
+}
+.login-form--signup .login-form__two-col {
+  gap: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.login-form--signup .login-form__group {
+  margin-bottom: 1.5rem;
+}
+.login-form--signup .login-form__group label {
+  font-size: 0.8rem;
+  margin-bottom: 0.35rem;
+}
+.login-form--signup .login-form__group input,
+.login-form--signup .login-form__group select {
+  padding: 0.5rem 0.65rem;
+  font-size: 0.875rem;
+  border-width: 1px;
+  border-radius: 4px;
+}
+.login-form--signup .login-form__two-col .login-form__group {
+  margin-bottom: 0;
+}
 .login-form__group {
   margin-bottom: 1.5rem;
   text-align: left;
@@ -4241,6 +4297,12 @@ body.document-modal-open .main-content {
 .login-form__button:active {
   transform: translateY(0);
 }
+.login-form--signup .login-form__button {
+  padding: 0.6rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  margin-top: 0.25rem;
+}
 .login-form__signup {
   margin-top: 1.5rem;
   font-size: 0.9rem;
@@ -4257,126 +4319,11 @@ body.document-modal-open .main-content {
   color: #1d4ed8;
   text-decoration: underline;
 }
-
-.settings {
-  padding: 32px 40px;
-  background: linear-gradient(135deg, #f5f7fb 0%, #eef2f7 100%);
-  min-height: 100vh;
+.login-form--signup .login-form__signup {
+  margin-top: 1rem;
+  font-size: 0.8rem;
 }
 
-.settings__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-}
-
-.settings__title {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1f2937;
-}
-
-.settings__content {
-  max-width: 920px;
-}
-
-.settings__section {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  padding: 24px;
-}
-
-.settings__section-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 6px;
-}
-
-.settings__section-description {
-  color: #6b7280;
-  margin-bottom: 20px;
-}
-
-.settings__section-body {
-  display: grid;
-  gap: 16px;
-}
-
-.settings__card {
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 16px 18px;
-  background: #f9fafb;
-}
-
-.settings__card-header {
-  margin-bottom: 10px;
-}
-
-.settings__card-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
-}
-
-.settings__card-body {
-  display: grid;
-  gap: 12px;
-}
-
-.settings__muted {
-  color: #6b7280;
-  font-size: 14px;
-}
-
-.settings__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.settings__button {
-  border: 1px solid #d1d5db;
-  background: #ffffff;
-  color: #111827;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-}
-
-.settings__button:hover {
-  border-color: #9ca3af;
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
-  transform: translateY(-1px);
-}
-
-.settings__button--primary {
-  background: #1f6feb;
-  color: #ffffff;
-  border-color: #1f6feb;
-}
-
-.settings__button--primary:hover {
-  box-shadow: 0 8px 18px rgba(31, 111, 235, 0.28);
-}
-
-@media (max-width: 640px) {
-  .settings {
-    padding: 24px 18px;
-  }
-  .settings__title {
-    font-size: 24px;
-  }
-  .settings__section {
-    padding: 18px;
-  }
-}
 .profile {
   padding: 2rem;
   width: 100%;
@@ -4651,6 +4598,8 @@ body.document-modal-open .main-content {
   padding: 0.35rem;
   z-index: 100;
   border: 1px solid #c0c0c0;
+  outline: 1px solid #290081;
+  outline-offset: 0;
   /* Arrow on left pointing toward the plus button */
 }
 .profile__photo-dropdown::before {

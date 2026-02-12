@@ -12,14 +12,16 @@ function Profile() {
     const profileImgSrc = profileImageUrl || '/images/default_profile.png';
     const [displayName, setDisplayName] = useState(() => localStorage.getItem('adr_profile_name') || 'Your Name');
     const [displaySection, setDisplaySection] = useState(() => localStorage.getItem('adr_profile_section') || '');
+    const [idNo, setIdNo] = useState(() => localStorage.getItem('adr_profile_id_no') || '');
+    const [position, setPosition] = useState(() => localStorage.getItem('adr_profile_position') || '');
     const [address, setAddress] = useState(() => localStorage.getItem('adr_profile_address') || '');
     const [email, setEmail] = useState(() => localStorage.getItem('adr_profile_email') || '');
     const [isEditing, setIsEditing] = useState(false);
     const [editName, setEditName] = useState('');
     const [editSection, setEditSection] = useState('');
 
-    const departmentOptions = [
-        { value: '', label: 'No available departments' },
+    const sectionOptions = [
+        { value: '', label: 'No section' },
     ];
 
     useEffect(() => {
@@ -166,9 +168,9 @@ function Profile() {
                                         className="profile__department-select"
                                         value={editSection}
                                         onChange={(e) => setEditSection(e.target.value)}
-                                        aria-label="Department"
+                                        aria-label="Section"
                                     >
-                                        {departmentOptions.map((opt) => (
+                                        {sectionOptions.map((opt) => (
                                             <option key={opt.value || 'blank'} value={opt.value}>{opt.label}</option>
                                         ))}
                                     </select>
@@ -186,7 +188,7 @@ function Profile() {
                                 </div>
                                 <div className="profile__section-cell">
                                     <p className={`profile__section ${!displaySection ? 'profile__section--empty' : ''}`}>
-                                        {displaySection || 'No department'}
+                                        {displaySection || 'No section'}
                                     </p>
                                 </div>
                             </>
@@ -195,6 +197,34 @@ function Profile() {
                 </div>
 
                 <div className="profile__fields">
+                    <div className="profile__field">
+                        <label className="profile__field-label" htmlFor="profile-id-no">ID NO.</label>
+                        <input
+                            id="profile-id-no"
+                            type="text"
+                            className="profile__field-input"
+                            value={idNo}
+                            onChange={(e) => {
+                                setIdNo(e.target.value);
+                                localStorage.setItem('adr_profile_id_no', e.target.value);
+                            }}
+                            placeholder="ID No."
+                        />
+                    </div>
+                    <div className="profile__field">
+                        <label className="profile__field-label" htmlFor="profile-position">POSITION</label>
+                        <input
+                            id="profile-position"
+                            type="text"
+                            className="profile__field-input"
+                            value={position}
+                            onChange={(e) => {
+                                setPosition(e.target.value);
+                                localStorage.setItem('adr_profile_position', e.target.value);
+                            }}
+                            placeholder="Position"
+                        />
+                    </div>
                     <div className="profile__field">
                         <label className="profile__field-label" htmlFor="profile-email">EMAIL</label>
                         <input

@@ -152,12 +152,12 @@ function ADRForm() {
             subject,
             dateTime,
             status,
-            attendanceItems,
-            reportsItems,
-            communicationRows,
-            otherItemsRows,
-            otherAdminRows,
-            endorsedItemsRows,
+            attendanceItems: attendanceItems ?? [],
+            reportsItems: reportsItems ?? [],
+            communicationRows: communicationRows ?? [],
+            otherItemsRows: otherItemsRows ?? [],
+            otherAdminRows: otherAdminRows ?? [],
+            endorsedItemsRows: Array.isArray(endorsedItemsRows) ? [...endorsedItemsRows] : [],
             preparedBy,
             preparedPosition,
             receivedBy,
@@ -535,26 +535,18 @@ function ADRForm() {
                                                 </div>
                                             </td>
                                             <td>
-                                                <label className="adr-form__bullet-check">
-                                                    <input type="checkbox" checked={row.contactAsBullets ?? false} onChange={(e) => updateCommunicationRow(row.id, 'contactAsBullets', e.target.checked)} />
-                                                    <span>Bullet form</span>
-                                                </label>
                                                 <textarea 
                                                     className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
-                                                    placeholder="Enter contact/freq/channel (new line to break)"
+                                                    placeholder="Enter contact/freq/channel (press Enter for each bullet)"
                                                     rows="2"
                                                     value={row.contact}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'contact', e.target.value)}
                                                 />
                                             </td>
                                             <td>
-                                                <label className="adr-form__bullet-check">
-                                                    <input type="checkbox" checked={row.statusAsBullets ?? false} onChange={(e) => updateCommunicationRow(row.id, 'statusAsBullets', e.target.checked)} />
-                                                    <span>Bullet form</span>
-                                                </label>
                                                 <textarea 
                                                     className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
-                                                    placeholder="Enter status/remarks (new line to break)"
+                                                    placeholder="Enter status/remarks (press Enter for each bullet)"
                                                     rows="2"
                                                     value={row.status}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'status', e.target.value)}
@@ -627,19 +619,9 @@ function ADRForm() {
                                                 />
                                             </td>
                                             <td>
-                                                <label className="adr-form__bullet-check">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={item.taskAsBullets ?? false}
-                                                        onChange={(e) => setAttendanceItems(prev => prev.map(i => 
-                                                            i.id === item.id ? { ...i, taskAsBullets: e.target.checked } : i
-                                                        ))}
-                                                    />
-                                                    <span>Bullet form</span>
-                                                </label>
                                                 <textarea 
                                                     className="adr-form__modal-input adr-form__modal-textarea" 
-                                                    placeholder="Enter task (use new line for multiple items)"
+                                                    placeholder="Enter task (press Enter for each bullet)"
                                                     rows="3"
                                                     value={item.task}
                                                     onChange={(e) => {
@@ -703,16 +685,6 @@ function ADRForm() {
                                         <tr className="adr-form__modal-table-row" key={item.id}>
                                             <td className="adr-form__modal-table-number">{index + 1}</td>
                                             <td>
-                                                <label className="adr-form__bullet-check">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={item.reportAsBullets ?? false}
-                                                        onChange={(e) => setReportsItems(prev => prev.map(i => 
-                                                            i.id === item.id ? { ...i, reportAsBullets: e.target.checked } : i
-                                                        ))}
-                                                    />
-                                                    <span>Bullet form</span>
-                                                </label>
                                                 <textarea 
                                                     className="adr-form__modal-input adr-form__modal-textarea" 
                                                     placeholder="Enter reports and advisories released (use new line to break text)"
@@ -826,13 +798,9 @@ function ADRForm() {
                                                 </div>
                                             </td>
                                             <td>
-                                                <label className="adr-form__bullet-check">
-                                                    <input type="checkbox" checked={row.statusAsBullets ?? false} onChange={(e) => updateOtherItemsRow(row.id, 'statusAsBullets', e.target.checked)} />
-                                                    <span>Bullet form</span>
-                                                </label>
                                                 <textarea 
                                                     className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
-                                                    placeholder="Enter status/remarks (new line to break)"
+                                                    placeholder="Enter status/remarks (press Enter for each bullet)"
                                                     rows="2"
                                                     value={row.status}
                                                     onChange={(e) => updateOtherItemsRow(row.id, 'status', e.target.value)}
@@ -877,50 +845,18 @@ function ADRForm() {
                             </button>
                         </div>
                         <div className="adr-form__modal-body">
-                            <table className="adr-form__modal-table">
-                                <thead>
-                                    <tr>
-                                        <th style={{ width: '50px' }}></th>
-                                        <th>Concern</th>
-                                        <th style={{ width: '60px' }}>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {otherAdminRows.map((row, index) => (
-                                        <tr key={row.id}>
-                                            <td>•</td>
-                                            <td>
-                                                <label className="adr-form__bullet-check">
-                                                    <input type="checkbox" checked={row.concernAsBullets ?? false} onChange={(e) => updateOtherAdminRow(row.id, 'concernAsBullets', e.target.checked)} />
-                                                    <span>Bullet form</span>
-                                                </label>
-                                                <textarea 
-                                                    className="adr-form__modal-input adr-form__modal-textarea" 
-                                                    placeholder="Enter administrative concern (new line to break)"
-                                                    rows="3"
-                                                    value={row.concern}
-                                                    onChange={(e) => updateOtherAdminRow(row.id, 'concern', e.target.value)}
-                                                />
-                                            </td>
-                                            <td>
-                                                <button 
-                                                    className="adr-form__modal-action-btn" 
-                                                    type="button"
-                                                    onClick={() => removeOtherAdminRow(row.id)}
-                                                >
-                                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                                                        <path d="M3 6H5H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                        <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                    </svg>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            <button className="adr-form__modal-add-row" type="button" onClick={addOtherAdminRow}>
-                                Add Row
-                            </button>
+                            <p className="adr-form__modal-hint">List down administrative concerns. Press Enter for each bullet.</p>
+                            <textarea
+                                className="adr-form__modal-input adr-form__modal-textarea"
+                                placeholder="e.g. No untoward incident"
+                                rows={6}
+                                value={otherAdminRows[0]?.concern ?? ''}
+                                onChange={(e) => {
+                                    const first = otherAdminRows[0];
+                                    if (first) updateOtherAdminRow(first.id, 'concern', e.target.value);
+                                    else setOtherAdminRows([{ id: 1, concern: e.target.value, concernAsBullets: false }]);
+                                }}
+                            />
                         </div>
                         <div className="adr-form__modal-footer">
                             <button className="adr-form__modal-confirm" type="button" onClick={() => setShowOtherAdminModal(false)}>
@@ -954,13 +890,9 @@ function ADRForm() {
                                         <tr key={row.id}>
                                             <td>1.{index + 1}</td>
                                             <td>
-                                                <label className="adr-form__bullet-check">
-                                                    <input type="checkbox" checked={row.itemAsBullets ?? false} onChange={(e) => updateEndorsedItemsRow(row.id, 'itemAsBullets', e.target.checked)} />
-                                                    <span>Bullet form</span>
-                                                </label>
                                                 <textarea 
                                                     className="adr-form__modal-input adr-form__modal-textarea" 
-                                                    placeholder="Enter item (new line to break)"
+                                                    placeholder="Enter item (press Enter for each bullet)"
                                                     rows="3"
                                                     value={row.item}
                                                     onChange={(e) => updateEndorsedItemsRow(row.id, 'item', e.target.value)}
@@ -996,6 +928,7 @@ function ADRForm() {
             )}
 
             <DocumentViewModal
+                key={showPreviewModal ? `preview-${endorsedItemsRows?.length ?? 0}` : 'preview-closed'}
                 isOpen={showPreviewModal}
                 report={showPreviewModal ? getPreviewReport() : null}
                 onClose={() => {
