@@ -191,7 +191,7 @@ function SwapForm() {
             <div className="swap-form__search-bar">
                 <div className="swap-form__search-bar-input">
                     <img src={`${window.location.origin}/images/search_icon.svg`} alt="Search" />
-                    <input type="text" placeholder="Search..." disabled />
+                    <input type="text" placeholder="Search..." />
                 </div>
                 <div className="swap-form__datetime">
                     <button className="adr-form__return-btn" onClick={handleReturn}>
