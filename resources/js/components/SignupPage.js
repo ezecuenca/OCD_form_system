@@ -1,26 +1,71 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
-const sectionOptions = [
-    { value: '', label: 'Choose your section' },
-];
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function SignupPage() {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [section, setSection] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [sectionOptions, setSectionOptions] = useState([]);
+    const [isLoadingSections, setIsLoadingSections] = useState(false);
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        let isMounted = true;
+        setIsLoadingSections(true);
+        axios.get('/api/section')
+            .then((res) => {
+                if (!isMounted) return;
+                const options = Array.isArray(res?.data) ? res.data : [];
+                setSectionOptions(options);
+            })
+            .catch(() => {
+                if (!isMounted) return;
+                setSectionOptions([]);
+            })
+            .finally(() => {
+                if (!isMounted) return;
+                setIsLoadingSections(false);
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
+        setErrorMessage('');
+
         if (password !== confirmPassword) {
-            alert('Passwords do not match!');
+            setErrorMessage('Passwords do not match.');
             return;
         }
-        
-        console.log('Signup attempt:', { username, email, section, password });
+
+        try {
+            setIsSubmitting(true);
+            await axios.post('/api/auth/register', {
+                username,
+                email,
+                password,
+                section_id: section || null,
+            });
+            navigate('/login');
+        } catch (err) {
+            const response = err?.response?.data;
+            if (response?.errors) {
+                const firstError = Object.values(response.errors).flat()[0];
+                setErrorMessage(firstError || 'Could not create account.');
+            } else {
+                setErrorMessage(response?.message || 'Could not create account.');
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -28,6 +73,11 @@ function SignupPage() {
             <div className="login-container login-container--signup">
                 <h2 className="signup-title">Create Account</h2>
                 <form className="login-form login-form--signup" onSubmit={handleSubmit}>
+                    {errorMessage && (
+                        <div className="login-form__error">
+                            {errorMessage}
+                        </div>
+                    )}
                     <div className="login-form__group">
                         <label htmlFor="username">Username</label>
                         <input
@@ -46,9 +96,12 @@ function SignupPage() {
                             value={section}
                             onChange={(e) => setSection(e.target.value)}
                             className="login-form__select"
+                            disabled={isLoadingSections}
+                            required
                         >
+                            <option value="">{isLoadingSections ? 'Loading sections...' : 'Choose your section'}</option>
                             {sectionOptions.map((opt) => (
-                                <option key={opt.value || 'blank'} value={opt.value}>{opt.label}</option>
+                                <option key={opt.id} value={opt.id}>{opt.name}</option>
                             ))}
                         </select>
                     </div>
@@ -86,7 +139,7 @@ function SignupPage() {
                         />
                     </div>
                     <button type="submit" className="login-form__button">
-                        Sign Up
+                        {isSubmitting ? 'Signing Up...' : 'Sign Up'}
                     </button>
                     <div className="login-form__signup">
                         Already have an account? <Link to="/login" className="login-form__signup-link">Login</Link> here.

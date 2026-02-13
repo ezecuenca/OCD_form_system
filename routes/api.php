@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExportDocxController;
+use App\Http\Controllers\SectionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/auth/register', [AuthController::class, 'register'])->name('api.auth.register');
+Route::get('/sections', [SectionsController::class, 'index'])->name('api.sections.index');
+Route::get('/section', [SectionsController::class, 'index'])->name('api.section.index');
 
 Route::post('/adr/export-docx', ExportDocxController::class)->name('api.adr.export-docx');
 Route::get('/adr/export-docx/{token}', [ExportDocxController::class, 'download'])->name('api.adr.export-docx.download');
