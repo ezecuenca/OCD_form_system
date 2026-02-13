@@ -198,20 +198,6 @@ function Profile() {
 
                 <div className="profile__fields">
                     <div className="profile__field">
-                        <label className="profile__field-label" htmlFor="profile-id-no">ID NO.</label>
-                        <input
-                            id="profile-id-no"
-                            type="text"
-                            className="profile__field-input"
-                            value={idNo}
-                            onChange={(e) => {
-                                setIdNo(e.target.value);
-                                localStorage.setItem('adr_profile_id_no', e.target.value);
-                            }}
-                            placeholder="ID No."
-                        />
-                    </div>
-                    <div className="profile__field">
                         <label className="profile__field-label" htmlFor="profile-position">POSITION</label>
                         <input
                             id="profile-position"
@@ -237,20 +223,6 @@ function Profile() {
                                 localStorage.setItem('adr_profile_email', e.target.value);
                             }}
                             placeholder="Email"
-                        />
-                    </div>
-                    <div className="profile__field">
-                        <label className="profile__field-label" htmlFor="profile-address">ADDRESS</label>
-                        <input
-                            id="profile-address"
-                            type="text"
-                            className="profile__field-input"
-                            value={address}
-                            onChange={(e) => {
-                                setAddress(e.target.value);
-                                localStorage.setItem('adr_profile_address', e.target.value);
-                            }}
-                            placeholder="Street address"
                         />
                     </div>
                 </div>
