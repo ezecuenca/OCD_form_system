@@ -6,6 +6,7 @@ import LoadingScreen from './LoadingScreen';
 function SignupPage() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [fullName, setFullName] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [section, setSection] = useState('');
@@ -76,6 +77,7 @@ function SignupPage() {
             setIsSubmitting(true);
             await axios.get('/sanctum/csrf-cookie');
             await axios.post('/api/auth/register', {
+                name: fullName.trim(),
                 username,
                 email,
                 password,
@@ -118,6 +120,17 @@ function SignupPage() {
                             {errorMessage}
                         </div>
                     )}
+                    <div className="login-form__group">
+                        <label htmlFor="fullName">Full Name</label>
+                        <input
+                            type="text"
+                            id="fullName"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            placeholder="Enter your full name"
+                            required
+                        />
+                    </div>
                     <div className="login-form__group">
                         <label htmlFor="username">Username</label>
                         <input

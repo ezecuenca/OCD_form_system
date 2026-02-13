@@ -10,6 +10,20 @@ const HEADER_HEIGHT_PX = 165;
 const FOOTER_HEIGHT_PX = 100;
 const CONTENT_AREA_FALLBACK = PAGE_HEIGHT_PX_FALLBACK - HEADER_HEIGHT_PX - FOOTER_HEIGHT_PX;
 
+function getCsrfToken() {
+    const name = 'XSRF-TOKEN=';
+    const decoded = decodeURIComponent(document.cookie);
+    const parts = decoded.split(';');
+    for (let i = 0; i < parts.length; i++) {
+        const part = parts[i].trim();
+        if (part.indexOf(name) === 0) {
+            return part.substring(name.length).trim();
+        }
+    }
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    return meta ? meta.getAttribute('content') : null;
+}
+
 function getBreakPoints(contentEl, bodyHeight) {
     if (!contentEl || bodyHeight <= 0) return [0, bodyHeight];
     const contentRect = contentEl.getBoundingClientRect();
@@ -46,7 +60,7 @@ function computePageRanges(bodyHeight, contentArea, breakPoints) {
 }
 
 function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
-    const { getReport } = useFormContext();
+    const { getReport, fetchReport } = useFormContext();
     const [reportFromId, setReportFromId] = useState(null);
     const [exportLoading, setExportLoading] = useState(false);
     const [exportError, setExportError] = useState(null);
@@ -72,11 +86,18 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
     useEffect(() => {
         if (isOpen && reportId && reportProp == null) {
             const foundReport = getReport(reportId);
-            setReportFromId(foundReport);
+            const hasFullData = foundReport && foundReport.attendanceItems != null;
+            if (hasFullData) {
+                setReportFromId(foundReport);
+            } else if (reportId != null) {
+                fetchReport(reportId).then(setReportFromId).catch(() => setReportFromId(foundReport || null));
+            } else {
+                setReportFromId(foundReport || null);
+            }
         } else {
             setReportFromId(null);
         }
-    }, [isOpen, reportId, reportProp, getReport]);
+    }, [isOpen, reportId, reportProp, getReport, fetchReport]);
 
     useEffect(() => {
         pdfViewUrlRef.current = pdfViewUrl;
@@ -138,13 +159,35 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
                 return null;
             });
         }
+        const csrfToken = getCsrfToken();
+        const headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/pdf',
+            'X-Requested-With': 'XMLHttpRequest'
+        };
+        if (csrfToken) headers['X-XSRF-TOKEN'] = csrfToken;
         fetch('/api/adr/export-pdf', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/pdf', 'X-Requested-With': 'XMLHttpRequest' },
+            credentials: 'include',
+            headers,
             body: JSON.stringify({ report: reportPayload })
         })
             .then((res) => {
-                if (!res.ok) return res.text().then((t) => { throw new Error(res.status === 503 ? 'PDF preview requires LibreOffice.' : t || 'Failed to load PDF'); });
+                const contentType = (res.headers.get('Content-Type') || '').toLowerCase();
+                if (!res.ok) {
+                    return res.text().then((t) => {
+                        const isHtml = (t || '').trim().toLowerCase().startsWith('<!doctype') || (t || '').includes('Page Expired');
+                        const msg = res.status === 419 || isHtml
+                            ? 'Session may have expired. Please refresh the page and try again.'
+                            : (res.status === 503 ? 'PDF preview requires LibreOffice.' : t || 'Failed to load PDF');
+                        throw new Error(msg);
+                    });
+                }
+                if (contentType.includes('text/html')) {
+                    return res.text().then(() => {
+                        throw new Error('Session may have expired. Please refresh the page and try again.');
+                    });
+                }
                 return res.blob();
             })
             .then((blob) => {
@@ -156,7 +199,7 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
                     setPdfViewUrl(url);
                     setPdfError(null);
                 } else {
-                    setPdfError('Unexpected response.');
+                    setPdfError('Server did not return a valid PDF. Try refreshing the page.');
                 }
             })
             .catch((err) => {
@@ -253,9 +296,17 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
             alertStatus: report.alertStatus || report.status || 'WHITE ALERT'
         };
         try {
+            const csrfToken = getCsrfToken();
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/pdf',
+                'X-Requested-With': 'XMLHttpRequest'
+            };
+            if (csrfToken) headers['X-XSRF-TOKEN'] = csrfToken;
             const res = await fetch('/api/adr/export-pdf', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/pdf', 'X-Requested-With': 'XMLHttpRequest' },
+                credentials: 'include',
+                headers,
                 body: JSON.stringify({ report: reportPayload })
             });
             const contentType = res.headers.get('Content-Type') || '';
@@ -298,6 +349,22 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
             seen.add(key);
             return name;
         });
+    };
+
+    const signatureNameWithBreaks = (name) => {
+        if (name == null || name === '—' || name === '-') return name;
+        const s = String(name).trim();
+        if (!s) return '-';
+        if (s.includes('\n')) {
+            return (
+                <span className="document-viewer__signature-name-multiline">
+                    {s.split('\n').map((line, i) => (
+                        <span key={i} className="document-viewer__signature-name-line">{line.trim() || '\u00A0'}</span>
+                    ))}
+                </span>
+            );
+        }
+        return s;
     };
 
     const renderMultiline = (text, asBullets) => {
@@ -547,23 +614,23 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
                     <div className="document-viewer__signature-row">
                         <div className="document-viewer__signature-item" data-break-point>
                             <div className="document-viewer__signature-label" data-break-point>Prepared by:</div>
-                            <div className="document-viewer__signature-name">{sigNames[0]}</div>
+                            <div className="document-viewer__signature-name">{signatureNameWithBreaks(sigNames[0])}</div>
                             <div className="document-viewer__signature-position">{dash(report.preparedPosition)}</div>
                         </div>
                         <div className="document-viewer__signature-item" data-break-point>
                             <div className="document-viewer__signature-label" data-break-point>Received by:</div>
-                            <div className="document-viewer__signature-name">{sigNames[1]}</div>
+                            <div className="document-viewer__signature-name">{signatureNameWithBreaks(sigNames[1])}</div>
                             <div className="document-viewer__signature-position">{dash(report.receivedPosition)}</div>
                         </div>
                     </div>
                     <div className="document-viewer__signature-item document-viewer__signature-item--full" data-break-point>
                         <div className="document-viewer__signature-label" data-break-point>Noted by:</div>
-                        <div className="document-viewer__signature-name">{sigNames[2]}</div>
+                        <div className="document-viewer__signature-name">{signatureNameWithBreaks(sigNames[2])}</div>
                         <div className="document-viewer__signature-position">{dash(report.notedPosition)}</div>
                     </div>
                     <div className="document-viewer__signature-item document-viewer__signature-item--full" data-break-point>
                         <div className="document-viewer__signature-label" data-break-point>Approved:</div>
-                        <div className="document-viewer__signature-name">{sigNames[3]}</div>
+                        <div className="document-viewer__signature-name">{signatureNameWithBreaks(sigNames[3])}</div>
                         <div className="document-viewer__signature-position">{dash(report.approvedPosition)}</div>
                     </div>
                 </div>

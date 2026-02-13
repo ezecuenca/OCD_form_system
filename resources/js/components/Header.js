@@ -4,10 +4,22 @@ import { useFormContext } from '../context/FormContext';
 import axios from 'axios';
 
 function Header() {
-    const { profileImageUrl } = useFormContext();
+    const { profileImageUrl, userFullName, setUserFullName } = useFormContext();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        let isMounted = true;
+        axios.get('/api/profile', { withCredentials: true })
+            .then((res) => {
+                if (isMounted && res.data?.full_name != null) {
+                    setUserFullName(String(res.data.full_name).trim());
+                }
+            })
+            .catch(() => {});
+        return () => { isMounted = false; };
+    }, [setUserFullName]);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -47,6 +59,9 @@ function Header() {
                 <div className="header__title-sub">Caraga Region</div>
             </div>
             <div className="header__user-wrap" ref={dropdownRef}>
+                {userFullName && (
+                    <span className="header__user-name">{userFullName}</span>
+                )}
                 <div className="header__user" onClick={handleUserClick} role="button" aria-haspopup="true" aria-expanded={dropdownOpen}>
                     <div className={`header__profile-wrap ${!profileImageUrl ? 'header__profile-wrap--default' : ''}`} aria-hidden>
                         {profileImageUrl ? (
