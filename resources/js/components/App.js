@@ -30,7 +30,7 @@ function AppLayout() {
             <main className="main-content" id="app-content">
                 <Routes>
                     <Route path="/" element={<Navigate to="/login" replace />} />
-                    <Route path="/dashboard" element={<Navigate to="/adr-reports" replace />} />
+                    <Route path="/dashboard" element={<Navigate to="/schedule" replace />} />
                     <Route path="/adr-reports" element={<ADRReports />} />
                     <Route path="/adr-reports/create" element={<ADRForm />} />
                     <Route path="/adr-reports/view/:id" element={<ViewRedirect />} />

@@ -4,11 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    public function login(Request $request)
+    {
+        $validated = $request->validate([
+            'username' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
+
+        $user = User::where('username', $validated['username'])->first();
+        if (!$user || !Hash::check($validated['password'], $user->hashed_password)) {
+            return response()->json(['message' => 'Invalid credentials.'], 401);
+        }
+
+        Auth::login($user);
+
+        return response()->json([
+            'id' => $user->id,
+            'username' => $user->username,
+            'email' => $user->email,
+            'role_id' => $user->role_id,
+        ]);
+    }
+
     public function register(Request $request)
     {
         $validated = $request->validate([

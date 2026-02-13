@@ -1,13 +1,36 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function LoginPage() {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Login attempt:', { username, password });
+        setErrorMessage('');
+
+        try {
+            setIsSubmitting(true);
+            await axios.post('/api/auth/login', {
+                username,
+                password,
+            });
+            navigate('/dashboard');
+        } catch (err) {
+            const response = err?.response?.data;
+            if (response?.errors) {
+                const firstError = Object.values(response.errors).flat()[0];
+                setErrorMessage(firstError || 'Login failed.');
+            } else {
+                setErrorMessage(response?.message || 'Login failed.');
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -21,6 +44,11 @@ function LoginPage() {
                     <h2>Caraga Region</h2>
                 </div>
                 <form className="login-form" onSubmit={handleSubmit}>
+                    {errorMessage && (
+                        <div className="login-form__error">
+                            {errorMessage}
+                        </div>
+                    )}
                     <div className="login-form__group">
                         <label htmlFor="username">Username</label>
                         <input
@@ -44,7 +72,7 @@ function LoginPage() {
                         />
                     </div>
                     <button type="submit" className="login-form__button">
-                        Login
+                        {isSubmitting ? 'Logging in...' : 'Login'}
                     </button>
                     <div className="login-form__signup">
                         Don't have an account? <Link to="/signup" className="login-form__signup-link">Sign up</Link> here.
