@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AdrFormController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExportDocxController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SectionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +30,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::get('/profile', [ProfileController::class, 'show'])->name('api.profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('api.profile.update');
+
+    Route::get('/adr-forms', [AdrFormController::class, 'index'])->name('api.adr-forms.index');
+    Route::get('/adr-forms/{id}', [AdrFormController::class, 'show'])->name('api.adr-forms.show');
+    Route::post('/adr-forms', [AdrFormController::class, 'store'])->name('api.adr-forms.store');
+    Route::put('/adr-forms/{id}', [AdrFormController::class, 'update'])->name('api.adr-forms.update');
+    Route::patch('/adr-forms/{id}/archive', [AdrFormController::class, 'archive'])->name('api.adr-forms.archive');
+    Route::patch('/adr-forms/{id}/restore', [AdrFormController::class, 'restore'])->name('api.adr-forms.restore');
+    Route::delete('/adr-forms/{id}', [AdrFormController::class, 'destroy'])->name('api.adr-forms.destroy');
 
     Route::post('/adr/export-docx', ExportDocxController::class)->name('api.adr.export-docx');
     Route::get('/adr/export-docx/{token}', [ExportDocxController::class, 'download'])->name('api.adr.export-docx.download');

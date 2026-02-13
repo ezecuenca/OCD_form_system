@@ -38,11 +38,11 @@ const getDefaultEndorsedItemsRows = () => [
 function ADRForm() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { addReport, updateReport, getReport } = useFormContext();
+    const { addReport, updateReport, getReport, fetchReport } = useFormContext();
     
-    // Check if we're editing an existing report
     const reportToEdit = location.state?.report;
     const isEditing = !!reportToEdit;
+    const [fullReport, setFullReport] = useState(reportToEdit && reportToEdit.attendanceItems != null ? reportToEdit : null);
     
     // Document name
     const [documentName, setDocumentName] = useState(reportToEdit?.documentName || '');
@@ -92,6 +92,43 @@ function ADRForm() {
     const [approvedBy, setApprovedBy] = useState(reportToEdit?.approvedBy || '');
     const [approvedPosition, setApprovedPosition] = useState(reportToEdit?.approvedPosition || '');
 
+    useEffect(() => {
+        if (!isEditing || !reportToEdit?.id) return;
+        if (reportToEdit.attendanceItems != null && Array.isArray(reportToEdit.attendanceItems)) {
+            setFullReport(reportToEdit);
+            return;
+        }
+        fetchReport(reportToEdit.id).then(setFullReport).catch(() => setFullReport(reportToEdit));
+    }, [isEditing, reportToEdit?.id]);
+
+    useEffect(() => {
+        if (!fullReport) return;
+        setDocumentName(fullReport.documentName ?? '');
+        setForName(fullReport.forName ?? '');
+        setForPosition(fullReport.forPosition ?? '');
+        setThruName(fullReport.thruName ?? '');
+        setThruPosition(fullReport.thruPosition ?? '');
+        setFromName(fullReport.fromName ?? '');
+        setFromPosition(fullReport.fromPosition ?? '');
+        setSubject(fullReport.subject ?? '');
+        setDateTime(fullReport.dateTime ?? '');
+        setStatus(fullReport.alertStatus ?? fullReport.status ?? '');
+        setAttendanceItems(fullReport.attendanceItems?.length ? fullReport.attendanceItems : [{ id: 1, name: '', task: '', taskAsBullets: false }]);
+        setReportsItems(fullReport.reportsItems?.length ? fullReport.reportsItems : [{ id: 1, report: '', remarks: '', reportAsBullets: false }]);
+        setCommunicationRows(fullReport.communicationRows ?? getDefaultCommunicationRows());
+        setOtherItemsRows(fullReport.otherItemsRows ?? getDefaultOtherItemsRows());
+        setOtherAdminRows(fullReport.otherAdminRows ?? getDefaultOtherAdminRows());
+        setEndorsedItemsRows(fullReport.endorsedItemsRows ?? getDefaultEndorsedItemsRows());
+        setPreparedBy(fullReport.preparedBy ?? '');
+        setPreparedPosition(fullReport.preparedPosition ?? '');
+        setReceivedBy(fullReport.receivedBy ?? '');
+        setReceivedPosition(fullReport.receivedPosition ?? '');
+        setNotedBy(fullReport.notedBy ?? '');
+        setNotedPosition(fullReport.notedPosition ?? '');
+        setApprovedBy(fullReport.approvedBy ?? '');
+        setApprovedPosition(fullReport.approvedPosition ?? '');
+    }, [fullReport?.id]);
+
     const handleReturn = () => {
         navigate('/adr-reports');
     };
@@ -128,11 +165,13 @@ function ADRForm() {
         };
         
         if (isEditing && reportToEdit && reportToEdit.id) {
-            updateReport(reportToEdit.id, formData);
-            navigate('/adr-reports', { state: { success: true, message: 'Document updated successfully!' } });
+            updateReport(reportToEdit.id, formData)
+                .then(() => navigate('/adr-reports', { state: { success: true, message: 'Document updated successfully!' } }))
+                .catch(() => {});
         } else {
-            const newReport = addReport(formData);
-            navigate('/adr-reports', { state: { success: true, message: 'Document created successfully!' } });
+            addReport(formData)
+                .then(() => navigate('/adr-reports', { state: { success: true, message: 'Document created successfully!' } }))
+                .catch(() => {});
         }
     };
     
@@ -281,6 +320,14 @@ function ADRForm() {
             row.id === id ? { ...row, [field]: value } : row
         ));
     };
+
+    if (isEditing && reportToEdit?.id && fullReport == null) {
+        return (
+            <div className="adr-form">
+                <p style={{ padding: '2rem', textAlign: 'center' }}>Loading report...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="adr-form">
@@ -449,14 +496,14 @@ function ADRForm() {
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Prepared By:</label>
-                            <input type="text" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} />
+                            <textarea className="adr-form__signature-name-input" rows={2} placeholder="Name (use Enter for line break)" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={preparedPosition} onChange={(e) => setPreparedPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Received By:</label>
-                            <input type="text" value={receivedBy} onChange={(e) => setReceivedBy(e.target.value)} />
+                            <textarea className="adr-form__signature-name-input" rows={2} placeholder="Name (use Enter for line break)" value={receivedBy} onChange={(e) => setReceivedBy(e.target.value)} />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={receivedPosition} onChange={(e) => setReceivedPosition(e.target.value)}></textarea>
                     </div>

@@ -62799,171 +62799,222 @@ function ADRForm() {
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     addReport = _useFormContext.addReport,
     updateReport = _useFormContext.updateReport,
-    getReport = _useFormContext.getReport;
-
-  // Check if we're editing an existing report
+    getReport = _useFormContext.getReport,
+    fetchReport = _useFormContext.fetchReport;
   var reportToEdit = (_location$state = location.state) === null || _location$state === void 0 ? void 0 : _location$state.report;
   var isEditing = !!reportToEdit;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(reportToEdit && reportToEdit.attendanceItems != null ? reportToEdit : null),
+    _useState2 = _slicedToArray(_useState, 2),
+    fullReport = _useState2[0],
+    setFullReport = _useState2[1];
 
   // Document name
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.documentName) || ''),
-    _useState2 = _slicedToArray(_useState, 2),
-    documentName = _useState2[0],
-    setDocumentName = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.documentName) || ''),
+    _useState4 = _slicedToArray(_useState3, 2),
+    documentName = _useState4[0],
+    setDocumentName = _useState4[1];
 
   // Top fields
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.forName) || ''),
-    _useState4 = _slicedToArray(_useState3, 2),
-    forName = _useState4[0],
-    setForName = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.forPosition) || ''),
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.forName) || ''),
     _useState6 = _slicedToArray(_useState5, 2),
-    forPosition = _useState6[0],
-    setForPosition = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.thruName) || ''),
+    forName = _useState6[0],
+    setForName = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.forPosition) || ''),
     _useState8 = _slicedToArray(_useState7, 2),
-    thruName = _useState8[0],
-    setThruName = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.thruPosition) || ''),
+    forPosition = _useState8[0],
+    setForPosition = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.thruName) || ''),
     _useState0 = _slicedToArray(_useState9, 2),
-    thruPosition = _useState0[0],
-    setThruPosition = _useState0[1];
-  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.fromName) || ''),
+    thruName = _useState0[0],
+    setThruName = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.thruPosition) || ''),
     _useState10 = _slicedToArray(_useState1, 2),
-    fromName = _useState10[0],
-    setFromName = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.fromPosition) || ''),
+    thruPosition = _useState10[0],
+    setThruPosition = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.fromName) || ''),
     _useState12 = _slicedToArray(_useState11, 2),
-    fromPosition = _useState12[0],
-    setFromPosition = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.subject) || ''),
+    fromName = _useState12[0],
+    setFromName = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.fromPosition) || ''),
     _useState14 = _slicedToArray(_useState13, 2),
-    subject = _useState14[0],
-    setSubject = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.dateTime) || ''),
+    fromPosition = _useState14[0],
+    setFromPosition = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.subject) || ''),
     _useState16 = _slicedToArray(_useState15, 2),
-    dateTime = _useState16[0],
-    setDateTime = _useState16[1];
+    subject = _useState16[0],
+    setSubject = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.dateTime) || ''),
+    _useState18 = _slicedToArray(_useState17, 2),
+    dateTime = _useState18[0],
+    setDateTime = _useState18[1];
 
   // Status
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.alertStatus) || (reportToEdit !== null && reportToEdit !== void 0 && reportToEdit.status && (reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) !== 'Active' && (reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) !== 'Archived' ? reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status : '')),
-    _useState18 = _slicedToArray(_useState17, 2),
-    status = _useState18[0],
-    setStatus = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.alertStatus) || (reportToEdit !== null && reportToEdit !== void 0 && reportToEdit.status && (reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) !== 'Active' && (reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) !== 'Archived' ? reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status : '')),
+    _useState20 = _slicedToArray(_useState19, 2),
+    status = _useState20[0],
+    setStatus = _useState20[1];
 
   // Attendance and Reports
-  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.attendanceItems) || [{
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.attendanceItems) || [{
       id: 1,
       name: '',
       task: '',
       taskAsBullets: false
     }]),
-    _useState20 = _slicedToArray(_useState19, 2),
-    attendanceItems = _useState20[0],
-    setAttendanceItems = _useState20[1];
-  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.reportsItems) || [{
+    _useState22 = _slicedToArray(_useState21, 2),
+    attendanceItems = _useState22[0],
+    setAttendanceItems = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.reportsItems) || [{
       id: 1,
       report: '',
       remarks: '',
       reportAsBullets: false
     }]),
-    _useState22 = _slicedToArray(_useState21, 2),
-    reportsItems = _useState22[0],
-    setReportsItems = _useState22[1];
+    _useState24 = _slicedToArray(_useState23, 2),
+    reportsItems = _useState24[0],
+    setReportsItems = _useState24[1];
 
   // Modals
-  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    _useState24 = _slicedToArray(_useState23, 2),
-    showCommunicationModal = _useState24[0],
-    setShowCommunicationModal = _useState24[1];
   var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState26 = _slicedToArray(_useState25, 2),
-    showAttendanceModal = _useState26[0],
-    setShowAttendanceModal = _useState26[1];
+    showCommunicationModal = _useState26[0],
+    setShowCommunicationModal = _useState26[1];
   var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState28 = _slicedToArray(_useState27, 2),
-    showReportsModal = _useState28[0],
-    setShowReportsModal = _useState28[1];
+    showAttendanceModal = _useState28[0],
+    setShowAttendanceModal = _useState28[1];
   var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState30 = _slicedToArray(_useState29, 2),
-    showOtherItemsModal = _useState30[0],
-    setShowOtherItemsModal = _useState30[1];
+    showReportsModal = _useState30[0],
+    setShowReportsModal = _useState30[1];
   var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState32 = _slicedToArray(_useState31, 2),
-    showOtherAdminModal = _useState32[0],
-    setShowOtherAdminModal = _useState32[1];
+    showOtherItemsModal = _useState32[0],
+    setShowOtherItemsModal = _useState32[1];
   var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState34 = _slicedToArray(_useState33, 2),
-    showEndorsedItemsModal = _useState34[0],
-    setShowEndorsedItemsModal = _useState34[1];
+    showOtherAdminModal = _useState34[0],
+    setShowOtherAdminModal = _useState34[1];
   var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState36 = _slicedToArray(_useState35, 2),
-    showValidationModal = _useState36[0],
-    setShowValidationModal = _useState36[1];
-  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    showEndorsedItemsModal = _useState36[0],
+    setShowEndorsedItemsModal = _useState36[1];
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState38 = _slicedToArray(_useState37, 2),
-    validationMessage = _useState38[0],
-    setValidationMessage = _useState38[1];
+    showValidationModal = _useState38[0],
+    setShowValidationModal = _useState38[1];
   var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState40 = _slicedToArray(_useState39, 2),
-    errorField = _useState40[0],
-    setErrorField = _useState40[1];
-  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    validationMessage = _useState40[0],
+    setValidationMessage = _useState40[1];
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState42 = _slicedToArray(_useState41, 2),
-    showPreviewModal = _useState42[0],
-    setShowPreviewModal = _useState42[1];
+    errorField = _useState42[0],
+    setErrorField = _useState42[1];
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState44 = _slicedToArray(_useState43, 2),
+    showPreviewModal = _useState44[0],
+    setShowPreviewModal = _useState44[1];
 
   // Communication and Other Items – use default data for new reports (editable, addable, removable)
-  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$communi = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.communicationRows) !== null && _reportToEdit$communi !== void 0 ? _reportToEdit$communi : getDefaultCommunicationRows()),
-    _useState44 = _slicedToArray(_useState43, 2),
-    communicationRows = _useState44[0],
-    setCommunicationRows = _useState44[1];
-  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$otherIt = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherItemsRows) !== null && _reportToEdit$otherIt !== void 0 ? _reportToEdit$otherIt : getDefaultOtherItemsRows()),
+  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$communi = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.communicationRows) !== null && _reportToEdit$communi !== void 0 ? _reportToEdit$communi : getDefaultCommunicationRows()),
     _useState46 = _slicedToArray(_useState45, 2),
-    otherItemsRows = _useState46[0],
-    setOtherItemsRows = _useState46[1];
-  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$otherAd = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherAdminRows) !== null && _reportToEdit$otherAd !== void 0 ? _reportToEdit$otherAd : getDefaultOtherAdminRows()),
+    communicationRows = _useState46[0],
+    setCommunicationRows = _useState46[1];
+  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$otherIt = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherItemsRows) !== null && _reportToEdit$otherIt !== void 0 ? _reportToEdit$otherIt : getDefaultOtherItemsRows()),
     _useState48 = _slicedToArray(_useState47, 2),
-    otherAdminRows = _useState48[0],
-    setOtherAdminRows = _useState48[1];
-  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$endorse = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.endorsedItemsRows) !== null && _reportToEdit$endorse !== void 0 ? _reportToEdit$endorse : getDefaultEndorsedItemsRows()),
+    otherItemsRows = _useState48[0],
+    setOtherItemsRows = _useState48[1];
+  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$otherAd = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherAdminRows) !== null && _reportToEdit$otherAd !== void 0 ? _reportToEdit$otherAd : getDefaultOtherAdminRows()),
     _useState50 = _slicedToArray(_useState49, 2),
-    endorsedItemsRows = _useState50[0],
-    setEndorsedItemsRows = _useState50[1];
+    otherAdminRows = _useState50[0],
+    setOtherAdminRows = _useState50[1];
+  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$endorse = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.endorsedItemsRows) !== null && _reportToEdit$endorse !== void 0 ? _reportToEdit$endorse : getDefaultEndorsedItemsRows()),
+    _useState52 = _slicedToArray(_useState51, 2),
+    endorsedItemsRows = _useState52[0],
+    setEndorsedItemsRows = _useState52[1];
 
   // Signatures
-  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedBy) || ''),
-    _useState52 = _slicedToArray(_useState51, 2),
-    preparedBy = _useState52[0],
-    setPreparedBy = _useState52[1];
-  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedPosition) || ''),
+  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedBy) || ''),
     _useState54 = _slicedToArray(_useState53, 2),
-    preparedPosition = _useState54[0],
-    setPreparedPosition = _useState54[1];
-  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedBy) || ''),
+    preparedBy = _useState54[0],
+    setPreparedBy = _useState54[1];
+  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedPosition) || ''),
     _useState56 = _slicedToArray(_useState55, 2),
-    receivedBy = _useState56[0],
-    setReceivedBy = _useState56[1];
-  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedPosition) || ''),
+    preparedPosition = _useState56[0],
+    setPreparedPosition = _useState56[1];
+  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedBy) || ''),
     _useState58 = _slicedToArray(_useState57, 2),
-    receivedPosition = _useState58[0],
-    setReceivedPosition = _useState58[1];
-  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedBy) || ''),
+    receivedBy = _useState58[0],
+    setReceivedBy = _useState58[1];
+  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedPosition) || ''),
     _useState60 = _slicedToArray(_useState59, 2),
-    notedBy = _useState60[0],
-    setNotedBy = _useState60[1];
-  var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedPosition) || ''),
+    receivedPosition = _useState60[0],
+    setReceivedPosition = _useState60[1];
+  var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedBy) || ''),
     _useState62 = _slicedToArray(_useState61, 2),
-    notedPosition = _useState62[0],
-    setNotedPosition = _useState62[1];
-  var _useState63 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedBy) || ''),
+    notedBy = _useState62[0],
+    setNotedBy = _useState62[1];
+  var _useState63 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedPosition) || ''),
     _useState64 = _slicedToArray(_useState63, 2),
-    approvedBy = _useState64[0],
-    setApprovedBy = _useState64[1];
-  var _useState65 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedPosition) || ''),
+    notedPosition = _useState64[0],
+    setNotedPosition = _useState64[1];
+  var _useState65 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedBy) || ''),
     _useState66 = _slicedToArray(_useState65, 2),
-    approvedPosition = _useState66[0],
-    setApprovedPosition = _useState66[1];
+    approvedBy = _useState66[0],
+    setApprovedBy = _useState66[1];
+  var _useState67 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedPosition) || ''),
+    _useState68 = _slicedToArray(_useState67, 2),
+    approvedPosition = _useState68[0],
+    setApprovedPosition = _useState68[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (!isEditing || !(reportToEdit !== null && reportToEdit !== void 0 && reportToEdit.id)) return;
+    if (reportToEdit.attendanceItems != null && Array.isArray(reportToEdit.attendanceItems)) {
+      setFullReport(reportToEdit);
+      return;
+    }
+    fetchReport(reportToEdit.id).then(setFullReport)["catch"](function () {
+      return setFullReport(reportToEdit);
+    });
+  }, [isEditing, reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.id]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var _fullReport$documentN, _fullReport$forName, _fullReport$forPositi, _fullReport$thruName, _fullReport$thruPosit, _fullReport$fromName, _fullReport$fromPosit, _fullReport$subject, _fullReport$dateTime, _ref, _fullReport$alertStat, _fullReport$attendanc, _fullReport$reportsIt, _fullReport$communica, _fullReport$otherItem, _fullReport$otherAdmi, _fullReport$endorsedI, _fullReport$preparedB, _fullReport$preparedP, _fullReport$receivedB, _fullReport$receivedP, _fullReport$notedBy, _fullReport$notedPosi, _fullReport$approvedB, _fullReport$approvedP;
+    if (!fullReport) return;
+    setDocumentName((_fullReport$documentN = fullReport.documentName) !== null && _fullReport$documentN !== void 0 ? _fullReport$documentN : '');
+    setForName((_fullReport$forName = fullReport.forName) !== null && _fullReport$forName !== void 0 ? _fullReport$forName : '');
+    setForPosition((_fullReport$forPositi = fullReport.forPosition) !== null && _fullReport$forPositi !== void 0 ? _fullReport$forPositi : '');
+    setThruName((_fullReport$thruName = fullReport.thruName) !== null && _fullReport$thruName !== void 0 ? _fullReport$thruName : '');
+    setThruPosition((_fullReport$thruPosit = fullReport.thruPosition) !== null && _fullReport$thruPosit !== void 0 ? _fullReport$thruPosit : '');
+    setFromName((_fullReport$fromName = fullReport.fromName) !== null && _fullReport$fromName !== void 0 ? _fullReport$fromName : '');
+    setFromPosition((_fullReport$fromPosit = fullReport.fromPosition) !== null && _fullReport$fromPosit !== void 0 ? _fullReport$fromPosit : '');
+    setSubject((_fullReport$subject = fullReport.subject) !== null && _fullReport$subject !== void 0 ? _fullReport$subject : '');
+    setDateTime((_fullReport$dateTime = fullReport.dateTime) !== null && _fullReport$dateTime !== void 0 ? _fullReport$dateTime : '');
+    setStatus((_ref = (_fullReport$alertStat = fullReport.alertStatus) !== null && _fullReport$alertStat !== void 0 ? _fullReport$alertStat : fullReport.status) !== null && _ref !== void 0 ? _ref : '');
+    setAttendanceItems((_fullReport$attendanc = fullReport.attendanceItems) !== null && _fullReport$attendanc !== void 0 && _fullReport$attendanc.length ? fullReport.attendanceItems : [{
+      id: 1,
+      name: '',
+      task: '',
+      taskAsBullets: false
+    }]);
+    setReportsItems((_fullReport$reportsIt = fullReport.reportsItems) !== null && _fullReport$reportsIt !== void 0 && _fullReport$reportsIt.length ? fullReport.reportsItems : [{
+      id: 1,
+      report: '',
+      remarks: '',
+      reportAsBullets: false
+    }]);
+    setCommunicationRows((_fullReport$communica = fullReport.communicationRows) !== null && _fullReport$communica !== void 0 ? _fullReport$communica : getDefaultCommunicationRows());
+    setOtherItemsRows((_fullReport$otherItem = fullReport.otherItemsRows) !== null && _fullReport$otherItem !== void 0 ? _fullReport$otherItem : getDefaultOtherItemsRows());
+    setOtherAdminRows((_fullReport$otherAdmi = fullReport.otherAdminRows) !== null && _fullReport$otherAdmi !== void 0 ? _fullReport$otherAdmi : getDefaultOtherAdminRows());
+    setEndorsedItemsRows((_fullReport$endorsedI = fullReport.endorsedItemsRows) !== null && _fullReport$endorsedI !== void 0 ? _fullReport$endorsedI : getDefaultEndorsedItemsRows());
+    setPreparedBy((_fullReport$preparedB = fullReport.preparedBy) !== null && _fullReport$preparedB !== void 0 ? _fullReport$preparedB : '');
+    setPreparedPosition((_fullReport$preparedP = fullReport.preparedPosition) !== null && _fullReport$preparedP !== void 0 ? _fullReport$preparedP : '');
+    setReceivedBy((_fullReport$receivedB = fullReport.receivedBy) !== null && _fullReport$receivedB !== void 0 ? _fullReport$receivedB : '');
+    setReceivedPosition((_fullReport$receivedP = fullReport.receivedPosition) !== null && _fullReport$receivedP !== void 0 ? _fullReport$receivedP : '');
+    setNotedBy((_fullReport$notedBy = fullReport.notedBy) !== null && _fullReport$notedBy !== void 0 ? _fullReport$notedBy : '');
+    setNotedPosition((_fullReport$notedPosi = fullReport.notedPosition) !== null && _fullReport$notedPosi !== void 0 ? _fullReport$notedPosi : '');
+    setApprovedBy((_fullReport$approvedB = fullReport.approvedBy) !== null && _fullReport$approvedB !== void 0 ? _fullReport$approvedB : '');
+    setApprovedPosition((_fullReport$approvedP = fullReport.approvedPosition) !== null && _fullReport$approvedP !== void 0 ? _fullReport$approvedP : '');
+  }, [fullReport === null || fullReport === void 0 ? void 0 : fullReport.id]);
   var handleReturn = function handleReturn() {
     navigate('/adr-reports');
   };
@@ -62998,21 +63049,23 @@ function ADRForm() {
       approvedPosition: approvedPosition
     };
     if (isEditing && reportToEdit && reportToEdit.id) {
-      updateReport(reportToEdit.id, formData);
-      navigate('/adr-reports', {
-        state: {
-          success: true,
-          message: 'Document updated successfully!'
-        }
-      });
+      updateReport(reportToEdit.id, formData).then(function () {
+        return navigate('/adr-reports', {
+          state: {
+            success: true,
+            message: 'Document updated successfully!'
+          }
+        });
+      })["catch"](function () {});
     } else {
-      var newReport = addReport(formData);
-      navigate('/adr-reports', {
-        state: {
-          success: true,
-          message: 'Document created successfully!'
-        }
-      });
+      addReport(formData).then(function () {
+        return navigate('/adr-reports', {
+          state: {
+            success: true,
+            message: 'Document created successfully!'
+          }
+        });
+      })["catch"](function () {});
     }
   };
   var handleViewDocument = function handleViewDocument() {
@@ -63205,6 +63258,18 @@ function ADRForm() {
       return row.id === id ? _objectSpread(_objectSpread({}, row), {}, _defineProperty({}, field, value)) : row;
     }));
   };
+  if (isEditing && reportToEdit !== null && reportToEdit !== void 0 && reportToEdit.id && fullReport == null) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      className: "adr-form",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        style: {
+          padding: '2rem',
+          textAlign: 'center'
+        },
+        children: "Loading report..."
+      })
+    });
+  }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     className: "adr-form",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
@@ -63510,8 +63575,10 @@ function ADRForm() {
             className: "adr-form__field",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
               children: "Prepared By:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
-              type: "text",
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+              className: "adr-form__signature-name-input",
+              rows: 2,
+              placeholder: "Name (use Enter for line break)",
               value: preparedBy,
               onChange: function onChange(e) {
                 return setPreparedBy(e.target.value);
@@ -63532,8 +63599,10 @@ function ADRForm() {
             className: "adr-form__field",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
               children: "Received By:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
-              type: "text",
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+              className: "adr-form__signature-name-input",
+              rows: 2,
+              placeholder: "Name (use Enter for line break)",
               value: receivedBy,
               onChange: function onChange(e) {
                 return setReceivedBy(e.target.value);
@@ -64378,6 +64447,7 @@ function ADRReports() {
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useLocation)();
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     reports = _useFormContext.reports,
+    reportsLoaded = _useFormContext.reportsLoaded,
     deleteReport = _useFormContext.deleteReport,
     archiveReport = _useFormContext.archiveReport,
     getReport = _useFormContext.getReport;
@@ -64589,6 +64659,18 @@ function ADRReports() {
   var activeReports = reports.filter(function (r) {
     return r.status === 'Active';
   });
+  if (!reportsLoaded) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      className: "adr-reports",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
+        style: {
+          padding: '2rem',
+          textAlign: 'center'
+        },
+        children: "Loading reports..."
+      })
+    });
+  }
   var filteredReports = activeReports.filter(function (report) {
     var created = new Date(report.createdAt);
     var reportYear = created.getFullYear().toString();
@@ -65118,6 +65200,7 @@ function ArchivedReports() {
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     reports = _useFormContext.reports,
+    reportsLoaded = _useFormContext.reportsLoaded,
     deleteReport = _useFormContext.deleteReport,
     restoreReport = _useFormContext.restoreReport;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
@@ -65367,6 +65450,18 @@ function ArchivedReports() {
     setSelectedMonth(month);
     setShowMonthDropdown(false);
   };
+  if (!reportsLoaded) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      className: "archived-reports",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        style: {
+          padding: '2rem',
+          textAlign: 'center'
+        },
+        children: "Loading reports..."
+      })
+    });
+  }
   var archivedReports = reports.filter(function (r) {
     return r.status === 'Archived';
   });
@@ -65939,6 +66034,19 @@ var PAGE_HEIGHT_PX_FALLBACK = Math.round(297 * 96 / 25.4);
 var HEADER_HEIGHT_PX = 165;
 var FOOTER_HEIGHT_PX = 100;
 var CONTENT_AREA_FALLBACK = PAGE_HEIGHT_PX_FALLBACK - HEADER_HEIGHT_PX - FOOTER_HEIGHT_PX;
+function getCsrfToken() {
+  var name = 'XSRF-TOKEN=';
+  var decoded = decodeURIComponent(document.cookie);
+  var parts = decoded.split(';');
+  for (var i = 0; i < parts.length; i++) {
+    var part = parts[i].trim();
+    if (part.indexOf(name) === 0) {
+      return part.substring(name.length).trim();
+    }
+  }
+  var meta = document.querySelector('meta[name="csrf-token"]');
+  return meta ? meta.getAttribute('content') : null;
+}
 function getBreakPoints(contentEl, bodyHeight) {
   if (!contentEl || bodyHeight <= 0) return [0, bodyHeight];
   var contentRect = contentEl.getBoundingClientRect();
@@ -65996,7 +66104,8 @@ function DocumentViewModal(_ref) {
     reportProp = _ref.report,
     onClose = _ref.onClose;
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
-    getReport = _useFormContext.getReport;
+    getReport = _useFormContext.getReport,
+    fetchReport = _useFormContext.fetchReport;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
     reportFromId = _useState2[0],
@@ -66053,11 +66162,20 @@ function DocumentViewModal(_ref) {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (isOpen && reportId && reportProp == null) {
       var foundReport = getReport(reportId);
-      setReportFromId(foundReport);
+      var hasFullData = foundReport && foundReport.attendanceItems != null;
+      if (hasFullData) {
+        setReportFromId(foundReport);
+      } else if (reportId != null) {
+        fetchReport(reportId).then(setReportFromId)["catch"](function () {
+          return setReportFromId(foundReport || null);
+        });
+      } else {
+        setReportFromId(foundReport || null);
+      }
     } else {
       setReportFromId(null);
     }
-  }, [isOpen, reportId, reportProp, getReport]);
+  }, [isOpen, reportId, reportProp, getReport, fetchReport]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     pdfViewUrlRef.current = pdfViewUrl;
   }, [pdfViewUrl]);
@@ -66119,20 +66237,34 @@ function DocumentViewModal(_ref) {
         return null;
       });
     }
+    var csrfToken = getCsrfToken();
+    var headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/pdf',
+      'X-Requested-With': 'XMLHttpRequest'
+    };
+    if (csrfToken) headers['X-XSRF-TOKEN'] = csrfToken;
     fetch('/api/adr/export-pdf', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/pdf',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
+      credentials: 'include',
+      headers: headers,
       body: JSON.stringify({
         report: reportPayload
       })
     }).then(function (res) {
-      if (!res.ok) return res.text().then(function (t) {
-        throw new Error(res.status === 503 ? 'PDF preview requires LibreOffice.' : t || 'Failed to load PDF');
-      });
+      var contentType = (res.headers.get('Content-Type') || '').toLowerCase();
+      if (!res.ok) {
+        return res.text().then(function (t) {
+          var isHtml = (t || '').trim().toLowerCase().startsWith('<!doctype') || (t || '').includes('Page Expired');
+          var msg = res.status === 419 || isHtml ? 'Session may have expired. Please refresh the page and try again.' : res.status === 503 ? 'PDF preview requires LibreOffice.' : t || 'Failed to load PDF';
+          throw new Error(msg);
+        });
+      }
+      if (contentType.includes('text/html')) {
+        return res.text().then(function () {
+          throw new Error('Session may have expired. Please refresh the page and try again.');
+        });
+      }
       return res.blob();
     }).then(function (blob) {
       if (blob.type && blob.type.includes('pdf')) {
@@ -66145,7 +66277,7 @@ function DocumentViewModal(_ref) {
         setPdfViewUrl(url);
         setPdfError(null);
       } else {
-        setPdfError('Unexpected response.');
+        setPdfError('Server did not return a valid PDF. Try refreshing the page.');
       }
     })["catch"](function (err) {
       setPdfError(err.message || 'Could not load PDF preview.');
@@ -66226,7 +66358,7 @@ function DocumentViewModal(_ref) {
   };
   var handleExportPdf = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-      var reportPayload, res, contentType, text, msg, j, blob, url, _t;
+      var reportPayload, csrfToken, headers, res, contentType, text, msg, j, blob, url, _t;
       return _regenerator().w(function (_context) {
         while (1) switch (_context.p = _context.n) {
           case 0:
@@ -66249,14 +66381,18 @@ function DocumentViewModal(_ref) {
               alertStatus: report.alertStatus || report.status || 'WHITE ALERT'
             });
             _context.p = 3;
+            csrfToken = getCsrfToken();
+            headers = {
+              'Content-Type': 'application/json',
+              'Accept': 'application/pdf',
+              'X-Requested-With': 'XMLHttpRequest'
+            };
+            if (csrfToken) headers['X-XSRF-TOKEN'] = csrfToken;
             _context.n = 4;
             return fetch('/api/adr/export-pdf', {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/pdf',
-                'X-Requested-With': 'XMLHttpRequest'
-              },
+              credentials: 'include',
+              headers: headers,
               body: JSON.stringify({
                 report: reportPayload
               })
@@ -66329,6 +66465,23 @@ function DocumentViewModal(_ref) {
       seen.add(key);
       return name;
     });
+  };
+  var signatureNameWithBreaks = function signatureNameWithBreaks(name) {
+    if (name == null || name === '—' || name === '-') return name;
+    var s = String(name).trim();
+    if (!s) return '-';
+    if (s.includes('\n')) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+        className: "document-viewer__signature-name-multiline",
+        children: s.split('\n').map(function (line, i) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+            className: "document-viewer__signature-name-line",
+            children: line.trim() || "\xA0"
+          }, i);
+        })
+      });
+    }
+    return s;
   };
   var renderMultiline = function renderMultiline(text, asBullets) {
     if (!(text !== null && text !== void 0 && text.trim())) return '-';
@@ -66724,7 +66877,7 @@ function DocumentViewModal(_ref) {
                 children: "Prepared by:"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 className: "document-viewer__signature-name",
-                children: sigNames[0]
+                children: signatureNameWithBreaks(sigNames[0])
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 className: "document-viewer__signature-position",
                 children: dash(report.preparedPosition)
@@ -66738,7 +66891,7 @@ function DocumentViewModal(_ref) {
                 children: "Received by:"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 className: "document-viewer__signature-name",
-                children: sigNames[1]
+                children: signatureNameWithBreaks(sigNames[1])
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 className: "document-viewer__signature-position",
                 children: dash(report.receivedPosition)
@@ -66753,7 +66906,7 @@ function DocumentViewModal(_ref) {
               children: "Noted by:"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__signature-name",
-              children: sigNames[2]
+              children: signatureNameWithBreaks(sigNames[2])
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__signature-position",
               children: dash(report.notedPosition)
@@ -66767,7 +66920,7 @@ function DocumentViewModal(_ref) {
               children: "Approved:"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__signature-name",
-              children: sigNames[3]
+              children: signatureNameWithBreaks(sigNames[3])
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
               className: "document-viewer__signature-position",
               children: dash(report.approvedPosition)
@@ -67046,13 +67199,29 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 function Header() {
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
-    profileImageUrl = _useFormContext.profileImageUrl;
+    profileImageUrl = _useFormContext.profileImageUrl,
+    userFullName = _useFormContext.userFullName,
+    setUserFullName = _useFormContext.setUserFullName;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
     dropdownOpen = _useState2[0],
     setDropdownOpen = _useState2[1];
   var dropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var isMounted = true;
+    axios__WEBPACK_IMPORTED_MODULE_3___default().get('/api/profile', {
+      withCredentials: true
+    }).then(function (res) {
+      var _res$data;
+      if (isMounted && ((_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.full_name) != null) {
+        setUserFullName(String(res.data.full_name).trim());
+      }
+    })["catch"](function () {});
+    return function () {
+      isMounted = false;
+    };
+  }, [setUserFullName]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var handleClickOutside = function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -67120,7 +67289,10 @@ function Header() {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       className: "header__user-wrap",
       ref: dropdownRef,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      children: [userFullName && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        className: "header__user-name",
+        children: userFullName
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "header__user",
         onClick: handleUserClick,
         role: "button",
@@ -67532,8 +67704,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
+/* harmony import */ var _SuccessNotification__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SuccessNotification */ "./resources/js/components/SuccessNotification.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -67543,10 +67726,13 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
+
+
 function Profile() {
-  var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_1__.useFormContext)(),
+  var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     profileImageUrl = _useFormContext.profileImageUrl,
-    setProfileImageUrl = _useFormContext.setProfileImageUrl;
+    setProfileImageUrl = _useFormContext.setProfileImageUrl,
+    setUserFullName = _useFormContext.setUserFullName;
   var fileInputRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
@@ -67559,39 +67745,27 @@ function Profile() {
   var dropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var editRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var profileImgSrc = profileImageUrl || '/images/default_profile.png';
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      return localStorage.getItem('adr_profile_name') || 'Your Name';
-    }),
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('Your Name'),
     _useState6 = _slicedToArray(_useState5, 2),
     displayName = _useState6[0],
     setDisplayName = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      return localStorage.getItem('adr_profile_section') || '';
-    }),
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState8 = _slicedToArray(_useState7, 2),
-    displaySection = _useState8[0],
-    setDisplaySection = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      return localStorage.getItem('adr_profile_id_no') || '';
-    }),
+    username = _useState8[0],
+    setUsername = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState0 = _slicedToArray(_useState9, 2),
-    idNo = _useState0[0],
-    setIdNo = _useState0[1];
-  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      return localStorage.getItem('adr_profile_position') || '';
-    }),
+    displaySectionId = _useState0[0],
+    setDisplaySectionId = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState10 = _slicedToArray(_useState1, 2),
-    position = _useState10[0],
-    setPosition = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      return localStorage.getItem('adr_profile_address') || '';
-    }),
+    displaySectionName = _useState10[0],
+    setDisplaySectionName = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState12 = _slicedToArray(_useState11, 2),
-    address = _useState12[0],
-    setAddress = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      return localStorage.getItem('adr_profile_email') || '';
-    }),
+    position = _useState12[0],
+    setPosition = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState14 = _slicedToArray(_useState13, 2),
     email = _useState14[0],
     setEmail = _useState14[1];
@@ -67605,12 +67779,78 @@ function Profile() {
     setEditName = _useState18[1];
   var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState20 = _slicedToArray(_useState19, 2),
-    editSection = _useState20[0],
-    setEditSection = _useState20[1];
-  var sectionOptions = [{
-    value: '',
-    label: 'No section'
-  }];
+    editUsername = _useState20[0],
+    setEditUsername = _useState20[1];
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+      value: '',
+      label: 'No section'
+    }]),
+    _useState22 = _slicedToArray(_useState21, 2),
+    sectionOptions = _useState22[0],
+    setSectionOptions = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
+    _useState24 = _slicedToArray(_useState23, 2),
+    profileLoading = _useState24[0],
+    setProfileLoading = _useState24[1];
+  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState26 = _slicedToArray(_useState25, 2),
+    profileError = _useState26[0],
+    setProfileError = _useState26[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState28 = _slicedToArray(_useState27, 2),
+    saveError = _useState28[0],
+    setSaveError = _useState28[1];
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState30 = _slicedToArray(_useState29, 2),
+    showSuccessNotification = _useState30[0],
+    setShowSuccessNotification = _useState30[1];
+  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState32 = _slicedToArray(_useState31, 2),
+    successMessage = _useState32[0],
+    setSuccessMessage = _useState32[1];
+  var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState34 = _slicedToArray(_useState33, 2),
+    isSaving = _useState34[0],
+    setIsSaving = _useState34[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var isMounted = true;
+    setProfileError('');
+    setProfileLoading(true);
+    Promise.all([axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/profile'), axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/section')]).then(function (_ref) {
+      var _data$full_name, _data$full_name2;
+      var _ref2 = _slicedToArray(_ref, 2),
+        profileRes = _ref2[0],
+        sectionsRes = _ref2[1];
+      if (!isMounted) return;
+      var data = (profileRes === null || profileRes === void 0 ? void 0 : profileRes.data) || {};
+      var options = Array.isArray(sectionsRes === null || sectionsRes === void 0 ? void 0 : sectionsRes.data) ? sectionsRes.data : [];
+      setDisplayName(((_data$full_name = data.full_name) === null || _data$full_name === void 0 ? void 0 : _data$full_name.trim()) || 'Your Name');
+      setUsername(data.username || '');
+      setDisplaySectionId(data.section_id != null ? String(data.section_id) : '');
+      setDisplaySectionName(data.section_name || '');
+      setPosition(data.position || '');
+      setEmail(data.email || '');
+      if (setUserFullName) setUserFullName(((_data$full_name2 = data.full_name) === null || _data$full_name2 === void 0 ? void 0 : _data$full_name2.trim()) || '');
+      setSectionOptions([{
+        value: '',
+        label: 'No section'
+      }].concat(_toConsumableArray(options.map(function (s) {
+        return {
+          value: String(s.id),
+          label: s.name
+        };
+      }))));
+    })["catch"](function (err) {
+      var _err$response;
+      if (!isMounted) return;
+      setProfileError((err === null || err === void 0 || (_err$response = err.response) === null || _err$response === void 0 || (_err$response = _err$response.data) === null || _err$response === void 0 ? void 0 : _err$response.message) || 'Failed to load profile.');
+    })["finally"](function () {
+      if (isMounted) setProfileLoading(false);
+    });
+    return function () {
+      isMounted = false;
+    };
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var handleClickOutside = function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -67670,32 +67910,127 @@ function Profile() {
   };
   var startEditing = function startEditing() {
     setEditName(displayName);
-    setEditSection(displaySection);
+    setEditUsername(username);
+    setSaveError('');
+    setShowSuccessNotification(false);
     setIsEditing(true);
   };
-  var saveEditing = function saveEditing() {
-    setDisplayName(editName.trim() || 'Your Name');
-    setDisplaySection(editSection);
-    localStorage.setItem('adr_profile_name', editName.trim() || 'Your Name');
-    localStorage.setItem('adr_profile_section', editSection);
-    setIsEditing(false);
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+  var handleUpdate = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+      var fullName, newUsername, sectionId, _data$full_name3, _data$full_name4, _yield$axios$put, data, _err$response2, _err$response3, msg, _t;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
+          case 0:
+            setSaveError('');
+            setShowSuccessNotification(false);
+            setIsSaving(true);
+            fullName = isEditing ? editName.trim() || 'Your Name' : displayName;
+            newUsername = isEditing ? editUsername.trim() || null : username;
+            sectionId = displaySectionId || null;
+            _context.p = 1;
+            _context.n = 2;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().put('/api/profile', {
+              full_name: fullName,
+              username: newUsername,
+              section_id: sectionId ? parseInt(sectionId, 10) : null,
+              position: position.trim() || null
+            });
+          case 2:
+            _yield$axios$put = _context.v;
+            data = _yield$axios$put.data;
+            setDisplayName(((_data$full_name3 = data.full_name) === null || _data$full_name3 === void 0 ? void 0 : _data$full_name3.trim()) || 'Your Name');
+            setUsername(data.username || '');
+            setDisplaySectionId(data.section_id != null ? String(data.section_id) : '');
+            setDisplaySectionName(data.section_name || '');
+            setPosition(data.position || '');
+            setEmail(data.email || '');
+            setIsEditing(false);
+            if (setUserFullName) setUserFullName(((_data$full_name4 = data.full_name) === null || _data$full_name4 === void 0 ? void 0 : _data$full_name4.trim()) || '');
+            setSuccessMessage('Profile updated successfully.');
+            setShowSuccessNotification(true);
+            _context.n = 4;
+            break;
+          case 3:
+            _context.p = 3;
+            _t = _context.v;
+            msg = _t !== null && _t !== void 0 && (_err$response2 = _t.response) !== null && _err$response2 !== void 0 && (_err$response2 = _err$response2.data) !== null && _err$response2 !== void 0 && _err$response2.message || _t !== null && _t !== void 0 && (_err$response3 = _t.response) !== null && _err$response3 !== void 0 && (_err$response3 = _err$response3.data) !== null && _err$response3 !== void 0 && _err$response3.errors ? Object.values(_t.response.data.errors || {}).flat()[0] : 'Failed to save profile.';
+            setSaveError(msg || 'Failed to save profile.');
+          case 4:
+            _context.p = 4;
+            setIsSaving(false);
+            return _context.f(4);
+          case 5:
+            return _context.a(2);
+        }
+      }, _callee, null, [[1, 3, 4, 5]]);
+    }));
+    return function handleUpdate() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+  if (profileLoading) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      className: "profile",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: "profile__header",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h1", {
+          className: "profile__title",
+          children: "Personal Info"
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: "profile__content",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+          className: "profile__loading",
+          children: "Loading profile..."
+        })
+      })]
+    });
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     className: "profile",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
       className: "profile__header",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h1", {
         className: "profile__title",
         children: "Personal Info"
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    }), (profileError || saveError) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: "profile__error",
+      role: "alert",
+      children: profileError || saveError
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_SuccessNotification__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      message: successMessage,
+      isVisible: showSuccessNotification,
+      onClose: function onClose() {
+        return setShowSuccessNotification(false);
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       className: "profile__content",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: "profile__content-top",
+        children: !isEditing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          type: "button",
+          className: "profile__edit-btn profile__edit-btn--top",
+          onClick: startEditing,
+          "aria-label": "Edit profile",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+            src: "/images/edit_icon.svg",
+            alt: "",
+            className: "profile__edit-icon"
+          })
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          type: "button",
+          className: "profile__update-btn profile__update-btn--top",
+          onClick: handleUpdate,
+          disabled: isSaving,
+          children: isSaving ? 'Updating...' : 'Update'
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "profile__card",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "profile__photo-wrap",
           ref: dropdownRef,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: "profile__photo-preview ".concat(!profileImageUrl ? 'profile__photo-preview--default' : '', " profile__photo-preview--clickable"),
             onClick: openViewer,
             role: "button",
@@ -67707,19 +68042,19 @@ function Profile() {
               }
             },
             "aria-label": "View profile picture",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
               src: profileImgSrc,
               alt: "Profile",
               className: "profile__photo-img"
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
             ref: fileInputRef,
             type: "file",
             accept: "image/jpeg,image/jpg,image/png,image/gif,image/webp,image/bmp,image/svg+xml,image/*",
             onChange: handleFileChange,
             className: "profile__photo-input",
             id: "profile-photo-input"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
             type: "button",
             className: "profile__photo-plus",
             title: "Profile options",
@@ -67732,138 +68067,130 @@ function Profile() {
                 return !prev;
               });
             },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
               className: "profile__photo-plus-icon",
               children: "+"
             })
-          }), dropdownOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          }), dropdownOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             className: "profile__photo-dropdown",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
               type: "button",
               className: "profile__photo-dropdown-item",
               onClick: handleChangePhoto,
               children: "Change profile picture"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
               type: "button",
               className: "profile__photo-dropdown-item",
               onClick: handleRemovePhoto,
               children: "Remove profile picture"
             })]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "profile__info",
           ref: editRef,
-          children: isEditing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          children: isEditing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               className: "profile__name-row",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                 className: "profile__name-cell profile__name-cell--field",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
-                  type: "text",
-                  className: "profile__name-input",
-                  value: editName,
-                  onChange: function onChange(e) {
-                    return setEditName(e.target.value);
-                  },
-                  placeholder: "Your name",
-                  autoFocus: true
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-                  type: "button",
-                  className: "profile__check-btn",
-                  onClick: saveEditing,
-                  "aria-label": "Save",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
-                    src: "/images/check_icon.svg",
-                    alt: "",
-                    className: "profile__check-icon"
-                  })
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-              className: "profile__section-cell",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("select", {
-                className: "profile__department-select",
-                value: editSection,
-                onChange: function onChange(e) {
-                  return setEditSection(e.target.value);
-                },
-                "aria-label": "Section",
-                children: sectionOptions.map(function (opt) {
-                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
-                    value: opt.value,
-                    children: opt.label
-                  }, opt.value || 'blank');
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                  className: "profile__name-edit-wrap",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                    type: "text",
+                    className: "profile__name-input",
+                    value: editName,
+                    onChange: function onChange(e) {
+                      return setEditName(e.target.value);
+                    },
+                    placeholder: "Your name",
+                    autoFocus: true
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                    type: "text",
+                    className: "profile__username-input",
+                    value: editUsername,
+                    onChange: function onChange(e) {
+                      return setEditUsername(e.target.value);
+                    },
+                    placeholder: "Username",
+                    "aria-label": "Username"
+                  })]
                 })
               })
-            })]
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            })
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               className: "profile__name-row",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
                 className: "profile__name-cell",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
                   className: "profile__name",
                   children: displayName
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-                type: "button",
-                className: "profile__edit-btn",
-                onClick: startEditing,
-                "aria-label": "Edit profile",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
-                  src: "/images/edit_icon.svg",
-                  alt: "",
-                  className: "profile__edit-icon"
-                })
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-              className: "profile__section-cell",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
-                className: "profile__section ".concat(!displaySection ? 'profile__section--empty' : ''),
-                children: displaySection || 'No section'
+                }), username && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                  className: "profile__username",
+                  children: username
+                })]
               })
-            })]
+            })
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "profile__fields",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "profile__field",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
             className: "profile__field-label",
             htmlFor: "profile-position",
             children: "POSITION"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
             id: "profile-position",
             type: "text",
             className: "profile__field-input",
             value: position,
             onChange: function onChange(e) {
-              setPosition(e.target.value);
-              localStorage.setItem('adr_profile_position', e.target.value);
+              return setPosition(e.target.value);
             },
             placeholder: "Position"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "profile__field",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+            className: "profile__field-label",
+            htmlFor: "profile-section",
+            children: "SECTION"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("select", {
+            id: "profile-section",
+            className: "profile__field-input",
+            value: displaySectionId,
+            onChange: function onChange(e) {
+              return setDisplaySectionId(e.target.value);
+            },
+            "aria-label": "Section",
+            children: sectionOptions.map(function (opt) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+                value: opt.value,
+                children: opt.label
+              }, opt.value || 'blank');
+            })
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "profile__field",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
             className: "profile__field-label",
             htmlFor: "profile-email",
             children: "EMAIL"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
             id: "profile-email",
             type: "email",
             className: "profile__field-input",
             value: email,
-            onChange: function onChange(e) {
-              setEmail(e.target.value);
-              localStorage.setItem('adr_profile_email', e.target.value);
-            },
-            placeholder: "Email"
+            disabled: true,
+            placeholder: "Email",
+            readOnly: true,
+            "aria-readonly": "true"
           })]
         })]
       })]
-    }), viewerOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    }), viewerOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       className: "profile__viewer",
       onClick: function onClick() {
         return setViewerOpen(false);
@@ -67871,18 +68198,18 @@ function Profile() {
       role: "dialog",
       "aria-modal": "true",
       "aria-label": "Profile picture full size",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
         type: "button",
         className: "profile__viewer-close",
         onClick: function onClick() {
           return setViewerOpen(false);
         },
         "aria-label": "Close",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
             d: "M18 6L6 18M6 6l12 12",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -67890,12 +68217,12 @@ function Profile() {
             strokeLinejoin: "round"
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "profile__viewer-frame",
         onClick: function onClick(e) {
           return e.stopPropagation();
         },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
           src: profileImgSrc,
           alt: "Profile full size",
           className: "profile__viewer-img"
@@ -68678,48 +69005,52 @@ function SignupPage() {
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useLocation)();
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState2 = _slicedToArray(_useState, 2),
-    username = _useState2[0],
-    setUsername = _useState2[1];
+    fullName = _useState2[0],
+    setFullName = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState4 = _slicedToArray(_useState3, 2),
-    email = _useState4[0],
-    setEmail = _useState4[1];
+    username = _useState4[0],
+    setUsername = _useState4[1];
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState6 = _slicedToArray(_useState5, 2),
-    section = _useState6[0],
-    setSection = _useState6[1];
+    email = _useState6[0],
+    setEmail = _useState6[1];
   var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState8 = _slicedToArray(_useState7, 2),
-    password = _useState8[0],
-    setPassword = _useState8[1];
+    section = _useState8[0],
+    setSection = _useState8[1];
   var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState0 = _slicedToArray(_useState9, 2),
-    confirmPassword = _useState0[0],
-    setConfirmPassword = _useState0[1];
+    password = _useState0[0],
+    setPassword = _useState0[1];
   var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState10 = _slicedToArray(_useState1, 2),
-    errorMessage = _useState10[0],
-    setErrorMessage = _useState10[1];
+    confirmPassword = _useState10[0],
+    setConfirmPassword = _useState10[1];
   var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState12 = _slicedToArray(_useState11, 2),
-    noticeMessage = _useState12[0],
-    setNoticeMessage = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
+    errorMessage = _useState12[0],
+    setErrorMessage = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState14 = _slicedToArray(_useState13, 2),
-    isCheckingAuth = _useState14[0],
-    setIsCheckingAuth = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    noticeMessage = _useState14[0],
+    setNoticeMessage = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState16 = _slicedToArray(_useState15, 2),
-    isSubmitting = _useState16[0],
-    setIsSubmitting = _useState16[1];
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    isCheckingAuth = _useState16[0],
+    setIsCheckingAuth = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState18 = _slicedToArray(_useState17, 2),
-    sectionOptions = _useState18[0],
-    setSectionOptions = _useState18[1];
-  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    isSubmitting = _useState18[0],
+    setIsSubmitting = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState20 = _slicedToArray(_useState19, 2),
-    isLoadingSections = _useState20[0],
-    setIsLoadingSections = _useState20[1];
+    sectionOptions = _useState20[0],
+    setSectionOptions = _useState20[1];
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState22 = _slicedToArray(_useState21, 2),
+    isLoadingSections = _useState22[0],
+    setIsLoadingSections = _useState22[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var _location$state;
     var reason = location === null || location === void 0 || (_location$state = location.state) === null || _location$state === void 0 ? void 0 : _location$state.reason;
@@ -68780,6 +69111,7 @@ function SignupPage() {
           case 2:
             _context.n = 3;
             return axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/auth/register', {
+              name: fullName.trim(),
               username: username,
               email: email,
               password: password,
@@ -68838,6 +69170,21 @@ function SignupPage() {
         }), errorMessage && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "login-form__error",
           children: errorMessage
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          className: "login-form__group",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
+            htmlFor: "fullName",
+            children: "Full Name"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+            type: "text",
+            id: "fullName",
+            value: fullName,
+            onChange: function onChange(e) {
+              return setFullName(e.target.value);
+            },
+            placeholder: "Enter your full name",
+            required: true
+          })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "login-form__group",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
@@ -69922,23 +70269,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
 
 
 var FormContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)();
@@ -69949,14 +70303,9 @@ var useFormContext = function useFormContext() {
   }
   return context;
 };
-
-// Normalize id so string "123" and number 123 match (e.g. from URL vs state)
 var sameId = function sameId(a, b) {
   return a == null && b == null || Number(a) === Number(b);
 };
-
-// One-time reset: clear all reports to declutter (remove this block after first load if you want to keep data again)
-var RESET_REPORTS_ONCE_KEY = 'adr_reports_reset_done';
 var PROFILE_IMAGE_KEY = 'adr_profile_image';
 var FormProvider = function FormProvider(_ref) {
   var children = _ref.children;
@@ -69966,6 +70315,18 @@ var FormProvider = function FormProvider(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     profileImageUrl = _useState2[0],
     setProfileImageUrlState = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState4 = _slicedToArray(_useState3, 2),
+    userFullName = _useState4[0],
+    setUserFullName = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState6 = _slicedToArray(_useState5, 2),
+    reports = _useState6[0],
+    setReports = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState8 = _slicedToArray(_useState7, 2),
+    reportsLoaded = _useState8[0],
+    setReportsLoaded = _useState8[1];
   var setProfileImageUrl = function setProfileImageUrl(url) {
     if (url) {
       localStorage.setItem(PROFILE_IMAGE_KEY, url);
@@ -69974,55 +70335,110 @@ var FormProvider = function FormProvider(_ref) {
     }
     setProfileImageUrlState(url);
   };
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      if (!localStorage.getItem(RESET_REPORTS_ONCE_KEY)) {
-        localStorage.removeItem('adr_reports');
-        localStorage.setItem(RESET_REPORTS_ONCE_KEY, '1');
-        return [];
-      }
-      var savedReports = localStorage.getItem('adr_reports');
-      return savedReports ? JSON.parse(savedReports) : [];
-    }),
-    _useState4 = _slicedToArray(_useState3, 2),
-    reports = _useState4[0],
-    setReports = _useState4[1];
 
-  // Save reports to localStorage whenever they change
+  // Load reports from API when app mounts (authenticated user)
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    localStorage.setItem('adr_reports', JSON.stringify(reports));
-  }, [reports]);
-  var addReport = function addReport(reportData) {
-    var _reportData$status;
-    var newReport = _objectSpread(_objectSpread({
-      id: Date.now()
-    }, reportData), {}, {
-      createdAt: new Date().toISOString(),
-      alertStatus: (_reportData$status = reportData.status) !== null && _reportData$status !== void 0 ? _reportData$status : 'WHITE ALERT',
-      // WHITE ALERT, etc. from form dropdown
-      status: 'Active' // Active/Archived for reports list
+    var isMounted = true;
+    axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/adr-forms', {
+      withCredentials: true
+    }).then(function (res) {
+      if (isMounted && Array.isArray(res.data)) {
+        setReports(res.data);
+      }
+    })["catch"](function () {
+      if (isMounted) setReports([]);
+    })["finally"](function () {
+      if (isMounted) setReportsLoaded(true);
     });
-    setReports(function (prev) {
-      return [newReport].concat(_toConsumableArray(prev));
-    });
-    return newReport;
-  };
-  var updateReport = function updateReport(id, reportData) {
-    setReports(function (prev) {
-      return prev.map(function (report) {
-        if (sameId(report.id, id)) {
-          var _ref2, _reportData$status2;
-          return _objectSpread(_objectSpread(_objectSpread({}, report), reportData), {}, {
-            id: report.id,
-            createdAt: report.createdAt,
-            updatedAt: new Date().toISOString(),
-            alertStatus: (_ref2 = (_reportData$status2 = reportData.status) !== null && _reportData$status2 !== void 0 ? _reportData$status2 : report.alertStatus) !== null && _ref2 !== void 0 ? _ref2 : 'WHITE ALERT',
-            status: report.status // Preserve Active/Archived for list
-          });
-        }
-        return report;
+    return function () {
+      isMounted = false;
+    };
+  }, []);
+  var fetchReport = function fetchReport(id) {
+    return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/adr-forms/".concat(id), {
+      withCredentials: true
+    }).then(function (res) {
+      var full = res.data;
+      setReports(function (prev) {
+        var exists = prev.some(function (r) {
+          return sameId(r.id, id);
+        });
+        if (exists) return prev.map(function (r) {
+          return sameId(r.id, id) ? full : r;
+        });
+        return [full].concat(_toConsumableArray(prev));
       });
+      return full;
     });
   };
+  var addReport = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(reportData) {
+      var _reportData$documentN, _reportData$subject, _reportData$status, _ref3, _reportData$alertStat;
+      var payload, _yield$axios$post, data;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.n) {
+          case 0:
+            payload = _objectSpread({
+              documentName: (_reportData$documentN = reportData.documentName) !== null && _reportData$documentN !== void 0 ? _reportData$documentN : '',
+              subject: (_reportData$subject = reportData.subject) !== null && _reportData$subject !== void 0 ? _reportData$subject : '',
+              status: (_reportData$status = reportData.status) !== null && _reportData$status !== void 0 ? _reportData$status : 'WHITE ALERT',
+              alertStatus: (_ref3 = (_reportData$alertStat = reportData.alertStatus) !== null && _reportData$alertStat !== void 0 ? _reportData$alertStat : reportData.status) !== null && _ref3 !== void 0 ? _ref3 : 'WHITE ALERT'
+            }, reportData);
+            _context.n = 1;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/adr-forms', {
+              report: payload
+            }, {
+              withCredentials: true
+            });
+          case 1:
+            _yield$axios$post = _context.v;
+            data = _yield$axios$post.data;
+            setReports(function (prev) {
+              return [data].concat(_toConsumableArray(prev));
+            });
+            return _context.a(2, data);
+        }
+      }, _callee);
+    }));
+    return function addReport(_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+  var updateReport = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(id, reportData) {
+      var _reportData$documentN2, _reportData$subject2, _reportData$status2, _ref5, _reportData$alertStat2;
+      var payload, _yield$axios$put, data;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.n) {
+          case 0:
+            payload = _objectSpread({
+              documentName: (_reportData$documentN2 = reportData.documentName) !== null && _reportData$documentN2 !== void 0 ? _reportData$documentN2 : '',
+              subject: (_reportData$subject2 = reportData.subject) !== null && _reportData$subject2 !== void 0 ? _reportData$subject2 : '',
+              status: (_reportData$status2 = reportData.status) !== null && _reportData$status2 !== void 0 ? _reportData$status2 : 'WHITE ALERT',
+              alertStatus: (_ref5 = (_reportData$alertStat2 = reportData.alertStatus) !== null && _reportData$alertStat2 !== void 0 ? _reportData$alertStat2 : reportData.status) !== null && _ref5 !== void 0 ? _ref5 : 'WHITE ALERT'
+            }, reportData);
+            _context2.n = 1;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().put("/api/adr-forms/".concat(id), {
+              report: payload
+            }, {
+              withCredentials: true
+            });
+          case 1:
+            _yield$axios$put = _context2.v;
+            data = _yield$axios$put.data;
+            setReports(function (prev) {
+              return prev.map(function (r) {
+                return sameId(r.id, id) ? data : r;
+              });
+            });
+            return _context2.a(2, data);
+        }
+      }, _callee2);
+    }));
+    return function updateReport(_x2, _x3) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
   var getReport = function getReport(id) {
     return reports.find(function (report) {
       return sameId(report.id, id);
@@ -70035,35 +70451,101 @@ var FormProvider = function FormProvider(_ref) {
       });
     });
   };
-  var archiveReport = function archiveReport(id) {
-    setReports(function (prev) {
-      return prev.map(function (report) {
-        return sameId(report.id, id) ? _objectSpread(_objectSpread({}, report), {}, {
-          status: 'Archived'
-        }) : report;
-      });
-    });
-  };
-  var restoreReport = function restoreReport(id) {
-    setReports(function (prev) {
-      return prev.map(function (report) {
-        return sameId(report.id, id) ? _objectSpread(_objectSpread({}, report), {}, {
-          status: 'Active'
-        }) : report;
-      });
-    });
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(FormContext.Provider, {
+  var archiveReport = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(id) {
+      var _yield$axios$patch, data, _t;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
+          case 0:
+            _context3.p = 0;
+            _context3.n = 1;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().patch("/api/adr-forms/".concat(id, "/archive"), {}, {
+              withCredentials: true
+            });
+          case 1:
+            _yield$axios$patch = _context3.v;
+            data = _yield$axios$patch.data;
+            setReports(function (prev) {
+              return prev.map(function (r) {
+                return sameId(r.id, id) ? data : r;
+              });
+            });
+            _context3.n = 3;
+            break;
+          case 2:
+            _context3.p = 2;
+            _t = _context3.v;
+            setReports(function (prev) {
+              return prev.map(function (r) {
+                return sameId(r.id, id) ? _objectSpread(_objectSpread({}, r), {}, {
+                  status: 'Archived'
+                }) : r;
+              });
+            });
+          case 3:
+            return _context3.a(2);
+        }
+      }, _callee3, null, [[0, 2]]);
+    }));
+    return function archiveReport(_x4) {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+  var restoreReport = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(id) {
+      var _yield$axios$patch2, data, _t2;
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.p = _context4.n) {
+          case 0:
+            _context4.p = 0;
+            _context4.n = 1;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().patch("/api/adr-forms/".concat(id, "/restore"), {}, {
+              withCredentials: true
+            });
+          case 1:
+            _yield$axios$patch2 = _context4.v;
+            data = _yield$axios$patch2.data;
+            setReports(function (prev) {
+              return prev.map(function (r) {
+                return sameId(r.id, id) ? data : r;
+              });
+            });
+            _context4.n = 3;
+            break;
+          case 2:
+            _context4.p = 2;
+            _t2 = _context4.v;
+            setReports(function (prev) {
+              return prev.map(function (r) {
+                return sameId(r.id, id) ? _objectSpread(_objectSpread({}, r), {}, {
+                  status: 'Active'
+                }) : r;
+              });
+            });
+          case 3:
+            return _context4.a(2);
+        }
+      }, _callee4, null, [[0, 2]]);
+    }));
+    return function restoreReport(_x5) {
+      return _ref7.apply(this, arguments);
+    };
+  }();
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(FormContext.Provider, {
     value: {
       reports: reports,
+      reportsLoaded: reportsLoaded,
       addReport: addReport,
       updateReport: updateReport,
       getReport: getReport,
+      fetchReport: fetchReport,
       deleteReport: deleteReport,
       archiveReport: archiveReport,
       restoreReport: restoreReport,
       profileImageUrl: profileImageUrl,
-      setProfileImageUrl: setProfileImageUrl
+      setProfileImageUrl: setProfileImageUrl,
+      userFullName: userFullName,
+      setUserFullName: setUserFullName
     },
     children: children
   });

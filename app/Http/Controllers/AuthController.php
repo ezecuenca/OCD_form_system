@@ -51,6 +51,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
+            'name' => ['nullable', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users,username'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
@@ -68,7 +69,7 @@ class AuthController extends Controller
             DB::table('profile')->insert([
                 'user_id' => $user->id,
                 'section_id' => $validated['section_id'],
-                'full_name' => null,
+                'full_name' => isset($validated['name']) ? trim($validated['name']) : null,
                 'position' => null,
                 'image_path' => null,
                 'created_at' => now(),

@@ -6,7 +6,7 @@ import ConfirmModal from './ConfirmModal';
 
 function ArchivedReports() {
     const navigate = useNavigate();
-    const { reports, deleteReport, restoreReport } = useFormContext();
+    const { reports, reportsLoaded, deleteReport, restoreReport } = useFormContext();
     const [selectedReports, setSelectedReports] = useState([]);
     const [selectedSwapRequests, setSelectedSwapRequests] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -192,6 +192,14 @@ function ArchivedReports() {
         setSelectedMonth(month);
         setShowMonthDropdown(false);
     };
+
+    if (!reportsLoaded) {
+        return (
+            <div className="archived-reports">
+                <p style={{ padding: '2rem', textAlign: 'center' }}>Loading reports...</p>
+            </div>
+        );
+    }
 
     const archivedReports = reports.filter(r => r.status === 'Archived');
 
