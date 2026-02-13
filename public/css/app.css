@@ -1573,10 +1573,6 @@ body {
 .schedule__day--active {
   position: relative;
 }
-.schedule__day--active:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(233, 151, 69, 0.4);
-}
 .schedule__day--empty {
   background-color: #fafafa;
   color: #c8c8c8;
