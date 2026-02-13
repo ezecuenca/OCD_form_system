@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit, onSwitchToSwap }) {
+function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit, onSwitchToSwap, userRole }) {
     
     const isAddMode = mode === 'add';
     const isViewMode = mode === 'view';
@@ -166,7 +166,9 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
 
                         {isViewMode && (
                             <>
-                                <button type="button" className="btn btn--primary" onClick={() => onSwitchToEdit()}>Edit Task</button>
+                                {(userRole === 2 || userRole === 3) && (
+                                    <button type="button" className="btn btn--primary" onClick={() => onSwitchToEdit()}>Edit Task</button>
+                                )}
                                 <button type="button" className="btn btn--secondary" onClick={() => onSwitchToSwap()}>Request Swap</button>
                             </>
                         )}

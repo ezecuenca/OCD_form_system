@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import TasksModal from './TasksModal';
 import { saveSwapRequest, getSwapRequests } from '../utils/swapRequests';
 
@@ -10,11 +11,22 @@ function Schedule() {
         return savedTasks ? JSON.parse(savedTasks) : [];
     });
 
+    const [user, setUser] = useState(null);
+
     useEffect(() => {
         localStorage.setItem('scheduledTasks', JSON.stringify(tasks));
     }, [tasks]);
 
-    // Load and count pending swap requests
+    useEffect(() => {
+        axios.get('/api/auth/me')
+            .then((res) => {
+                setUser(res.data);
+            })
+            .catch(() => {
+                setUser(null);
+            });
+    }, []);
+
     useEffect(() => {
         const updatePendingCount = () => {
             const requests = getSwapRequests();
@@ -24,7 +36,6 @@ function Schedule() {
         
         updatePendingCount();
         
-        // Listen for storage changes to update count dynamically
         const handleStorage = () => updatePendingCount();
         window.addEventListener('storage', handleStorage);
         
@@ -92,6 +103,8 @@ function Schedule() {
 
     const handleDayClick = (day) => {
         if (!day) return;
+        
+        if (user?.role_id !== 2 && user?.role_id !== 3) return;
 
         const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         setSelectedDate(dateStr);
@@ -240,23 +253,27 @@ function Schedule() {
                     </div>
 
                     <div className="schedule__actions">
-                        <button
-                        className="schedule__btn schedule__btn--primary"
-                        onClick={() => {
-                            const today = new Date();
-                            const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-                            setSelectedDate(dateStr);
-                            setShowTaskForm(true);
-                        }}
-                        >
-                        Add Task (Today)
-                        </button>
-                        <div className="schedule__swap-btn-container">
-                            <Link to="/swap-form" className="schedule__btn schedule__btn--tertiary">Swapping Form Requests</Link>
-                            {pendingSwapCount > 0 && (
-                                <span className="schedule__notification-badge">{pendingSwapCount}</span>
-                            )}
-                        </div>
+                        {(user?.role_id === 2 || user?.role_id === 3) && (
+                            <button
+                            className="schedule__btn schedule__btn--primary"
+                            onClick={() => {
+                                const today = new Date();
+                                const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                                setSelectedDate(dateStr);
+                                setShowTaskForm(true);
+                            }}
+                            >
+                            Add Task (Today)
+                            </button>
+                        )}
+                        {(user?.role_id === 2 || user?.role_id === 3) && (
+                            <div className="schedule__swap-btn-container">
+                                <Link to="/swap-form" className="schedule__btn schedule__btn--tertiary">Swapping Form Requests</Link>
+                                {pendingSwapCount > 0 && (
+                                    <span className="schedule__notification-badge">{pendingSwapCount}</span>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -285,6 +302,7 @@ function Schedule() {
                     setModalMode('swap');
                     setShowTaskForm(false);
                 }}
+                userRole={user?.role_id}
             />
         </div>
     );

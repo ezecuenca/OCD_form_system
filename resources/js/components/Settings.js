@@ -1,13 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function Settings() {
     const accounts = [];
-    const [activeSection, setActiveSection] = useState('accounts');
+    const [activeSection, setActiveSection] = useState('templates');
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        axios.get('/api/auth/me')
+            .then((res) => {
+                setUser(res.data);
+                // Set initial section based on role
+                if (res.data?.role_id === 3) {
+                    setActiveSection('accounts');
+                } else {
+                    setActiveSection('templates');
+                }
+            })
+            .catch(() => {
+                setUser(null);
+            });
+    }, []);
 
     let sectionContent;
     switch (activeSection) {
         case 'accounts':
-            sectionContent = (
+            sectionContent = user?.role_id === 3 ? (
                 <>
                     <div className="settings__panel-header">
                         <h2 id="accounts-title" className="settings__section-title">Account Management</h2>
@@ -58,7 +76,7 @@ function Settings() {
                         </table>
                     </div>
                 </>
-            );
+            ) : null;
             break;
         case 'templates':
             sectionContent = (
@@ -112,13 +130,15 @@ function Settings() {
             <div className="settings__content">
                 <section className="settings__panel" aria-label="Admin settings">
                     <aside className="settings__subnav" aria-label="Settings sections">
-                        <button
-                            type="button"
-                            className={`settings__subnav-item ${activeSection === 'accounts' ? 'settings__subnav-item--active' : ''}`}
-                            onClick={() => setActiveSection('accounts')}
-                        >
-                            Accounts
-                        </button>
+                        {user?.role_id === 3 && (
+                            <button
+                                type="button"
+                                className={`settings__subnav-item ${activeSection === 'accounts' ? 'settings__subnav-item--active' : ''}`}
+                                onClick={() => setActiveSection('accounts')}
+                            >
+                                Accounts
+                            </button>
+                        )}
                         <button
                             type="button"
                             className={`settings__subnav-item ${activeSection === 'templates' ? 'settings__subnav-item--active' : ''}`}

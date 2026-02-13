@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 function Sidebar() {
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        axios.get('/api/auth/me')
+            .then((res) => {
+                setUser(res.data);
+            })
+            .catch(() => {
+                setUser(null);
+            });
+    }, []);
+
     return (
         <aside className="sidebar">
             <div className="sidebar__logo">
@@ -40,17 +53,19 @@ function Sidebar() {
                 </NavLink>
             </nav>
 
-            <div className="sidebar__settings">
-                <NavLink 
-                    to="/settings" 
-                    className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
-                >
-                    <span className="sidebar__link-icon">
-                        <img src="/images/setting_logo.svg" alt="Settings" className="sidebar__link-icon-img" />
-                    </span>
-                    <span className="sidebar__link-text">Settings</span>
-                </NavLink>
-            </div>
+            {(user?.role_id === 2 || user?.role_id === 3) && (
+                <div className="sidebar__settings">
+                    <NavLink 
+                        to="/settings" 
+                        className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
+                    >
+                        <span className="sidebar__link-icon">
+                            <img src="/images/setting_logo.svg" alt="Settings" className="sidebar__link-icon-img" />
+                        </span>
+                        <span className="sidebar__link-text">Settings</span>
+                    </NavLink>
+                </div>
+            )}
         </aside>
     );
 }
