@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
 const FormContext = createContext();
 
@@ -10,17 +11,16 @@ export const useFormContext = () => {
     return context;
 };
 
-// Normalize id so string "123" and number 123 match (e.g. from URL vs state)
 const sameId = (a, b) => (a == null && b == null) || (Number(a) === Number(b));
-
-// One-time reset: clear all reports to declutter (remove this block after first load if you want to keep data again)
-const RESET_REPORTS_ONCE_KEY = 'adr_reports_reset_done';
 const PROFILE_IMAGE_KEY = 'adr_profile_image';
 
 export const FormProvider = ({ children }) => {
     const [profileImageUrl, setProfileImageUrlState] = useState(() => {
         return localStorage.getItem(PROFILE_IMAGE_KEY) || null;
     });
+    const [userFullName, setUserFullName] = useState('');
+    const [reports, setReports] = useState([]);
+    const [reportsLoaded, setReportsLoaded] = useState(false);
 
     const setProfileImageUrl = (url) => {
         if (url) {
@@ -31,48 +31,61 @@ export const FormProvider = ({ children }) => {
         setProfileImageUrlState(url);
     };
 
-    const [reports, setReports] = useState(() => {
-        if (!localStorage.getItem(RESET_REPORTS_ONCE_KEY)) {
-            localStorage.removeItem('adr_reports');
-            localStorage.setItem(RESET_REPORTS_ONCE_KEY, '1');
-            return [];
-        }
-        const savedReports = localStorage.getItem('adr_reports');
-        return savedReports ? JSON.parse(savedReports) : [];
-    });
-
-    // Save reports to localStorage whenever they change
+    // Load reports from API when app mounts (authenticated user)
     useEffect(() => {
-        localStorage.setItem('adr_reports', JSON.stringify(reports));
-    }, [reports]);
+        let isMounted = true;
+        axios.get('/api/adr-forms', { withCredentials: true })
+            .then((res) => {
+                if (isMounted && Array.isArray(res.data)) {
+                    setReports(res.data);
+                }
+            })
+            .catch(() => {
+                if (isMounted) setReports([]);
+            })
+            .finally(() => {
+                if (isMounted) setReportsLoaded(true);
+            });
+        return () => { isMounted = false; };
+    }, []);
 
-    const addReport = (reportData) => {
-        const newReport = {
-            id: Date.now(),
-            ...reportData,
-            createdAt: new Date().toISOString(),
-            alertStatus: reportData.status ?? 'WHITE ALERT', // WHITE ALERT, etc. from form dropdown
-            status: 'Active' // Active/Archived for reports list
-        };
-        setReports(prev => [newReport, ...prev]);
-        return newReport;
+    const fetchReport = (id) => {
+        return axios.get(`/api/adr-forms/${id}`, { withCredentials: true })
+            .then((res) => {
+                const full = res.data;
+                setReports(prev => {
+                    const exists = prev.some(r => sameId(r.id, id));
+                    if (exists) return prev.map(r => sameId(r.id, id) ? full : r);
+                    return [full, ...prev];
+                });
+                return full;
+            });
     };
 
-    const updateReport = (id, reportData) => {
-        setReports(prev => prev.map(report => {
-            if (sameId(report.id, id)) {
-                return {
-                    ...report,
-                    ...reportData,
-                    id: report.id,
-                    createdAt: report.createdAt,
-                    updatedAt: new Date().toISOString(),
-                    alertStatus: reportData.status ?? report.alertStatus ?? 'WHITE ALERT',
-                    status: report.status // Preserve Active/Archived for list
-                };
-            }
-            return report;
-        }));
+    const addReport = async (reportData) => {
+        const payload = {
+            documentName: reportData.documentName ?? '',
+            subject: reportData.subject ?? '',
+            status: reportData.status ?? 'WHITE ALERT',
+            alertStatus: reportData.alertStatus ?? reportData.status ?? 'WHITE ALERT',
+            ...reportData
+        };
+        const { data } = await axios.post('/api/adr-forms', { report: payload }, { withCredentials: true });
+        setReports(prev => [data, ...prev]);
+        return data;
+    };
+
+    const updateReport = async (id, reportData) => {
+        const payload = {
+            documentName: reportData.documentName ?? '',
+            subject: reportData.subject ?? '',
+            status: reportData.status ?? 'WHITE ALERT',
+            alertStatus: reportData.alertStatus ?? reportData.status ?? 'WHITE ALERT',
+            ...reportData
+        };
+        const { data } = await axios.put(`/api/adr-forms/${id}`, { report: payload }, { withCredentials: true });
+        setReports(prev => prev.map(r => sameId(r.id, id) ? data : r));
+        return data;
     };
 
     const getReport = (id) => {
@@ -83,20 +96,40 @@ export const FormProvider = ({ children }) => {
         setReports(prev => prev.filter(report => !sameId(report.id, id)));
     };
 
-    const archiveReport = (id) => {
-        setReports(prev => prev.map(report =>
-            sameId(report.id, id) ? { ...report, status: 'Archived' } : report
-        ));
+    const archiveReport = async (id) => {
+        try {
+            const { data } = await axios.patch(`/api/adr-forms/${id}/archive`, {}, { withCredentials: true });
+            setReports(prev => prev.map(r => sameId(r.id, id) ? data : r));
+        } catch (_) {
+            setReports(prev => prev.map(r => sameId(r.id, id) ? { ...r, status: 'Archived' } : r));
+        }
     };
 
-    const restoreReport = (id) => {
-        setReports(prev => prev.map(report =>
-            sameId(report.id, id) ? { ...report, status: 'Active' } : report
-        ));
+    const restoreReport = async (id) => {
+        try {
+            const { data } = await axios.patch(`/api/adr-forms/${id}/restore`, {}, { withCredentials: true });
+            setReports(prev => prev.map(r => sameId(r.id, id) ? data : r));
+        } catch (_) {
+            setReports(prev => prev.map(r => sameId(r.id, id) ? { ...r, status: 'Active' } : r));
+        }
     };
 
     return (
-        <FormContext.Provider value={{ reports, addReport, updateReport, getReport, deleteReport, archiveReport, restoreReport, profileImageUrl, setProfileImageUrl }}>
+        <FormContext.Provider value={{
+            reports,
+            reportsLoaded,
+            addReport,
+            updateReport,
+            getReport,
+            fetchReport,
+            deleteReport,
+            archiveReport,
+            restoreReport,
+            profileImageUrl,
+            setProfileImageUrl,
+            userFullName,
+            setUserFullName
+        }}>
             {children}
         </FormContext.Provider>
     );

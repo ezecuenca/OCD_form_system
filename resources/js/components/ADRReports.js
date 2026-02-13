@@ -8,7 +8,7 @@ import DocumentViewModal from './DocumentViewModal';
 function ADRReports() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { reports, deleteReport, archiveReport, getReport } = useFormContext();
+    const { reports, reportsLoaded, deleteReport, archiveReport, getReport } = useFormContext();
     const [selectedReports, setSelectedReports] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
@@ -162,6 +162,14 @@ function ADRReports() {
     };
 
     const activeReports = reports.filter(r => r.status === 'Active');
+
+    if (!reportsLoaded) {
+        return (
+            <div className="adr-reports">
+                <p style={{ padding: '2rem', textAlign: 'center' }}>Loading reports...</p>
+            </div>
+        );
+    }
 
     const filteredReports = activeReports.filter((report) => {
         const created = new Date(report.createdAt);

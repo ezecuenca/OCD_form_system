@@ -539,11 +539,23 @@
             margin-bottom: 0;
         }
 
-        .adr-form__position-line {
+        .adr-form__position-line,
+        .adr-form__signature-name-input {
             &::placeholder {
                 color: #999;
                 font-style: italic;
             }
+        }
+
+        .adr-form__signature-name-input {
+            border: none !important;
+            border-bottom: 1px solid #333 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            text-align: center;
+            resize: vertical;
+            min-height: 36px;
+            font-weight: 600;
         }
     }
 
