@@ -1,18 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import LoadingScreen from './LoadingScreen';
 
 function SignupPage() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [section, setSection] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [noticeMessage, setNoticeMessage] = useState('');
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [sectionOptions, setSectionOptions] = useState([]);
     const [isLoadingSections, setIsLoadingSections] = useState(false);
+
+    useEffect(() => {
+        const reason = location?.state?.reason;
+        if (reason === 'session-expired') {
+            setNoticeMessage('Session expired. Please log in again.');
+        }
+    }, [location?.state?.reason]);
+
+    useEffect(() => {
+        let isMounted = true;
+        axios.get('/api/auth/me')
+            .then(() => {
+                if (isMounted) navigate('/dashboard', { replace: true });
+            })
+            .catch(() => {
+                if (isMounted) setIsCheckingAuth(false);
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [navigate]);
 
     useEffect(() => {
         let isMounted = true;
@@ -48,6 +74,7 @@ function SignupPage() {
 
         try {
             setIsSubmitting(true);
+            await axios.get('/sanctum/csrf-cookie');
             await axios.post('/api/auth/register', {
                 username,
                 email,
@@ -68,11 +95,24 @@ function SignupPage() {
         }
     };
 
+    if (isCheckingAuth) {
+        return <LoadingScreen message="Checking your session..." />;
+    }
+
+    if (isSubmitting) {
+        return <LoadingScreen message="Creating your account..." />;
+    }
+
     return (
         <div className="login-page">
             <div className="login-container login-container--signup">
                 <h2 className="signup-title">Create Account</h2>
                 <form className="login-form login-form--signup" onSubmit={handleSubmit}>
+                    {noticeMessage && (
+                        <div className="login-form__notice">
+                            {noticeMessage}
+                        </div>
+                    )}
                     {errorMessage && (
                         <div className="login-form__error">
                             {errorMessage}

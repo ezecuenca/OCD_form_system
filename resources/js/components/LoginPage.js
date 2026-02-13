@@ -1,13 +1,39 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import LoadingScreen from './LoadingScreen';
 
 function LoginPage() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [noticeMessage, setNoticeMessage] = useState('');
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        const reason = location?.state?.reason;
+        if (reason === 'session-expired') {
+            setNoticeMessage('Session expired. Please log in again.');
+        }
+    }, [location?.state?.reason]);
+
+    useEffect(() => {
+        let isMounted = true;
+        axios.get('/api/auth/me')
+            .then(() => {
+                if (isMounted) navigate('/dashboard', { replace: true });
+            })
+            .catch(() => {
+                if (isMounted) setIsCheckingAuth(false);
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -15,6 +41,7 @@ function LoginPage() {
 
         try {
             setIsSubmitting(true);
+            await axios.get('/sanctum/csrf-cookie');
             await axios.post('/api/auth/login', {
                 username,
                 password,
@@ -33,6 +60,14 @@ function LoginPage() {
         }
     };
 
+    if (isCheckingAuth) {
+        return <LoadingScreen message="Checking your session..." />;
+    }
+
+    if (isSubmitting) {
+        return <LoadingScreen message="Signing you in..." />;
+    }
+
     return (
         <div className="login-page">
             <div className="login-container">
@@ -44,6 +79,11 @@ function LoginPage() {
                     <h2>Caraga Region</h2>
                 </div>
                 <form className="login-form" onSubmit={handleSubmit}>
+                    {noticeMessage && (
+                        <div className="login-form__notice">
+                            {noticeMessage}
+                        </div>
+                    )}
                     {errorMessage && (
                         <div className="login-form__error">
                             {errorMessage}

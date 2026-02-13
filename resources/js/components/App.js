@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { FormProvider } from '../context/FormContext';
 import Sidebar from './Sidebar';
 import Header from './Header';
@@ -12,6 +13,7 @@ import Settings from './Settings';
 import Profile from './Profile';
 import LoginPage from './LoginPage';
 import SignupPage from './SignupPage';
+import LoadingScreen from './LoadingScreen';
 
 function ViewRedirect() {
     const { id } = useParams();
@@ -45,6 +47,35 @@ function AppLayout() {
     );
 }
 
+function RequireAuth({ children }) {
+    const [status, setStatus] = useState('loading');
+
+    useEffect(() => {
+        let isMounted = true;
+        axios.get('/api/auth/me')
+            .then(() => {
+                if (isMounted) setStatus('authed');
+            })
+            .catch(() => {
+                if (isMounted) setStatus('guest');
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    if (status === 'loading') {
+        return <LoadingScreen message="Loading your workspace..." />;
+    }
+
+    if (status === 'guest') {
+        return <Navigate to="/login" replace state={{ reason: 'session-expired' }} />;
+    }
+
+    return children;
+}
+
 function App() {
     return (
         <FormProvider>
@@ -52,7 +83,14 @@ function App() {
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignupPage />} />
-                    <Route path="/*" element={<AppLayout />} />
+                    <Route
+                        path="/*"
+                        element={
+                            <RequireAuth>
+                                <AppLayout />
+                            </RequireAuth>
+                        }
+                    />
                 </Routes>
             </Router>
         </FormProvider>

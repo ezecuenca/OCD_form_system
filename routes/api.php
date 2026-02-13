@@ -17,15 +17,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('/auth/register', [AuthController::class, 'register'])->name('api.auth.register');
 Route::post('/auth/login', [AuthController::class, 'login'])->name('api.auth.login');
 Route::get('/sections', [SectionsController::class, 'index'])->name('api.sections.index');
 Route::get('/section', [SectionsController::class, 'index'])->name('api.section.index');
 
-Route::post('/adr/export-docx', ExportDocxController::class)->name('api.adr.export-docx');
-Route::get('/adr/export-docx/{token}', [ExportDocxController::class, 'download'])->name('api.adr.export-docx.download');
-Route::post('/adr/export-pdf', [ExportDocxController::class, 'exportPdf'])->name('api.adr.export-pdf');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/auth/me', [AuthController::class, 'me'])->name('api.auth.me');
+    Route::post('/auth/logout', [AuthController::class, 'logout'])->name('api.auth.logout');
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::post('/adr/export-docx', ExportDocxController::class)->name('api.adr.export-docx');
+    Route::get('/adr/export-docx/{token}', [ExportDocxController::class, 'download'])->name('api.adr.export-docx.download');
+    Route::post('/adr/export-pdf', [ExportDocxController::class, 'exportPdf'])->name('api.adr.export-pdf');
+});

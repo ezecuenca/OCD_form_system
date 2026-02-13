@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
+import axios from 'axios';
 
 function Header() {
     const { profileImageUrl } = useFormContext();
@@ -23,9 +24,15 @@ function Header() {
         setDropdownOpen((prev) => !prev);
     };
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         setDropdownOpen(false);
-        navigate('/login');
+        try {
+            await axios.get('/sanctum/csrf-cookie');
+            await axios.post('/api/auth/logout');
+        } catch (err) {
+        } finally {
+            navigate('/login');
+        }
     };
 
     const handleViewProfile = () => {
