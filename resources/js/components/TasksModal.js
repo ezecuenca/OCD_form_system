@@ -12,6 +12,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
 
     const [profileId, setProfileId] = useState('');
     const [profileName, setProfileName] = useState('');
+    const [showProfileSuggestions, setShowProfileSuggestions] = useState(false);
     const [task, setTask] = useState('');
     const [schedule, setSchedule] = useState('');
     const [errors, setErrors] = useState({}); // New state for inline errors
@@ -26,7 +27,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
             setSchedule(selectedDate || '');
         } else if (initialTask) {
             setProfileId(initialTask.profileId || '');
-            setProfileName(initialTask.name || '');
+            setProfileName(initialTask.fullName || initialTask.name || '');
             setTask(initialTask.task || '');
             setSchedule(initialTask.date || '');
         }
@@ -40,6 +41,18 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
         if (!schedule) newErrors.schedule = 'Date is required';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
+    };
+
+    const filteredProfiles = profileOptions.filter(profile =>
+        profile.full_name.toLowerCase().includes(profileName.trim().toLowerCase())
+    );
+
+    const handleProfileChange = (value) => {
+        setProfileName(value);
+        const match = profileOptions.find(
+            profile => profile.full_name.toLowerCase() === value.trim().toLowerCase()
+        );
+        setProfileId(match ? String(match.id) : '');
     };
 
     const handleSubmit = (e) => {
@@ -88,27 +101,32 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                     <>
                         <div className="form__group">
                             <label>Staff</label>
-                            <input
-                                type="text"
-                                id="profileName"
-                                list="profileOptions"
-                                value={profileName}
-                                onChange={(e) => {
-                                    const value = e.target.value;
-                                    setProfileName(value);
-                                    const match = profileOptions.find(
-                                        profile => profile.full_name.toLowerCase() === value.trim().toLowerCase()
-                                    );
-                                    setProfileId(match ? String(match.id) : '');
-                                }}
-                                placeholder="Type a name to search"
-                                required
-                            />
-                            <datalist id="profileOptions">
-                                {profileOptions.map(profile => (
-                                    <option key={profile.id} value={profile.full_name} />
-                                ))}
-                            </datalist>
+                            <div className="autocomplete">
+                                <input
+                                    type="text"
+                                    id="profileName"
+                                    value={profileName}
+                                    onChange={(e) => handleProfileChange(e.target.value)}
+                                    onFocus={() => setShowProfileSuggestions(true)}
+                                    onBlur={() => setTimeout(() => setShowProfileSuggestions(false), 120)}
+                                    placeholder="Type a name to search"
+                                    required
+                                />
+                                {showProfileSuggestions && filteredProfiles.length > 0 && (
+                                    <div className="autocomplete__menu" role="listbox">
+                                        {filteredProfiles.map(profile => (
+                                            <button
+                                                key={profile.id}
+                                                type="button"
+                                                className="autocomplete__option"
+                                                onMouseDown={() => handleProfileChange(profile.full_name)}
+                                            >
+                                                {profile.full_name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                             {errors.profileId && <span className="error" style={{ color: 'red', fontSize: '0.8rem' }}>{errors.profileId}</span>}
                         </div>
 
@@ -146,7 +164,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                         <div className="view-task">
                             <div className="view-task__row">
                             <label>Staff</label>
-                            <div className="value strong">{initialTask?.name || '—'}</div>
+                            <div className="value strong">{initialTask?.fullName || initialTask?.name || '—'}</div>
                         </div>
 
                         <div className="view-task__row">

@@ -11,10 +11,16 @@ function Schedule() {
 
     const [user, setUser] = useState(null);
 
+    const getFirstName = (fullName) => {
+        if (!fullName) return '—';
+        return String(fullName).trim().split(/\s+/)[0] || '—';
+    };
+
     const mapScheduleToTask = (item) => ({
         id: item.id,
         profileId: item.profile_id ? String(item.profile_id) : '',
-        name: item.profile_name || '—',
+        name: getFirstName(item.profile_name),
+        fullName: item.profile_name || '—',
         task: item.task_description || '',
         date: item.task_date,
         status: item.status,

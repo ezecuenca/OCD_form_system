@@ -68289,11 +68289,16 @@ function Schedule() {
     _useState8 = _slicedToArray(_useState7, 2),
     user = _useState8[0],
     setUser = _useState8[1];
+  var getFirstName = function getFirstName(fullName) {
+    if (!fullName) return '—';
+    return String(fullName).trim().split(/\s+/)[0] || '—';
+  };
   var mapScheduleToTask = function mapScheduleToTask(item) {
     return {
       id: item.id,
       profileId: item.profile_id ? String(item.profile_id) : '',
-      name: item.profile_name || '—',
+      name: getFirstName(item.profile_name),
+      fullName: item.profile_name || '—',
       task: item.task_description || '',
       date: item.task_date,
       status: item.status
@@ -70301,18 +70306,22 @@ function TasksModal(_ref) {
     _useState4 = _slicedToArray(_useState3, 2),
     profileName = _useState4[0],
     setProfileName = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState6 = _slicedToArray(_useState5, 2),
-    task = _useState6[0],
-    setTask = _useState6[1];
+    showProfileSuggestions = _useState6[0],
+    setShowProfileSuggestions = _useState6[1];
   var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState8 = _slicedToArray(_useState7, 2),
-    schedule = _useState8[0],
-    setSchedule = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({}),
+    task = _useState8[0],
+    setTask = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState0 = _slicedToArray(_useState9, 2),
-    errors = _useState0[0],
-    setErrors = _useState0[1]; // New state for inline errors
+    schedule = _useState0[0],
+    setSchedule = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({}),
+    _useState10 = _slicedToArray(_useState1, 2),
+    errors = _useState10[0],
+    setErrors = _useState10[1]; // New state for inline errors
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (!isOpen) return;
@@ -70323,7 +70332,7 @@ function TasksModal(_ref) {
       setSchedule(selectedDate || '');
     } else if (initialTask) {
       setProfileId(initialTask.profileId || '');
-      setProfileName(initialTask.name || '');
+      setProfileName(initialTask.fullName || initialTask.name || '');
       setTask(initialTask.task || '');
       setSchedule(initialTask.date || '');
     }
@@ -70336,6 +70345,16 @@ function TasksModal(_ref) {
     if (!schedule) newErrors.schedule = 'Date is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+  var filteredProfiles = profileOptions.filter(function (profile) {
+    return profile.full_name.toLowerCase().includes(profileName.trim().toLowerCase());
+  });
+  var handleProfileChange = function handleProfileChange(value) {
+    setProfileName(value);
+    var match = profileOptions.find(function (profile) {
+      return profile.full_name.toLowerCase() === value.trim().toLowerCase();
+    });
+    setProfileId(match ? String(match.id) : '');
   };
   var handleSubmit = function handleSubmit(e) {
     e.preventDefault();
@@ -70389,28 +70408,39 @@ function TasksModal(_ref) {
             className: "form__group",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
               children: "Staff"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
-              type: "text",
-              id: "profileName",
-              list: "profileOptions",
-              value: profileName,
-              onChange: function onChange(e) {
-                var value = e.target.value;
-                setProfileName(value);
-                var match = profileOptions.find(function (profile) {
-                  return profile.full_name.toLowerCase() === value.trim().toLowerCase();
-                });
-                setProfileId(match ? String(match.id) : '');
-              },
-              placeholder: "Type a name to search",
-              required: true
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("datalist", {
-              id: "profileOptions",
-              children: profileOptions.map(function (profile) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
-                  value: profile.full_name
-                }, profile.id);
-              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+              className: "autocomplete",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
+                type: "text",
+                id: "profileName",
+                value: profileName,
+                onChange: function onChange(e) {
+                  return handleProfileChange(e.target.value);
+                },
+                onFocus: function onFocus() {
+                  return setShowProfileSuggestions(true);
+                },
+                onBlur: function onBlur() {
+                  return setTimeout(function () {
+                    return setShowProfileSuggestions(false);
+                  }, 120);
+                },
+                placeholder: "Type a name to search",
+                required: true
+              }), showProfileSuggestions && filteredProfiles.length > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+                className: "autocomplete__menu",
+                role: "listbox",
+                children: filteredProfiles.map(function (profile) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+                    type: "button",
+                    className: "autocomplete__option",
+                    onMouseDown: function onMouseDown() {
+                      return handleProfileChange(profile.full_name);
+                    },
+                    children: profile.full_name
+                  }, profile.id);
+                })
+              })]
             }), errors.profileId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
               className: "error",
               style: {
@@ -70480,7 +70510,7 @@ function TasksModal(_ref) {
               children: "Staff"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
               className: "value strong",
-              children: (initialTask === null || initialTask === void 0 ? void 0 : initialTask.name) || '—'
+              children: (initialTask === null || initialTask === void 0 ? void 0 : initialTask.fullName) || (initialTask === null || initialTask === void 0 ? void 0 : initialTask.name) || '—'
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
             className: "view-task__row",
