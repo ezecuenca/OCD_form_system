@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
@@ -11,6 +12,20 @@ use Illuminate\Support\Facades\Storage;
 
 class ExportDocxController extends Controller
 {
+    /**
+     * Path to the .docx template file: uses the template marked "in use" in the DB,
+     * or falls back to ADR_template.docx if none is active.
+     */
+    private function getTemplatePath(): string
+    {
+        $active = Template::where('is_active', 1)->first();
+        if (!$active || !trim((string) $active->template_name)) {
+            return resource_path('templates/ADR_template.docx');
+        }
+        $base = preg_replace('/[^a-zA-Z0-9_\-\s]/', '', trim($active->template_name));
+        $filename = ($base !== '') ? $base . '.docx' : 'ADR_template.docx';
+        return resource_path('templates/' . $filename);
+    }
     /**
      * POST: Generate DOCX and redirect to GET download URL so the browser
      * treats the download as navigation (avoids "permission to download" prompt).
@@ -39,7 +54,7 @@ class ExportDocxController extends Controller
             return response()->json(['error' => 'No report data provided.'], 422);
         }
 
-        $templatePath = resource_path('templates/ADR_template.docx');
+        $templatePath = $this->getTemplatePath();
         clearstatcache(true, $templatePath);
         if (!is_readable($templatePath)) {
             Log::error('ADR template not found or not readable: ' . $templatePath);
@@ -306,7 +321,7 @@ class ExportDocxController extends Controller
      */
     private function generateDocxContent(array $report): string
     {
-        $templatePath = resource_path('templates/ADR_template.docx');
+        $templatePath = $this->getTemplatePath();
         clearstatcache(true, $templatePath);
         if (!is_readable($templatePath)) {
             throw new \RuntimeException('Export template not found.');
