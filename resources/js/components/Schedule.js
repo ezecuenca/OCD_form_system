@@ -2,20 +2,55 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import TasksModal from './TasksModal';
-import { saveSwapRequest, getSwapRequests } from '../utils/swapRequests';
 
 function Schedule() {
 
-    const [tasks, setTasks] = useState(() => {
-        const savedTasks = localStorage.getItem('scheduledTasks');
-        return savedTasks ? JSON.parse(savedTasks) : [];
-    });
+    const [tasks, setTasks] = useState([]);
+    const [profiles, setProfiles] = useState([]);
 
     const [user, setUser] = useState(null);
 
+    const mapScheduleToTask = (item) => ({
+        id: item.id,
+        profileId: item.profile_id ? String(item.profile_id) : '',
+        name: item.profile_name || '—',
+        task: item.task_description || '',
+        date: item.task_date,
+        status: item.status,
+    });
+
     useEffect(() => {
-        localStorage.setItem('scheduledTasks', JSON.stringify(tasks));
-    }, [tasks]);
+        let isMounted = true;
+
+        const loadData = async () => {
+            try {
+                const [schedulesRes, profilesRes] = await Promise.all([
+                    axios.get('/api/schedules'),
+                    axios.get('/api/profiles'),
+                ]);
+
+                if (!isMounted) return;
+
+                const scheduleItems = Array.isArray(schedulesRes.data) ? schedulesRes.data : [];
+                const profileItems = Array.isArray(profilesRes.data) ? profilesRes.data : [];
+
+                setTasks(scheduleItems.map(mapScheduleToTask));
+                setProfiles(profileItems.map((profile) => ({
+                    id: String(profile.id),
+                    full_name: profile.full_name || '—',
+                })));
+            } catch (error) {
+                if (!isMounted) return;
+                setTasks([]);
+            }
+        };
+
+        loadData();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
 
     useEffect(() => {
         axios.get('/api/auth/me')
@@ -28,18 +63,27 @@ function Schedule() {
     }, []);
 
     useEffect(() => {
-        const updatePendingCount = () => {
-            const requests = getSwapRequests();
-            const pendingCount = requests.filter(r => r.status === 'pending').length;
-            setPendingSwapCount(pendingCount);
+        let isMounted = true;
+
+        const updatePendingCount = async () => {
+            try {
+                const response = await axios.get('/api/swapping-requests', {
+                    params: { status: 'pending' },
+                });
+                if (!isMounted) return;
+                const pendingCount = Array.isArray(response.data) ? response.data.length : 0;
+                setPendingSwapCount(pendingCount);
+            } catch (error) {
+                if (!isMounted) return;
+                setPendingSwapCount(0);
+            }
         };
-        
+
         updatePendingCount();
-        
-        const handleStorage = () => updatePendingCount();
-        window.addEventListener('storage', handleStorage);
-        
-        return () => window.removeEventListener('storage', handleStorage);
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -111,9 +155,20 @@ function Schedule() {
         setShowTaskForm(true);
     };
 
-    const handleAddTask = (taskData) => {
-        setTasks([...tasks, taskData]);
-        setShowTaskForm(false);
+    const handleAddTask = async (taskData) => {
+        try {
+            const payload = {
+                profile_id: Number(taskData.profileId),
+                task_description: taskData.task,
+                task_date: taskData.date,
+                status: 'active',
+            };
+            const response = await axios.post('/api/schedules', payload);
+            setTasks((prev) => [...prev, mapScheduleToTask(response.data)]);
+            setShowTaskForm(false);
+        } catch (error) {
+            alert('Could not save schedule. Please try again.');
+        }
     };
 
     const handleTaskClick = (task) => {
@@ -130,22 +185,23 @@ function Schedule() {
         const existingTaskOnTarget = tasks.find(t => t.date === targetDateStr);
 
         const swapRequest = {
-            id: `swap-${Date.now()}`,
-            taskName: taskToSwap.name,
-            taskDescription: taskToSwap.task,
-            fromDate: taskToSwap.date,
-            toDate: targetDateStr,
-            targetTaskName: existingTaskOnTarget ? existingTaskOnTarget.name : null,
-            status: 'pending',
-            createdAt: new Date().toISOString()
+            requester_schedule_id: taskToSwap.id,
+            target_date: targetDateStr,
         };
 
-        saveSwapRequest(swapRequest);
-
-        setShowTaskForm(false);
-        setModalMode('add');
-        setSelectedTask(null);
-        setTaskToSwap(null);
+        axios.post('/api/swapping-requests', swapRequest)
+            .then(() => {
+                setPendingSwapCount((prev) => prev + 1);
+            })
+            .catch(() => {
+                alert('Could not create swap request. Please try again.');
+            })
+            .finally(() => {
+                setShowTaskForm(false);
+                setModalMode('add');
+                setSelectedTask(null);
+                setTaskToSwap(null);
+            });
     };
 
     const getTasksForDate = (day) => {
@@ -291,11 +347,22 @@ function Schedule() {
                 onAddTask={handleAddTask}
                 initialTask={selectedTask}
                 mode={modalMode}
-                onUpdateTask={(updateTask) => {
-                    setTasks(prev => prev.map(t => t === selectedTask ? updateTask : t));
-                    setShowTaskForm(false);
-                    setSelectedTask(null);
-                    setModalMode('add');
+                onUpdateTask={async (updateTask) => {
+                    try {
+                        const payload = {
+                            profile_id: Number(updateTask.profileId),
+                            task_description: updateTask.task,
+                            task_date: updateTask.date,
+                            status: updateTask.status || 'active',
+                        };
+                        const response = await axios.put(`/api/schedules/${updateTask.id}`, payload);
+                        setTasks(prev => prev.map(t => t.id === updateTask.id ? mapScheduleToTask(response.data) : t));
+                        setShowTaskForm(false);
+                        setSelectedTask(null);
+                        setModalMode('add');
+                    } catch (error) {
+                        alert('Could not update schedule. Please try again.');
+                    }
                 }}
                 onSwitchToEdit={() => setModalMode('edit')}
                 onSwitchToSwap={() => {
@@ -303,6 +370,7 @@ function Schedule() {
                     setShowTaskForm(false);
                 }}
                 userRole={user?.role_id}
+                profileOptions={profiles}
             />
         </div>
     );

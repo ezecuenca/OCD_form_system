@@ -68252,12 +68252,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _TasksModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TasksModal */ "./resources/js/components/TasksModal.js");
-/* harmony import */ var _utils_swapRequests__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/swapRequests */ "./resources/js/utils/swapRequests.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -68269,22 +68272,86 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
-
 function Schedule() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      var savedTasks = localStorage.getItem('scheduledTasks');
-      return savedTasks ? JSON.parse(savedTasks) : [];
-    }),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
     tasks = _useState2[0],
     setTasks = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState4 = _slicedToArray(_useState3, 2),
-    user = _useState4[0],
-    setUser = _useState4[1];
+    profiles = _useState4[0],
+    setProfiles = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState6 = _slicedToArray(_useState5, 2),
+    user = _useState6[0],
+    setUser = _useState6[1];
+  var mapScheduleToTask = function mapScheduleToTask(item) {
+    return {
+      id: item.id,
+      profileId: item.profile_id ? String(item.profile_id) : '',
+      name: item.profile_name || '—',
+      task: item.task_description || '',
+      date: item.task_date,
+      status: item.status
+    };
+  };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    localStorage.setItem('scheduledTasks', JSON.stringify(tasks));
-  }, [tasks]);
+    var isMounted = true;
+    var loadData = /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+        var _yield$Promise$all, _yield$Promise$all2, schedulesRes, profilesRes, scheduleItems, profileItems, _t;
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.p = _context.n) {
+            case 0:
+              _context.p = 0;
+              _context.n = 1;
+              return Promise.all([axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/schedules'), axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/profiles')]);
+            case 1:
+              _yield$Promise$all = _context.v;
+              _yield$Promise$all2 = _slicedToArray(_yield$Promise$all, 2);
+              schedulesRes = _yield$Promise$all2[0];
+              profilesRes = _yield$Promise$all2[1];
+              if (isMounted) {
+                _context.n = 2;
+                break;
+              }
+              return _context.a(2);
+            case 2:
+              scheduleItems = Array.isArray(schedulesRes.data) ? schedulesRes.data : [];
+              profileItems = Array.isArray(profilesRes.data) ? profilesRes.data : [];
+              setTasks(scheduleItems.map(mapScheduleToTask));
+              setProfiles(profileItems.map(function (profile) {
+                return {
+                  id: String(profile.id),
+                  full_name: profile.full_name || '—'
+                };
+              }));
+              _context.n = 5;
+              break;
+            case 3:
+              _context.p = 3;
+              _t = _context.v;
+              if (isMounted) {
+                _context.n = 4;
+                break;
+              }
+              return _context.a(2);
+            case 4:
+              setTasks([]);
+            case 5:
+              return _context.a(2);
+          }
+        }, _callee, null, [[0, 3]]);
+      }));
+      return function loadData() {
+        return _ref.apply(this, arguments);
+      };
+    }();
+    loadData();
+    return function () {
+      isMounted = false;
+    };
+  }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/auth/me').then(function (res) {
       setUser(res.data);
@@ -68293,50 +68360,84 @@ function Schedule() {
     });
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var updatePendingCount = function updatePendingCount() {
-      var requests = (0,_utils_swapRequests__WEBPACK_IMPORTED_MODULE_4__.getSwapRequests)();
-      var pendingCount = requests.filter(function (r) {
-        return r.status === 'pending';
-      }).length;
-      setPendingSwapCount(pendingCount);
-    };
+    var isMounted = true;
+    var updatePendingCount = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+        var response, pendingCount, _t2;
+        return _regenerator().w(function (_context2) {
+          while (1) switch (_context2.p = _context2.n) {
+            case 0:
+              _context2.p = 0;
+              _context2.n = 1;
+              return axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/swapping-requests', {
+                params: {
+                  status: 'pending'
+                }
+              });
+            case 1:
+              response = _context2.v;
+              if (isMounted) {
+                _context2.n = 2;
+                break;
+              }
+              return _context2.a(2);
+            case 2:
+              pendingCount = Array.isArray(response.data) ? response.data.length : 0;
+              setPendingSwapCount(pendingCount);
+              _context2.n = 5;
+              break;
+            case 3:
+              _context2.p = 3;
+              _t2 = _context2.v;
+              if (isMounted) {
+                _context2.n = 4;
+                break;
+              }
+              return _context2.a(2);
+            case 4:
+              setPendingSwapCount(0);
+            case 5:
+              return _context2.a(2);
+          }
+        }, _callee2, null, [[0, 3]]);
+      }));
+      return function updatePendingCount() {
+        return _ref2.apply(this, arguments);
+      };
+    }();
     updatePendingCount();
-    var handleStorage = function handleStorage() {
-      return updatePendingCount();
-    };
-    window.addEventListener('storage', handleStorage);
     return function () {
-      return window.removeEventListener('storage', handleStorage);
+      isMounted = false;
     };
   }, []);
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
-    _useState6 = _slicedToArray(_useState5, 2),
-    currentDate = _useState6[0],
-    setCurrentDate = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
     _useState8 = _slicedToArray(_useState7, 2),
-    showTaskForm = _useState8[0],
-    setShowTaskForm = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    currentDate = _useState8[0],
+    setCurrentDate = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState0 = _slicedToArray(_useState9, 2),
-    selectedDate = _useState0[0],
-    setSelectedDate = _useState0[1];
+    showTaskForm = _useState0[0],
+    setShowTaskForm = _useState0[1];
   var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState10 = _slicedToArray(_useState1, 2),
-    selectedTask = _useState10[0],
-    setSelectedTask = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('add'),
+    selectedDate = _useState10[0],
+    setSelectedDate = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState12 = _slicedToArray(_useState11, 2),
-    modalMode = _useState12[0],
-    setModalMode = _useState12[1]; // 'add' | 'view' | 'edit' | 'swap'
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    selectedTask = _useState12[0],
+    setSelectedTask = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('add'),
     _useState14 = _slicedToArray(_useState13, 2),
-    taskToSwap = _useState14[0],
-    setTaskToSwap = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    modalMode = _useState14[0],
+    setModalMode = _useState14[1]; // 'add' | 'view' | 'edit' | 'swap'
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState16 = _slicedToArray(_useState15, 2),
-    pendingSwapCount = _useState16[0],
-    setPendingSwapCount = _useState16[1];
+    taskToSwap = _useState16[0],
+    setTaskToSwap = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState18 = _slicedToArray(_useState17, 2),
+    pendingSwapCount = _useState18[0],
+    setPendingSwapCount = _useState18[1];
   var daysInMonth = function daysInMonth(date) {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -68392,10 +68493,42 @@ function Schedule() {
     setSelectedDate(dateStr);
     setShowTaskForm(true);
   };
-  var handleAddTask = function handleAddTask(taskData) {
-    setTasks([].concat(_toConsumableArray(tasks), [taskData]));
-    setShowTaskForm(false);
-  };
+  var handleAddTask = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(taskData) {
+      var payload, response, _t3;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
+          case 0:
+            _context3.p = 0;
+            payload = {
+              profile_id: Number(taskData.profileId),
+              task_description: taskData.task,
+              task_date: taskData.date,
+              status: 'active'
+            };
+            _context3.n = 1;
+            return axios__WEBPACK_IMPORTED_MODULE_2___default().post('/api/schedules', payload);
+          case 1:
+            response = _context3.v;
+            setTasks(function (prev) {
+              return [].concat(_toConsumableArray(prev), [mapScheduleToTask(response.data)]);
+            });
+            setShowTaskForm(false);
+            _context3.n = 3;
+            break;
+          case 2:
+            _context3.p = 2;
+            _t3 = _context3.v;
+            alert('Could not save schedule. Please try again.');
+          case 3:
+            return _context3.a(2);
+        }
+      }, _callee3, null, [[0, 2]]);
+    }));
+    return function handleAddTask(_x) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
   var handleTaskClick = function handleTaskClick(task) {
     setSelectedTask(task);
     setTaskToSwap(task);
@@ -68409,20 +68542,21 @@ function Schedule() {
       return t.date === targetDateStr;
     });
     var swapRequest = {
-      id: "swap-".concat(Date.now()),
-      taskName: taskToSwap.name,
-      taskDescription: taskToSwap.task,
-      fromDate: taskToSwap.date,
-      toDate: targetDateStr,
-      targetTaskName: existingTaskOnTarget ? existingTaskOnTarget.name : null,
-      status: 'pending',
-      createdAt: new Date().toISOString()
+      requester_schedule_id: taskToSwap.id,
+      target_date: targetDateStr
     };
-    (0,_utils_swapRequests__WEBPACK_IMPORTED_MODULE_4__.saveSwapRequest)(swapRequest);
-    setShowTaskForm(false);
-    setModalMode('add');
-    setSelectedTask(null);
-    setTaskToSwap(null);
+    axios__WEBPACK_IMPORTED_MODULE_2___default().post('/api/swapping-requests', swapRequest).then(function () {
+      setPendingSwapCount(function (prev) {
+        return prev + 1;
+      });
+    })["catch"](function () {
+      alert('Could not create swap request. Please try again.');
+    })["finally"](function () {
+      setShowTaskForm(false);
+      setModalMode('add');
+      setSelectedTask(null);
+      setTaskToSwap(null);
+    });
   };
   var getTasksForDate = function getTasksForDate(day) {
     if (!day) return [];
@@ -68437,14 +68571,14 @@ function Schedule() {
   });
   var days = getDaysArray();
   var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     className: "schedule",
-    children: [modalMode === 'swap' && taskToSwap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    children: [modalMode === 'swap' && taskToSwap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       className: "schedule__swap-banner",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("p", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("p", {
         className: "schedule__swap-banner-text",
         children: ["Request Swap: Click a day to select target date \u2014 Moving \"", taskToSwap === null || taskToSwap === void 0 ? void 0 : taskToSwap.name, "\" from ", formatDate(taskToSwap === null || taskToSwap === void 0 ? void 0 : taskToSwap.date)]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
         className: "schedule__swap-cancel",
         onClick: function onClick() {
           setModalMode('add');
@@ -68454,38 +68588,38 @@ function Schedule() {
         },
         children: "Cancel"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
       className: "schedule__content",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "schedule__card",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "schedule__month-header",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
             className: "schedule__month-btn",
             onClick: previousMonth,
             children: "\u2190 Previous"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h2", {
             className: "schedule__month-title",
             children: monthName
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
             className: "schedule__month-btn",
             onClick: nextMonth,
             children: "Next \u2192"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "schedule__weekdays",
           children: dayNames.map(function (day) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               className: "schedule__weekday",
               children: day
             }, day);
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "schedule__grid",
           children: days.map(function (day, index) {
             var dayTasks = getTasksForDate(day);
             var isToday = day && currentDate.getFullYear() === new Date().getFullYear() && currentDate.getMonth() === new Date().getMonth() && day === new Date().getDate();
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
               className: "schedule__day \n                                        ".concat(day ? 'schedule__day--active' : 'schedule__day--empty', "\n                                        ").concat(isToday ? 'schedule__day--today' : ''),
               onClick: function onClick() {
                 if (modalMode === 'swap') {
@@ -68505,20 +68639,20 @@ function Schedule() {
                   }
                 }
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                 className: "schedule__day-number",
                 children: day
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                 className: "schedule__day-tasks",
                 children: dayTasks.map(function (task, taskIndex) {
-                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                     className: "schedule__task",
                     onClick: function onClick() {
                       return handleTaskClick(task);
                     },
                     role: "button",
                     tabIndex: 0,
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                       className: "schedule__task-name",
                       children: task.name
                     })
@@ -68527,9 +68661,9 @@ function Schedule() {
               })]
             }, index);
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "schedule__actions",
-          children: [((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+          children: [((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
             className: "schedule__btn schedule__btn--primary",
             onClick: function onClick() {
               var today = new Date();
@@ -68538,20 +68672,20 @@ function Schedule() {
               setShowTaskForm(true);
             },
             children: "Add Task (Today)"
-          }), ((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          }), ((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             className: "schedule__swap-btn-container",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.Link, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.Link, {
               to: "/swap-form",
               className: "schedule__btn schedule__btn--tertiary",
               children: "Swapping Form Requests"
-            }), pendingSwapCount > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+            }), pendingSwapCount > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
               className: "schedule__notification-badge",
               children: pendingSwapCount
             })]
           })]
         })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_TasksModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_TasksModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
       isOpen: showTaskForm,
       onClose: function onClose() {
         setModalMode('add');
@@ -68564,16 +68698,46 @@ function Schedule() {
       onAddTask: handleAddTask,
       initialTask: selectedTask,
       mode: modalMode,
-      onUpdateTask: function onUpdateTask(updateTask) {
-        setTasks(function (prev) {
-          return prev.map(function (t) {
-            return t === selectedTask ? updateTask : t;
-          });
-        });
-        setShowTaskForm(false);
-        setSelectedTask(null);
-        setModalMode('add');
-      },
+      onUpdateTask: (/*#__PURE__*/function () {
+        var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(updateTask) {
+          var payload, response, _t4;
+          return _regenerator().w(function (_context4) {
+            while (1) switch (_context4.p = _context4.n) {
+              case 0:
+                _context4.p = 0;
+                payload = {
+                  profile_id: Number(updateTask.profileId),
+                  task_description: updateTask.task,
+                  task_date: updateTask.date,
+                  status: updateTask.status || 'active'
+                };
+                _context4.n = 1;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().put("/api/schedules/".concat(updateTask.id), payload);
+              case 1:
+                response = _context4.v;
+                setTasks(function (prev) {
+                  return prev.map(function (t) {
+                    return t.id === updateTask.id ? mapScheduleToTask(response.data) : t;
+                  });
+                });
+                setShowTaskForm(false);
+                setSelectedTask(null);
+                setModalMode('add');
+                _context4.n = 3;
+                break;
+              case 2:
+                _context4.p = 2;
+                _t4 = _context4.v;
+                alert('Could not update schedule. Please try again.');
+              case 3:
+                return _context4.a(2);
+            }
+          }, _callee4, null, [[0, 2]]);
+        }));
+        return function (_x2) {
+          return _ref4.apply(this, arguments);
+        };
+      }()),
       onSwitchToEdit: function onSwitchToEdit() {
         return setModalMode('edit');
       },
@@ -68581,7 +68745,8 @@ function Schedule() {
         setModalMode('swap');
         setShowTaskForm(false);
       },
-      userRole: user === null || user === void 0 ? void 0 : user.role_id
+      userRole: user === null || user === void 0 ? void 0 : user.role_id,
+      profileOptions: profiles
     })]
   });
 }
@@ -69364,7 +69529,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _utils_swapRequests__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/swapRequests */ "./resources/js/utils/swapRequests.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _ConfirmModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ConfirmModal */ "./resources/js/components/ConfirmModal.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
@@ -69372,6 +69538,10 @@ function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArra
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -69449,20 +69619,36 @@ function SwapForm() {
     currentPage = _useState14[0],
     setCurrentPage = _useState14[1];
   var itemsPerPage = 10;
-  var loadSwapRequests = function loadSwapRequests() {
-    return setSwapRequests((0,_utils_swapRequests__WEBPACK_IMPORTED_MODULE_1__.getSwapRequests)().filter(function (r) {
-      return r.status !== 'archived';
+  var loadSwapRequests = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+      var response, data, _t;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
+          case 0:
+            _context.p = 0;
+            _context.n = 1;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/swapping-requests');
+          case 1:
+            response = _context.v;
+            data = Array.isArray(response.data) ? response.data : [];
+            setSwapRequests(data);
+            _context.n = 3;
+            break;
+          case 2:
+            _context.p = 2;
+            _t = _context.v;
+            setSwapRequests([]);
+          case 3:
+            return _context.a(2);
+        }
+      }, _callee, null, [[0, 2]]);
     }));
-  };
+    return function loadSwapRequests() {
+      return _ref.apply(this, arguments);
+    };
+  }();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     loadSwapRequests();
-    var handleStorage = function handleStorage() {
-      return loadSwapRequests();
-    };
-    window.addEventListener('storage', handleStorage);
-    return function () {
-      return window.removeEventListener('storage', handleStorage);
-    };
   }, []);
   var handleReturn = function handleReturn() {
     navigate('/schedule');
@@ -69482,38 +69668,81 @@ function SwapForm() {
     };
   }, [showYearDropdown, showMonthDropdown]);
   var handleDeny = function handleDeny(id) {
-    if (window.confirm('Deny this swap request?')) {
-      (0,_utils_swapRequests__WEBPACK_IMPORTED_MODULE_1__.updateSwapRequestStatus)(id, 'denied');
-      loadSwapRequests();
-    }
+    if (!window.confirm('Deny this swap request?')) return;
+    axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/deny")).then(function () {
+      return loadSwapRequests();
+    })["catch"](function () {
+      return alert('Could not deny request. Please try again.');
+    });
   };
-  var handleApprove = function handleApprove(id) {
-    var success = (0,_utils_swapRequests__WEBPACK_IMPORTED_MODULE_1__.executeSwapRequest)(id);
-    if (success) {
-      loadSwapRequests();
-    } else {
-      alert('Could not execute swap. The task may have been modified or removed.');
-    }
-  };
+  var handleApprove = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(id) {
+      var _t2;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.p = _context2.n) {
+          case 0:
+            _context2.p = 0;
+            _context2.n = 1;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/approve"));
+          case 1:
+            loadSwapRequests();
+            _context2.n = 3;
+            break;
+          case 2:
+            _context2.p = 2;
+            _t2 = _context2.v;
+            alert('Could not execute swap. Please try again.');
+          case 3:
+            return _context2.a(2);
+        }
+      }, _callee2, null, [[0, 2]]);
+    }));
+    return function handleApprove(_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
   var handleArchive = function handleArchive(id) {
     setConfirmState({
       isOpen: true,
       message: 'Archive this swap request?',
-      onConfirm: function onConfirm() {
-        if ((0,_utils_swapRequests__WEBPACK_IMPORTED_MODULE_1__.archiveSwapRequest)(id)) {
-          setSelectedRequests(function (prev) {
-            return prev.filter(function (i) {
-              return i !== id;
-            });
-          });
-          loadSwapRequests();
+      onConfirm: function () {
+        var _onConfirm = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+          var _t3;
+          return _regenerator().w(function (_context3) {
+            while (1) switch (_context3.p = _context3.n) {
+              case 0:
+                _context3.p = 0;
+                _context3.n = 1;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/archive"));
+              case 1:
+                setSelectedRequests(function (prev) {
+                  return prev.filter(function (i) {
+                    return i !== id;
+                  });
+                });
+                loadSwapRequests();
+                _context3.n = 3;
+                break;
+              case 2:
+                _context3.p = 2;
+                _t3 = _context3.v;
+                alert('Could not archive request. Please try again.');
+              case 3:
+                setConfirmState({
+                  isOpen: false,
+                  message: '',
+                  onConfirm: null
+                });
+              case 4:
+                return _context3.a(2);
+            }
+          }, _callee3, null, [[0, 2]]);
+        }));
+        function onConfirm() {
+          return _onConfirm.apply(this, arguments);
         }
-        setConfirmState({
-          isOpen: false,
-          message: '',
-          onConfirm: null
-        });
-      }
+        return onConfirm;
+      }()
     });
   };
   var handleBulkArchive = function handleBulkArchive() {
@@ -69530,18 +69759,42 @@ function SwapForm() {
     setConfirmState({
       isOpen: true,
       message: "Archive ".concat(toArchive.length, " request").concat(toArchive.length === 1 ? '' : 's', "?"),
-      onConfirm: function onConfirm() {
-        toArchive.forEach(function (id) {
-          return (0,_utils_swapRequests__WEBPACK_IMPORTED_MODULE_1__.archiveSwapRequest)(id);
-        });
-        setSelectedRequests([]);
-        loadSwapRequests();
-        setConfirmState({
-          isOpen: false,
-          message: '',
-          onConfirm: null
-        });
-      }
+      onConfirm: function () {
+        var _onConfirm2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+          var _t4;
+          return _regenerator().w(function (_context4) {
+            while (1) switch (_context4.p = _context4.n) {
+              case 0:
+                _context4.p = 0;
+                _context4.n = 1;
+                return Promise.all(toArchive.map(function (id) {
+                  return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/archive"));
+                }));
+              case 1:
+                setSelectedRequests([]);
+                loadSwapRequests();
+                _context4.n = 3;
+                break;
+              case 2:
+                _context4.p = 2;
+                _t4 = _context4.v;
+                alert('Could not archive selected requests. Please try again.');
+              case 3:
+                setConfirmState({
+                  isOpen: false,
+                  message: '',
+                  onConfirm: null
+                });
+              case 4:
+                return _context4.a(2);
+            }
+          }, _callee4, null, [[0, 2]]);
+        }));
+        function onConfirm() {
+          return _onConfirm2.apply(this, arguments);
+        }
+        return onConfirm;
+      }()
     });
   };
   var handleSelectRequest = function handleSelectRequest(id) {
@@ -70003,14 +70256,16 @@ function TasksModal(_ref) {
     onUpdateTask = _ref.onUpdateTask,
     onSwitchToEdit = _ref.onSwitchToEdit,
     onSwitchToSwap = _ref.onSwitchToSwap,
-    userRole = _ref.userRole;
+    userRole = _ref.userRole,
+    _ref$profileOptions = _ref.profileOptions,
+    profileOptions = _ref$profileOptions === void 0 ? [] : _ref$profileOptions;
   var isAddMode = mode === 'add';
   var isViewMode = mode === 'view';
   var isEditMode = mode === 'edit';
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState2 = _slicedToArray(_useState, 2),
-    name = _useState2[0],
-    setName = _useState2[1];
+    profileId = _useState2[0],
+    setProfileId = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState4 = _slicedToArray(_useState3, 2),
     task = _useState4[0],
@@ -70027,11 +70282,11 @@ function TasksModal(_ref) {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (!isOpen) return;
     if (isAddMode) {
-      setName('');
+      setProfileId('');
       setTask('');
       setSchedule(selectedDate || '');
     } else if (initialTask) {
-      setName(initialTask.name || '');
+      setProfileId(initialTask.profileId || '');
       setTask(initialTask.task || '');
       setSchedule(initialTask.date || '');
     }
@@ -70039,7 +70294,7 @@ function TasksModal(_ref) {
   }, [isOpen, mode, initialTask, selectedDate]);
   var validateForm = function validateForm() {
     var newErrors = {};
-    if (!name.trim()) newErrors.name = 'Name is required';
+    if (!profileId) newErrors.profileId = 'Staff is required';
     if (!task.trim()) newErrors.task = 'Task description is required';
     if (!schedule) newErrors.schedule = 'Date is required';
     setErrors(newErrors);
@@ -70050,7 +70305,7 @@ function TasksModal(_ref) {
     if (isViewMode) return;
     if (!validateForm()) return;
     var taskData = {
-      name: name.trim(),
+      profileId: profileId,
       task: task.trim(),
       date: schedule
     };
@@ -70096,23 +70351,30 @@ function TasksModal(_ref) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
             className: "form__group",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-              children: "Name"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
-              type: "text",
-              id: "name",
-              value: name,
+              children: "Staff"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("select", {
+              id: "profileId",
+              value: profileId,
               onChange: function onChange(e) {
-                return setName(e.target.value);
+                return setProfileId(e.target.value);
               },
-              placeholder: "Enter name",
-              required: true
-            }), errors.name && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+              required: true,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
+                value: "",
+                children: "Select staff"
+              }), profileOptions.map(function (profile) {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
+                  value: String(profile.id),
+                  children: profile.full_name
+                }, profile.id);
+              })]
+            }), errors.profileId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
               className: "error",
               style: {
                 color: 'red',
                 fontSize: '0.8rem'
               },
-              children: errors.name
+              children: errors.profileId
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
             className: "form__group",
@@ -70172,10 +70434,10 @@ function TasksModal(_ref) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
             className: "view-task__row",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
-              children: "Name"
+              children: "Staff"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
               className: "value strong",
-              children: name || '—'
+              children: (initialTask === null || initialTask === void 0 ? void 0 : initialTask.name) || '—'
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
             className: "view-task__row",
@@ -70197,7 +70459,7 @@ function TasksModal(_ref) {
                 gap: '0.5rem',
                 flexWrap: 'wrap'
               },
-              children: [formatDate(schedule), (initialTask === null || initialTask === void 0 ? void 0 : initialTask.swappedAt) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+              children: [formatDate(schedule), (initialTask === null || initialTask === void 0 ? void 0 : initialTask.status) === 'swap' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
                 style: {
                   fontSize: '0.75rem',
                   padding: '2px 8px',

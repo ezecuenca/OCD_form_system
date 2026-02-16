@@ -11,6 +11,31 @@ use Illuminate\Validation\Rule;
 class ProfileController extends Controller
 {
     /**
+     * List profiles for schedule assignment.
+     */
+    public function index()
+    {
+        $profiles = Profile::with('user')
+            ->orderBy('full_name')
+            ->orderBy('id')
+            ->get();
+
+        $list = $profiles->map(function (Profile $profile) {
+            $displayName = $profile->full_name;
+            if (!$displayName && $profile->user) {
+                $displayName = $profile->user->username;
+            }
+
+            return [
+                'id' => $profile->id,
+                'full_name' => $displayName,
+            ];
+        });
+
+        return response()->json($list);
+    }
+
+    /**
      * Get the authenticated user's profile (profile row + section name + email from users).
      */
     public function show(Request $request)

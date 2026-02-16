@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit, onSwitchToSwap, userRole }) {
+function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit, onSwitchToSwap, userRole, profileOptions = [] }) {
     
     const isAddMode = mode === 'add';
     const isViewMode = mode === 'view';
     const isEditMode = mode === 'edit';
 
-    const [name, setName] = useState('');
+    const [profileId, setProfileId] = useState('');
     const [task, setTask] = useState('');
     const [schedule, setSchedule] = useState('');
     const [errors, setErrors] = useState({}); // New state for inline errors
@@ -15,11 +15,11 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
         if (!isOpen) return;
 
         if (isAddMode) {
-            setName('');
+            setProfileId('');
             setTask('');
             setSchedule(selectedDate || '');
         } else if (initialTask) {
-            setName(initialTask.name || '');
+            setProfileId(initialTask.profileId || '');
             setTask(initialTask.task || '');
             setSchedule(initialTask.date || '');
         }
@@ -28,7 +28,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
 
     const validateForm = () => {
         const newErrors = {};
-        if (!name.trim()) newErrors.name = 'Name is required';
+        if (!profileId) newErrors.profileId = 'Staff is required';
         if (!task.trim()) newErrors.task = 'Task description is required';
         if (!schedule) newErrors.schedule = 'Date is required';
         setErrors(newErrors);
@@ -42,7 +42,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
         if (!validateForm()) return;
 
         const taskData = {
-            name: name.trim(),
+            profileId,
             task: task.trim(),
             date: schedule,
         };
@@ -80,16 +80,21 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                     {isAddMode || isEditMode ? (
                     <>
                         <div className="form__group">
-                            <label>Name</label>
-                            <input
-                                type="text"
-                                id='name'
-                                value={name}
-                                onChange={e => setName(e.target.value)}
-                                placeholder="Enter name"
+                            <label>Staff</label>
+                            <select
+                                id="profileId"
+                                value={profileId}
+                                onChange={e => setProfileId(e.target.value)}
                                 required
-                            />
-                            {errors.name && <span className="error" style={{ color: 'red', fontSize: '0.8rem' }}>{errors.name}</span>}
+                            >
+                                <option value="">Select staff</option>
+                                {profileOptions.map(profile => (
+                                    <option key={profile.id} value={String(profile.id)}>
+                                        {profile.full_name}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.profileId && <span className="error" style={{ color: 'red', fontSize: '0.8rem' }}>{errors.profileId}</span>}
                         </div>
 
                         <div className="form__group">
@@ -125,8 +130,8 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
 
                         <div className="view-task">
                             <div className="view-task__row">
-                            <label>Name</label>
-                            <div className="value strong">{name || '—'}</div>
+                            <label>Staff</label>
+                            <div className="value strong">{initialTask?.name || '—'}</div>
                         </div>
 
                         <div className="view-task__row">
@@ -140,7 +145,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                             <label>Date</label>
                             <div className="value date" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                                 {formatDate(schedule)}
-                                {initialTask?.swappedAt && (
+                                {initialTask?.status === 'swap' && (
                                     <span style={{
                                         fontSize: '0.75rem',
                                         padding: '2px 8px',

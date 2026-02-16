@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getSwapRequests, updateSwapRequestStatus, executeSwapRequest, archiveSwapRequest } from '../utils/swapRequests';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ConfirmModal from './ConfirmModal';
 
@@ -44,13 +44,18 @@ function SwapForm() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
-    const loadSwapRequests = () => setSwapRequests(getSwapRequests().filter(r => r.status !== 'archived'));
+    const loadSwapRequests = async () => {
+        try {
+            const response = await axios.get('/api/swapping-requests');
+            const data = Array.isArray(response.data) ? response.data : [];
+            setSwapRequests(data);
+        } catch (error) {
+            setSwapRequests([]);
+        }
+    };
 
     useEffect(() => {
         loadSwapRequests();
-        const handleStorage = () => loadSwapRequests();
-        window.addEventListener('storage', handleStorage);
-        return () => window.removeEventListener('storage', handleStorage);
     }, []);
 
     const handleReturn = () => {
@@ -74,18 +79,19 @@ function SwapForm() {
     }, [showYearDropdown, showMonthDropdown]);
 
     const handleDeny = (id) => {
-        if (window.confirm('Deny this swap request?')) {
-            updateSwapRequestStatus(id, 'denied');
-            loadSwapRequests();
-        }
+        if (!window.confirm('Deny this swap request?')) return;
+
+        axios.post(`/api/swapping-requests/${id}/deny`)
+            .then(() => loadSwapRequests())
+            .catch(() => alert('Could not deny request. Please try again.'));
     };
 
-    const handleApprove = (id) => {
-        const success = executeSwapRequest(id);
-        if (success) {
+    const handleApprove = async (id) => {
+        try {
+            await axios.post(`/api/swapping-requests/${id}/approve`);
             loadSwapRequests();
-        } else {
-            alert('Could not execute swap. The task may have been modified or removed.');
+        } catch (error) {
+            alert('Could not execute swap. Please try again.');
         }
     };
 
@@ -93,10 +99,13 @@ function SwapForm() {
         setConfirmState({
             isOpen: true,
             message: 'Archive this swap request?',
-            onConfirm: () => {
-                if (archiveSwapRequest(id)) {
+            onConfirm: async () => {
+                try {
+                    await axios.post(`/api/swapping-requests/${id}/archive`);
                     setSelectedRequests(prev => prev.filter(i => i !== id));
                     loadSwapRequests();
+                } catch (error) {
+                    alert('Could not archive request. Please try again.');
                 }
                 setConfirmState({ isOpen: false, message: '', onConfirm: null });
             }
@@ -115,10 +124,14 @@ function SwapForm() {
         setConfirmState({
             isOpen: true,
             message: `Archive ${toArchive.length} request${toArchive.length === 1 ? '' : 's'}?`,
-            onConfirm: () => {
-                toArchive.forEach(id => archiveSwapRequest(id));
-                setSelectedRequests([]);
-                loadSwapRequests();
+            onConfirm: async () => {
+                try {
+                    await Promise.all(toArchive.map(id => axios.post(`/api/swapping-requests/${id}/archive`)));
+                    setSelectedRequests([]);
+                    loadSwapRequests();
+                } catch (error) {
+                    alert('Could not archive selected requests. Please try again.');
+                }
                 setConfirmState({ isOpen: false, message: '', onConfirm: null });
             }
         });
