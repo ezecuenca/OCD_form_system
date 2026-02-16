@@ -351,6 +351,13 @@ body.document-modal-open .main-content {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             flex-shrink: 0;
         }
+
+        /* Template preview: let sheet grow so header + body + footer all show */
+        .document-modal__template-body--adr .document-viewer__page--template-preview {
+            height: auto;
+            min-height: auto;
+            max-height: none;
+        }
     }
 
     @media print {

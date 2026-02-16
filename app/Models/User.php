@@ -31,6 +31,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'hashed_password',
+        'password',
         'remember_token',
     ];
 
@@ -45,6 +46,6 @@ class User extends Authenticatable
 
     public function getAuthPassword()
     {
-        return $this->hashed_password;
+        return $this->hashed_password ?? $this->attributes['password'] ?? null;
     }
 }
