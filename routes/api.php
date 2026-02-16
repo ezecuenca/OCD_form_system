@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SectionsController;
 use App\Http\Controllers\SwappingRequestController;
+use App\Http\Controllers\TemplatesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,11 @@ Route::get('/sections', [SectionsController::class, 'index'])->name('api.section
 Route::get('/section', [SectionsController::class, 'index'])->name('api.section.index');
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/sections', [SectionsController::class, 'store'])->name('api.sections.store');
+    Route::put('/sections/{id}', [SectionsController::class, 'update'])->name('api.sections.update');
+    Route::patch('/sections/{id}/archive', [SectionsController::class, 'archive'])->name('api.sections.archive');
+    Route::patch('/sections/{id}/restore', [SectionsController::class, 'restore'])->name('api.sections.restore');
+    Route::delete('/sections/{id}', [SectionsController::class, 'destroy'])->name('api.sections.destroy');
     Route::get('/auth/me', [AuthController::class, 'me'])->name('api.auth.me');
     Route::post('/auth/logout', [AuthController::class, 'logout'])->name('api.auth.logout');
     Route::get('/user', function (Request $request) {
@@ -59,4 +65,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/adr/export-docx', ExportDocxController::class)->name('api.adr.export-docx');
     Route::get('/adr/export-docx/{token}', [ExportDocxController::class, 'download'])->name('api.adr.export-docx.download');
     Route::post('/adr/export-pdf', [ExportDocxController::class, 'exportPdf'])->name('api.adr.export-pdf');
+
+    Route::get('/templates', [TemplatesController::class, 'index'])->name('api.templates.index');
+    Route::post('/templates', [TemplatesController::class, 'store'])->name('api.templates.store');
+    Route::patch('/templates/set-active', [TemplatesController::class, 'setActive'])->name('api.templates.set-active');
+    Route::get('/templates/{filename}/preview', [TemplatesController::class, 'preview'])->name('api.templates.preview')->where('filename', '[^/]+');
+    Route::get('/templates/{filename}', [TemplatesController::class, 'show'])->name('api.templates.show')->where('filename', '[^/]+');
 });

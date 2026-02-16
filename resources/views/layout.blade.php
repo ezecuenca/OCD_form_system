@@ -7,6 +7,8 @@
 
     <title>@yield('title', 'After Duty Report System')</title>
 
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/ocd_logo.svg') }}">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">

@@ -70,6 +70,164 @@
     margin-bottom: 12px;
 }
 
+.settings__panel-header--row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.settings__panel-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Match Archived Reports action buttons: min-height 38px, padding, gap */
+.settings__archive-btn,
+.settings__restore-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0 1rem;
+    min-height: 38px;
+    font-size: 0.8125rem;
+    font-weight: normal;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    font-family: inherit;
+}
+
+/* Archive button: red outline when active; hover fills with red */
+.settings__archive-btn {
+    border-color: #dc3545;
+    background: #fff;
+    color: #dc3545;
+}
+
+.settings__archive-btn:hover:not(:disabled) {
+    background: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+.settings__archive-btn:hover:not(:disabled) img {
+    filter: brightness(0) invert(1);
+}
+
+/* Archive disabled: outline, text same light red/pink; icon lightened to match */
+.settings__archive-btn:disabled {
+    border-color: #f0b4b4;
+    background: #fff;
+    color: #f0b4b4;
+    cursor: not-allowed;
+}
+
+.settings__archive-btn:disabled img {
+    opacity: 0.75;
+    filter: brightness(1.15);
+}
+
+.settings__archive-btn img {
+    width: 15px;
+    height: 15px;
+}
+
+/* Restore button: same as Archived Reports – blue (#1071ef) when active; hover fills */
+.settings__restore-btn {
+    border-color: #1071ef;
+    background: #fff;
+    color: #1071ef;
+}
+
+.settings__restore-btn:hover:not(:disabled) {
+    background: #1071ef;
+    border-color: #1071ef;
+    color: #fff;
+}
+
+.settings__restore-btn:hover:not(:disabled) img {
+    filter: brightness(0) invert(1);
+}
+
+/* Restore disabled: outline, text same light blue; icon lightened to match */
+.settings__restore-btn:disabled {
+    border-color: #a8d0ee;
+    background: #fff;
+    color: #a8d0ee;
+    cursor: not-allowed;
+}
+
+.settings__restore-btn:disabled img {
+    opacity: 0.75;
+    filter: brightness(1.2);
+}
+
+.settings__restore-btn img {
+    width: 15px;
+    height: 15px;
+}
+
+.settings__dept-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.settings__dept-tab {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.settings__dept-tab:hover {
+    color: #290081;
+}
+
+.settings__dept-tab--active {
+    color: #290081;
+    border-bottom-color: #290081;
+}
+
+.settings__create-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    font-size: 0.870rem;
+    font-weight: none;
+    border-radius: 6px;
+    border: 2px solid #290081;
+    background: #290081;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.settings__create-btn:hover {
+    background: #e99745;
+    border-color: #e99745;
+}
+
+.settings__create-btn img {
+    width: 18px;
+    height: 18px;
+    filter: brightness(0) invert(1);
+}
+
 .settings__section-title {
     font-size: 18px;
     font-weight: 700;
@@ -144,6 +302,77 @@
     justify-content: flex-start;
 }
 
+/* Departments table: move action buttons (not the header) slightly left */
+.settings__table--departments tbody .settings__table-actions {
+    padding-left: 0.38rem;
+    justify-content: center;
+}
+
+.settings__table--departments thead th.settings__table-actions {
+    text-align: center;
+}
+
+/* Departments table: smaller action icon buttons */
+.settings__table--departments .settings__icon-button {
+    width: 26px;
+    height: 26px;
+}
+
+.settings__table--departments .settings__icon-button img {
+    width: 14px;
+    height: 14px;
+}
+
+.settings__table--departments .settings__table-created {
+    text-align: left;
+    white-space: nowrap;
+}
+
+/* Templates table: Actions column with check (in use) + view, spacing */
+.settings__template-actions {
+    width: 160px;
+}
+
+.settings__template-actions-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+}
+
+.settings__in-use-text {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #16a34a;
+    margin-right: 0.25rem;
+}
+
+.settings__icon-button--check.settings__icon-button--in-use {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.settings__icon-button--check.settings__icon-button--in-use img {
+    opacity: 1;
+}
+
+/* Created at: date on first line, time on second (match ADR reports table) */
+.settings__table-created-datetime {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.settings__table-created-date {
+    font-weight: 500;
+    color: #333;
+}
+
+.settings__table-created-time {
+    font-size: 0.75rem;
+    color: #666;
+}
+
 .settings__status {
     display: inline-flex;
     align-items: center;
@@ -183,6 +412,101 @@
 
 .settings__icon-button:hover {
     opacity: 0.7;
+}
+
+// Section create/edit modal
+.settings__modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.settings__modal {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 24px;
+    min-width: 320px;
+    max-width: 90vw;
+}
+
+.settings__modal-title {
+    margin: 0 0 16px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.settings__modal-field {
+    margin-bottom: 16px;
+}
+
+.settings__modal-field label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.settings__modal-field input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.settings__modal-field input:focus {
+    outline: none;
+    border-color: #290081;
+}
+
+.settings__modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.settings__modal-btn {
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.settings__modal-btn--cancel {
+    background: #fff;
+    border: 1px solid #d1d5db;
+    color: #374151;
+}
+
+.settings__modal-btn--cancel:hover {
+    background: #f3f4f6;
+}
+
+.settings__modal-btn--save {
+    background: #290081;
+    border: 2px solid #290081;
+    color: #fff;
+}
+
+.settings__modal-btn--save:hover:not(:disabled) {
+    background: #e99745;
+    border-color: #e99745;
+}
+
+.settings__modal-btn--save:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 @media (max-width: 640px) {

@@ -20,7 +20,6 @@ function Profile() {
     const [email, setEmail] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [editName, setEditName] = useState('');
-    const [editUsername, setEditUsername] = useState('');
 
     const [sectionOptions, setSectionOptions] = useState([{ value: '', label: 'No section' }]);
     const [profileLoading, setProfileLoading] = useState(true);
@@ -125,7 +124,6 @@ function Profile() {
 
     const startEditing = () => {
         setEditName(displayName);
-        setEditUsername(username);
         setSaveError('');
         setShowSuccessNotification(false);
         setIsEditing(true);
@@ -136,7 +134,7 @@ function Profile() {
         setShowSuccessNotification(false);
         setIsSaving(true);
         const fullName = isEditing ? (editName.trim() || 'Your Name') : displayName;
-        const newUsername = isEditing ? (editUsername.trim() || null) : username;
+        const newUsername = username;
         const sectionId = displaySectionId || null;
         try {
             const { data } = await axios.put('/api/profile', {
@@ -266,14 +264,7 @@ function Profile() {
                                                 placeholder="Your name"
                                                 autoFocus
                                             />
-                                            <input
-                                                type="text"
-                                                className="profile__username-input"
-                                                value={editUsername}
-                                                onChange={(e) => setEditUsername(e.target.value)}
-                                                placeholder="Username"
-                                                aria-label="Username"
-                                            />
+                                            {username && <span className="profile__username profile__username--readonly">{username}</span>}
                                         </div>
                                     </div>
                                 </div>

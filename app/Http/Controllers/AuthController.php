@@ -34,11 +34,13 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('username', $validated['username'])->first();
-        if (!$user || !Hash::check($validated['password'], $user->hashed_password)) {
+        $passwordHash = $user ? $user->getAuthPassword() : null;
+        if (!$user || !$passwordHash || !Hash::check($validated['password'], $passwordHash)) {
             return response()->json(['message' => 'Invalid credentials.'], 401);
         }
 
-        Auth::login($user);
+        $request->session()->regenerate();
+        Auth::login($user, $request->boolean('remember', false));
 
         return response()->json([
             'id' => $user->id,
