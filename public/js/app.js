@@ -68674,7 +68674,7 @@ function Schedule() {
                 className: "schedule__day-tasks",
                 children: dayTasks.map(function (task, taskIndex) {
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-                    className: "schedule__task",
+                    className: "schedule__task".concat(task.status === 'swap' ? ' schedule__task--swapped' : ''),
                     onClick: function onClick(event) {
                       if (modalMode === 'swap') {
                         handleSwapTaskClick(event, task);
@@ -69616,41 +69616,45 @@ function SwapForm() {
     _useState2 = _slicedToArray(_useState, 2),
     swapRequests = _useState2[0],
     setSwapRequests = _useState2[1];
-  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useNavigate)();
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState4 = _slicedToArray(_useState3, 2),
-    selectedRequests = _useState4[0],
-    setSelectedRequests = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    searchQuery = _useState4[0],
+    setSearchQuery = _useState4[1];
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useNavigate)();
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState6 = _slicedToArray(_useState5, 2),
-    showMonthDropdown = _useState6[0],
-    setShowMonthDropdown = _useState6[1];
+    selectedRequests = _useState6[0],
+    setSelectedRequests = _useState6[1];
   var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState8 = _slicedToArray(_useState7, 2),
-    showYearDropdown = _useState8[0],
-    setShowYearDropdown = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('All Years'),
+    showMonthDropdown = _useState8[0],
+    setShowMonthDropdown = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState0 = _slicedToArray(_useState9, 2),
-    selectedYear = _useState0[0],
-    setSelectedYear = _useState0[1];
-  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('All Months'),
+    showYearDropdown = _useState0[0],
+    setShowYearDropdown = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('All Years'),
     _useState10 = _slicedToArray(_useState1, 2),
-    selectedMonth = _useState10[0],
-    setSelectedMonth = _useState10[1];
+    selectedYear = _useState10[0],
+    setSelectedYear = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('All Months'),
+    _useState12 = _slicedToArray(_useState11, 2),
+    selectedMonth = _useState12[0],
+    setSelectedMonth = _useState12[1];
   var yearDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var monthDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       isOpen: false,
       message: '',
       onConfirm: null
     }),
-    _useState12 = _slicedToArray(_useState11, 2),
-    confirmState = _useState12[0],
-    setConfirmState = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1),
     _useState14 = _slicedToArray(_useState13, 2),
-    currentPage = _useState14[0],
-    setCurrentPage = _useState14[1];
+    confirmState = _useState14[0],
+    setConfirmState = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1),
+    _useState16 = _slicedToArray(_useState15, 2),
+    currentPage = _useState16[0],
+    setCurrentPage = _useState16[1];
   var itemsPerPage = 10;
   var loadSwapRequests = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
@@ -69866,12 +69870,28 @@ function SwapForm() {
     setSelectedMonth(month);
     setShowMonthDropdown(false);
   };
+  var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var filteredRequests = swapRequests.filter(function (req) {
+    var created = req.createdAt ? new Date(req.createdAt) : null;
+    var requestYear = created ? created.getFullYear().toString() : '';
+    var requestMonthName = created ? monthNames[created.getMonth()] : '';
+    if (selectedYear !== 'All Years' && requestYear !== selectedYear) return false;
+    if (selectedMonth !== 'All Months' && requestMonthName !== selectedMonth) return false;
+    if (searchQuery.trim()) {
+      var q = searchQuery.toLowerCase().trim();
+      var desc = getRequestDescription(req).toLowerCase();
+      var dateStr = created ? formatDate(req.createdAt).toLowerCase() : '';
+      var statusStr = (req.status || '').toLowerCase();
+      if (!desc.includes(q) && !dateStr.includes(q) && !statusStr.includes(q)) return false;
+    }
+    return true;
+  });
 
   // Pagination calculations
-  var totalPages = Math.ceil(swapRequests.length / itemsPerPage);
+  var totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
   var startIndex = (currentPage - 1) * itemsPerPage;
   var endIndex = startIndex + itemsPerPage;
-  var paginatedRequests = swapRequests.slice(startIndex, endIndex);
+  var paginatedRequests = filteredRequests.slice(startIndex, endIndex);
   var goToFirstPage = function goToFirstPage() {
     return setCurrentPage(1);
   };
@@ -69893,12 +69913,12 @@ function SwapForm() {
       setCurrentPage(totalPages);
     }
   }, [swapRequests.length, currentPage, totalPages]);
-  var getRequestDescription = function getRequestDescription(req) {
+  function getRequestDescription(req) {
     if (req.targetTaskName) {
       return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") => \"").concat(req.targetTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
     }
     return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") => (").concat(formatDateOnly(req.toDate), ")");
-  };
+  }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     className: "swap-form",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -69910,7 +69930,11 @@ function SwapForm() {
           alt: "Search"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
           type: "text",
-          placeholder: "Search..."
+          placeholder: "Search...",
+          value: searchQuery,
+          onChange: function onChange(e) {
+            return setSearchQuery(e.target.value);
+          }
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "swap-form__datetime",
@@ -69957,7 +69981,7 @@ function SwapForm() {
             onClick: function onClick() {
               return setShowYearDropdown(!showYearDropdown);
             },
-            children: ["Year", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
+            children: [selectedYear, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
@@ -69988,7 +70012,7 @@ function SwapForm() {
             onClick: function onClick() {
               return setShowMonthDropdown(!showMonthDropdown);
             },
-            children: ["Month", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
+            children: [selectedMonth, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
@@ -70044,7 +70068,7 @@ function SwapForm() {
             })]
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
-          children: swapRequests.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tr", {
+          children: filteredRequests.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tr", {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
               colSpan: "5",
               style: {
@@ -70052,7 +70076,7 @@ function SwapForm() {
                 padding: '2rem',
                 color: '#666'
               },
-              children: "No swap requests yet. View a task on the Schedule and click \"Request Swap\" to create one."
+              children: "No swap requests found."
             })
           }) : paginatedRequests.map(function (req) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
@@ -70197,10 +70221,10 @@ function SwapForm() {
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
         className: "swap-form__pagination-info",
-        children: swapRequests.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'No data'
+        children: filteredRequests.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'No data'
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
         onClick: goToNextPage,
-        disabled: currentPage === totalPages || swapRequests.length === 0,
+        disabled: currentPage === totalPages || filteredRequests.length === 0,
         title: "Next page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
           viewBox: "0 0 24 24",
@@ -70216,7 +70240,7 @@ function SwapForm() {
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
         onClick: goToLastPage,
-        disabled: currentPage === totalPages || swapRequests.length === 0,
+        disabled: currentPage === totalPages || filteredRequests.length === 0,
         title: "Last page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
           viewBox: "0 0 24 24",

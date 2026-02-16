@@ -325,7 +325,7 @@ function Schedule() {
                                         {dayTasks.map((task, taskIndex) => (
                                             <div 
                                                 key={taskIndex} 
-                                                className="schedule__task"
+                                                className={`schedule__task${task.status === 'swap' ? ' schedule__task--swapped' : ''}`}
                                                 onClick={(event) => {
                                                     if (modalMode === 'swap') {
                                                         handleSwapTaskClick(event, task);
