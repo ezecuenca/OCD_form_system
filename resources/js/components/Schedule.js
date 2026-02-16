@@ -190,23 +190,14 @@ function Schedule() {
         setShowTaskForm(true);
     };
 
-    const handleSwapDayClick = (day) => {
-        if (!day || !taskToSwap || modalMode !== 'swap') return;
-
-        const targetDateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const existingTaskOnTarget = tasks.find(t => t.date === targetDateStr);
-
-        const swapRequest = {
-            requester_schedule_id: taskToSwap.id,
-            target_date: targetDateStr,
-        };
-
-        axios.post('/api/swapping-requests', swapRequest)
+    const submitSwapRequest = (payload) => {
+        axios.post('/api/swapping-requests', payload)
             .then(() => {
                 setPendingSwapCount((prev) => prev + 1);
             })
-            .catch(() => {
-                alert('Could not create swap request. Please try again.');
+            .catch((error) => {
+                const message = error?.response?.data?.message || 'Could not create swap request. Please try again.';
+                alert(message);
             })
             .finally(() => {
                 setShowTaskForm(false);
@@ -214,6 +205,28 @@ function Schedule() {
                 setSelectedTask(null);
                 setTaskToSwap(null);
             });
+    };
+
+    const handleSwapDayClick = (day) => {
+        if (!day || !taskToSwap || modalMode !== 'swap') return;
+
+        const targetDateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+        submitSwapRequest({
+            requester_schedule_id: taskToSwap.id,
+            target_date: targetDateStr,
+        });
+    };
+
+    const handleSwapTaskClick = (event, targetTask) => {
+        event.stopPropagation();
+        if (!taskToSwap || modalMode !== 'swap') return;
+        if (targetTask.id === taskToSwap.id) return;
+
+        submitSwapRequest({
+            requester_schedule_id: taskToSwap.id,
+            target_schedule_id: targetTask.id,
+        });
     };
 
     const getTasksForDate = (day) => {
@@ -307,7 +320,13 @@ function Schedule() {
                                             <div 
                                                 key={taskIndex} 
                                                 className="schedule__task"
-                                                onClick={() => handleTaskClick(task)}
+                                                onClick={(event) => {
+                                                    if (modalMode === 'swap') {
+                                                        handleSwapTaskClick(event, task);
+                                                        return;
+                                                    }
+                                                    handleTaskClick(task);
+                                                }}
                                                 role='button'
                                                 tabIndex={0}
                                                 >

@@ -11,6 +11,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
         (userRole === 1 && String(initialTask?.profileId || '') === String(currentProfileId || ''));
 
     const [profileId, setProfileId] = useState('');
+    const [profileName, setProfileName] = useState('');
     const [task, setTask] = useState('');
     const [schedule, setSchedule] = useState('');
     const [errors, setErrors] = useState({}); // New state for inline errors
@@ -20,10 +21,12 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
 
         if (isAddMode) {
             setProfileId('');
+            setProfileName('');
             setTask('');
             setSchedule(selectedDate || '');
         } else if (initialTask) {
             setProfileId(initialTask.profileId || '');
+            setProfileName(initialTask.name || '');
             setTask(initialTask.task || '');
             setSchedule(initialTask.date || '');
         }
@@ -32,7 +35,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
 
     const validateForm = () => {
         const newErrors = {};
-        if (!profileId) newErrors.profileId = 'Staff is required';
+        if (!profileId) newErrors.profileId = 'Select a staff member from the list';
         if (!task.trim()) newErrors.task = 'Task description is required';
         if (!schedule) newErrors.schedule = 'Date is required';
         setErrors(newErrors);
@@ -85,19 +88,27 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                     <>
                         <div className="form__group">
                             <label>Staff</label>
-                            <select
-                                id="profileId"
-                                value={profileId}
-                                onChange={e => setProfileId(e.target.value)}
+                            <input
+                                type="text"
+                                id="profileName"
+                                list="profileOptions"
+                                value={profileName}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    setProfileName(value);
+                                    const match = profileOptions.find(
+                                        profile => profile.full_name.toLowerCase() === value.trim().toLowerCase()
+                                    );
+                                    setProfileId(match ? String(match.id) : '');
+                                }}
+                                placeholder="Type a name to search"
                                 required
-                            >
-                                <option value="">Select staff</option>
+                            />
+                            <datalist id="profileOptions">
                                 {profileOptions.map(profile => (
-                                    <option key={profile.id} value={String(profile.id)}>
-                                        {profile.full_name}
-                                    </option>
+                                    <option key={profile.id} value={profile.full_name} />
                                 ))}
-                            </select>
+                            </datalist>
                             {errors.profileId && <span className="error" style={{ color: 'red', fontSize: '0.8rem' }}>{errors.profileId}</span>}
                         </div>
 

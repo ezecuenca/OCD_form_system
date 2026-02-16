@@ -68548,27 +68548,37 @@ function Schedule() {
     setModalMode('view');
     setShowTaskForm(true);
   };
-  var handleSwapDayClick = function handleSwapDayClick(day) {
-    if (!day || !taskToSwap || modalMode !== 'swap') return;
-    var targetDateStr = "".concat(currentDate.getFullYear(), "-").concat(String(currentDate.getMonth() + 1).padStart(2, '0'), "-").concat(String(day).padStart(2, '0'));
-    var existingTaskOnTarget = tasks.find(function (t) {
-      return t.date === targetDateStr;
-    });
-    var swapRequest = {
-      requester_schedule_id: taskToSwap.id,
-      target_date: targetDateStr
-    };
-    axios__WEBPACK_IMPORTED_MODULE_2___default().post('/api/swapping-requests', swapRequest).then(function () {
+  var submitSwapRequest = function submitSwapRequest(payload) {
+    axios__WEBPACK_IMPORTED_MODULE_2___default().post('/api/swapping-requests', payload).then(function () {
       setPendingSwapCount(function (prev) {
         return prev + 1;
       });
-    })["catch"](function () {
-      alert('Could not create swap request. Please try again.');
+    })["catch"](function (error) {
+      var _error$response;
+      var message = (error === null || error === void 0 || (_error$response = error.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Could not create swap request. Please try again.';
+      alert(message);
     })["finally"](function () {
       setShowTaskForm(false);
       setModalMode('add');
       setSelectedTask(null);
       setTaskToSwap(null);
+    });
+  };
+  var handleSwapDayClick = function handleSwapDayClick(day) {
+    if (!day || !taskToSwap || modalMode !== 'swap') return;
+    var targetDateStr = "".concat(currentDate.getFullYear(), "-").concat(String(currentDate.getMonth() + 1).padStart(2, '0'), "-").concat(String(day).padStart(2, '0'));
+    submitSwapRequest({
+      requester_schedule_id: taskToSwap.id,
+      target_date: targetDateStr
+    });
+  };
+  var handleSwapTaskClick = function handleSwapTaskClick(event, targetTask) {
+    event.stopPropagation();
+    if (!taskToSwap || modalMode !== 'swap') return;
+    if (targetTask.id === taskToSwap.id) return;
+    submitSwapRequest({
+      requester_schedule_id: taskToSwap.id,
+      target_schedule_id: targetTask.id
     });
   };
   var getTasksForDate = function getTasksForDate(day) {
@@ -68660,8 +68670,12 @@ function Schedule() {
                 children: dayTasks.map(function (task, taskIndex) {
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                     className: "schedule__task",
-                    onClick: function onClick() {
-                      return handleTaskClick(task);
+                    onClick: function onClick(event) {
+                      if (modalMode === 'swap') {
+                        handleSwapTaskClick(event, task);
+                        return;
+                      }
+                      handleTaskClick(task);
                     },
                     role: "button",
                     tabIndex: 0,
@@ -70285,25 +70299,31 @@ function TasksModal(_ref) {
     setProfileId = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState4 = _slicedToArray(_useState3, 2),
-    task = _useState4[0],
-    setTask = _useState4[1];
+    profileName = _useState4[0],
+    setProfileName = _useState4[1];
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState6 = _slicedToArray(_useState5, 2),
-    schedule = _useState6[0],
-    setSchedule = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({}),
+    task = _useState6[0],
+    setTask = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState8 = _slicedToArray(_useState7, 2),
-    errors = _useState8[0],
-    setErrors = _useState8[1]; // New state for inline errors
+    schedule = _useState8[0],
+    setSchedule = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({}),
+    _useState0 = _slicedToArray(_useState9, 2),
+    errors = _useState0[0],
+    setErrors = _useState0[1]; // New state for inline errors
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (!isOpen) return;
     if (isAddMode) {
       setProfileId('');
+      setProfileName('');
       setTask('');
       setSchedule(selectedDate || '');
     } else if (initialTask) {
       setProfileId(initialTask.profileId || '');
+      setProfileName(initialTask.name || '');
       setTask(initialTask.task || '');
       setSchedule(initialTask.date || '');
     }
@@ -70311,7 +70331,7 @@ function TasksModal(_ref) {
   }, [isOpen, mode, initialTask, selectedDate]);
   var validateForm = function validateForm() {
     var newErrors = {};
-    if (!profileId) newErrors.profileId = 'Staff is required';
+    if (!profileId) newErrors.profileId = 'Select a staff member from the list';
     if (!task.trim()) newErrors.task = 'Task description is required';
     if (!schedule) newErrors.schedule = 'Date is required';
     setErrors(newErrors);
@@ -70369,22 +70389,28 @@ function TasksModal(_ref) {
             className: "form__group",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
               children: "Staff"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("select", {
-              id: "profileId",
-              value: profileId,
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
+              type: "text",
+              id: "profileName",
+              list: "profileOptions",
+              value: profileName,
               onChange: function onChange(e) {
-                return setProfileId(e.target.value);
+                var value = e.target.value;
+                setProfileName(value);
+                var match = profileOptions.find(function (profile) {
+                  return profile.full_name.toLowerCase() === value.trim().toLowerCase();
+                });
+                setProfileId(match ? String(match.id) : '');
               },
-              required: true,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
-                value: "",
-                children: "Select staff"
-              }), profileOptions.map(function (profile) {
+              placeholder: "Type a name to search",
+              required: true
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("datalist", {
+              id: "profileOptions",
+              children: profileOptions.map(function (profile) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("option", {
-                  value: String(profile.id),
-                  children: profile.full_name
+                  value: profile.full_name
                 }, profile.id);
-              })]
+              })
             }), errors.profileId && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
               className: "error",
               style: {

@@ -13,6 +13,7 @@ class SwappingRequest extends Model
         'requester_profile_id',
         'requester_schedule_id',
         'target_schedule_id',
+        'target_date',
         'status',
         'approved_by',
         'is_archived',
@@ -22,6 +23,7 @@ class SwappingRequest extends Model
     protected $casts = [
         'is_archived' => 'boolean',
         'archived_at' => 'datetime',
+        'target_date' => 'date:Y-m-d',
     ];
 
     public function requesterProfile(): BelongsTo

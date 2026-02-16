@@ -44,9 +44,9 @@ class SwappingRequestController extends Controller
         }
 
         $fromDate = $requesterSchedule?->task_date?->format('Y-m-d');
-        $toDate = $targetSchedule?->task_date?->format('Y-m-d');
+        $toDate = $targetSchedule?->task_date?->format('Y-m-d') ?? $request->target_date?->format('Y-m-d');
 
-        if ($request->status === 'approved' && $requesterSchedule && $targetSchedule && $targetSchedule->status !== 'placeholder') {
+        if ($request->status === 'approved' && $requesterSchedule && $targetSchedule) {
             $fromDate = $targetSchedule->task_date?->format('Y-m-d');
             $toDate = $requesterSchedule->task_date?->format('Y-m-d');
         }
@@ -105,8 +105,13 @@ class SwappingRequestController extends Controller
 
         $validated = $request->validate([
             'requester_schedule_id' => ['required', 'integer', 'exists:schedule,id'],
-            'target_date' => ['required', 'date'],
+            'target_schedule_id' => ['nullable', 'integer', 'exists:schedule,id'],
+            'target_date' => ['nullable', 'date'],
         ]);
+
+        if (empty($validated['target_schedule_id']) && empty($validated['target_date'])) {
+            return response()->json(['message' => 'Target schedule or date is required.'], 422);
+        }
 
         $requesterSchedule = Schedule::with('profile.user')->find($validated['requester_schedule_id']);
         if (!$requesterSchedule) {
@@ -121,31 +126,27 @@ class SwappingRequestController extends Controller
             return response()->json(['message' => 'Cannot swap a placeholder schedule.'], 422);
         }
 
-        $targetSchedule = Schedule::where('task_date', $validated['target_date'])
-            ->where(function ($builder) {
-                $builder->whereNull('status')->orWhere('status', '!=', 'placeholder');
-            })
-            ->first();
-
-        $swapRequest = DB::transaction(function () use ($profileId, $requesterSchedule, $targetSchedule, $validated) {
-            if (!$targetSchedule) {
-                $targetSchedule = Schedule::create([
-                    'profile_id' => $requesterSchedule->profile_id,
-                    'task_description' => '',
-                    'task_date' => $validated['target_date'],
-                    'status' => 'placeholder',
-                ]);
+        $targetSchedule = null;
+        if (!empty($validated['target_schedule_id'])) {
+            if ((int) $validated['target_schedule_id'] === (int) $requesterSchedule->id) {
+                return response()->json(['message' => 'Target schedule must be different.'], 422);
             }
 
-            return SwappingRequest::create([
-                'requester_profile_id' => $profileId,
-                'requester_schedule_id' => $requesterSchedule->id,
-                'target_schedule_id' => $targetSchedule->id,
-                'status' => 'pending',
-                'approved_by' => null,
-                'is_archived' => false,
-            ]);
-        });
+            $targetSchedule = Schedule::find($validated['target_schedule_id']);
+            if (!$targetSchedule) {
+                return response()->json(['message' => 'Target schedule not found.'], 422);
+            }
+        }
+
+        $swapRequest = SwappingRequest::create([
+            'requester_profile_id' => $profileId,
+            'requester_schedule_id' => $requesterSchedule->id,
+            'target_schedule_id' => $targetSchedule?->id,
+            'target_date' => $validated['target_date'] ?? null,
+            'status' => 'pending',
+            'approved_by' => null,
+            'is_archived' => false,
+        ]);
 
         $swapRequest->load(['requesterSchedule.profile.user', 'targetSchedule.profile.user']);
         return response()->json($this->formatRequest($swapRequest), 201);
@@ -175,21 +176,26 @@ class SwappingRequestController extends Controller
             $requesterSchedule = $swapRequest->requesterSchedule;
             $targetSchedule = $swapRequest->targetSchedule;
 
-            if (!$requesterSchedule || !$targetSchedule) {
+            if (!$requesterSchedule) {
                 return null;
             }
 
-            $fromDate = $requesterSchedule->task_date;
-            $toDate = $targetSchedule->task_date;
+            if ($targetSchedule) {
+                $fromDate = $requesterSchedule->task_date;
+                $toDate = $targetSchedule->task_date;
 
-            $requesterSchedule->update([
-                'task_date' => $toDate,
-                'status' => 'swap',
-            ]);
+                $requesterSchedule->update([
+                    'task_date' => $toDate,
+                    'status' => 'swap',
+                ]);
 
-            if ($targetSchedule->status !== 'placeholder') {
                 $targetSchedule->update([
                     'task_date' => $fromDate,
+                    'status' => 'swap',
+                ]);
+            } else {
+                $requesterSchedule->update([
+                    'task_date' => $swapRequest->target_date,
                     'status' => 'swap',
                 ]);
             }
