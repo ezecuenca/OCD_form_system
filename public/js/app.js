@@ -68281,10 +68281,14 @@ function Schedule() {
     _useState4 = _slicedToArray(_useState3, 2),
     profiles = _useState4[0],
     setProfiles = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState6 = _slicedToArray(_useState5, 2),
-    user = _useState6[0],
-    setUser = _useState6[1];
+    currentProfileId = _useState6[0],
+    setCurrentProfileId = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState8 = _slicedToArray(_useState7, 2),
+    user = _useState8[0],
+    setUser = _useState8[1];
   var mapScheduleToTask = function mapScheduleToTask(item) {
     return {
       id: item.id,
@@ -68360,6 +68364,15 @@ function Schedule() {
     });
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/profile').then(function (res) {
+      var _res$data;
+      var idValue = (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.id;
+      setCurrentProfileId(idValue ? String(idValue) : '');
+    })["catch"](function () {
+      setCurrentProfileId('');
+    });
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var isMounted = true;
     var updatePendingCount = /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
@@ -68410,34 +68423,34 @@ function Schedule() {
       isMounted = false;
     };
   }, []);
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
-    _useState8 = _slicedToArray(_useState7, 2),
-    currentDate = _useState8[0],
-    setCurrentDate = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
     _useState0 = _slicedToArray(_useState9, 2),
-    showTaskForm = _useState0[0],
-    setShowTaskForm = _useState0[1];
-  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    currentDate = _useState0[0],
+    setCurrentDate = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState10 = _slicedToArray(_useState1, 2),
-    selectedDate = _useState10[0],
-    setSelectedDate = _useState10[1];
+    showTaskForm = _useState10[0],
+    setShowTaskForm = _useState10[1];
   var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState12 = _slicedToArray(_useState11, 2),
-    selectedTask = _useState12[0],
-    setSelectedTask = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('add'),
+    selectedDate = _useState12[0],
+    setSelectedDate = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState14 = _slicedToArray(_useState13, 2),
-    modalMode = _useState14[0],
-    setModalMode = _useState14[1]; // 'add' | 'view' | 'edit' | 'swap'
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    selectedTask = _useState14[0],
+    setSelectedTask = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('add'),
     _useState16 = _slicedToArray(_useState15, 2),
-    taskToSwap = _useState16[0],
-    setTaskToSwap = _useState16[1];
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    modalMode = _useState16[0],
+    setModalMode = _useState16[1]; // 'add' | 'view' | 'edit' | 'swap'
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState18 = _slicedToArray(_useState17, 2),
-    pendingSwapCount = _useState18[0],
-    setPendingSwapCount = _useState18[1];
+    taskToSwap = _useState18[0],
+    setTaskToSwap = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState20 = _slicedToArray(_useState19, 2),
+    pendingSwapCount = _useState20[0],
+    setPendingSwapCount = _useState20[1];
   var daysInMonth = function daysInMonth(date) {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -68746,7 +68759,8 @@ function Schedule() {
         setShowTaskForm(false);
       },
       userRole: user === null || user === void 0 ? void 0 : user.role_id,
-      profileOptions: profiles
+      profileOptions: profiles,
+      currentProfileId: currentProfileId
     })]
   });
 }
@@ -70258,10 +70272,13 @@ function TasksModal(_ref) {
     onSwitchToSwap = _ref.onSwitchToSwap,
     userRole = _ref.userRole,
     _ref$profileOptions = _ref.profileOptions,
-    profileOptions = _ref$profileOptions === void 0 ? [] : _ref$profileOptions;
+    profileOptions = _ref$profileOptions === void 0 ? [] : _ref$profileOptions,
+    _ref$currentProfileId = _ref.currentProfileId,
+    currentProfileId = _ref$currentProfileId === void 0 ? '' : _ref$currentProfileId;
   var isAddMode = mode === 'add';
   var isViewMode = mode === 'view';
   var isEditMode = mode === 'edit';
+  var canRequestSwap = userRole === 2 || userRole === 3 || userRole === 1 && String((initialTask === null || initialTask === void 0 ? void 0 : initialTask.profileId) || '') === String(currentProfileId || '');
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState2 = _slicedToArray(_useState, 2),
     profileId = _useState2[0],
@@ -70488,7 +70505,7 @@ function TasksModal(_ref) {
                 return onSwitchToEdit();
               },
               children: "Edit Task"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+            }), canRequestSwap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
               type: "button",
               className: "btn btn--secondary",
               onClick: function onClick() {

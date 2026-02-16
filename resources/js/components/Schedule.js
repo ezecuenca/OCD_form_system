@@ -7,6 +7,7 @@ function Schedule() {
 
     const [tasks, setTasks] = useState([]);
     const [profiles, setProfiles] = useState([]);
+    const [currentProfileId, setCurrentProfileId] = useState('');
 
     const [user, setUser] = useState(null);
 
@@ -59,6 +60,17 @@ function Schedule() {
             })
             .catch(() => {
                 setUser(null);
+            });
+    }, []);
+
+    useEffect(() => {
+        axios.get('/api/profile')
+            .then((res) => {
+                const idValue = res.data?.id;
+                setCurrentProfileId(idValue ? String(idValue) : '');
+            })
+            .catch(() => {
+                setCurrentProfileId('');
             });
     }, []);
 
@@ -371,6 +383,7 @@ function Schedule() {
                 }}
                 userRole={user?.role_id}
                 profileOptions={profiles}
+                currentProfileId={currentProfileId}
             />
         </div>
     );

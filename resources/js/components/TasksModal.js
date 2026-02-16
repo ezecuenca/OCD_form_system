@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit, onSwitchToSwap, userRole, profileOptions = [] }) {
+function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit, onSwitchToSwap, userRole, profileOptions = [], currentProfileId = '' }) {
     
     const isAddMode = mode === 'add';
     const isViewMode = mode === 'view';
     const isEditMode = mode === 'edit';
+    const canRequestSwap =
+        userRole === 2 ||
+        userRole === 3 ||
+        (userRole === 1 && String(initialTask?.profileId || '') === String(currentProfileId || ''));
 
     const [profileId, setProfileId] = useState('');
     const [task, setTask] = useState('');
@@ -174,7 +178,9 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                                 {(userRole === 2 || userRole === 3) && (
                                     <button type="button" className="btn btn--primary" onClick={() => onSwitchToEdit()}>Edit Task</button>
                                 )}
-                                <button type="button" className="btn btn--secondary" onClick={() => onSwitchToSwap()}>Request Swap</button>
+                                {canRequestSwap && (
+                                    <button type="button" className="btn btn--secondary" onClick={() => onSwitchToSwap()}>Request Swap</button>
+                                )}
                             </>
                         )}
 

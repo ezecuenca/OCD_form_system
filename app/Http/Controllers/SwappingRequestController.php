@@ -113,6 +113,10 @@ class SwappingRequestController extends Controller
             return response()->json(['message' => 'Schedule not found.'], 404);
         }
 
+        if (!$this->canManageRequests($request) && $requesterSchedule->profile_id !== $profileId) {
+            return response()->json(['message' => 'Not authorized to swap this schedule.'], 403);
+        }
+
         if ($requesterSchedule->status === 'placeholder') {
             return response()->json(['message' => 'Cannot swap a placeholder schedule.'], 422);
         }

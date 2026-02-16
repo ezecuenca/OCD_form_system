@@ -45,6 +45,7 @@ class ProfileController extends Controller
 
         if (!$profile) {
             return response()->json([
+                'id' => null,
                 'full_name' => null,
                 'username' => $user->username,
                 'section_id' => null,
@@ -57,6 +58,7 @@ class ProfileController extends Controller
 
         $section = $profile->section;
         return response()->json([
+            'id' => $profile->id,
             'full_name' => $profile->full_name,
             'username' => $user->username,
             'section_id' => $profile->section_id,
