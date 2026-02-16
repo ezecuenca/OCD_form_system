@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
-function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit, onSwitchToSwap, userRole }) {
+function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 'add', onAddTask , onUpdateTask, onSwitchToEdit, onSwitchToSwap, userRole, profileOptions = [], currentProfileId = '' }) {
     
     const isAddMode = mode === 'add';
     const isViewMode = mode === 'view';
     const isEditMode = mode === 'edit';
+    const canRequestSwap =
+        userRole === 2 ||
+        userRole === 3 ||
+        (userRole === 1 && String(initialTask?.profileId || '') === String(currentProfileId || ''));
 
-    const [name, setName] = useState('');
+    const [profileId, setProfileId] = useState('');
+    const [profileName, setProfileName] = useState('');
+    const [showProfileSuggestions, setShowProfileSuggestions] = useState(false);
     const [task, setTask] = useState('');
     const [schedule, setSchedule] = useState('');
     const [errors, setErrors] = useState({}); // New state for inline errors
@@ -15,11 +21,13 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
         if (!isOpen) return;
 
         if (isAddMode) {
-            setName('');
+            setProfileId('');
+            setProfileName('');
             setTask('');
             setSchedule(selectedDate || '');
         } else if (initialTask) {
-            setName(initialTask.name || '');
+            setProfileId(initialTask.profileId || '');
+            setProfileName(initialTask.fullName || initialTask.name || '');
             setTask(initialTask.task || '');
             setSchedule(initialTask.date || '');
         }
@@ -28,11 +36,23 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
 
     const validateForm = () => {
         const newErrors = {};
-        if (!name.trim()) newErrors.name = 'Name is required';
+        if (!profileId) newErrors.profileId = 'Select a staff member from the list';
         if (!task.trim()) newErrors.task = 'Task description is required';
         if (!schedule) newErrors.schedule = 'Date is required';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
+    };
+
+    const filteredProfiles = profileOptions.filter(profile =>
+        profile.full_name.toLowerCase().includes(profileName.trim().toLowerCase())
+    );
+
+    const handleProfileChange = (value) => {
+        setProfileName(value);
+        const match = profileOptions.find(
+            profile => profile.full_name.toLowerCase() === value.trim().toLowerCase()
+        );
+        setProfileId(match ? String(match.id) : '');
     };
 
     const handleSubmit = (e) => {
@@ -42,7 +62,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
         if (!validateForm()) return;
 
         const taskData = {
-            name: name.trim(),
+            profileId,
             task: task.trim(),
             date: schedule,
         };
@@ -80,16 +100,34 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                     {isAddMode || isEditMode ? (
                     <>
                         <div className="form__group">
-                            <label>Name</label>
-                            <input
-                                type="text"
-                                id='name'
-                                value={name}
-                                onChange={e => setName(e.target.value)}
-                                placeholder="Enter name"
-                                required
-                            />
-                            {errors.name && <span className="error" style={{ color: 'red', fontSize: '0.8rem' }}>{errors.name}</span>}
+                            <label>Staff</label>
+                            <div className="autocomplete">
+                                <input
+                                    type="text"
+                                    id="profileName"
+                                    value={profileName}
+                                    onChange={(e) => handleProfileChange(e.target.value)}
+                                    onFocus={() => setShowProfileSuggestions(true)}
+                                    onBlur={() => setTimeout(() => setShowProfileSuggestions(false), 120)}
+                                    placeholder="Type a name to search"
+                                    required
+                                />
+                                {showProfileSuggestions && filteredProfiles.length > 0 && (
+                                    <div className="autocomplete__menu" role="listbox">
+                                        {filteredProfiles.map(profile => (
+                                            <button
+                                                key={profile.id}
+                                                type="button"
+                                                className="autocomplete__option"
+                                                onMouseDown={() => handleProfileChange(profile.full_name)}
+                                            >
+                                                {profile.full_name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            {errors.profileId && <span className="error" style={{ color: 'red', fontSize: '0.8rem' }}>{errors.profileId}</span>}
                         </div>
 
                         <div className="form__group">
@@ -125,8 +163,8 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
 
                         <div className="view-task">
                             <div className="view-task__row">
-                            <label>Name</label>
-                            <div className="value strong">{name || '—'}</div>
+                            <label>Staff</label>
+                            <div className="value strong">{initialTask?.fullName || initialTask?.name || '—'}</div>
                         </div>
 
                         <div className="view-task__row">
@@ -140,7 +178,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                             <label>Date</label>
                             <div className="value date" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                                 {formatDate(schedule)}
-                                {initialTask?.swappedAt && (
+                                {initialTask?.status === 'swap' && (
                                     <span style={{
                                         fontSize: '0.75rem',
                                         padding: '2px 8px',
@@ -169,7 +207,9 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                                 {(userRole === 2 || userRole === 3) && (
                                     <button type="button" className="btn btn--primary" onClick={() => onSwitchToEdit()}>Edit Task</button>
                                 )}
-                                <button type="button" className="btn btn--secondary" onClick={() => onSwitchToSwap()}>Request Swap</button>
+                                {canRequestSwap && (
+                                    <button type="button" className="btn btn--secondary" onClick={() => onSwitchToSwap()}>Request Swap</button>
+                                )}
                             </>
                         )}
 

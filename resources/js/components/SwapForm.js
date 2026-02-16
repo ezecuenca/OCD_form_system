@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getSwapRequests, updateSwapRequestStatus, executeSwapRequest, archiveSwapRequest } from '../utils/swapRequests';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ConfirmModal from './ConfirmModal';
 
@@ -28,6 +28,7 @@ function formatDateOnly(dateStr) {
 
 function SwapForm() {
     const [swapRequests, setSwapRequests] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
     const [selectedRequests, setSelectedRequests] = useState([]);
     const [showMonthDropdown, setShowMonthDropdown] = useState(false);
@@ -44,13 +45,18 @@ function SwapForm() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
-    const loadSwapRequests = () => setSwapRequests(getSwapRequests().filter(r => r.status !== 'archived'));
+    const loadSwapRequests = async () => {
+        try {
+            const response = await axios.get('/api/swapping-requests');
+            const data = Array.isArray(response.data) ? response.data : [];
+            setSwapRequests(data);
+        } catch (error) {
+            setSwapRequests([]);
+        }
+    };
 
     useEffect(() => {
         loadSwapRequests();
-        const handleStorage = () => loadSwapRequests();
-        window.addEventListener('storage', handleStorage);
-        return () => window.removeEventListener('storage', handleStorage);
     }, []);
 
     const handleReturn = () => {
@@ -74,18 +80,19 @@ function SwapForm() {
     }, [showYearDropdown, showMonthDropdown]);
 
     const handleDeny = (id) => {
-        if (window.confirm('Deny this swap request?')) {
-            updateSwapRequestStatus(id, 'denied');
-            loadSwapRequests();
-        }
+        if (!window.confirm('Deny this swap request?')) return;
+
+        axios.post(`/api/swapping-requests/${id}/deny`)
+            .then(() => loadSwapRequests())
+            .catch(() => alert('Could not deny request. Please try again.'));
     };
 
-    const handleApprove = (id) => {
-        const success = executeSwapRequest(id);
-        if (success) {
+    const handleApprove = async (id) => {
+        try {
+            await axios.post(`/api/swapping-requests/${id}/approve`);
             loadSwapRequests();
-        } else {
-            alert('Could not execute swap. The task may have been modified or removed.');
+        } catch (error) {
+            alert('Could not execute swap. Please try again.');
         }
     };
 
@@ -93,10 +100,13 @@ function SwapForm() {
         setConfirmState({
             isOpen: true,
             message: 'Archive this swap request?',
-            onConfirm: () => {
-                if (archiveSwapRequest(id)) {
+            onConfirm: async () => {
+                try {
+                    await axios.post(`/api/swapping-requests/${id}/archive`);
                     setSelectedRequests(prev => prev.filter(i => i !== id));
                     loadSwapRequests();
+                } catch (error) {
+                    alert('Could not archive request. Please try again.');
                 }
                 setConfirmState({ isOpen: false, message: '', onConfirm: null });
             }
@@ -115,10 +125,14 @@ function SwapForm() {
         setConfirmState({
             isOpen: true,
             message: `Archive ${toArchive.length} request${toArchive.length === 1 ? '' : 's'}?`,
-            onConfirm: () => {
-                toArchive.forEach(id => archiveSwapRequest(id));
-                setSelectedRequests([]);
-                loadSwapRequests();
+            onConfirm: async () => {
+                try {
+                    await Promise.all(toArchive.map(id => axios.post(`/api/swapping-requests/${id}/archive`)));
+                    setSelectedRequests([]);
+                    loadSwapRequests();
+                } catch (error) {
+                    alert('Could not archive selected requests. Please try again.');
+                }
                 setConfirmState({ isOpen: false, message: '', onConfirm: null });
             }
         });
@@ -162,11 +176,31 @@ function SwapForm() {
         setShowMonthDropdown(false);
     };
 
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    const filteredRequests = swapRequests.filter((req) => {
+        const created = req.createdAt ? new Date(req.createdAt) : null;
+        const requestYear = created ? created.getFullYear().toString() : '';
+        const requestMonthName = created ? monthNames[created.getMonth()] : '';
+
+        if (selectedYear !== 'All Years' && requestYear !== selectedYear) return false;
+        if (selectedMonth !== 'All Months' && requestMonthName !== selectedMonth) return false;
+
+        if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase().trim();
+            const desc = getRequestDescription(req).toLowerCase();
+            const dateStr = created ? formatDate(req.createdAt).toLowerCase() : '';
+            const statusStr = (req.status || '').toLowerCase();
+            if (!desc.includes(q) && !dateStr.includes(q) && !statusStr.includes(q)) return false;
+        }
+        return true;
+    });
+
     // Pagination calculations
-    const totalPages = Math.ceil(swapRequests.length / itemsPerPage);
+    const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const paginatedRequests = swapRequests.slice(startIndex, endIndex);
+    const paginatedRequests = filteredRequests.slice(startIndex, endIndex);
 
     const goToFirstPage = () => setCurrentPage(1);
     const goToPrevPage = () => setCurrentPage(prev => Math.max(1, prev - 1));
@@ -179,19 +213,24 @@ function SwapForm() {
         }
     }, [swapRequests.length, currentPage, totalPages]);
 
-    const getRequestDescription = (req) => {
+    function getRequestDescription(req) {
         if (req.targetTaskName) {
             return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) => "${req.targetTaskName}" (${formatDateOnly(req.toDate)})`;
         }
         return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) => (${formatDateOnly(req.toDate)})`;
-    };
+    }
 
     return (
         <div className="swap-form">
             <div className="swap-form__search-bar">
                 <div className="swap-form__search-bar-input">
                     <img src={`${window.location.origin}/images/search_icon.svg`} alt="Search" />
-                    <input type="text" placeholder="Search..." />
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
                 </div>
                 <div className="swap-form__datetime">
                     <button className="adr-form__return-btn" onClick={handleReturn}>
@@ -220,7 +259,7 @@ function SwapForm() {
                 <div className="swap-form__filters">
                     <div className="swap-form__filter-dropdown" ref={yearDropdownRef}>
                         <button onClick={() => setShowYearDropdown(!showYearDropdown)}>
-                            Year
+                            {selectedYear}
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
@@ -242,7 +281,7 @@ function SwapForm() {
 
                     <div className="swap-form__filter-dropdown" ref={monthDropdownRef}>
                         <button onClick={() => setShowMonthDropdown(!showMonthDropdown)}>
-                            Month
+                            {selectedMonth}
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
@@ -288,10 +327,10 @@ function SwapForm() {
                         </tr>
                     </thead>
                     <tbody>
-                        {swapRequests.length === 0 ? (
+                        {filteredRequests.length === 0 ? (
                             <tr>
                                 <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                    No swap requests yet. View a task on the Schedule and click &quot;Request Swap&quot; to create one.
+                                    No swap requests found.
                                 </td>
                             </tr>
                         ) : (
@@ -374,13 +413,13 @@ function SwapForm() {
                         <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <span className="swap-form__pagination-info">{swapRequests.length > 0 ? `Page ${currentPage} of ${totalPages}` : 'No data'}</span>
-                <button onClick={goToNextPage} disabled={currentPage === totalPages || swapRequests.length === 0} title="Next page">
+                <span className="swap-form__pagination-info">{filteredRequests.length > 0 ? `Page ${currentPage} of ${totalPages}` : 'No data'}</span>
+                <button onClick={goToNextPage} disabled={currentPage === totalPages || filteredRequests.length === 0} title="Next page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <button onClick={goToLastPage} disabled={currentPage === totalPages || swapRequests.length === 0} title="Last page">
+                <button onClick={goToLastPage} disabled={currentPage === totalPages || filteredRequests.length === 0} title="Last page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13 17L18 12L13 7M6 17L11 12L6 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
