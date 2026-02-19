@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('api.profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('api.profile.update');
     Route::get('/profiles', [ProfileController::class, 'index'])->name('api.profiles.index');
+    Route::put('/profiles/{id}', [ProfileController::class, 'updateById'])->name('api.profiles.update');
 
     Route::get('/schedules', [ScheduleController::class, 'index'])->name('api.schedules.index');
     Route::post('/schedules', [ScheduleController::class, 'store'])->name('api.schedules.store');
