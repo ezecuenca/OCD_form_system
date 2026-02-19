@@ -3,9 +3,12 @@ import axios from 'axios';
 import ConfirmModal from './ConfirmModal';
 import SuccessNotification from './SuccessNotification';
 import TemplateViewModal from './TemplateViewModal';
+import AccountEditModal from './AccountEditModal';
 
 function Settings() {
-    const accounts = [];
+    const [accounts, setAccounts] = useState([]);
+    const [accountsLoading, setAccountsLoading] = useState(false);
+    const [accountsError, setAccountsError] = useState(null);
     const [activeSection, setActiveSection] = useState('accounts');
     const [sections, setSections] = useState([]);
     const [archivedSections, setArchivedSections] = useState([]);
@@ -24,12 +27,99 @@ function Settings() {
     const [confirmMessage, setConfirmMessage] = useState('');
     const [confirmAction, setConfirmAction] = useState(null);
 
+    const [showAccountModal, setShowAccountModal] = useState(false);
+    const [editingAccount, setEditingAccount] = useState(null);
+    const [accountSaving, setAccountSaving] = useState(false);
+    const [accountSections, setAccountSections] = useState([]);
+    const [accountSectionsLoading, setAccountSectionsLoading] = useState(false);
+    const [accountSectionsError, setAccountSectionsError] = useState(null);
+
     const [templates, setTemplates] = useState([]);
     const [templatesLoading, setTemplatesLoading] = useState(false);
     const [templatesError, setTemplatesError] = useState(null);
     const [templateToView, setTemplateToView] = useState(null);
     const [templateUploading, setTemplateUploading] = useState(false);
     const templateFileInputRef = useRef(null);
+
+    const roleIdLabels = {
+        1: 'User',
+        2: 'Admin',
+        3: 'Super Admin',
+    };
+
+    const normalizeRoleLabel = (value) => {
+        if (!value) return null;
+        const raw = String(value).trim();
+        if (!raw) return null;
+        const lowered = raw.toLowerCase();
+        if (lowered === 'user') return 'User';
+        if (lowered === 'admin') return 'Admin';
+        if (lowered === 'super admin' || lowered === 'super_admin' || lowered === 'superadmin') return 'Super Admin';
+        return raw;
+    };
+
+    const mapProfileToAccount = (profile) => {
+        const user = profile?.user || {};
+        const rawFullName = profile?.raw_full_name ?? '';
+        const trimmedFullName = rawFullName ? String(rawFullName).trim() : '';
+        const name = trimmedFullName || 'No full name yet';
+        const roleId = profile?.role_id || user?.role_id || null;
+        const roleName = normalizeRoleLabel(profile?.role_name || profile?.role || user?.role_name || user?.role);
+        const role = roleIdLabels[roleId] || roleName || '—';
+        let status = profile?.status || user?.status || null;
+        if (!status && typeof profile?.is_active === 'boolean') {
+            status = profile.is_active ? 'Active' : 'Disabled';
+        }
+        if (!status && typeof user?.is_active === 'boolean') {
+            status = user.is_active ? 'Active' : 'Disabled';
+        }
+        if (!status) status = 'Active';
+        return {
+            id: profile?.id || user?.id || name,
+            profile_id: profile?.id || null,
+            user_id: profile?.user_id || user?.id || null,
+            raw_full_name: rawFullName,
+            full_name: profile?.full_name || null,
+            position: profile?.position || '',
+            section_id: profile?.section_id || null,
+            role_id: roleId,
+            name,
+            status,
+            role,
+        };
+    };
+
+    useEffect(() => {
+        if (activeSection !== 'accounts') return;
+        setAccountsLoading(true);
+        setAccountsError(null);
+        axios.get('/api/profiles')
+            .then((res) => {
+                const data = Array.isArray(res.data) ? res.data : [];
+                setAccounts(data.map(mapProfileToAccount));
+            })
+            .catch((err) => {
+                setAccountsError(err?.response?.data?.message || 'Failed to load accounts.');
+                setAccounts([]);
+            })
+            .finally(() => setAccountsLoading(false));
+    }, [activeSection]);
+
+    useEffect(() => {
+        if (!showAccountModal) return;
+        setAccountSectionsLoading(true);
+        setAccountSectionsError(null);
+        axios.get('/api/sections')
+            .then((res) => {
+                const data = Array.isArray(res.data) ? res.data : [];
+                setAccountSections(data);
+            })
+            .catch((err) => {
+                setAccountSectionsError(err?.response?.data?.message || 'Failed to load sections.');
+                setAccountSections([]);
+            })
+            .finally(() => setAccountSectionsLoading(false));
+    }, [showAccountModal]);
 
     useEffect(() => {
         if (activeSection !== 'departments') return;
@@ -330,6 +420,35 @@ function Settings() {
             });
     };
 
+    const openEditAccount = (account) => {
+        setEditingAccount(account);
+        setShowAccountModal(true);
+    };
+
+    const closeAccountModal = () => {
+        setShowAccountModal(false);
+        setEditingAccount(null);
+    };
+
+    const saveAccount = (payload) => {
+        if (!editingAccount?.profile_id) return;
+        setAccountSaving(true);
+        axios.put(`/api/profiles/${editingAccount.profile_id}`, payload)
+            .then((res) => {
+                const updated = mapProfileToAccount(res.data);
+                setAccounts((prev) => prev.map((item) => (
+                    item.profile_id === updated.profile_id ? { ...item, ...updated } : item
+                )));
+                setSuccessMessage('Account updated successfully.');
+                setShowSuccessNotification(true);
+                closeAccountModal();
+            })
+            .catch((err) => {
+                alert(err?.response?.data?.message || 'Failed to update account.');
+            })
+            .finally(() => setAccountSaving(false));
+    };
+
     let sectionContent;
     switch (activeSection) {
         case 'accounts':
@@ -352,7 +471,19 @@ function Settings() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {accounts.length === 0 ? (
+                                {accountsLoading ? (
+                                    <tr>
+                                        <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                ) : accountsError ? (
+                                    <tr>
+                                        <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#c00' }}>
+                                            {accountsError}
+                                        </td>
+                                    </tr>
+                                ) : accounts.length === 0 ? (
                                     <tr>
                                         <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
                                             No accounts yet. Add an account to get started.
@@ -370,7 +501,12 @@ function Settings() {
                                             </td>
                                             <td>{account.role}</td>
                                             <td className="settings__table-actions">
-                                                <button type="button" className="settings__icon-button" aria-label="Edit account">
+                                                <button
+                                                    type="button"
+                                                    className="settings__icon-button"
+                                                    aria-label="Edit account"
+                                                    onClick={() => openEditAccount(account)}
+                                                >
                                                     <img src="/images/edit_icon.svg" alt="" aria-hidden="true" />
                                                 </button>
                                                 <button type="button" className="settings__icon-button" aria-label="Disable account">
@@ -777,6 +913,17 @@ function Settings() {
                 templateFilename={templateToView?.filename}
                 templateName={templateToView?.name}
                 onClose={() => setTemplateToView(null)}
+            />
+
+            <AccountEditModal
+                isOpen={showAccountModal}
+                account={editingAccount}
+                sections={accountSections}
+                sectionsLoading={accountSectionsLoading}
+                sectionsError={accountSectionsError}
+                onClose={closeAccountModal}
+                onSave={saveAccount}
+                saving={accountSaving}
             />
         </div>
     );
