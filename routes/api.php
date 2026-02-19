@@ -71,5 +71,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/templates', [TemplatesController::class, 'store'])->name('api.templates.store');
     Route::patch('/templates/set-active', [TemplatesController::class, 'setActive'])->name('api.templates.set-active');
     Route::get('/templates/{filename}/preview', [TemplatesController::class, 'preview'])->name('api.templates.preview')->where('filename', '[^/]+');
+    Route::delete('/templates/{filename}', [TemplatesController::class, 'destroy'])->name('api.templates.destroy')->where('filename', '[^/]+');
     Route::get('/templates/{filename}', [TemplatesController::class, 'show'])->name('api.templates.show')->where('filename', '[^/]+');
 });

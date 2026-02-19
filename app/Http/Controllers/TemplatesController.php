@@ -96,30 +96,26 @@ class TemplatesController extends Controller
 
         $filename = $baseName . '.docx';
         $path = $dir . '/' . $filename;
-        $counter = 1;
-        while (is_file($path)) {
-            $filename = $baseName . '_' . $counter . '.docx';
-            $path = $dir . '/' . $filename;
-            $counter++;
-        }
-
+        // Same name = replace: overwrite file and update DB row (preserve is_active).
         if (!$file->move($dir, $filename)) {
             return response()->json(['message' => 'Failed to save template.'], 500);
         }
 
-        $fullPath = $dir . '/' . $filename;
-        $updatedAt = is_file($fullPath) ? date('c', filemtime($fullPath)) : date('c');
         $name = pathinfo($filename, PATHINFO_FILENAME);
-        Template::updateOrCreate(
+        $template = Template::firstOrCreate(
             ['template_name' => $name],
             ['template_name' => $name, 'html_layout' => null, 'is_active' => false]
         );
+        $template->touch();
+
+        $fullPath = $dir . '/' . $filename;
+        $updatedAt = is_file($fullPath) ? date('c', filemtime($fullPath)) : date('c');
 
         return response()->json([
             'name' => $name,
             'filename' => $filename,
             'updated_at' => $updatedAt,
-            'is_active' => false,
+            'is_active' => (bool) $template->is_active,
         ], 201);
     }
 
@@ -153,35 +149,62 @@ class TemplatesController extends Controller
     }
 
     /**
-     * List .docx template files in resources/templates and merge is_active from DB.
+     * List templates from the database. Only includes rows where the .docx file exists.
+     * When only one template remains, it is set "in use" by default.
      */
     public function index()
     {
         $dir = resource_path('templates');
-        if (!is_dir($dir)) {
-            return response()->json([]);
-        }
-
-        $activeNames = Template::where('is_active', true)->pluck('template_name')->flip()->toArray();
         $templates = [];
-        foreach (File::files($dir) as $file) {
-            $ext = strtolower($file->getExtension());
-            if ($ext !== 'docx') {
+        foreach (Template::orderBy('template_name')->get() as $row) {
+            $name = trim((string) $row->template_name);
+            if ($name === '') {
                 continue;
             }
-            $filename = $file->getFilename();
-            $name = pathinfo($filename, PATHINFO_FILENAME);
+            $filename = $name . '.docx';
+            $path = $dir . '/' . $filename;
+            if (!is_file($path) || !is_readable($path)) {
+                continue;
+            }
             $templates[] = [
                 'name' => $name,
                 'filename' => $filename,
-                'updated_at' => date('c', $file->getMTime()),
-                'is_active' => isset($activeNames[$name]),
+                'updated_at' => date('c', filemtime($path)),
+                'is_active' => (bool) $row->is_active,
             ];
         }
 
-        usort($templates, fn ($a, $b) => strcasecmp($a['name'], $b['name']));
+        // If only one template and none is active, set it as "in use" by default.
+        if (count($templates) === 1 && !$templates[0]['is_active']) {
+            $onlyName = $templates[0]['name'];
+            Template::where('template_name', $onlyName)->update(['is_active' => 1]);
+            $templates[0]['is_active'] = true;
+        }
 
         return response()->json($templates);
+    }
+
+    /**
+     * Permanently delete a template file and its DB record.
+     */
+    public function destroy(string $filename)
+    {
+        $filename = basename($filename);
+        if (strtolower(pathinfo($filename, PATHINFO_EXTENSION)) !== 'docx') {
+            return response()->json(['message' => 'Invalid template.'], 404);
+        }
+
+        $path = resource_path('templates/' . $filename);
+        if (is_file($path)) {
+            if (!@unlink($path)) {
+                return response()->json(['message' => 'Could not delete template file.'], 500);
+            }
+        }
+
+        $name = pathinfo($filename, PATHINFO_FILENAME);
+        Template::where('template_name', $name)->delete();
+
+        return response()->json(['message' => 'Template deleted.']);
     }
 
     /**

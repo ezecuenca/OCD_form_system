@@ -611,7 +611,77 @@
 
         &--sm {
             min-height: 44px;
-            rows: 2;
+        }
+
+        &--remarks {
+            min-height: 60px;
+            max-height: 120px;
+            overflow-y: auto;
+            resize: vertical;
+        }
+    }
+
+    &__field-toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.2rem;
+        margin-bottom: 0.4rem;
+        padding: 0.35rem 0.5rem;
+        background: #f8f9fa;
+        border-radius: 6px;
+        border: 1px solid #e9ecef;
+
+        &-label {
+            color: #495057;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-right: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        &-sep {
+            color: #dee2e6;
+            margin: 0 0.15rem;
+            font-weight: 300;
+            user-select: none;
+        }
+    }
+
+    &__toolbar-btn {
+        padding: 0.25rem 0.4rem;
+        border: 1px solid #dee2e6;
+        background: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        color: #495057;
+        transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+        &:hover {
+            background: #e9ecef;
+            border-color: #ced4da;
+            color: #212529;
+        }
+        &--active {
+            background: $form-purple;
+            color: white;
+            border-color: $form-purple;
+
+            img {
+                filter: brightness(0) invert(1);
+            }
+        }
+        &--icon {
+            padding: 0.35rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            img, svg {
+                display: block;
+                width: 16px;
+                height: 16px;
+            }
         }
     }
 
@@ -712,12 +782,36 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 1rem;
+            table-layout: fixed;
 
             &-number {
-                width: 50px;
+                width: 40px;
                 text-align: center !important;
                 font-weight: 600;
                 color: #666;
+            }
+
+            &-name-col {
+                width: 28%;
+                min-width: 140px;
+            }
+
+            &-task-col {
+                width: 59%;
+            }
+
+            &-actions-col {
+                width: 56px;
+            }
+
+            &-report-col {
+                width: 59%;
+                min-width: 160px;
+            }
+
+            &-remarks-col {
+                width: 28%;
+                min-width: 120px;
             }
 
             thead {
@@ -750,6 +844,7 @@
 
         &-input {
             width: 100%;
+            min-width: 0;
             padding: 0.5rem;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -758,6 +853,7 @@
             outline: none;
             transition: border-color 0.2s;
             background: #f7f7f7;
+            box-sizing: border-box;
 
             &:focus {
                 border-color: $form-purple;

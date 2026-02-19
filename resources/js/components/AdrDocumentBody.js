@@ -33,6 +33,15 @@ function signatureNameWithBreaks(name, emptyDisplay = '-') {
     return s;
 }
 
+/** Strip leading hyphen and/or "1.1 ", "1.2 ", etc. so list numbering is not duplicated and no stray hyphen shows. */
+function stripEndorsedNumber(item) {
+    if (item == null || typeof item !== 'string') return item;
+    const s = item
+        .replace(/^\s*(-\s*)?(1\.\d+\s*)?/i, '')
+        .trim();
+    return s || item.trim();
+}
+
 function renderMultiline(text, asBullets) {
     if (!text?.trim()) return '-';
     const useBullets = asBullets || (text && text.includes('\n'));
@@ -191,16 +200,20 @@ function AdrDocumentBody({ report, blankPlaceholders = false }) {
                         {report.reportsItems && report.reportsItems.length > 0 ? report.reportsItems.map((item, index) => (
                             <tr key={`reports-${index}-${item.id ?? ''}`} data-break-point>
                                 <td className="document-viewer__table-num">{index + 1}</td>
-                                <td className="document-viewer__table-report">
+                                <td className="document-viewer__table-report" style={{ textAlign: item.alignReport || 'left' }}>
                                     {item.report?.trim() ? (
                                         <div className="document-viewer__report-text">
-                                            {item.report.split(/\n/).map((line, i) => (
-                                                line.trim() ? <div key={i}>{line.trim()}</div> : <br key={i} />
-                                            ))}
+                                            {item.report
+                                                .split(/\n/)
+                                                .map((line) => line.trim())
+                                                .filter((line) => line !== '')
+                                                .map((line, i) => (
+                                                    <div key={i}>{line}</div>
+                                                ))}
                                         </div>
                                     ) : emptyDisplay}
                                 </td>
-                                <td className="document-viewer__table-remarks">{dash(item.remarks)}</td>
+                                <td className="document-viewer__table-remarks" style={{ textAlign: item.alignRemarks || 'left' }}>{dash(item.remarks)}</td>
                             </tr>
                         )) : (
                             <tr data-break-point>
@@ -292,9 +305,17 @@ function AdrDocumentBody({ report, blankPlaceholders = false }) {
                     <p className="document-viewer__admin-text" data-break-point>1. The following were endorsed to incoming Operations Duty Staff:</p>
                     {report.endorsedItemsRows && report.endorsedItemsRows.length > 0 ? (
                         <ol className="document-viewer__endorsed-list">
-                            {report.endorsedItemsRows.map((row, index) => (
-                                <li key={row.id || index} data-break-point>{renderMultiline(row.item, row.itemAsBullets)}</li>
-                            ))}
+                            {report.endorsedItemsRows
+                                .filter((row) => (row.item || '').trim() !== '')
+                                .map((row, index) => {
+                                    const stripped = stripEndorsedNumber(row.item);
+                                    const isEmpty = !stripped || stripped.trim() === '-';
+                                    return (
+                                        <li key={row.id || index} data-break-point>
+                                            {!isEmpty ? renderMultiline(stripped, row.itemAsBullets) : '\u00A0'}
+                                        </li>
+                                    );
+                                })}
                         </ol>
                     ) : null}
                     <p className="document-viewer__admin-text" data-break-point>2. For information of the OCD Officer-In-Charge.</p>
