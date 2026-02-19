@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import TasksModal from './TasksModal';
+import SuccessNotification from './SuccessNotification';
 
 function Schedule() {
-
+    const location = useLocation();
+    const navigate = useNavigate();
     const [tasks, setTasks] = useState([]);
     const [profiles, setProfiles] = useState([]);
     const [currentProfileId, setCurrentProfileId] = useState('');
 
     const [user, setUser] = useState(null);
+    const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
     const getFirstName = (fullName) => {
         if (!fullName) return '—';
@@ -79,6 +83,14 @@ function Schedule() {
                 setCurrentProfileId('');
             });
     }, []);
+
+    useEffect(() => {
+        if (location.state?.loginSuccess) {
+            setSuccessMessage('Logged in successfully.');
+            setShowSuccessNotification(true);
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [location.state?.loginSuccess, navigate, location.pathname]);
 
     useEffect(() => {
         let isMounted = true;
@@ -409,6 +421,11 @@ function Schedule() {
                 userRole={user?.role_id}
                 profileOptions={profiles}
                 currentProfileId={currentProfileId}
+            />
+            <SuccessNotification
+                message={successMessage}
+                isVisible={showSuccessNotification}
+                onClose={() => setShowSuccessNotification(false)}
             />
         </div>
     );

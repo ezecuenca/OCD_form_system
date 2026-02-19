@@ -783,24 +783,26 @@ class ExportDocxController extends Controller
 
     private function setEndorsedItemsRows(\PhpOffice\PhpWord\TemplateProcessor $tp, array $report): void
     {
-        $rows = $report['endorsedItemsRows'] ?? [];
+        $rows = array_values(array_filter(
+            $report['endorsedItemsRows'] ?? [],
+            fn ($r) => trim((string) ($r['item'] ?? '')) !== ''
+        ));
         $first = $rows[0] ?? null;
-        // First row / single placeholder: use combined list when multiple items so a template with one ${END_ITEM} shows all
-        $endItemFirst = $first ? $this->clean($first['item'] ?? '') : '-';
-        if (count($rows) > 1) {
-            $lines = [];
-            foreach ($rows as $i => $r) {
-                $num = '1.' . ($i + 1);
-                $lines[] = $num . ' ' . $this->clean($r['item'] ?? '');
-            }
-            $endItemFirst = implode("\n", $lines);
+        // Always put numbering (1.1, 1.2, ...) inside END_ITEM so template can use only ${END_ITEM} and get consistent numbering for 1 or more items (no hyphen, no missing number).
+        $lines = [];
+        foreach ($rows as $i => $r) {
+            $num = '1.' . ($i + 1);
+            $itemText = $this->clean($r['item'] ?? '');
+            $lines[] = $itemText !== '' ? $num . ' ' . $itemText : $num;
         }
-        $this->setValue($tp, 'END_ITEM', $endItemFirst);
-        $this->setValue($tp, 'END_NUM', $first ? '1.1' : '-');
+        $endItemFirst = implode("\n", $lines);
+        $this->setValue($tp, 'END_ITEM', $endItemFirst !== '' ? $endItemFirst : '-');
+        $this->setValue($tp, 'END_NUM', '-');
         for ($i = 1; $i <= self::MAX_ENDORSED; $i++) {
             $r = $rows[$i - 1] ?? null;
             $this->setValue($tp, 'END_NUM#' . $i, $r ? '1.' . $i : '-');
-            $this->setValue($tp, 'END_ITEM#' . $i, $r ? $this->clean($r['item'] ?? '') : '-');
+            $itemText = $r ? $this->clean($r['item'] ?? '') : '';
+            $this->setValue($tp, 'END_ITEM#' . $i, $itemText);
         }
     }
 

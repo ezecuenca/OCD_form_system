@@ -514,6 +514,33 @@
         width: 28%;
         max-width: 11rem;
     }
+
+    /* Reports table: tighter spacing and column balance so content doesn’t look spread out */
+    &__table--reports {
+        thead th,
+        tbody td {
+            padding: 0.25rem 0.35rem;
+        }
+        .document-viewer__table-num {
+            width: 2.5rem;
+        }
+        .document-viewer__table-report {
+            width: 60%;
+        }
+        .document-viewer__table-remarks {
+            width: 38%;
+            max-width: none;
+        }
+        .document-viewer__report-text {
+            line-height: 1.35;
+            div {
+                margin-bottom: 0.1rem;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
     
     &__report-text {
         div {

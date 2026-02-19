@@ -1205,7 +1205,72 @@ body {
 }
 .adr-form__modal-textarea--sm {
   min-height: 44px;
-  rows: 2;
+}
+.adr-form__modal-textarea--remarks {
+  min-height: 60px;
+  max-height: 120px;
+  overflow-y: auto;
+  resize: vertical;
+}
+.adr-form__field-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  margin-bottom: 0.4rem;
+  padding: 0.35rem 0.5rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+.adr-form__field-toolbar-label {
+  color: #495057;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-right: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.adr-form__field-toolbar-sep {
+  color: #dee2e6;
+  margin: 0 0.15rem;
+  font-weight: 300;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.adr-form__toolbar-btn {
+  padding: 0.25rem 0.4rem;
+  border: 1px solid #dee2e6;
+  background: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #495057;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.adr-form__toolbar-btn:hover {
+  background: #e9ecef;
+  border-color: #ced4da;
+  color: #212529;
+}
+.adr-form__toolbar-btn--active {
+  background: #290081;
+  color: white;
+  border-color: #290081;
+}
+.adr-form__toolbar-btn--active img {
+  filter: brightness(0) invert(1);
+}
+.adr-form__toolbar-btn--icon {
+  padding: 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.adr-form__toolbar-btn--icon img, .adr-form__toolbar-btn--icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
 }
 .adr-form__bullet-check {
   display: inline-flex;
@@ -1296,12 +1361,31 @@ body {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1rem;
+  table-layout: fixed;
 }
 .adr-form__modal-table-number {
-  width: 50px;
+  width: 40px;
   text-align: center !important;
   font-weight: 600;
   color: #666;
+}
+.adr-form__modal-table-name-col {
+  width: 28%;
+  min-width: 140px;
+}
+.adr-form__modal-table-task-col {
+  width: 59%;
+}
+.adr-form__modal-table-actions-col {
+  width: 56px;
+}
+.adr-form__modal-table-report-col {
+  width: 59%;
+  min-width: 160px;
+}
+.adr-form__modal-table-remarks-col {
+  width: 28%;
+  min-width: 120px;
 }
 .adr-form__modal-table thead {
   background: #f5f5f5;
@@ -1325,6 +1409,7 @@ body {
 }
 .adr-form__modal-input {
   width: 100%;
+  min-width: 0;
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -1333,6 +1418,7 @@ body {
   outline: none;
   transition: border-color 0.2s;
   background: #f7f7f7;
+  box-sizing: border-box;
 }
 .adr-form__modal-input:focus {
   border-color: #290081;
@@ -3327,6 +3413,32 @@ body {
   min-width: 0;
   width: 28%;
   max-width: 11rem;
+}
+.document-viewer {
+  /* Reports table: tighter spacing and column balance so content doesn’t look spread out */
+}
+.document-viewer__table--reports thead th,
+.document-viewer__table--reports tbody td {
+  padding: 0.25rem 0.35rem;
+}
+.document-viewer__table--reports .document-viewer__table-num {
+  width: 2.5rem;
+}
+.document-viewer__table--reports .document-viewer__table-report {
+  width: 60%;
+}
+.document-viewer__table--reports .document-viewer__table-remarks {
+  width: 38%;
+  max-width: none;
+}
+.document-viewer__table--reports .document-viewer__report-text {
+  line-height: 1.35;
+}
+.document-viewer__table--reports .document-viewer__report-text div {
+  margin-bottom: 0.1rem;
+}
+.document-viewer__table--reports .document-viewer__report-text div:last-child {
+  margin-bottom: 0;
 }
 .document-viewer__report-text div {
   margin-bottom: 0.25rem;
@@ -5325,9 +5437,10 @@ body.document-modal-open .main-content {
   white-space: nowrap;
 }
 
-/* Templates table: Actions column with check (in use) + view, spacing */
+/* Templates table: Actions column with check (in use) + view + delete, spacing */
 .settings__template-actions {
-  width: 160px;
+  width: 130px;
+  margin-left: 0.5rem;
 }
 
 .settings__template-actions-inner {
