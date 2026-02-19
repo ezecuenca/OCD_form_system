@@ -3,9 +3,12 @@ import axios from 'axios';
 import ConfirmModal from './ConfirmModal';
 import SuccessNotification from './SuccessNotification';
 import TemplateViewModal from './TemplateViewModal';
+import AccountEditModal from './AccountEditModal';
 
 function Settings() {
-    const accounts = [];
+    const [accounts, setAccounts] = useState([]);
+    const [accountsLoading, setAccountsLoading] = useState(false);
+    const [accountsError, setAccountsError] = useState(null);
     const [activeSection, setActiveSection] = useState('accounts');
     const [sections, setSections] = useState([]);
     const [archivedSections, setArchivedSections] = useState([]);
@@ -24,12 +27,101 @@ function Settings() {
     const [confirmMessage, setConfirmMessage] = useState('');
     const [confirmAction, setConfirmAction] = useState(null);
 
+    const [showAccountModal, setShowAccountModal] = useState(false);
+    const [editingAccount, setEditingAccount] = useState(null);
+    const [accountSaving, setAccountSaving] = useState(false);
+    const [accountSections, setAccountSections] = useState([]);
+    const [accountSectionsLoading, setAccountSectionsLoading] = useState(false);
+    const [accountSectionsError, setAccountSectionsError] = useState(null);
+
     const [templates, setTemplates] = useState([]);
     const [templatesLoading, setTemplatesLoading] = useState(false);
     const [templatesError, setTemplatesError] = useState(null);
     const [templateToView, setTemplateToView] = useState(null);
     const [templateUploading, setTemplateUploading] = useState(false);
+    const [selectedTemplateFilenames, setSelectedTemplateFilenames] = useState(() => new Set());
     const templateFileInputRef = useRef(null);
+    const selectAllTemplatesRef = useRef(null);
+
+    const roleIdLabels = {
+        1: 'User',
+        2: 'Admin',
+        3: 'Super Admin',
+    };
+
+    const normalizeRoleLabel = (value) => {
+        if (!value) return null;
+        const raw = String(value).trim();
+        if (!raw) return null;
+        const lowered = raw.toLowerCase();
+        if (lowered === 'user') return 'User';
+        if (lowered === 'admin') return 'Admin';
+        if (lowered === 'super admin' || lowered === 'super_admin' || lowered === 'superadmin') return 'Super Admin';
+        return raw;
+    };
+
+    const mapProfileToAccount = (profile) => {
+        const user = profile?.user || {};
+        const rawFullName = profile?.raw_full_name ?? '';
+        const trimmedFullName = rawFullName ? String(rawFullName).trim() : '';
+        const name = trimmedFullName || 'No full name yet';
+        const roleId = profile?.role_id || user?.role_id || null;
+        const roleName = normalizeRoleLabel(profile?.role_name || profile?.role || user?.role_name || user?.role);
+        const role = roleIdLabels[roleId] || roleName || '—';
+        let status = profile?.status || user?.status || null;
+        if (!status && typeof profile?.is_active === 'boolean') {
+            status = profile.is_active ? 'Active' : 'Disabled';
+        }
+        if (!status && typeof user?.is_active === 'boolean') {
+            status = user.is_active ? 'Active' : 'Disabled';
+        }
+        if (!status) status = 'Active';
+        return {
+            id: profile?.id || user?.id || name,
+            profile_id: profile?.id || null,
+            user_id: profile?.user_id || user?.id || null,
+            raw_full_name: rawFullName,
+            full_name: profile?.full_name || null,
+            position: profile?.position || '',
+            section_id: profile?.section_id || null,
+            role_id: roleId,
+            name,
+            status,
+            role,
+        };
+    };
+
+    useEffect(() => {
+        if (activeSection !== 'accounts') return;
+        setAccountsLoading(true);
+        setAccountsError(null);
+        axios.get('/api/profiles')
+            .then((res) => {
+                const data = Array.isArray(res.data) ? res.data : [];
+                setAccounts(data.map(mapProfileToAccount));
+            })
+            .catch((err) => {
+                setAccountsError(err?.response?.data?.message || 'Failed to load accounts.');
+                setAccounts([]);
+            })
+            .finally(() => setAccountsLoading(false));
+    }, [activeSection]);
+
+    useEffect(() => {
+        if (!showAccountModal) return;
+        setAccountSectionsLoading(true);
+        setAccountSectionsError(null);
+        axios.get('/api/sections')
+            .then((res) => {
+                const data = Array.isArray(res.data) ? res.data : [];
+                setAccountSections(data);
+            })
+            .catch((err) => {
+                setAccountSectionsError(err?.response?.data?.message || 'Failed to load sections.');
+                setAccountSections([]);
+            })
+            .finally(() => setAccountSectionsLoading(false));
+    }, [showAccountModal]);
 
     useEffect(() => {
         if (activeSection !== 'departments') return;
@@ -72,6 +164,30 @@ function Settings() {
             })
             .finally(() => setTemplatesLoading(false));
     }, [activeSection]);
+
+    useEffect(() => {
+        const onVisibilityChange = () => {
+            if (document.visibilityState === 'visible' && activeSection === 'templates') {
+                setTemplatesLoading(true);
+                setTemplatesError(null);
+                axios.get('/api/templates')
+                    .then((res) => setTemplates(Array.isArray(res.data) ? res.data : []))
+                    .catch((err) => {
+                        setTemplatesError(err?.response?.data?.message || 'Failed to load templates.');
+                        setTemplates([]);
+                    })
+                    .finally(() => setTemplatesLoading(false));
+            }
+        };
+        document.addEventListener('visibilitychange', onVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+    }, [activeSection]);
+
+    useEffect(() => {
+        const el = selectAllTemplatesRef.current;
+        if (!el) return;
+        el.indeterminate = templates.length > 0 && selectedTemplateFilenames.size > 0 && selectedTemplateFilenames.size < templates.length;
+    }, [templates.length, selectedTemplateFilenames]);
 
     const openCreateSection = () => {
         setEditingSection(null);
@@ -277,15 +393,12 @@ function Settings() {
         templateFileInputRef.current?.click();
     };
 
-    const handleTemplateFileChange = (e) => {
-        const file = e.target.files?.[0];
-        e.target.value = '';
-        if (!file) return;
-        const ext = (file.name || '').toLowerCase().split('.').pop();
-        if (ext !== 'docx') {
-            setTemplatesError('Only .docx files are allowed.');
-            return;
-        }
+    const getTemplateBaseName = (fileName) => {
+        const base = (fileName || '').replace(/\.[^.]*$/, '').replace(/[^a-zA-Z0-9_\-\s]/g, '').trim().slice(0, 100) || 'template';
+        return base;
+    };
+
+    const uploadTemplateFile = (file) => {
         setTemplateUploading(true);
         setTemplatesError(null);
         const formData = new FormData();
@@ -295,14 +408,44 @@ function Settings() {
         })
             .then((res) => {
                 const data = res.data;
-                setTemplates((prev) => [...prev, { name: data.name, filename: data.filename, updated_at: data.updated_at, is_active: !!data.is_active }].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })));
-                setSuccessMessage('Template added successfully.');
+                setTemplates((prev) => {
+                    const byName = (t) => t.name === data.name;
+                    const next = prev.some(byName)
+                        ? prev.map((t) => (byName(t) ? { name: data.name, filename: data.filename, updated_at: data.updated_at, is_active: !!data.is_active } : t))
+                        : [...prev, { name: data.name, filename: data.filename, updated_at: data.updated_at, is_active: !!data.is_active }];
+                    return next.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+                });
+                const replaced = templates.some((t) => t.name === data.name);
+                setSuccessMessage(replaced ? 'Template replaced successfully.' : 'Template added successfully.');
                 setShowSuccessNotification(true);
             })
             .catch((err) => {
                 setTemplatesError(err?.response?.data?.message || 'Failed to add template.');
             })
             .finally(() => setTemplateUploading(false));
+    };
+
+    const handleTemplateFileChange = (e) => {
+        const file = e.target.files?.[0];
+        e.target.value = '';
+        if (!file) return;
+        const ext = (file.name || '').toLowerCase().split('.').pop();
+        if (ext !== 'docx') {
+            setTemplatesError('Only .docx files are allowed.');
+            return;
+        }
+        const baseName = getTemplateBaseName(file.name);
+        const existing = templates.find((t) => t.name === baseName);
+        if (existing) {
+            setConfirmMessage(`A template named "${baseName}" already exists. Replace it?`);
+            setConfirmAction(() => () => {
+                uploadTemplateFile(file);
+                setShowConfirmModal(false);
+            });
+            setShowConfirmModal(true);
+            return;
+        }
+        uploadTemplateFile(file);
     };
 
     const setTemplateInUse = (tpl) => {
@@ -317,6 +460,64 @@ function Settings() {
             });
     };
 
+    const deleteTemplate = (tpl) => {
+        setConfirmMessage(`Permanently delete template "${tpl.name}"? This cannot be undone.`);
+        setConfirmAction(() => () => {
+            axios.delete(`/api/templates/${encodeURIComponent(tpl.filename)}`)
+                .then(() => {
+                    setTemplates((prev) => prev.filter((t) => t.filename !== tpl.filename));
+                    if (templateToView?.filename === tpl.filename) setTemplateToView(null);
+                    setSuccessMessage('Template deleted.');
+                    setShowSuccessNotification(true);
+                    setShowConfirmModal(false);
+                })
+                .catch((err) => {
+                    setTemplatesError(err?.response?.data?.message || 'Failed to delete template.');
+                    setShowConfirmModal(false);
+                });
+        });
+        setShowConfirmModal(true);
+    };
+
+    const toggleTemplateSelection = (filename) => {
+        setSelectedTemplateFilenames((prev) => {
+            const next = new Set(prev);
+            if (next.has(filename)) next.delete(filename);
+            else next.add(filename);
+            return next;
+        });
+    };
+
+    const toggleSelectAllTemplates = () => {
+        setSelectedTemplateFilenames((prev) => {
+            if (prev.size === templates.length) return new Set();
+            return new Set(templates.map((t) => t.filename));
+        });
+    };
+
+    const deleteSelectedTemplates = () => {
+        const toDelete = new Set(selectedTemplateFilenames);
+        setConfirmMessage(`Permanently delete ${toDelete.size} templates? This cannot be undone.`);
+        setConfirmAction(() => () => {
+            const filenames = [...toDelete];
+            Promise.all(filenames.map((f) => axios.delete(`/api/templates/${encodeURIComponent(f)}`)))
+                .then(() => {
+                    setTemplates((prev) => prev.filter((t) => !toDelete.has(t.filename)));
+                    if (templateToView && toDelete.has(templateToView.filename)) setTemplateToView(null);
+                    setSelectedTemplateFilenames(new Set());
+                    setSuccessMessage('Templates deleted.');
+                    setShowSuccessNotification(true);
+                    setShowConfirmModal(false);
+                })
+                .catch((err) => {
+                    setTemplatesError(err?.response?.data?.message || 'Failed to delete some templates.');
+                    setShowConfirmModal(false);
+                });
+        });
+        setShowConfirmModal(true);
+    };
+
+
     const deleteSection = (section) => {
         if (!window.confirm(`Permanently delete section "${section.name}"? This cannot be undone.`)) return;
         axios.delete(`/api/sections/${section.id}`)
@@ -328,6 +529,35 @@ function Settings() {
             .catch((err) => {
                 alert(err?.response?.data?.message || 'Failed to delete section.');
             });
+    };
+
+    const openEditAccount = (account) => {
+        setEditingAccount(account);
+        setShowAccountModal(true);
+    };
+
+    const closeAccountModal = () => {
+        setShowAccountModal(false);
+        setEditingAccount(null);
+    };
+
+    const saveAccount = (payload) => {
+        if (!editingAccount?.profile_id) return;
+        setAccountSaving(true);
+        axios.put(`/api/profiles/${editingAccount.profile_id}`, payload)
+            .then((res) => {
+                const updated = mapProfileToAccount(res.data);
+                setAccounts((prev) => prev.map((item) => (
+                    item.profile_id === updated.profile_id ? { ...item, ...updated } : item
+                )));
+                setSuccessMessage('Account updated successfully.');
+                setShowSuccessNotification(true);
+                closeAccountModal();
+            })
+            .catch((err) => {
+                alert(err?.response?.data?.message || 'Failed to update account.');
+            })
+            .finally(() => setAccountSaving(false));
     };
 
     let sectionContent;
@@ -352,7 +582,19 @@ function Settings() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {accounts.length === 0 ? (
+                                {accountsLoading ? (
+                                    <tr>
+                                        <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                                            Loading...
+                                        </td>
+                                    </tr>
+                                ) : accountsError ? (
+                                    <tr>
+                                        <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#c00' }}>
+                                            {accountsError}
+                                        </td>
+                                    </tr>
+                                ) : accounts.length === 0 ? (
                                     <tr>
                                         <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
                                             No accounts yet. Add an account to get started.
@@ -370,7 +612,12 @@ function Settings() {
                                             </td>
                                             <td>{account.role}</td>
                                             <td className="settings__table-actions">
-                                                <button type="button" className="settings__icon-button" aria-label="Edit account">
+                                                <button
+                                                    type="button"
+                                                    className="settings__icon-button"
+                                                    aria-label="Edit account"
+                                                    onClick={() => openEditAccount(account)}
+                                                >
                                                     <img src="/images/edit_icon.svg" alt="" aria-hidden="true" />
                                                 </button>
                                                 <button type="button" className="settings__icon-button" aria-label="Disable account">
@@ -392,6 +639,16 @@ function Settings() {
                     <div className="settings__panel-header settings__panel-header--row">
                         <h2 id="templates-title" className="settings__section-title">Templates</h2>
                         <div className="settings__panel-header-actions">
+                            <button
+                                type="button"
+                                className="settings__archive-btn"
+                                onClick={deleteSelectedTemplates}
+                                disabled={selectedTemplateFilenames.size < 2}
+                                aria-label="Delete selected templates"
+                            >
+                                <img src={`${window.location.origin}/images/delete_icon.svg`} alt="" />
+                                Delete
+                            </button>
                             <input
                                 ref={templateFileInputRef}
                                 type="file"
@@ -408,7 +665,7 @@ function Settings() {
                                 aria-label="Add template"
                             >
                                 <img src={`${window.location.origin}/images/create_icon.svg`} alt="" />
-                                {templateUploading ? 'Adding...' : 'Add'}
+                                {templateUploading ? 'Adding...' : 'Add new template'}
                             </button>
                         </div>
                     </div>
@@ -417,7 +674,13 @@ function Settings() {
                             <thead>
                                 <tr>
                                     <th className="settings__table-check">
-                                        <input type="checkbox" aria-label="Select all templates" disabled />
+                                        <input
+                                            ref={selectAllTemplatesRef}
+                                            type="checkbox"
+                                            aria-label="Select all templates"
+                                            checked={templates.length > 0 && selectedTemplateFilenames.size === templates.length}
+                                            onChange={toggleSelectAllTemplates}
+                                        />
                                     </th>
                                     <th className="settings__table-actions">Actions</th>
                                     <th>Template</th>
@@ -447,7 +710,12 @@ function Settings() {
                                     templates.map((tpl) => (
                                         <tr key={tpl.filename}>
                                             <td className="settings__table-check">
-                                                <input type="checkbox" aria-label={`Select ${tpl.name}`} disabled />
+                                                <input
+                                                    type="checkbox"
+                                                    aria-label={`Select ${tpl.name}`}
+                                                    checked={selectedTemplateFilenames.has(tpl.filename)}
+                                                    onChange={() => toggleTemplateSelection(tpl.filename)}
+                                                />
                                             </td>
                                             <td className="settings__table-actions settings__template-actions">
                                                 <div className="settings__template-actions-inner">
@@ -470,6 +738,14 @@ function Settings() {
                                                         onClick={() => viewTemplate(tpl.filename, tpl.name)}
                                                     >
                                                         <img src="/images/view_icon.svg" alt="" aria-hidden="true" />
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="settings__icon-button"
+                                                        aria-label={`Delete ${tpl.name}`}
+                                                        onClick={() => deleteTemplate(tpl)}
+                                                    >
+                                                        <img src="/images/delete_icon.svg" alt="" aria-hidden="true" />
                                                     </button>
                                                 </div>
                                             </td>
@@ -777,6 +1053,17 @@ function Settings() {
                 templateFilename={templateToView?.filename}
                 templateName={templateToView?.name}
                 onClose={() => setTemplateToView(null)}
+            />
+
+            <AccountEditModal
+                isOpen={showAccountModal}
+                account={editingAccount}
+                sections={accountSections}
+                sectionsLoading={accountSectionsLoading}
+                sectionsError={accountSectionsError}
+                onClose={closeAccountModal}
+                onSave={saveAccount}
+                saving={accountSaving}
             />
         </div>
     );

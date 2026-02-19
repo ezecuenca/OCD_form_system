@@ -8,7 +8,7 @@ import FooterDocument from './FooterDocument';
 
 function isAdrTemplate(name, filename) {
     const base = (name || (filename || '').replace(/\.docx$/i, '')).replace(/\s+/g, '_').trim();
-    return /^ADR_template$/i.test(base);
+    return /^ADR_template/i.test(base);
 }
 
 function TemplateViewModal({ isOpen, templateFilename, templateName, onClose }) {

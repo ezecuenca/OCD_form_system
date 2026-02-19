@@ -11,6 +11,19 @@ use Illuminate\Validation\Rule;
 class ProfileController extends Controller
 {
     /**
+     * List profiles for schedule assignment.
+     */
+    public function index()
+    {
+        $profiles = Profile::with('user')
+            ->orderBy('full_name')
+            ->orderBy('id')
+            ->get();
+
+        return response()->json($profiles->map(fn (Profile $profile) => $this->serializeProfile($profile)));
+    }
+
+    /**
      * Get the authenticated user's profile (profile row + section name + email from users).
      */
     public function show(Request $request)
@@ -20,6 +33,7 @@ class ProfileController extends Controller
 
         if (!$profile) {
             return response()->json([
+                'id' => null,
                 'full_name' => null,
                 'username' => $user->username,
                 'section_id' => null,
@@ -32,6 +46,7 @@ class ProfileController extends Controller
 
         $section = $profile->section;
         return response()->json([
+            'id' => $profile->id,
             'full_name' => $profile->full_name,
             'username' => $user->username,
             'section_id' => $profile->section_id,
@@ -89,5 +104,75 @@ class ProfileController extends Controller
         });
 
         return $this->show($request);
+    }
+
+    /**
+     * Update a profile by id (admin only).
+     */
+    public function updateById(Request $request, $id)
+    {
+        $actor = $request->user();
+        if (!$actor || !in_array($actor->role_id, [2, 3], true)) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
+
+        $profile = Profile::with('user')->find($id);
+        if (!$profile) {
+            return response()->json(['message' => 'Profile not found.'], 404);
+        }
+
+        $validated = $request->validate([
+            'full_name' => ['nullable', 'string', 'max:255'],
+            'section_id' => ['nullable', 'integer', 'exists:section,id'],
+            'position' => ['nullable', 'string', 'max:255'],
+            'role_id' => ['nullable', 'integer', Rule::in([1, 2, 3])],
+        ]);
+
+        DB::transaction(function () use ($profile, $validated) {
+            $profile->update([
+                'full_name' => $validated['full_name'] ?? null,
+                'section_id' => $validated['section_id'] ?? null,
+                'position' => $validated['position'] ?? null,
+            ]);
+
+            if (
+                array_key_exists('role_id', $validated)
+                && $validated['role_id'] !== null
+                && $profile->user
+            ) {
+                $profile->user->update(['role_id' => $validated['role_id']]);
+            }
+        });
+
+        $profile->refresh()->load('user');
+
+        return response()->json($this->serializeProfile($profile));
+    }
+
+    private function serializeProfile(Profile $profile): array
+    {
+        $user = $profile->user;
+        $displayName = $profile->full_name;
+        if (!$displayName && $user) {
+            $displayName = $user->username;
+        }
+
+        return [
+            'id' => $profile->id,
+            'full_name' => $displayName,
+            'raw_full_name' => $profile->full_name,
+            'section_id' => $profile->section_id,
+            'position' => $profile->position,
+            'username' => $user ? $user->username : null,
+            'email' => $user ? $user->email : null,
+            'role_id' => $user ? $user->role_id : null,
+            'user_id' => $user ? $user->id : null,
+            'user' => $user ? [
+                'id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'role_id' => $user->role_id,
+            ] : null,
+        ];
     }
 }

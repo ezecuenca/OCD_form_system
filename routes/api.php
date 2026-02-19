@@ -4,7 +4,9 @@ use App\Http\Controllers\AdrFormController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExportDocxController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SectionsController;
+use App\Http\Controllers\SwappingRequestController;
 use App\Http\Controllers\TemplatesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +41,19 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('api.profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('api.profile.update');
+    Route::get('/profiles', [ProfileController::class, 'index'])->name('api.profiles.index');
+    Route::put('/profiles/{id}', [ProfileController::class, 'updateById'])->name('api.profiles.update');
+
+    Route::get('/schedules', [ScheduleController::class, 'index'])->name('api.schedules.index');
+    Route::post('/schedules', [ScheduleController::class, 'store'])->name('api.schedules.store');
+    Route::put('/schedules/{id}', [ScheduleController::class, 'update'])->name('api.schedules.update');
+    Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->name('api.schedules.destroy');
+
+    Route::get('/swapping-requests', [SwappingRequestController::class, 'index'])->name('api.swapping-requests.index');
+    Route::post('/swapping-requests', [SwappingRequestController::class, 'store'])->name('api.swapping-requests.store');
+    Route::post('/swapping-requests/{id}/approve', [SwappingRequestController::class, 'approve'])->name('api.swapping-requests.approve');
+    Route::post('/swapping-requests/{id}/deny', [SwappingRequestController::class, 'deny'])->name('api.swapping-requests.deny');
+    Route::post('/swapping-requests/{id}/archive', [SwappingRequestController::class, 'archive'])->name('api.swapping-requests.archive');
 
     Route::get('/adr-forms', [AdrFormController::class, 'index'])->name('api.adr-forms.index');
     Route::get('/adr-forms/{id}', [AdrFormController::class, 'show'])->name('api.adr-forms.show');
@@ -56,5 +71,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/templates', [TemplatesController::class, 'store'])->name('api.templates.store');
     Route::patch('/templates/set-active', [TemplatesController::class, 'setActive'])->name('api.templates.set-active');
     Route::get('/templates/{filename}/preview', [TemplatesController::class, 'preview'])->name('api.templates.preview')->where('filename', '[^/]+');
+    Route::delete('/templates/{filename}', [TemplatesController::class, 'destroy'])->name('api.templates.destroy')->where('filename', '[^/]+');
     Route::get('/templates/{filename}', [TemplatesController::class, 'show'])->name('api.templates.show')->where('filename', '[^/]+');
 });
