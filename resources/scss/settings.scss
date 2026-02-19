@@ -328,9 +328,10 @@
     white-space: nowrap;
 }
 
-/* Templates table: Actions column with check (in use) + view, spacing */
+/* Templates table: Actions column with check (in use) + view + delete, spacing */
 .settings__template-actions {
-    width: 160px;
+    width: 130px;
+    margin-left: 0.5rem;
 }
 
 .settings__template-actions-inner {

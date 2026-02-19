@@ -39,7 +39,9 @@ function Settings() {
     const [templatesError, setTemplatesError] = useState(null);
     const [templateToView, setTemplateToView] = useState(null);
     const [templateUploading, setTemplateUploading] = useState(false);
+    const [selectedTemplateFilenames, setSelectedTemplateFilenames] = useState(() => new Set());
     const templateFileInputRef = useRef(null);
+    const selectAllTemplatesRef = useRef(null);
 
     const roleIdLabels = {
         1: 'User',
@@ -162,6 +164,30 @@ function Settings() {
             })
             .finally(() => setTemplatesLoading(false));
     }, [activeSection]);
+
+    useEffect(() => {
+        const onVisibilityChange = () => {
+            if (document.visibilityState === 'visible' && activeSection === 'templates') {
+                setTemplatesLoading(true);
+                setTemplatesError(null);
+                axios.get('/api/templates')
+                    .then((res) => setTemplates(Array.isArray(res.data) ? res.data : []))
+                    .catch((err) => {
+                        setTemplatesError(err?.response?.data?.message || 'Failed to load templates.');
+                        setTemplates([]);
+                    })
+                    .finally(() => setTemplatesLoading(false));
+            }
+        };
+        document.addEventListener('visibilitychange', onVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+    }, [activeSection]);
+
+    useEffect(() => {
+        const el = selectAllTemplatesRef.current;
+        if (!el) return;
+        el.indeterminate = templates.length > 0 && selectedTemplateFilenames.size > 0 && selectedTemplateFilenames.size < templates.length;
+    }, [templates.length, selectedTemplateFilenames]);
 
     const openCreateSection = () => {
         setEditingSection(null);
@@ -367,15 +393,12 @@ function Settings() {
         templateFileInputRef.current?.click();
     };
 
-    const handleTemplateFileChange = (e) => {
-        const file = e.target.files?.[0];
-        e.target.value = '';
-        if (!file) return;
-        const ext = (file.name || '').toLowerCase().split('.').pop();
-        if (ext !== 'docx') {
-            setTemplatesError('Only .docx files are allowed.');
-            return;
-        }
+    const getTemplateBaseName = (fileName) => {
+        const base = (fileName || '').replace(/\.[^.]*$/, '').replace(/[^a-zA-Z0-9_\-\s]/g, '').trim().slice(0, 100) || 'template';
+        return base;
+    };
+
+    const uploadTemplateFile = (file) => {
         setTemplateUploading(true);
         setTemplatesError(null);
         const formData = new FormData();
@@ -385,14 +408,44 @@ function Settings() {
         })
             .then((res) => {
                 const data = res.data;
-                setTemplates((prev) => [...prev, { name: data.name, filename: data.filename, updated_at: data.updated_at, is_active: !!data.is_active }].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })));
-                setSuccessMessage('Template added successfully.');
+                setTemplates((prev) => {
+                    const byName = (t) => t.name === data.name;
+                    const next = prev.some(byName)
+                        ? prev.map((t) => (byName(t) ? { name: data.name, filename: data.filename, updated_at: data.updated_at, is_active: !!data.is_active } : t))
+                        : [...prev, { name: data.name, filename: data.filename, updated_at: data.updated_at, is_active: !!data.is_active }];
+                    return next.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+                });
+                const replaced = templates.some((t) => t.name === data.name);
+                setSuccessMessage(replaced ? 'Template replaced successfully.' : 'Template added successfully.');
                 setShowSuccessNotification(true);
             })
             .catch((err) => {
                 setTemplatesError(err?.response?.data?.message || 'Failed to add template.');
             })
             .finally(() => setTemplateUploading(false));
+    };
+
+    const handleTemplateFileChange = (e) => {
+        const file = e.target.files?.[0];
+        e.target.value = '';
+        if (!file) return;
+        const ext = (file.name || '').toLowerCase().split('.').pop();
+        if (ext !== 'docx') {
+            setTemplatesError('Only .docx files are allowed.');
+            return;
+        }
+        const baseName = getTemplateBaseName(file.name);
+        const existing = templates.find((t) => t.name === baseName);
+        if (existing) {
+            setConfirmMessage(`A template named "${baseName}" already exists. Replace it?`);
+            setConfirmAction(() => () => {
+                uploadTemplateFile(file);
+                setShowConfirmModal(false);
+            });
+            setShowConfirmModal(true);
+            return;
+        }
+        uploadTemplateFile(file);
     };
 
     const setTemplateInUse = (tpl) => {
@@ -406,6 +459,64 @@ function Settings() {
                 setTemplatesError(err?.response?.data?.message || 'Failed to set template in use.');
             });
     };
+
+    const deleteTemplate = (tpl) => {
+        setConfirmMessage(`Permanently delete template "${tpl.name}"? This cannot be undone.`);
+        setConfirmAction(() => () => {
+            axios.delete(`/api/templates/${encodeURIComponent(tpl.filename)}`)
+                .then(() => {
+                    setTemplates((prev) => prev.filter((t) => t.filename !== tpl.filename));
+                    if (templateToView?.filename === tpl.filename) setTemplateToView(null);
+                    setSuccessMessage('Template deleted.');
+                    setShowSuccessNotification(true);
+                    setShowConfirmModal(false);
+                })
+                .catch((err) => {
+                    setTemplatesError(err?.response?.data?.message || 'Failed to delete template.');
+                    setShowConfirmModal(false);
+                });
+        });
+        setShowConfirmModal(true);
+    };
+
+    const toggleTemplateSelection = (filename) => {
+        setSelectedTemplateFilenames((prev) => {
+            const next = new Set(prev);
+            if (next.has(filename)) next.delete(filename);
+            else next.add(filename);
+            return next;
+        });
+    };
+
+    const toggleSelectAllTemplates = () => {
+        setSelectedTemplateFilenames((prev) => {
+            if (prev.size === templates.length) return new Set();
+            return new Set(templates.map((t) => t.filename));
+        });
+    };
+
+    const deleteSelectedTemplates = () => {
+        const toDelete = new Set(selectedTemplateFilenames);
+        setConfirmMessage(`Permanently delete ${toDelete.size} templates? This cannot be undone.`);
+        setConfirmAction(() => () => {
+            const filenames = [...toDelete];
+            Promise.all(filenames.map((f) => axios.delete(`/api/templates/${encodeURIComponent(f)}`)))
+                .then(() => {
+                    setTemplates((prev) => prev.filter((t) => !toDelete.has(t.filename)));
+                    if (templateToView && toDelete.has(templateToView.filename)) setTemplateToView(null);
+                    setSelectedTemplateFilenames(new Set());
+                    setSuccessMessage('Templates deleted.');
+                    setShowSuccessNotification(true);
+                    setShowConfirmModal(false);
+                })
+                .catch((err) => {
+                    setTemplatesError(err?.response?.data?.message || 'Failed to delete some templates.');
+                    setShowConfirmModal(false);
+                });
+        });
+        setShowConfirmModal(true);
+    };
+
 
     const deleteSection = (section) => {
         if (!window.confirm(`Permanently delete section "${section.name}"? This cannot be undone.`)) return;
@@ -528,6 +639,16 @@ function Settings() {
                     <div className="settings__panel-header settings__panel-header--row">
                         <h2 id="templates-title" className="settings__section-title">Templates</h2>
                         <div className="settings__panel-header-actions">
+                            <button
+                                type="button"
+                                className="settings__archive-btn"
+                                onClick={deleteSelectedTemplates}
+                                disabled={selectedTemplateFilenames.size < 2}
+                                aria-label="Delete selected templates"
+                            >
+                                <img src={`${window.location.origin}/images/delete_icon.svg`} alt="" />
+                                Delete
+                            </button>
                             <input
                                 ref={templateFileInputRef}
                                 type="file"
@@ -544,7 +665,7 @@ function Settings() {
                                 aria-label="Add template"
                             >
                                 <img src={`${window.location.origin}/images/create_icon.svg`} alt="" />
-                                {templateUploading ? 'Adding...' : 'Add'}
+                                {templateUploading ? 'Adding...' : 'Add new template'}
                             </button>
                         </div>
                     </div>
@@ -553,7 +674,13 @@ function Settings() {
                             <thead>
                                 <tr>
                                     <th className="settings__table-check">
-                                        <input type="checkbox" aria-label="Select all templates" disabled />
+                                        <input
+                                            ref={selectAllTemplatesRef}
+                                            type="checkbox"
+                                            aria-label="Select all templates"
+                                            checked={templates.length > 0 && selectedTemplateFilenames.size === templates.length}
+                                            onChange={toggleSelectAllTemplates}
+                                        />
                                     </th>
                                     <th className="settings__table-actions">Actions</th>
                                     <th>Template</th>
@@ -583,7 +710,12 @@ function Settings() {
                                     templates.map((tpl) => (
                                         <tr key={tpl.filename}>
                                             <td className="settings__table-check">
-                                                <input type="checkbox" aria-label={`Select ${tpl.name}`} disabled />
+                                                <input
+                                                    type="checkbox"
+                                                    aria-label={`Select ${tpl.name}`}
+                                                    checked={selectedTemplateFilenames.has(tpl.filename)}
+                                                    onChange={() => toggleTemplateSelection(tpl.filename)}
+                                                />
                                             </td>
                                             <td className="settings__table-actions settings__template-actions">
                                                 <div className="settings__template-actions-inner">
@@ -606,6 +738,14 @@ function Settings() {
                                                         onClick={() => viewTemplate(tpl.filename, tpl.name)}
                                                     >
                                                         <img src="/images/view_icon.svg" alt="" aria-hidden="true" />
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="settings__icon-button"
+                                                        aria-label={`Delete ${tpl.name}`}
+                                                        onClick={() => deleteTemplate(tpl)}
+                                                    >
+                                                        <img src="/images/delete_icon.svg" alt="" aria-hidden="true" />
                                                     </button>
                                                 </div>
                                             </td>

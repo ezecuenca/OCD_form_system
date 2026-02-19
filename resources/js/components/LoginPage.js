@@ -46,7 +46,7 @@ function LoginPage() {
                 username,
                 password,
             });
-            navigate('/dashboard');
+            navigate('/schedule', { state: { loginSuccess: true } });
         } catch (err) {
             const response = err?.response?.data;
             if (response?.errors) {

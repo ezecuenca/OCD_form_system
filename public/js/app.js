@@ -68974,11 +68974,14 @@ function ADRForm() {
       id: 1,
       report: '',
       remarks: '',
-      reportAsBullets: false
+      reportAsBullets: false,
+      alignReport: 'left',
+      alignRemarks: 'left'
     }]),
     _useState24 = _slicedToArray(_useState23, 2),
     reportsItems = _useState24[0],
     setReportsItems = _useState24[1];
+  var reportsFieldRefs = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({});
 
   // Modals
   var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
@@ -69238,9 +69241,89 @@ function ADRForm() {
         id: newId,
         report: '',
         remarks: '',
-        reportAsBullets: false
+        reportAsBullets: false,
+        alignReport: 'left',
+        alignRemarks: 'left'
       }]);
     });
+  };
+  var updateReportsAlign = function updateReportsAlign(itemId, field, align) {
+    setReportsItems(function (prev) {
+      return prev.map(function (i) {
+        return i.id === itemId ? _objectSpread(_objectSpread({}, i), {}, _defineProperty({}, field, align)) : i;
+      });
+    });
+  };
+  var getSelectionOrCurrentLine = function getSelectionOrCurrentLine(v, start, end) {
+    if (start < end) return {
+      start: start,
+      end: end
+    };
+    var lineStart = v.lastIndexOf('\n', start - 1) + 1;
+    var lineEnd = v.indexOf('\n', start);
+    if (lineEnd === -1) lineEnd = v.length;
+    return {
+      start: lineStart,
+      end: lineEnd
+    };
+  };
+  var indentReportsField = function indentReportsField(itemId, field) {
+    var ta = reportsFieldRefs.current["".concat(itemId, "-").concat(field)];
+    if (!ta) return;
+    var v = ta.value;
+    var selStart = ta.selectionStart;
+    var selEnd = ta.selectionEnd;
+    var _getSelectionOrCurren = getSelectionOrCurrentLine(v, selStart, selEnd),
+      start = _getSelectionOrCurren.start,
+      end = _getSelectionOrCurren.end;
+    var before = v.slice(0, start);
+    var sel = v.slice(start, end);
+    var after = v.slice(end);
+    var indentStr = '    ';
+    var newSel = sel.split('\n').map(function (line) {
+      return indentStr + line;
+    }).join('\n');
+    var newVal = before + newSel + after;
+    var newEnd = start + newSel.length;
+    setReportsItems(function (prev) {
+      return prev.map(function (i) {
+        return i.id === itemId ? _objectSpread(_objectSpread({}, i), {}, _defineProperty({}, field, newVal)) : i;
+      });
+    });
+    setTimeout(function () {
+      ta.focus();
+      ta.setSelectionRange(start, newEnd);
+    }, 0);
+  };
+  var outdentReportsField = function outdentReportsField(itemId, field) {
+    var ta = reportsFieldRefs.current["".concat(itemId, "-").concat(field)];
+    if (!ta) return;
+    var v = ta.value;
+    var selStart = ta.selectionStart;
+    var selEnd = ta.selectionEnd;
+    var _getSelectionOrCurren2 = getSelectionOrCurrentLine(v, selStart, selEnd),
+      start = _getSelectionOrCurren2.start,
+      end = _getSelectionOrCurren2.end;
+    var lines = v.split('\n');
+    var charIdx = 0;
+    var newLines = lines.map(function (line) {
+      var _line$match$0$length, _line$match;
+      var len = line.length;
+      var lineStart = charIdx;
+      charIdx += len + 1;
+      if (lineStart >= end || lineStart + len <= start) return line;
+      var toRemove = Math.min(4, (_line$match$0$length = (_line$match = line.match(/^[ \t]+/)) === null || _line$match === void 0 || (_line$match = _line$match[0]) === null || _line$match === void 0 ? void 0 : _line$match.length) !== null && _line$match$0$length !== void 0 ? _line$match$0$length : 0);
+      return line.slice(toRemove);
+    });
+    var newVal = newLines.join('\n');
+    setReportsItems(function (prev) {
+      return prev.map(function (i) {
+        return i.id === itemId ? _objectSpread(_objectSpread({}, i), {}, _defineProperty({}, field, newVal)) : i;
+      });
+    });
+    setTimeout(function () {
+      return ta === null || ta === void 0 ? void 0 : ta.focus();
+    }, 0);
   };
   var removeReportsItem = function removeReportsItem(id) {
     setReportsItems(function (prev) {
@@ -69341,26 +69424,6 @@ function ADRForm() {
   };
   var updateOtherAdminRow = function updateOtherAdminRow(id, field, value) {
     setOtherAdminRows(otherAdminRows.map(function (row) {
-      return row.id === id ? _objectSpread(_objectSpread({}, row), {}, _defineProperty({}, field, value)) : row;
-    }));
-  };
-  var addEndorsedItemsRow = function addEndorsedItemsRow() {
-    var newId = Math.max.apply(Math, _toConsumableArray(endorsedItemsRows.map(function (row) {
-      return row.id;
-    })).concat([0])) + 1;
-    setEndorsedItemsRows([].concat(_toConsumableArray(endorsedItemsRows), [{
-      id: newId,
-      item: '',
-      itemAsBullets: false
-    }]));
-  };
-  var removeEndorsedItemsRow = function removeEndorsedItemsRow(id) {
-    setEndorsedItemsRows(endorsedItemsRows.filter(function (row) {
-      return row.id !== id;
-    }));
-  };
-  var updateEndorsedItemsRow = function updateEndorsedItemsRow(id, field, value) {
-    setEndorsedItemsRows(endorsedItemsRows.map(function (row) {
       return row.id === id ? _objectSpread(_objectSpread({}, row), {}, _defineProperty({}, field, value)) : row;
     }));
   };
@@ -69681,14 +69744,13 @@ function ADRForm() {
             className: "adr-form__field",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
               children: "Prepared By:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-              className: "adr-form__signature-name-input",
-              rows: 2,
-              placeholder: "Name (use Enter for line break)",
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+              type: "text",
               value: preparedBy,
               onChange: function onChange(e) {
                 return setPreparedBy(e.target.value);
-              }
+              },
+              placeholder: "Name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
@@ -69705,14 +69767,13 @@ function ADRForm() {
             className: "adr-form__field",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
               children: "Received By:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-              className: "adr-form__signature-name-input",
-              rows: 2,
-              placeholder: "Name (use Enter for line break)",
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+              type: "text",
               value: receivedBy,
               onChange: function onChange(e) {
                 return setReceivedBy(e.target.value);
-              }
+              },
+              placeholder: "Name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
@@ -69953,10 +70014,13 @@ function ADRForm() {
                   className: "adr-form__modal-table-number",
                   children: "#"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-name-col",
                   children: "Name"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-task-col",
                   children: "Task"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-actions-col",
                   children: "Actions"
                 })]
               })
@@ -69969,10 +70033,11 @@ function ADRForm() {
                     className: "adr-form__modal-table-number",
                     children: index + 1
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter name",
+                    className: "adr-form__modal-table-name-col",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
+                      placeholder: "Enter name(s) \u2014 add another line for more names",
+                      rows: 2,
                       value: item.name,
                       onChange: function onChange(e) {
                         var value = e.target.value;
@@ -69986,6 +70051,7 @@ function ADRForm() {
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-task-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
                       className: "adr-form__modal-input adr-form__modal-textarea",
                       placeholder: "Enter task (press Enter for each bullet)",
@@ -70003,6 +70069,7 @@ function ADRForm() {
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-actions-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                       className: "adr-form__modal-action-btn",
                       type: "button",
@@ -70084,10 +70151,13 @@ function ADRForm() {
                   className: "adr-form__modal-table-number",
                   children: "#"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-report-col",
                   children: "Reports and Advisories Released"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-remarks-col",
                   children: "Remarks"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-actions-col",
                   children: "Actions"
                 })]
               })
@@ -70099,11 +70169,96 @@ function ADRForm() {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                     className: "adr-form__modal-table-number",
                     children: index + 1
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
+                    className: "adr-form__modal-table-report-col",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+                      className: "adr-form__field-toolbar",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                        className: "adr-form__field-toolbar-label",
+                        children: "Align"
+                      }), [{
+                        align: 'left',
+                        icon: '/images/left_align.svg'
+                      }, {
+                        align: 'center',
+                        icon: '/images/center.svg'
+                      }, {
+                        align: 'right',
+                        icon: '/images/right_align.svg'
+                      }, {
+                        align: 'justify',
+                        icon: '/images/justify.svg'
+                      }].map(function (_ref2) {
+                        var align = _ref2.align,
+                          icon = _ref2.icon;
+                        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+                          type: "button",
+                          className: "adr-form__toolbar-btn adr-form__toolbar-btn--icon ".concat((item.alignReport || 'left') === align ? 'adr-form__toolbar-btn--active' : ''),
+                          onClick: function onClick() {
+                            return updateReportsAlign(item.id, 'alignReport', align);
+                          },
+                          title: "Align ".concat(align),
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
+                            src: icon,
+                            alt: "",
+                            "aria-hidden": true
+                          })
+                        }, align);
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                        className: "adr-form__field-toolbar-sep",
+                        "aria-hidden": true,
+                        children: "|"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+                        type: "button",
+                        className: "adr-form__toolbar-btn adr-form__toolbar-btn--icon",
+                        onClick: function onClick() {
+                          return indentReportsField(item.id, 'report');
+                        },
+                        title: "Indent selected lines",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
+                          viewBox: "0 0 24 24",
+                          fill: "none",
+                          stroke: "currentColor",
+                          strokeWidth: "2",
+                          width: "16",
+                          height: "16",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
+                            d: "M9 6h12M9 12h12M9 18h12M3 6v12l4-4-4-4z",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round"
+                          })
+                        })
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+                        type: "button",
+                        className: "adr-form__toolbar-btn adr-form__toolbar-btn--icon",
+                        onClick: function onClick() {
+                          return outdentReportsField(item.id, 'report');
+                        },
+                        title: "Outdent selected lines",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
+                          viewBox: "0 0 24 24",
+                          fill: "none",
+                          stroke: "currentColor",
+                          strokeWidth: "2",
+                          width: "16",
+                          height: "16",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
+                            d: "M15 6H3M15 12H3M15 18H3M21 9l-4 4 4 4V9z",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round"
+                          })
+                        })
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      ref: function ref(el) {
+                        reportsFieldRefs.current["".concat(item.id, "-report")] = el;
+                      },
                       className: "adr-form__modal-input adr-form__modal-textarea",
+                      style: {
+                        textAlign: item.alignReport || 'left'
+                      },
                       placeholder: "Enter reports and advisories released (use new line to break text)",
-                      rows: "3",
+                      rows: 3,
                       value: item.report,
                       onChange: function onChange(e) {
                         var value = e.target.value;
@@ -70115,12 +70270,97 @@ function ADRForm() {
                           });
                         });
                       }
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
+                    className: "adr-form__modal-table-remarks-col",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+                      className: "adr-form__field-toolbar",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                        className: "adr-form__field-toolbar-label",
+                        children: "Align"
+                      }), [{
+                        align: 'left',
+                        icon: '/images/left_align.svg'
+                      }, {
+                        align: 'center',
+                        icon: '/images/center.svg'
+                      }, {
+                        align: 'right',
+                        icon: '/images/right_align.svg'
+                      }, {
+                        align: 'justify',
+                        icon: '/images/justify.svg'
+                      }].map(function (_ref3) {
+                        var align = _ref3.align,
+                          icon = _ref3.icon;
+                        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+                          type: "button",
+                          className: "adr-form__toolbar-btn adr-form__toolbar-btn--icon ".concat((item.alignRemarks || 'left') === align ? 'adr-form__toolbar-btn--active' : ''),
+                          onClick: function onClick() {
+                            return updateReportsAlign(item.id, 'alignRemarks', align);
+                          },
+                          title: "Align ".concat(align),
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
+                            src: icon,
+                            alt: "",
+                            "aria-hidden": true
+                          })
+                        }, align);
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                        className: "adr-form__field-toolbar-sep",
+                        "aria-hidden": true,
+                        children: "|"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+                        type: "button",
+                        className: "adr-form__toolbar-btn adr-form__toolbar-btn--icon",
+                        onClick: function onClick() {
+                          return indentReportsField(item.id, 'remarks');
+                        },
+                        title: "Indent selected lines",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
+                          viewBox: "0 0 24 24",
+                          fill: "none",
+                          stroke: "currentColor",
+                          strokeWidth: "2",
+                          width: "16",
+                          height: "16",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
+                            d: "M9 6h12M9 12h12M9 18h12M3 6v12l4-4-4-4z",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round"
+                          })
+                        })
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+                        type: "button",
+                        className: "adr-form__toolbar-btn adr-form__toolbar-btn--icon",
+                        onClick: function onClick() {
+                          return outdentReportsField(item.id, 'remarks');
+                        },
+                        title: "Outdent selected lines",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
+                          viewBox: "0 0 24 24",
+                          fill: "none",
+                          stroke: "currentColor",
+                          strokeWidth: "2",
+                          width: "16",
+                          height: "16",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
+                            d: "M15 6H3M15 12H3M15 18H3M21 9l-4 4 4 4V9z",
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round"
+                          })
+                        })
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      ref: function ref(el) {
+                        reportsFieldRefs.current["".concat(item.id, "-remarks")] = el;
+                      },
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--remarks",
+                      style: {
+                        textAlign: item.alignRemarks || 'left'
+                      },
                       placeholder: "Enter remarks",
-                      rows: "2",
+                      rows: 3,
                       value: item.remarks,
                       onChange: function onChange(e) {
                         var value = e.target.value;
@@ -70132,8 +70372,9 @@ function ADRForm() {
                           });
                         });
                       }
-                    })
+                    })]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-actions-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                       className: "adr-form__modal-action-btn",
                       type: "button",
@@ -70400,75 +70641,27 @@ function ADRForm() {
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "adr-form__modal-body",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
-            className: "adr-form__modal-table",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
-                  style: {
-                    width: '70px'
-                  }
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
-                  children: "Item"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
-                  style: {
-                    width: '60px'
-                  },
-                  children: "Action"
-                })]
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
-              children: endorsedItemsRows.map(function (row, index) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
-                    children: ["1.", index + 1]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      className: "adr-form__modal-input adr-form__modal-textarea",
-                      placeholder: "Enter item (press Enter for each bullet)",
-                      rows: "3",
-                      value: row.item,
-                      onChange: function onChange(e) {
-                        return updateEndorsedItemsRow(row.id, 'item', e.target.value);
-                      }
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-                      className: "adr-form__modal-action-btn",
-                      type: "button",
-                      onClick: function onClick() {
-                        return removeEndorsedItemsRow(row.id);
-                      },
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
-                        viewBox: "0 0 24 24",
-                        fill: "none",
-                        xmlns: "http://www.w3.org/2000/svg",
-                        width: "16",
-                        height: "16",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
-                          d: "M3 6H5H21",
-                          stroke: "currentColor",
-                          strokeWidth: "2",
-                          strokeLinecap: "round",
-                          strokeLinejoin: "round"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
-                          d: "M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z",
-                          stroke: "currentColor",
-                          strokeWidth: "2",
-                          strokeLinecap: "round",
-                          strokeLinejoin: "round"
-                        })]
-                      })
-                    })
-                  })]
-                }, row.id);
-              })
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-            className: "adr-form__modal-add-row",
-            type: "button",
-            onClick: addEndorsedItemsRow,
-            children: "Add Row"
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+            className: "adr-form__modal-hint",
+            children: "List endorsed items. Press Enter for each item (e.g. 1.1, 1.2, 1.3)."
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+            className: "adr-form__modal-input adr-form__modal-textarea",
+            placeholder: "e.g. 3 keys, 4 bars",
+            rows: 6,
+            value: endorsedItemsRows.map(function (r) {
+              return r.item;
+            }).join('\n'),
+            onChange: function onChange(e) {
+              var text = e.target.value;
+              var lines = text.split('\n');
+              setEndorsedItemsRows(lines.map(function (line, index) {
+                return {
+                  id: index + 1,
+                  item: line,
+                  itemAsBullets: false
+                };
+              }));
+            }
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__modal-footer",
@@ -71333,6 +71526,13 @@ function signatureNameWithBreaks(name) {
   }
   return s;
 }
+
+/** Strip leading hyphen and/or "1.1 ", "1.2 ", etc. so list numbering is not duplicated and no stray hyphen shows. */
+function stripEndorsedNumber(item) {
+  if (item == null || typeof item !== 'string') return item;
+  var s = item.replace(/^\s*(-\s*)?(1\.\d+\s*)?/i, '').trim();
+  return s || item.trim();
+}
 function renderMultiline(text, asBullets) {
   if (!(text !== null && text !== void 0 && text.trim())) return '-';
   var useBullets = asBullets || text && text.includes('\n');
@@ -71600,16 +71800,26 @@ function AdrDocumentBody(_ref) {
                 children: index + 1
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
                 className: "document-viewer__table-report",
+                style: {
+                  textAlign: item.alignReport || 'left'
+                },
                 children: (_item$report = item.report) !== null && _item$report !== void 0 && _item$report.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
                   className: "document-viewer__report-text",
-                  children: item.report.split(/\n/).map(function (line, i) {
-                    return line.trim() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-                      children: line.trim()
-                    }, i) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("br", {}, i);
+                  children: item.report.split(/\n/).map(function (line) {
+                    return line.trim();
+                  }).filter(function (line) {
+                    return line !== '';
+                  }).map(function (line, i) {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+                      children: line
+                    }, i);
                   })
                 }) : emptyDisplay
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("td", {
                 className: "document-viewer__table-remarks",
+                style: {
+                  textAlign: item.alignRemarks || 'left'
+                },
                 children: dash(item.remarks)
               })]
             }, "reports-".concat(index, "-").concat((_item$id2 = item.id) !== null && _item$id2 !== void 0 ? _item$id2 : ''));
@@ -71761,10 +71971,14 @@ function AdrDocumentBody(_ref) {
           children: "1. The following were endorsed to incoming Operations Duty Staff:"
         }), report.endorsedItemsRows && report.endorsedItemsRows.length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("ol", {
           className: "document-viewer__endorsed-list",
-          children: report.endorsedItemsRows.map(function (row, index) {
+          children: report.endorsedItemsRows.filter(function (row) {
+            return (row.item || '').trim() !== '';
+          }).map(function (row, index) {
+            var stripped = stripEndorsedNumber(row.item);
+            var isEmpty = !stripped || stripped.trim() === '-';
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("li", {
               "data-break-point": true,
-              children: renderMultiline(row.item, row.itemAsBullets)
+              children: !isEmpty ? renderMultiline(stripped, row.itemAsBullets) : "\xA0"
             }, row.id || index);
           })
         }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
@@ -73989,7 +74203,11 @@ function LoginPage() {
               password: password
             });
           case 3:
-            navigate('/dashboard');
+            navigate('/schedule', {
+              state: {
+                loginSuccess: true
+              }
+            });
             _context.n = 5;
             break;
           case 4:
@@ -74648,10 +74866,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _TasksModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TasksModal */ "./resources/js/components/TasksModal.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _TasksModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TasksModal */ "./resources/js/components/TasksModal.js");
+/* harmony import */ var _SuccessNotification__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./SuccessNotification */ "./resources/js/components/SuccessNotification.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -74671,7 +74891,11 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
+
 function Schedule() {
+  var _location$state2;
+  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useLocation)();
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useNavigate)();
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
     tasks = _useState2[0],
@@ -74688,6 +74912,14 @@ function Schedule() {
     _useState8 = _slicedToArray(_useState7, 2),
     user = _useState8[0],
     setUser = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState0 = _slicedToArray(_useState9, 2),
+    showSuccessNotification = _useState0[0],
+    setShowSuccessNotification = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState10 = _slicedToArray(_useState1, 2),
+    successMessage = _useState10[0],
+    setSuccessMessage = _useState10[1];
   var getFirstName = function getFirstName(fullName) {
     if (!fullName) return '—';
     return String(fullName).trim().split(/\s+/)[0] || '—';
@@ -74713,7 +74945,7 @@ function Schedule() {
             case 0:
               _context.p = 0;
               _context.n = 1;
-              return Promise.all([axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/schedules'), axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/profiles')]);
+              return Promise.all([axios__WEBPACK_IMPORTED_MODULE_3___default().get('/api/schedules'), axios__WEBPACK_IMPORTED_MODULE_3___default().get('/api/profiles')]);
             case 1:
               _yield$Promise$all = _context.v;
               _yield$Promise$all2 = _slicedToArray(_yield$Promise$all, 2);
@@ -74761,14 +74993,14 @@ function Schedule() {
     };
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/auth/me').then(function (res) {
+    axios__WEBPACK_IMPORTED_MODULE_3___default().get('/api/auth/me').then(function (res) {
       setUser(res.data);
     })["catch"](function () {
       setUser(null);
     });
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/profile').then(function (res) {
+    axios__WEBPACK_IMPORTED_MODULE_3___default().get('/api/profile').then(function (res) {
       var _res$data;
       var idValue = (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.id;
       setCurrentProfileId(idValue ? String(idValue) : '');
@@ -74776,6 +75008,17 @@ function Schedule() {
       setCurrentProfileId('');
     });
   }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var _location$state;
+    if ((_location$state = location.state) !== null && _location$state !== void 0 && _location$state.loginSuccess) {
+      setSuccessMessage('Logged in successfully.');
+      setShowSuccessNotification(true);
+      navigate(location.pathname, {
+        replace: true,
+        state: {}
+      });
+    }
+  }, [(_location$state2 = location.state) === null || _location$state2 === void 0 ? void 0 : _location$state2.loginSuccess, navigate, location.pathname]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var isMounted = true;
     var updatePendingCount = /*#__PURE__*/function () {
@@ -74786,7 +75029,7 @@ function Schedule() {
             case 0:
               _context2.p = 0;
               _context2.n = 1;
-              return axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/swapping-requests', {
+              return axios__WEBPACK_IMPORTED_MODULE_3___default().get('/api/swapping-requests', {
                 params: {
                   status: 'pending'
                 }
@@ -74827,34 +75070,34 @@ function Schedule() {
       isMounted = false;
     };
   }, []);
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
-    _useState0 = _slicedToArray(_useState9, 2),
-    currentDate = _useState0[0],
-    setCurrentDate = _useState0[1];
-  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    _useState10 = _slicedToArray(_useState1, 2),
-    showTaskForm = _useState10[0],
-    setShowTaskForm = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
     _useState12 = _slicedToArray(_useState11, 2),
-    selectedDate = _useState12[0],
-    setSelectedDate = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    currentDate = _useState12[0],
+    setCurrentDate = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState14 = _slicedToArray(_useState13, 2),
-    selectedTask = _useState14[0],
-    setSelectedTask = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('add'),
+    showTaskForm = _useState14[0],
+    setShowTaskForm = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState16 = _slicedToArray(_useState15, 2),
-    modalMode = _useState16[0],
-    setModalMode = _useState16[1]; // 'add' | 'view' | 'edit' | 'swap'
+    selectedDate = _useState16[0],
+    setSelectedDate = _useState16[1];
   var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState18 = _slicedToArray(_useState17, 2),
-    taskToSwap = _useState18[0],
-    setTaskToSwap = _useState18[1];
-  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    selectedTask = _useState18[0],
+    setSelectedTask = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('add'),
     _useState20 = _slicedToArray(_useState19, 2),
-    pendingSwapCount = _useState20[0],
-    setPendingSwapCount = _useState20[1];
+    modalMode = _useState20[0],
+    setModalMode = _useState20[1]; // 'add' | 'view' | 'edit' | 'swap'
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState22 = _slicedToArray(_useState21, 2),
+    taskToSwap = _useState22[0],
+    setTaskToSwap = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState24 = _slicedToArray(_useState23, 2),
+    pendingSwapCount = _useState24[0],
+    setPendingSwapCount = _useState24[1];
   var daysInMonth = function daysInMonth(date) {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -74924,7 +75167,7 @@ function Schedule() {
               status: 'active'
             };
             _context3.n = 1;
-            return axios__WEBPACK_IMPORTED_MODULE_2___default().post('/api/schedules', payload);
+            return axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/schedules', payload);
           case 1:
             response = _context3.v;
             setTasks(function (prev) {
@@ -74953,7 +75196,7 @@ function Schedule() {
     setShowTaskForm(true);
   };
   var submitSwapRequest = function submitSwapRequest(payload) {
-    axios__WEBPACK_IMPORTED_MODULE_2___default().post('/api/swapping-requests', payload).then(function () {
+    axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/swapping-requests', payload).then(function () {
       setPendingSwapCount(function (prev) {
         return prev + 1;
       });
@@ -74998,14 +75241,14 @@ function Schedule() {
   });
   var days = getDaysArray();
   var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
     className: "schedule",
-    children: [modalMode === 'swap' && taskToSwap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    children: [modalMode === 'swap' && taskToSwap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "schedule__swap-banner",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("p", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("p", {
         className: "schedule__swap-banner-text",
         children: ["Request Swap: Click a day to select target date \u2014 Moving \"", taskToSwap === null || taskToSwap === void 0 ? void 0 : taskToSwap.name, "\" from ", formatDate(taskToSwap === null || taskToSwap === void 0 ? void 0 : taskToSwap.date)]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
         className: "schedule__swap-cancel",
         onClick: function onClick() {
           setModalMode('add');
@@ -75015,38 +75258,38 @@ function Schedule() {
         },
         children: "Cancel"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
       className: "schedule__content",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
         className: "schedule__card",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
           className: "schedule__month-header",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
             className: "schedule__month-btn",
             onClick: previousMonth,
             children: "\u2190 Previous"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h2", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h2", {
             className: "schedule__month-title",
             children: monthName
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
             className: "schedule__month-btn",
             onClick: nextMonth,
             children: "Next \u2192"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "schedule__weekdays",
           children: dayNames.map(function (day) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
               className: "schedule__weekday",
               children: day
             }, day);
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "schedule__grid",
           children: days.map(function (day, index) {
             var dayTasks = getTasksForDate(day);
             var isToday = day && currentDate.getFullYear() === new Date().getFullYear() && currentDate.getMonth() === new Date().getMonth() && day === new Date().getDate();
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
               className: "schedule__day \n                                        ".concat(day ? 'schedule__day--active' : 'schedule__day--empty', "\n                                        ").concat(isToday ? 'schedule__day--today' : ''),
               onClick: function onClick() {
                 if (modalMode === 'swap') {
@@ -75066,13 +75309,13 @@ function Schedule() {
                   }
                 }
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                 className: "schedule__day-number",
                 children: day
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                 className: "schedule__day-tasks",
                 children: dayTasks.map(function (task, taskIndex) {
-                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                     className: "schedule__task".concat(task.status === 'swap' ? ' schedule__task--swapped' : ''),
                     onClick: function onClick(event) {
                       if (modalMode === 'swap') {
@@ -75083,7 +75326,7 @@ function Schedule() {
                     },
                     role: "button",
                     tabIndex: 0,
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                       className: "schedule__task-name",
                       children: task.name
                     })
@@ -75092,9 +75335,9 @@ function Schedule() {
               })]
             }, index);
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
           className: "schedule__actions",
-          children: [((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          children: [((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
             className: "schedule__btn schedule__btn--primary",
             onClick: function onClick() {
               var today = new Date();
@@ -75103,20 +75346,20 @@ function Schedule() {
               setShowTaskForm(true);
             },
             children: "Add Task (Today)"
-          }), ((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          }), ((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
             className: "schedule__swap-btn-container",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.Link, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.Link, {
               to: "/swap-form",
               className: "schedule__btn schedule__btn--tertiary",
               children: "Swapping Form Requests"
-            }), pendingSwapCount > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+            }), pendingSwapCount > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
               className: "schedule__notification-badge",
               children: pendingSwapCount
             })]
           })]
         })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_TasksModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_TasksModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
       isOpen: showTaskForm,
       onClose: function onClose() {
         setModalMode('add');
@@ -75143,7 +75386,7 @@ function Schedule() {
                   status: updateTask.status || 'active'
                 };
                 _context4.n = 1;
-                return axios__WEBPACK_IMPORTED_MODULE_2___default().put("/api/schedules/".concat(updateTask.id), payload);
+                return axios__WEBPACK_IMPORTED_MODULE_3___default().put("/api/schedules/".concat(updateTask.id), payload);
               case 1:
                 response = _context4.v;
                 setTasks(function (prev) {
@@ -75179,6 +75422,12 @@ function Schedule() {
       userRole: user === null || user === void 0 ? void 0 : user.role_id,
       profileOptions: profiles,
       currentProfileId: currentProfileId
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_SuccessNotification__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      message: successMessage,
+      isVisible: showSuccessNotification,
+      onClose: function onClose() {
+        return setShowSuccessNotification(false);
+      }
     })]
   });
 }
@@ -75354,7 +75603,14 @@ function Settings() {
     _useState60 = _slicedToArray(_useState59, 2),
     templateUploading = _useState60[0],
     setTemplateUploading = _useState60[1];
+  var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
+      return new Set();
+    }),
+    _useState62 = _slicedToArray(_useState61, 2),
+    selectedTemplateFilenames = _useState62[0],
+    setSelectedTemplateFilenames = _useState62[1];
   var templateFileInputRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var selectAllTemplatesRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var roleIdLabels = {
     1: 'User',
     2: 'Admin',
@@ -75475,6 +75731,32 @@ function Settings() {
       return setTemplatesLoading(false);
     });
   }, [activeSection]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var onVisibilityChange = function onVisibilityChange() {
+      if (document.visibilityState === 'visible' && activeSection === 'templates') {
+        setTemplatesLoading(true);
+        setTemplatesError(null);
+        axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/templates').then(function (res) {
+          return setTemplates(Array.isArray(res.data) ? res.data : []);
+        })["catch"](function (err) {
+          var _err$response5;
+          setTemplatesError((err === null || err === void 0 || (_err$response5 = err.response) === null || _err$response5 === void 0 || (_err$response5 = _err$response5.data) === null || _err$response5 === void 0 ? void 0 : _err$response5.message) || 'Failed to load templates.');
+          setTemplates([]);
+        })["finally"](function () {
+          return setTemplatesLoading(false);
+        });
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return function () {
+      return document.removeEventListener('visibilitychange', onVisibilityChange);
+    };
+  }, [activeSection]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var el = selectAllTemplatesRef.current;
+    if (!el) return;
+    el.indeterminate = templates.length > 0 && selectedTemplateFilenames.size > 0 && selectedTemplateFilenames.size < templates.length;
+  }, [templates.length, selectedTemplateFilenames]);
   var openCreateSection = function openCreateSection() {
     setEditingSection(null);
     setSectionNameInput('');
@@ -75523,8 +75805,8 @@ function Settings() {
       setShowSuccessNotification(true);
       closeSectionModal();
     })["catch"](function (err) {
-      var _err$response5;
-      alert((err === null || err === void 0 || (_err$response5 = err.response) === null || _err$response5 === void 0 || (_err$response5 = _err$response5.data) === null || _err$response5 === void 0 ? void 0 : _err$response5.message) || 'Failed to save section.');
+      var _err$response6;
+      alert((err === null || err === void 0 || (_err$response6 = err.response) === null || _err$response6 === void 0 || (_err$response6 = _err$response6.data) === null || _err$response6 === void 0 ? void 0 : _err$response6.message) || 'Failed to save section.');
     })["finally"](function () {
       return setSectionSaving(false);
     });
@@ -75553,8 +75835,8 @@ function Settings() {
           setShowSuccessNotification(true);
           setShowConfirmModal(false);
         })["catch"](function (err) {
-          var _err$response6;
-          alert((err === null || err === void 0 || (_err$response6 = err.response) === null || _err$response6 === void 0 || (_err$response6 = _err$response6.data) === null || _err$response6 === void 0 ? void 0 : _err$response6.message) || 'Failed to archive section.');
+          var _err$response7;
+          alert((err === null || err === void 0 || (_err$response7 = err.response) === null || _err$response7 === void 0 || (_err$response7 = _err$response7.data) === null || _err$response7 === void 0 ? void 0 : _err$response7.message) || 'Failed to archive section.');
           setShowConfirmModal(false);
         });
       };
@@ -75585,8 +75867,8 @@ function Settings() {
           setShowSuccessNotification(true);
           setShowConfirmModal(false);
         })["catch"](function (err) {
-          var _err$response7;
-          alert((err === null || err === void 0 || (_err$response7 = err.response) === null || _err$response7 === void 0 || (_err$response7 = _err$response7.data) === null || _err$response7 === void 0 ? void 0 : _err$response7.message) || 'Failed to restore section.');
+          var _err$response8;
+          alert((err === null || err === void 0 || (_err$response8 = err.response) === null || _err$response8 === void 0 || (_err$response8 = _err$response8.data) === null || _err$response8 === void 0 ? void 0 : _err$response8.message) || 'Failed to restore section.');
           setShowConfirmModal(false);
         });
       };
@@ -75640,8 +75922,8 @@ function Settings() {
           setShowSuccessNotification(true);
           setShowConfirmModal(false);
         })["catch"](function (err) {
-          var _err$response8;
-          alert((err === null || err === void 0 || (_err$response8 = err.response) === null || _err$response8 === void 0 || (_err$response8 = _err$response8.data) === null || _err$response8 === void 0 ? void 0 : _err$response8.message) || 'Failed to archive some sections.');
+          var _err$response9;
+          alert((err === null || err === void 0 || (_err$response9 = err.response) === null || _err$response9 === void 0 || (_err$response9 = _err$response9.data) === null || _err$response9 === void 0 ? void 0 : _err$response9.message) || 'Failed to archive some sections.');
           setShowConfirmModal(false);
         });
       };
@@ -75681,8 +75963,8 @@ function Settings() {
           setShowSuccessNotification(true);
           setShowConfirmModal(false);
         })["catch"](function (err) {
-          var _err$response9;
-          alert((err === null || err === void 0 || (_err$response9 = err.response) === null || _err$response9 === void 0 || (_err$response9 = _err$response9.data) === null || _err$response9 === void 0 ? void 0 : _err$response9.message) || 'Failed to restore some sections.');
+          var _err$response0;
+          alert((err === null || err === void 0 || (_err$response0 = err.response) === null || _err$response0 === void 0 || (_err$response0 = _err$response0.data) === null || _err$response0 === void 0 ? void 0 : _err$response0.message) || 'Failed to restore some sections.');
           setShowConfirmModal(false);
         });
       };
@@ -75737,16 +76019,11 @@ function Settings() {
     var _templateFileInputRef;
     (_templateFileInputRef = templateFileInputRef.current) === null || _templateFileInputRef === void 0 || _templateFileInputRef.click();
   };
-  var handleTemplateFileChange = function handleTemplateFileChange(e) {
-    var _e$target$files;
-    var file = (_e$target$files = e.target.files) === null || _e$target$files === void 0 ? void 0 : _e$target$files[0];
-    e.target.value = '';
-    if (!file) return;
-    var ext = (file.name || '').toLowerCase().split('.').pop();
-    if (ext !== 'docx') {
-      setTemplatesError('Only .docx files are allowed.');
-      return;
-    }
+  var getTemplateBaseName = function getTemplateBaseName(fileName) {
+    var base = (fileName || '').replace(/\.[^.]*$/, '').replace(/[^a-zA-Z0-9_\-\s]/g, '').trim().slice(0, 100) || 'template';
+    return base;
+  };
+  var uploadTemplateFile = function uploadTemplateFile(file) {
     setTemplateUploading(true);
     setTemplatesError(null);
     var formData = new FormData();
@@ -75758,25 +76035,66 @@ function Settings() {
     }).then(function (res) {
       var data = res.data;
       setTemplates(function (prev) {
-        return [].concat(_toConsumableArray(prev), [{
+        var byName = function byName(t) {
+          return t.name === data.name;
+        };
+        var next = prev.some(byName) ? prev.map(function (t) {
+          return byName(t) ? {
+            name: data.name,
+            filename: data.filename,
+            updated_at: data.updated_at,
+            is_active: !!data.is_active
+          } : t;
+        }) : [].concat(_toConsumableArray(prev), [{
           name: data.name,
           filename: data.filename,
           updated_at: data.updated_at,
           is_active: !!data.is_active
-        }]).sort(function (a, b) {
+        }]);
+        return next.sort(function (a, b) {
           return a.name.localeCompare(b.name, undefined, {
             sensitivity: 'base'
           });
         });
       });
-      setSuccessMessage('Template added successfully.');
+      var replaced = templates.some(function (t) {
+        return t.name === data.name;
+      });
+      setSuccessMessage(replaced ? 'Template replaced successfully.' : 'Template added successfully.');
       setShowSuccessNotification(true);
     })["catch"](function (err) {
-      var _err$response0;
-      setTemplatesError((err === null || err === void 0 || (_err$response0 = err.response) === null || _err$response0 === void 0 || (_err$response0 = _err$response0.data) === null || _err$response0 === void 0 ? void 0 : _err$response0.message) || 'Failed to add template.');
+      var _err$response1;
+      setTemplatesError((err === null || err === void 0 || (_err$response1 = err.response) === null || _err$response1 === void 0 || (_err$response1 = _err$response1.data) === null || _err$response1 === void 0 ? void 0 : _err$response1.message) || 'Failed to add template.');
     })["finally"](function () {
       return setTemplateUploading(false);
     });
+  };
+  var handleTemplateFileChange = function handleTemplateFileChange(e) {
+    var _e$target$files;
+    var file = (_e$target$files = e.target.files) === null || _e$target$files === void 0 ? void 0 : _e$target$files[0];
+    e.target.value = '';
+    if (!file) return;
+    var ext = (file.name || '').toLowerCase().split('.').pop();
+    if (ext !== 'docx') {
+      setTemplatesError('Only .docx files are allowed.');
+      return;
+    }
+    var baseName = getTemplateBaseName(file.name);
+    var existing = templates.find(function (t) {
+      return t.name === baseName;
+    });
+    if (existing) {
+      setConfirmMessage("A template named \"".concat(baseName, "\" already exists. Replace it?"));
+      setConfirmAction(function () {
+        return function () {
+          uploadTemplateFile(file);
+          setShowConfirmModal(false);
+        };
+      });
+      setShowConfirmModal(true);
+      return;
+    }
+    uploadTemplateFile(file);
   };
   var setTemplateInUse = function setTemplateInUse(tpl) {
     axios__WEBPACK_IMPORTED_MODULE_1___default().patch('/api/templates/set-active', {
@@ -75792,9 +76110,75 @@ function Settings() {
       setSuccessMessage('Template set as in use.');
       setShowSuccessNotification(true);
     })["catch"](function (err) {
-      var _err$response1;
-      setTemplatesError((err === null || err === void 0 || (_err$response1 = err.response) === null || _err$response1 === void 0 || (_err$response1 = _err$response1.data) === null || _err$response1 === void 0 ? void 0 : _err$response1.message) || 'Failed to set template in use.');
+      var _err$response10;
+      setTemplatesError((err === null || err === void 0 || (_err$response10 = err.response) === null || _err$response10 === void 0 || (_err$response10 = _err$response10.data) === null || _err$response10 === void 0 ? void 0 : _err$response10.message) || 'Failed to set template in use.');
     });
+  };
+  var deleteTemplate = function deleteTemplate(tpl) {
+    setConfirmMessage("Permanently delete template \"".concat(tpl.name, "\"? This cannot be undone."));
+    setConfirmAction(function () {
+      return function () {
+        axios__WEBPACK_IMPORTED_MODULE_1___default()["delete"]("/api/templates/".concat(encodeURIComponent(tpl.filename))).then(function () {
+          setTemplates(function (prev) {
+            return prev.filter(function (t) {
+              return t.filename !== tpl.filename;
+            });
+          });
+          if ((templateToView === null || templateToView === void 0 ? void 0 : templateToView.filename) === tpl.filename) setTemplateToView(null);
+          setSuccessMessage('Template deleted.');
+          setShowSuccessNotification(true);
+          setShowConfirmModal(false);
+        })["catch"](function (err) {
+          var _err$response11;
+          setTemplatesError((err === null || err === void 0 || (_err$response11 = err.response) === null || _err$response11 === void 0 || (_err$response11 = _err$response11.data) === null || _err$response11 === void 0 ? void 0 : _err$response11.message) || 'Failed to delete template.');
+          setShowConfirmModal(false);
+        });
+      };
+    });
+    setShowConfirmModal(true);
+  };
+  var toggleTemplateSelection = function toggleTemplateSelection(filename) {
+    setSelectedTemplateFilenames(function (prev) {
+      var next = new Set(prev);
+      if (next.has(filename)) next["delete"](filename);else next.add(filename);
+      return next;
+    });
+  };
+  var toggleSelectAllTemplates = function toggleSelectAllTemplates() {
+    setSelectedTemplateFilenames(function (prev) {
+      if (prev.size === templates.length) return new Set();
+      return new Set(templates.map(function (t) {
+        return t.filename;
+      }));
+    });
+  };
+  var deleteSelectedTemplates = function deleteSelectedTemplates() {
+    var toDelete = new Set(selectedTemplateFilenames);
+    setConfirmMessage("Permanently delete ".concat(toDelete.size, " templates? This cannot be undone."));
+    setConfirmAction(function () {
+      return function () {
+        var filenames = _toConsumableArray(toDelete);
+        Promise.all(filenames.map(function (f) {
+          return axios__WEBPACK_IMPORTED_MODULE_1___default()["delete"]("/api/templates/".concat(encodeURIComponent(f)));
+        })).then(function () {
+          setTemplates(function (prev) {
+            return prev.filter(function (t) {
+              return !toDelete.has(t.filename);
+            });
+          });
+          if (templateToView && toDelete.has(templateToView.filename)) setTemplateToView(null);
+          setSelectedTemplateFilenames(new Set());
+          setSuccessMessage('Templates deleted.');
+          setShowSuccessNotification(true);
+          setShowConfirmModal(false);
+        })["catch"](function (err) {
+          var _err$response12;
+          setTemplatesError((err === null || err === void 0 || (_err$response12 = err.response) === null || _err$response12 === void 0 || (_err$response12 = _err$response12.data) === null || _err$response12 === void 0 ? void 0 : _err$response12.message) || 'Failed to delete some templates.');
+          setShowConfirmModal(false);
+        });
+      };
+    });
+    setShowConfirmModal(true);
   };
   var deleteSection = function deleteSection(section) {
     if (!window.confirm("Permanently delete section \"".concat(section.name, "\"? This cannot be undone."))) return;
@@ -75807,8 +76191,8 @@ function Settings() {
       setSuccessMessage('Section deleted successfully.');
       setShowSuccessNotification(true);
     })["catch"](function (err) {
-      var _err$response10;
-      alert((err === null || err === void 0 || (_err$response10 = err.response) === null || _err$response10 === void 0 || (_err$response10 = _err$response10.data) === null || _err$response10 === void 0 ? void 0 : _err$response10.message) || 'Failed to delete section.');
+      var _err$response13;
+      alert((err === null || err === void 0 || (_err$response13 = err.response) === null || _err$response13 === void 0 || (_err$response13 = _err$response13.data) === null || _err$response13 === void 0 ? void 0 : _err$response13.message) || 'Failed to delete section.');
     });
   };
   var openEditAccount = function openEditAccount(account) {
@@ -75833,8 +76217,8 @@ function Settings() {
       setShowSuccessNotification(true);
       closeAccountModal();
     })["catch"](function (err) {
-      var _err$response11;
-      alert((err === null || err === void 0 || (_err$response11 = err.response) === null || _err$response11 === void 0 || (_err$response11 = _err$response11.data) === null || _err$response11 === void 0 ? void 0 : _err$response11.message) || 'Failed to update account.');
+      var _err$response14;
+      alert((err === null || err === void 0 || (_err$response14 = err.response) === null || _err$response14 === void 0 || (_err$response14 = _err$response14.data) === null || _err$response14 === void 0 ? void 0 : _err$response14.message) || 'Failed to update account.');
     })["finally"](function () {
       return setAccountSaving(false);
     });
@@ -75962,7 +76346,17 @@ function Settings() {
             children: "Templates"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
             className: "settings__panel-header-actions",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
+              type: "button",
+              className: "settings__archive-btn",
+              onClick: deleteSelectedTemplates,
+              disabled: selectedTemplateFilenames.size < 2,
+              "aria-label": "Delete selected templates",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+                src: "".concat(window.location.origin, "/images/delete_icon.svg"),
+                alt: ""
+              }), "Delete"]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
               ref: templateFileInputRef,
               type: "file",
               accept: ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -75980,7 +76374,7 @@ function Settings() {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
                 src: "".concat(window.location.origin, "/images/create_icon.svg"),
                 alt: ""
-              }), templateUploading ? 'Adding...' : 'Add']
+              }), templateUploading ? 'Adding...' : 'Add new template']
             })]
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
@@ -75992,9 +76386,11 @@ function Settings() {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
                   className: "settings__table-check",
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+                    ref: selectAllTemplatesRef,
                     type: "checkbox",
                     "aria-label": "Select all templates",
-                    disabled: true
+                    checked: templates.length > 0 && selectedTemplateFilenames.size === templates.length,
+                    onChange: toggleSelectAllTemplates
                   })
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
                   className: "settings__table-actions",
@@ -76044,7 +76440,10 @@ function Settings() {
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
                       type: "checkbox",
                       "aria-label": "Select ".concat(tpl.name),
-                      disabled: true
+                      checked: selectedTemplateFilenames.has(tpl.filename),
+                      onChange: function onChange() {
+                        return toggleTemplateSelection(tpl.filename);
+                      }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
                     className: "settings__table-actions settings__template-actions",
@@ -76074,6 +76473,18 @@ function Settings() {
                         },
                         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
                           src: "/images/view_icon.svg",
+                          alt: "",
+                          "aria-hidden": "true"
+                        })
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+                        type: "button",
+                        className: "settings__icon-button",
+                        "aria-label": "Delete ".concat(tpl.name),
+                        onClick: function onClick() {
+                          return deleteTemplate(tpl);
+                        },
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+                          src: "/images/delete_icon.svg",
                           alt: "",
                           "aria-hidden": "true"
                         })
@@ -78076,7 +78487,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 function isAdrTemplate(name, filename) {
   var base = (name || (filename || '').replace(/\.docx$/i, '')).replace(/\s+/g, '_').trim();
-  return /^ADR_template$/i.test(base);
+  return /^ADR_template/i.test(base);
 }
 function TemplateViewModal(_ref) {
   var isOpen = _ref.isOpen,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
 import ConfirmModal from './ConfirmModal';
@@ -62,7 +62,8 @@ function ADRForm() {
     
     // Attendance and Reports
     const [attendanceItems, setAttendanceItems] = useState(reportToEdit?.attendanceItems || [{ id: 1, name: '', task: '', taskAsBullets: false }]);
-    const [reportsItems, setReportsItems] = useState(reportToEdit?.reportsItems || [{ id: 1, report: '', remarks: '', reportAsBullets: false }]);
+    const [reportsItems, setReportsItems] = useState(reportToEdit?.reportsItems || [{ id: 1, report: '', remarks: '', reportAsBullets: false, alignReport: 'left', alignRemarks: 'left' }]);
+    const reportsFieldRefs = useRef({});
     
     // Modals
     const [showCommunicationModal, setShowCommunicationModal] = useState(false);
@@ -226,8 +227,60 @@ function ADRForm() {
     const addReportsItem = () => {
         setReportsItems(prev => {
             const newId = Math.max(...prev.map(item => Number(item.id) || 0), 0) + 1;
-            return [...prev, { id: newId, report: '', remarks: '', reportAsBullets: false }];
+            return [...prev, { id: newId, report: '', remarks: '', reportAsBullets: false, alignReport: 'left', alignRemarks: 'left' }];
         });
+    };
+
+    const updateReportsAlign = (itemId, field, align) => {
+        setReportsItems(prev => prev.map(i => i.id === itemId ? { ...i, [field]: align } : i));
+    };
+
+    const getSelectionOrCurrentLine = (v, start, end) => {
+        if (start < end) return { start, end };
+        const lineStart = v.lastIndexOf('\n', start - 1) + 1;
+        let lineEnd = v.indexOf('\n', start);
+        if (lineEnd === -1) lineEnd = v.length;
+        return { start: lineStart, end: lineEnd };
+    };
+
+    const indentReportsField = (itemId, field) => {
+        const ta = reportsFieldRefs.current[`${itemId}-${field}`];
+        if (!ta) return;
+        const v = ta.value;
+        const selStart = ta.selectionStart;
+        const selEnd = ta.selectionEnd;
+        const { start, end } = getSelectionOrCurrentLine(v, selStart, selEnd);
+        const before = v.slice(0, start);
+        const sel = v.slice(start, end);
+        const after = v.slice(end);
+        const indentStr = '    ';
+        const newSel = sel.split('\n').map(line => indentStr + line).join('\n');
+        const newVal = before + newSel + after;
+        const newEnd = start + newSel.length;
+        setReportsItems(prev => prev.map(i => i.id === itemId ? { ...i, [field]: newVal } : i));
+        setTimeout(() => { ta.focus(); ta.setSelectionRange(start, newEnd); }, 0);
+    };
+
+    const outdentReportsField = (itemId, field) => {
+        const ta = reportsFieldRefs.current[`${itemId}-${field}`];
+        if (!ta) return;
+        const v = ta.value;
+        const selStart = ta.selectionStart;
+        const selEnd = ta.selectionEnd;
+        const { start, end } = getSelectionOrCurrentLine(v, selStart, selEnd);
+        const lines = v.split('\n');
+        let charIdx = 0;
+        const newLines = lines.map(line => {
+            const len = line.length;
+            const lineStart = charIdx;
+            charIdx += len + 1;
+            if (lineStart >= end || lineStart + len <= start) return line;
+            const toRemove = Math.min(4, line.match(/^[ \t]+/)?.[0]?.length ?? 0);
+            return line.slice(toRemove);
+        });
+        const newVal = newLines.join('\n');
+        setReportsItems(prev => prev.map(i => i.id === itemId ? { ...i, [field]: newVal } : i));
+        setTimeout(() => ta?.focus(), 0);
     };
 
     const removeReportsItem = (id) => {
@@ -302,21 +355,6 @@ function ADRForm() {
 
     const updateOtherAdminRow = (id, field, value) => {
         setOtherAdminRows(otherAdminRows.map(row => 
-            row.id === id ? { ...row, [field]: value } : row
-        ));
-    };
-
-    const addEndorsedItemsRow = () => {
-        const newId = Math.max(...endorsedItemsRows.map(row => row.id), 0) + 1;
-        setEndorsedItemsRows([...endorsedItemsRows, { id: newId, item: '', itemAsBullets: false }]);
-    };
-
-    const removeEndorsedItemsRow = (id) => {
-        setEndorsedItemsRows(endorsedItemsRows.filter(row => row.id !== id));
-    };
-
-    const updateEndorsedItemsRow = (id, field, value) => {
-        setEndorsedItemsRows(endorsedItemsRows.map(row => 
             row.id === id ? { ...row, [field]: value } : row
         ));
     };
@@ -496,14 +534,14 @@ function ADRForm() {
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Prepared By:</label>
-                            <textarea className="adr-form__signature-name-input" rows={2} placeholder="Name (use Enter for line break)" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} />
+                            <input type="text" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} placeholder="Name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={preparedPosition} onChange={(e) => setPreparedPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Received By:</label>
-                            <textarea className="adr-form__signature-name-input" rows={2} placeholder="Name (use Enter for line break)" value={receivedBy} onChange={(e) => setReceivedBy(e.target.value)} />
+                            <input type="text" value={receivedBy} onChange={(e) => setReceivedBy(e.target.value)} placeholder="Name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={receivedPosition} onChange={(e) => setReceivedPosition(e.target.value)}></textarea>
                     </div>
@@ -642,30 +680,30 @@ function ADRForm() {
                                 <thead>
                                     <tr>
                                         <th className="adr-form__modal-table-number">#</th>
-                                        <th>Name</th>
-                                        <th>Task</th>
-                                        <th>Actions</th>
+                                        <th className="adr-form__modal-table-name-col">Name</th>
+                                        <th className="adr-form__modal-table-task-col">Task</th>
+                                        <th className="adr-form__modal-table-actions-col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="adr-form__modal-table-body">
                                     {attendanceItems.map((item, index) => (
                                         <tr className="adr-form__modal-table-row" key={item.id}>
                                             <td className="adr-form__modal-table-number">{index + 1}</td>
-                                            <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter name"
+                                            <td className="adr-form__modal-table-name-col">
+                                                <textarea
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm"
+                                                    placeholder="Enter name(s) — add another line for more names"
+                                                    rows={2}
                                                     value={item.name}
                                                     onChange={(e) => {
                                                         const value = e.target.value;
-                                                        setAttendanceItems(prev => prev.map(i => 
+                                                        setAttendanceItems(prev => prev.map(i =>
                                                             i.id === item.id ? { ...i, name: value } : i
                                                         ));
                                                     }}
                                                 />
                                             </td>
-                                            <td>
+                                            <td className="adr-form__modal-table-task-col">
                                                 <textarea 
                                                     className="adr-form__modal-input adr-form__modal-textarea" 
                                                     placeholder="Enter task (press Enter for each bullet)"
@@ -679,7 +717,7 @@ function ADRForm() {
                                                     }}
                                                 ></textarea>
                                             </td>
-                                            <td>
+                                            <td className="adr-form__modal-table-actions-col">
                                                 <button 
                                                     className="adr-form__modal-action-btn" 
                                                     type="button"
@@ -722,20 +760,42 @@ function ADRForm() {
                                 <thead>
                                     <tr>
                                         <th className="adr-form__modal-table-number">#</th>
-                                        <th>Reports and Advisories Released</th>
-                                        <th>Remarks</th>
-                                        <th>Actions</th>
+                                        <th className="adr-form__modal-table-report-col">Reports and Advisories Released</th>
+                                        <th className="adr-form__modal-table-remarks-col">Remarks</th>
+                                        <th className="adr-form__modal-table-actions-col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="adr-form__modal-table-body">
                                     {reportsItems.map((item, index) => (
                                         <tr className="adr-form__modal-table-row" key={item.id}>
                                             <td className="adr-form__modal-table-number">{index + 1}</td>
-                                            <td>
+                                            <td className="adr-form__modal-table-report-col">
+                                                <div className="adr-form__field-toolbar">
+                                                    <span className="adr-form__field-toolbar-label">Align</span>
+                                                    {[
+                                                        { align: 'left', icon: '/images/left_align.svg' },
+                                                        { align: 'center', icon: '/images/center.svg' },
+                                                        { align: 'right', icon: '/images/right_align.svg' },
+                                                        { align: 'justify', icon: '/images/justify.svg' },
+                                                    ].map(({ align, icon }) => (
+                                                        <button key={align} type="button" className={`adr-form__toolbar-btn adr-form__toolbar-btn--icon ${(item.alignReport || 'left') === align ? 'adr-form__toolbar-btn--active' : ''}`} onClick={() => updateReportsAlign(item.id, 'alignReport', align)} title={`Align ${align}`}>
+                                                            <img src={icon} alt="" aria-hidden />
+                                                        </button>
+                                                    ))}
+                                                    <span className="adr-form__field-toolbar-sep" aria-hidden>|</span>
+                                                    <button type="button" className="adr-form__toolbar-btn adr-form__toolbar-btn--icon" onClick={() => indentReportsField(item.id, 'report')} title="Indent selected lines">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M9 6h12M9 12h12M9 18h12M3 6v12l4-4-4-4z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                                                    </button>
+                                                    <button type="button" className="adr-form__toolbar-btn adr-form__toolbar-btn--icon" onClick={() => outdentReportsField(item.id, 'report')} title="Outdent selected lines">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M15 6H3M15 12H3M15 18H3M21 9l-4 4 4 4V9z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                                                    </button>
+                                                </div>
                                                 <textarea 
+                                                    ref={(el) => { reportsFieldRefs.current[`${item.id}-report`] = el; }}
                                                     className="adr-form__modal-input adr-form__modal-textarea" 
+                                                    style={{ textAlign: item.alignReport || 'left' }}
                                                     placeholder="Enter reports and advisories released (use new line to break text)"
-                                                    rows="3"
+                                                    rows={3}
                                                     value={item.report}
                                                     onChange={(e) => {
                                                         const value = e.target.value;
@@ -745,11 +805,33 @@ function ADRForm() {
                                                     }}
                                                 ></textarea>
                                             </td>
-                                            <td>
+                                            <td className="adr-form__modal-table-remarks-col">
+                                                <div className="adr-form__field-toolbar">
+                                                    <span className="adr-form__field-toolbar-label">Align</span>
+                                                    {[
+                                                        { align: 'left', icon: '/images/left_align.svg' },
+                                                        { align: 'center', icon: '/images/center.svg' },
+                                                        { align: 'right', icon: '/images/right_align.svg' },
+                                                        { align: 'justify', icon: '/images/justify.svg' },
+                                                    ].map(({ align, icon }) => (
+                                                        <button key={align} type="button" className={`adr-form__toolbar-btn adr-form__toolbar-btn--icon ${(item.alignRemarks || 'left') === align ? 'adr-form__toolbar-btn--active' : ''}`} onClick={() => updateReportsAlign(item.id, 'alignRemarks', align)} title={`Align ${align}`}>
+                                                            <img src={icon} alt="" aria-hidden />
+                                                        </button>
+                                                    ))}
+                                                    <span className="adr-form__field-toolbar-sep" aria-hidden>|</span>
+                                                    <button type="button" className="adr-form__toolbar-btn adr-form__toolbar-btn--icon" onClick={() => indentReportsField(item.id, 'remarks')} title="Indent selected lines">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M9 6h12M9 12h12M9 18h12M3 6v12l4-4-4-4z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                                                    </button>
+                                                    <button type="button" className="adr-form__toolbar-btn adr-form__toolbar-btn--icon" onClick={() => outdentReportsField(item.id, 'remarks')} title="Outdent selected lines">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M15 6H3M15 12H3M15 18H3M21 9l-4 4 4 4V9z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                                                    </button>
+                                                </div>
                                                 <textarea 
-                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
+                                                    ref={(el) => { reportsFieldRefs.current[`${item.id}-remarks`] = el; }}
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--remarks" 
+                                                    style={{ textAlign: item.alignRemarks || 'left' }}
                                                     placeholder="Enter remarks"
-                                                    rows="2"
+                                                    rows={3}
                                                     value={item.remarks}
                                                     onChange={(e) => {
                                                         const value = e.target.value;
@@ -759,7 +841,7 @@ function ADRForm() {
                                                     }}
                                                 ></textarea>
                                             </td>
-                                            <td>
+                                            <td className="adr-form__modal-table-actions-col">
                                                 <button 
                                                     className="adr-form__modal-action-btn" 
                                                     type="button"
@@ -924,46 +1006,24 @@ function ADRForm() {
                             </button>
                         </div>
                         <div className="adr-form__modal-body">
-                            <table className="adr-form__modal-table">
-                                <thead>
-                                    <tr>
-                                        <th style={{ width: '70px' }}></th>
-                                        <th>Item</th>
-                                        <th style={{ width: '60px' }}>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {endorsedItemsRows.map((row, index) => (
-                                        <tr key={row.id}>
-                                            <td>1.{index + 1}</td>
-                                            <td>
-                                                <textarea 
-                                                    className="adr-form__modal-input adr-form__modal-textarea" 
-                                                    placeholder="Enter item (press Enter for each bullet)"
-                                                    rows="3"
-                                                    value={row.item}
-                                                    onChange={(e) => updateEndorsedItemsRow(row.id, 'item', e.target.value)}
-                                                />
-                                            </td>
-                                            <td>
-                                                <button 
-                                                    className="adr-form__modal-action-btn" 
-                                                    type="button"
-                                                    onClick={() => removeEndorsedItemsRow(row.id)}
-                                                >
-                                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                                                        <path d="M3 6H5H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                        <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                    </svg>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            <button className="adr-form__modal-add-row" type="button" onClick={addEndorsedItemsRow}>
-                                Add Row
-                            </button>
+                            <p className="adr-form__modal-hint">List endorsed items. Press Enter for each item (e.g. 1.1, 1.2, 1.3).</p>
+                            <textarea
+                                className="adr-form__modal-input adr-form__modal-textarea"
+                                placeholder="e.g. 3 keys, 4 bars"
+                                rows={6}
+                                value={endorsedItemsRows.map((r) => r.item).join('\n')}
+                                onChange={(e) => {
+                                    const text = e.target.value;
+                                    const lines = text.split('\n');
+                                    setEndorsedItemsRows(
+                                        lines.map((line, index) => ({
+                                            id: index + 1,
+                                            item: line,
+                                            itemAsBullets: false,
+                                        }))
+                                    );
+                                }}
+                            />
                         </div>
                         <div className="adr-form__modal-footer">
                             <button className="adr-form__modal-confirm" type="button" onClick={() => setShowEndorsedItemsModal(false)}>
