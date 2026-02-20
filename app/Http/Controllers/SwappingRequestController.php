@@ -269,4 +269,28 @@ class SwappingRequestController extends Controller
         $swapRequest->load(['requesterSchedule.profile.user', 'targetSchedule.profile.user']);
         return response()->json($this->formatRequest($swapRequest));
     }
+
+    public function restore(Request $request, $id)
+    {
+        if (!$this->canManageRequests($request)) {
+            return response()->json(['message' => 'Not authorized.'], 403);
+        }
+
+        $swapRequest = SwappingRequest::find($id);
+        if (!$swapRequest) {
+            return response()->json(['message' => 'Swap request not found.'], 404);
+        }
+
+        if (!$swapRequest->is_archived) {
+            return response()->json(['message' => 'Only archived requests can be restored.'], 422);
+        }
+
+        $swapRequest->update([
+            'is_archived' => false,
+            'archived_at' => null,
+        ]);
+
+        $swapRequest->load(['requesterSchedule.profile.user', 'targetSchedule.profile.user']);
+        return response()->json($this->formatRequest($swapRequest));
+    }
 }
