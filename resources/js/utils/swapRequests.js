@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const SWAP_REQUESTS_KEY = 'swapRequests';
 const SCHEDULED_TASKS_KEY = 'scheduledTasks';
 
@@ -37,12 +39,11 @@ export function archiveSwapRequest(id) {
 }
 
 export function restoreSwapRequest(id) {
-    const requests = getSwapRequests();
-    const req = requests.find(r => r.id === id);
-    if (!req || req.status !== 'archived') return false;
-    const prevStatus = req.archivedFromStatus || 'denied';
-    updateSwapRequestStatus(id, prevStatus, { archivedFromStatus: undefined });
-    return true;
+    return axios.post(`/api/swapping-requests/${id}/restore`)
+        .catch(error => {
+            console.error('Error restoring swap request:', error);
+            throw error;
+        });
 }
 
 export function executeSwapRequest(id) {

@@ -54,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/swapping-requests/{id}/approve', [SwappingRequestController::class, 'approve'])->name('api.swapping-requests.approve');
     Route::post('/swapping-requests/{id}/deny', [SwappingRequestController::class, 'deny'])->name('api.swapping-requests.deny');
     Route::post('/swapping-requests/{id}/archive', [SwappingRequestController::class, 'archive'])->name('api.swapping-requests.archive');
+    Route::post('/swapping-requests/{id}/restore', [SwappingRequestController::class, 'restore'])->name('api.swapping-requests.restore');
 
     Route::get('/adr-forms', [AdrFormController::class, 'index'])->name('api.adr-forms.index');
     Route::get('/adr-forms/{id}', [AdrFormController::class, 'show'])->name('api.adr-forms.show');

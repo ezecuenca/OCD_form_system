@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { useFormContext } from '../context/FormContext';
 import { getSwapRequests, restoreSwapRequest } from '../utils/swapRequests';
 import ConfirmModal from './ConfirmModal';
@@ -49,8 +50,18 @@ function ArchivedReports() {
     }, []);
 
     useEffect(() => {
-        setArchivedSwapRequests(getSwapRequests().filter(r => r.status === 'archived'));
         setSelectedSwapRequests([]);
+        if (activeTab === 'swapped') {
+            axios.get('/api/swapping-requests?include_archived=true')
+                .then(response => {
+                    const data = Array.isArray(response.data) ? response.data : [];
+                    const archived = data.filter(r => r.is_archived);
+                    setArchivedSwapRequests(archived);
+                })
+                .catch(() => {
+                    setArchivedSwapRequests([]);
+                });
+        }
     }, [activeTab]);
 
     const handleViewDocument = (id) => {
@@ -79,10 +90,17 @@ function ArchivedReports() {
         }
 
         setConfirmMessage(`Are you sure you want to restore (${selectedSwapRequests.length}) swap request${selectedSwapRequests.length === 1 ? '' : 's'}?`);
-        setConfirmAction(() => () => {
-            selectedSwapRequests.forEach(id => restoreSwapRequest(id));
-            setArchivedSwapRequests(getSwapRequests().filter(r => r.status === 'archived'));
-            setSelectedSwapRequests([]);
+        setConfirmAction(() => async () => {
+            try {
+                await Promise.all(selectedSwapRequests.map(id => restoreSwapRequest(id)));
+                const response = await axios.get('/api/swapping-requests?include_archived=true');
+                const data = Array.isArray(response.data) ? response.data : [];
+                const archived = data.filter(r => r.is_archived);
+                setArchivedSwapRequests(archived);
+                setSelectedSwapRequests([]);
+            } catch (error) {
+                console.error('Error restoring swap requests:', error);
+            }
             setShowConfirmModal(false);
         });
         setShowConfirmModal(true);
@@ -167,12 +185,19 @@ function ArchivedReports() {
     const handleRestoreSwapRequest = (id) => {
         pendingRestoreSwapIdRef.current = id;
         setConfirmMessage('Are you sure you want to restore this swap request?');
-        setConfirmAction(() => () => {
+        setConfirmAction(() => async () => {
             const idToRestore = pendingRestoreSwapIdRef.current;
             if (idToRestore) {
-                restoreSwapRequest(idToRestore);
-                setArchivedSwapRequests(getSwapRequests().filter(r => r.status === 'archived'));
-                setSelectedSwapRequests(prev => prev.filter(requestId => requestId !== idToRestore));
+                try {
+                    await restoreSwapRequest(idToRestore);
+                    const response = await axios.get('/api/swapping-requests?include_archived=true');
+                    const data = Array.isArray(response.data) ? response.data : [];
+                    const archived = data.filter(r => r.is_archived);
+                    setArchivedSwapRequests(archived);
+                    setSelectedSwapRequests(prev => prev.filter(requestId => requestId !== idToRestore));
+                } catch (error) {
+                    console.error('Error restoring swap request:', error);
+                }
                 pendingRestoreSwapIdRef.current = null;
             }
             setShowConfirmModal(false);
@@ -510,10 +535,10 @@ function ArchivedReports() {
                                             padding: '4px 8px',
                                             borderRadius: '4px',
                                             fontSize: '0.85rem',
-                                            backgroundColor: req.archivedFromStatus === 'approved' ? '#e8f5e9' : '#ffebee',
-                                            color: req.archivedFromStatus === 'approved' ? '#2e7d32' : '#c62828'
+                                            backgroundColor: req.status === 'approved' ? '#e8f5e9' : '#ffebee',
+                                            color: req.status === 'approved' ? '#2e7d32' : '#c62828'
                                         }}>
-                                            {req.archivedFromStatus || '—'}
+                                            {req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : '—'}
                                         </span>
                                     </td>
                                     <td>
