@@ -1,298 +1,193 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
-import ConfirmModal from './ConfirmModal';
-import DocumentViewModal from './DocumentViewModal';
-
-// Default data for new reports – Administrative Matters A to C (and endorsed). Editable, addable, removable.
-const getDefaultCommunicationRows = () => [
-    { id: 1, particulars: 'Hytera Digital Radio', noOfItems: 2, contact: 'LCL-Caraga / INRG-Caraga', status: 'Operational', contactAsBullets: false, statusAsBullets: false },
-    { id: 2, particulars: 'Hytera digital radio charger', noOfItems: 2, contact: '-', status: 'Operational', contactAsBullets: false, statusAsBullets: false },
-    { id: 3, particulars: 'Samsung mobile phone', noOfItems: 1, contact: '0947 946 8145 (SMART)', status: 'Bal 0.50 No call/text promo', contactAsBullets: false, statusAsBullets: false },
-    { id: 4, particulars: 'RedMi mobile phone', noOfItems: 1, contact: 'SIM 1: 096694832281 SIM 2: 091711637259 (GLOBE)', status: 'SIM 1 Postpaid SIM 2: Bal 0.50 No call/text promo', contactAsBullets: false, statusAsBullets: false },
-    { id: 5, particulars: 'TPLink Wifi (Temporary)', noOfItems: 1, contact: '-', status: 'Stable connection', contactAsBullets: false, statusAsBullets: false },
-    { id: 6, particulars: 'VoIP Line for Intercom', noOfItems: 2, contact: '1215. 1216', status: 'Stable Connection', contactAsBullets: false, statusAsBullets: false },
-    { id: 7, particulars: 'VoIP Line Inter Region and Central Office Connectivity', noOfItems: 2, contact: '926, 927', status: 'Stable Connection', contactAsBullets: false, statusAsBullets: false }
-];
-const getDefaultOtherItemsRows = () => [
-    { id: 1, particulars: '55-inch TV monitor (Sony)', noOfItems: 3, status: 'Wall-mounted inside OMCR; 1 at VIP Conference Room', statusAsBullets: false },
-    { id: 2, particulars: '65-inch TV monitor (TCL)', noOfItems: 1, status: 'Wall-mounted inside OMCR', statusAsBullets: false },
-    { id: 3, particulars: '40-inch TV monitors', noOfItems: 2, status: '1 unit wall-mounted outside OMCR; 1 unit wall-mounted at the lobby', statusAsBullets: false },
-    { id: 4, particulars: 'Desktop computers', noOfItems: 4, status: 'Workstations', statusAsBullets: false },
-    { id: 5, particulars: 'Portable Water Filtration Set', noOfItems: 2, status: 'Functional; At storage room near OS', statusAsBullets: false },
-    { id: 6, particulars: 'Solar Panel Power Source for Water Filter', noOfItems: 2, status: 'Functional; At storage room near OS', statusAsBullets: false },
-    { id: 7, particulars: 'Nissan Calibre', noOfItems: 1, status: 'Parked safely at GCCC', statusAsBullets: false },
-    { id: 8, particulars: 'Mitsubishi Pick-up', noOfItems: 1, status: 'Parked safely at GCCC', statusAsBullets: false },
-    { id: 9, particulars: 'Toyota Commuter Van', noOfItems: 1, status: 'Parked safely at GCCC', statusAsBullets: false },
-    { id: 10, particulars: 'Key - Nissan Calibre', noOfItems: 1, status: 'Under custody of security guard', statusAsBullets: false },
-    { id: 11, particulars: 'Key - Mitsubishi Pick-up', noOfItems: 1, status: 'Under custody of security guard', statusAsBullets: false },
-    { id: 12, particulars: 'Key - Toyota Commuter Van', noOfItems: 1, status: 'Under custody of security guard', statusAsBullets: false }
-];
-const getDefaultOtherAdminRows = () => [
-    { id: 1, concern: 'No untoward incident', concernAsBullets: false }
-];
-const getDefaultEndorsedItemsRows = () => [
-    { id: 1, item: '2 units of mobile phones', itemAsBullets: false }
-];
+import SuccessNotification from './SuccessNotification';
+import axios from 'axios';
 
 function ADRForm() {
+    const [notification, setNotification] = useState(null);
+    const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+    const [showErrorNotification, setShowErrorNotification] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    const { addReport, updateReport, getReport, fetchReport } = useFormContext();
+    const { addReport, updateReport } = useFormContext();
     
-    const reportToEdit = location.state?.report;
-    const isEditing = !!reportToEdit;
-    const [fullReport, setFullReport] = useState(reportToEdit && reportToEdit.attendanceItems != null ? reportToEdit : null);
+    // Check if we're in edit mode (coming from existing report)
+    const editingReport = location.state?.report;
+    const isEditing = !!editingReport;
+
+    // Load report data when editing
+    useEffect(() => {
+        if (editingReport) {
+            // Load all the form fields from the editing report
+            setDocumentName(editingReport.documentName || '');
+            setSubject(editingReport.subject || '');
+            setForName(editingReport.forName || '');
+            setForPosition(editingReport.forPosition || '');
+            setThruName(editingReport.thruName || '');
+            setThruPosition(editingReport.thruPosition || '');
+            setFromName(editingReport.fromName || '');
+            setFromPosition(editingReport.fromPosition || '');
+            setDateTime(editingReport.dateTime || '');
+            setStatus(editingReport.alertStatus || editingReport.status || 'WHITE ALERT');
+            setAttendanceItems(editingReport.attendanceItems || [{ id: 1, name: '', task: '' }]);
+            setReportsItems(editingReport.reportsItems || [{ id: 1, report: '', remarks: '' }]);
+            setCommunicationRows(editingReport.communicationRows || [{ id: 1, particulars: '', noOfItems: 0, contact: '', status: '' }]);
+            setOtherItemsRows(editingReport.otherItemsRows || [{ id: 1, particulars: '', noOfItems: 0, status: '' }]);
+            setPreparedBy(editingReport.preparedBy || '');
+            setPreparedPosition(editingReport.preparedPosition || '');
+            setReceivedBy(editingReport.receivedBy || '');
+            setReceivedPosition(editingReport.receivedPosition || '');
+            setNotedBy(editingReport.notedBy || '');
+            setNotedPosition(editingReport.notedPosition || '');
+            setApprovedBy(editingReport.approvedBy || '');
+            setApprovedPosition(editingReport.approvedPosition || '');
+        }
+    }, [editingReport]);
     
-    // Document name
-    const [documentName, setDocumentName] = useState(reportToEdit?.documentName || '');
+
+    const [documentName, setDocumentName] = useState('');
     
-    // Top fields
-    const [forName, setForName] = useState(reportToEdit?.forName || '');
-    const [forPosition, setForPosition] = useState(reportToEdit?.forPosition || '');
-    const [thruName, setThruName] = useState(reportToEdit?.thruName || '');
-    const [thruPosition, setThruPosition] = useState(reportToEdit?.thruPosition || '');
-    const [fromName, setFromName] = useState(reportToEdit?.fromName || '');
-    const [fromPosition, setFromPosition] = useState(reportToEdit?.fromPosition || '');
-    const [subject, setSubject] = useState(reportToEdit?.subject || '');
-    const [dateTime, setDateTime] = useState(reportToEdit?.dateTime || '');
+    const [forName, setForName] = useState('');
+    const [forPosition, setForPosition] = useState('');
+    const [thruName, setThruName] = useState('');
+    const [thruPosition, setThruPosition] = useState('');
+    const [fromName, setFromName] = useState('');
+    const [fromPosition, setFromPosition] = useState('');
+    const [subject, setSubject] = useState('');
+    const [dateTime, setDateTime] = useState('');
     
-    // Status
-    const [status, setStatus] = useState(reportToEdit?.alertStatus || (reportToEdit?.status && reportToEdit?.status !== 'Active' && reportToEdit?.status !== 'Archived' ? reportToEdit?.status : ''));
+    const [status, setStatus] = useState('WHITE ALERT');
     
-    // Attendance and Reports
-    const [attendanceItems, setAttendanceItems] = useState(reportToEdit?.attendanceItems || [{ id: 1, name: '', task: '', taskAsBullets: false }]);
-    const [reportsItems, setReportsItems] = useState(reportToEdit?.reportsItems || [{ id: 1, report: '', remarks: '', reportAsBullets: false, alignReport: 'left', alignRemarks: 'left' }]);
-    const reportsFieldRefs = useRef({});
+
+    const [attendanceItems, setAttendanceItems] = useState([{ id: 1, name: '', task: '' }]);
+    const [reportsItems, setReportsItems] = useState([{ id: 1, report: '', remarks: '' }]);
     
-    // Modals
+    
     const [showCommunicationModal, setShowCommunicationModal] = useState(false);
     const [showAttendanceModal, setShowAttendanceModal] = useState(false);
     const [showReportsModal, setShowReportsModal] = useState(false);
     const [showOtherItemsModal, setShowOtherItemsModal] = useState(false);
-    const [showOtherAdminModal, setShowOtherAdminModal] = useState(false);
-    const [showEndorsedItemsModal, setShowEndorsedItemsModal] = useState(false);
-    const [showValidationModal, setShowValidationModal] = useState(false);
-    const [validationMessage, setValidationMessage] = useState('');
-    const [errorField, setErrorField] = useState('');
-    const [showPreviewModal, setShowPreviewModal] = useState(false);
     
-    // Communication and Other Items – use default data for new reports (editable, addable, removable)
-    const [communicationRows, setCommunicationRows] = useState(reportToEdit?.communicationRows ?? getDefaultCommunicationRows());
-    const [otherItemsRows, setOtherItemsRows] = useState(reportToEdit?.otherItemsRows ?? getDefaultOtherItemsRows());
-    const [otherAdminRows, setOtherAdminRows] = useState(reportToEdit?.otherAdminRows ?? getDefaultOtherAdminRows());
-    const [endorsedItemsRows, setEndorsedItemsRows] = useState(reportToEdit?.endorsedItemsRows ?? getDefaultEndorsedItemsRows());
+    // Communication and Other Items
+    const [communicationRows, setCommunicationRows] = useState([
+        { id: 1, particulars: '', noOfItems: 0, contact: '', status: '' }
+    ]);
+    const [otherItemsRows, setOtherItemsRows] = useState([
+        { id: 1, particulars: '', noOfItems: 0, status: '' }
+    ]);
     
     // Signatures
-    const [preparedBy, setPreparedBy] = useState(reportToEdit?.preparedBy || '');
-    const [preparedPosition, setPreparedPosition] = useState(reportToEdit?.preparedPosition || '');
-    const [receivedBy, setReceivedBy] = useState(reportToEdit?.receivedBy || '');
-    const [receivedPosition, setReceivedPosition] = useState(reportToEdit?.receivedPosition || '');
-    const [notedBy, setNotedBy] = useState(reportToEdit?.notedBy || '');
-    const [notedPosition, setNotedPosition] = useState(reportToEdit?.notedPosition || '');
-    const [approvedBy, setApprovedBy] = useState(reportToEdit?.approvedBy || '');
-    const [approvedPosition, setApprovedPosition] = useState(reportToEdit?.approvedPosition || '');
-
-    useEffect(() => {
-        if (!isEditing || !reportToEdit?.id) return;
-        if (reportToEdit.attendanceItems != null && Array.isArray(reportToEdit.attendanceItems)) {
-            setFullReport(reportToEdit);
-            return;
-        }
-        fetchReport(reportToEdit.id).then(setFullReport).catch(() => setFullReport(reportToEdit));
-    }, [isEditing, reportToEdit?.id]);
-
-    useEffect(() => {
-        if (!fullReport) return;
-        setDocumentName(fullReport.documentName ?? '');
-        setForName(fullReport.forName ?? '');
-        setForPosition(fullReport.forPosition ?? '');
-        setThruName(fullReport.thruName ?? '');
-        setThruPosition(fullReport.thruPosition ?? '');
-        setFromName(fullReport.fromName ?? '');
-        setFromPosition(fullReport.fromPosition ?? '');
-        setSubject(fullReport.subject ?? '');
-        setDateTime(fullReport.dateTime ?? '');
-        setStatus(fullReport.alertStatus ?? fullReport.status ?? '');
-        setAttendanceItems(fullReport.attendanceItems?.length ? fullReport.attendanceItems : [{ id: 1, name: '', task: '', taskAsBullets: false }]);
-        setReportsItems(fullReport.reportsItems?.length ? fullReport.reportsItems : [{ id: 1, report: '', remarks: '', reportAsBullets: false }]);
-        setCommunicationRows(fullReport.communicationRows ?? getDefaultCommunicationRows());
-        setOtherItemsRows(fullReport.otherItemsRows ?? getDefaultOtherItemsRows());
-        setOtherAdminRows(fullReport.otherAdminRows ?? getDefaultOtherAdminRows());
-        setEndorsedItemsRows(fullReport.endorsedItemsRows ?? getDefaultEndorsedItemsRows());
-        setPreparedBy(fullReport.preparedBy ?? '');
-        setPreparedPosition(fullReport.preparedPosition ?? '');
-        setReceivedBy(fullReport.receivedBy ?? '');
-        setReceivedPosition(fullReport.receivedPosition ?? '');
-        setNotedBy(fullReport.notedBy ?? '');
-        setNotedPosition(fullReport.notedPosition ?? '');
-        setApprovedBy(fullReport.approvedBy ?? '');
-        setApprovedPosition(fullReport.approvedPosition ?? '');
-    }, [fullReport?.id]);
+    const [preparedBy, setPreparedBy] = useState('');
+    const [preparedPosition, setPreparedPosition] = useState('');
+    const [receivedBy, setReceivedBy] = useState('');
+    const [receivedPosition, setReceivedPosition] = useState('');
+    const [notedBy, setNotedBy] = useState('');
+    const [notedPosition, setNotedPosition] = useState('');
+    const [approvedBy, setApprovedBy] = useState('');
+    const [approvedPosition, setApprovedPosition] = useState('');
 
     const handleReturn = () => {
         navigate('/adr-reports');
     };
+
+    const showNotification = (message, type = 'error') => {
+        setNotification({ message, type });
+        setTimeout(() => setNotification(null), 4000);
+    };
     
-    const handleConfirm = () => {
-        // Validation temporarily disabled for template work
-        // TODO: Re-enable validation after template is complete
-        
-        const formData = {
-            documentName,
-            forName,
-            forPosition,
-            thruName,
-            thruPosition,
-            fromName,
-            fromPosition,
-            subject,
-            dateTime,
-            status,
-            attendanceItems,
-            reportsItems,
-            communicationRows,
-            otherItemsRows,
-            otherAdminRows,
-            endorsedItemsRows,
-            preparedBy,
-            preparedPosition,
-            receivedBy,
-            receivedPosition,
-            notedBy,
-            notedPosition,
-            approvedBy,
-            approvedPosition
+    const handleConfirm = async () => {
+        if (!documentName.trim()) {
+            setShowErrorNotification(true);
+            return;
+        }
+
+        // Wrap everything in { report: { ... } } — matches AdrFormController::store() expectation
+        const payload = {
+            report: {
+                documentName,
+                subject,
+                alertStatus: status,
+                templates_id: 10,  // links to your ADR_template (id=10)
+
+                forName,
+                forPosition,
+                thruName,
+                thruPosition,
+                fromName,
+                fromPosition,
+                dateTime,
+                status,
+                attendanceItems,
+                reportsItems,
+                communicationRows,
+                otherItemsRows,
+                preparedBy,
+                preparedPosition,
+                receivedBy,
+                receivedPosition,
+                notedBy,
+                notedPosition,
+                approvedBy,
+                approvedPosition
+            }
         };
-        
-        if (isEditing && reportToEdit && reportToEdit.id) {
-            updateReport(reportToEdit.id, formData)
-                .then(() => navigate('/adr-reports', { state: { success: true, message: 'Document updated successfully!' } }))
-                .catch(() => {});
-        } else {
-            addReport(formData)
-                .then(() => navigate('/adr-reports', { state: { success: true, message: 'Document created successfully!' } }))
-                .catch(() => {});
+
+        try {
+            if (isEditing && editingReport.id) {
+                // Update existing report
+                await updateReport(editingReport.id, payload.report);
+            } else {
+                // Create new report
+                await addReport(payload.report);
+            }
+
+            setShowSuccessNotification(true);
+            setTimeout(() => {
+                navigate('/adr-reports');
+            }, 1500);
+        } catch (error) {
+            console.error("Failed to save ADR form:", error);
+            showNotification(
+                error.response?.data?.message || 'Failed to save report. Please try again.',
+                'error'
+            );
         }
     };
-    
-    const handleViewDocument = () => {
-        setShowPreviewModal(true);
-    };
 
-    const getPreviewReport = () => {
-        const formData = {
-            documentName,
-            forName,
-            forPosition,
-            thruName,
-            thruPosition,
-            fromName,
-            fromPosition,
-            subject,
-            dateTime,
-            status,
-            attendanceItems: attendanceItems ?? [],
-            reportsItems: reportsItems ?? [],
-            communicationRows: communicationRows ?? [],
-            otherItemsRows: otherItemsRows ?? [],
-            otherAdminRows: otherAdminRows ?? [],
-            endorsedItemsRows: Array.isArray(endorsedItemsRows) ? [...endorsedItemsRows] : [],
-            preparedBy,
-            preparedPosition,
-            receivedBy,
-            receivedPosition,
-            notedBy,
-            notedPosition,
-            approvedBy,
-            approvedPosition
-        };
-        return { ...formData, alertStatus: status || 'WHITE ALERT' };
-    };
+    
+    
+    // const handleViewDocument = () => {
+    //     // Functionality disabled for now
+    // };
+
+    
 
     const addAttendanceItem = () => {
-        setAttendanceItems(prev => {
-            const newId = Math.max(...prev.map(item => Number(item.id) || 0), 0) + 1;
-            return [...prev, { id: newId, name: '', task: '', taskAsBullets: false }];
-        });
+        const newId = Math.max(...attendanceItems.map(item => item.id), 0) + 1;
+        setAttendanceItems([...attendanceItems, { id: newId, name: '', task: '' }]);
     };
 
     const removeAttendanceItem = (id) => {
-        setAttendanceItems(prev => {
-            if (prev.length <= 1) return prev;
-            return prev.filter(item => Number(item.id) !== Number(id));
-        });
+        if (attendanceItems.length > 1) {
+            setAttendanceItems(attendanceItems.filter(item => item.id !== id));
+        }
     };
 
     const addReportsItem = () => {
-        setReportsItems(prev => {
-            const newId = Math.max(...prev.map(item => Number(item.id) || 0), 0) + 1;
-            return [...prev, { id: newId, report: '', remarks: '', reportAsBullets: false, alignReport: 'left', alignRemarks: 'left' }];
-        });
-    };
-
-    const updateReportsAlign = (itemId, field, align) => {
-        setReportsItems(prev => prev.map(i => i.id === itemId ? { ...i, [field]: align } : i));
-    };
-
-    const getSelectionOrCurrentLine = (v, start, end) => {
-        if (start < end) return { start, end };
-        const lineStart = v.lastIndexOf('\n', start - 1) + 1;
-        let lineEnd = v.indexOf('\n', start);
-        if (lineEnd === -1) lineEnd = v.length;
-        return { start: lineStart, end: lineEnd };
-    };
-
-    const indentReportsField = (itemId, field) => {
-        const ta = reportsFieldRefs.current[`${itemId}-${field}`];
-        if (!ta) return;
-        const v = ta.value;
-        const selStart = ta.selectionStart;
-        const selEnd = ta.selectionEnd;
-        const { start, end } = getSelectionOrCurrentLine(v, selStart, selEnd);
-        const before = v.slice(0, start);
-        const sel = v.slice(start, end);
-        const after = v.slice(end);
-        const indentStr = '    ';
-        const newSel = sel.split('\n').map(line => indentStr + line).join('\n');
-        const newVal = before + newSel + after;
-        const newEnd = start + newSel.length;
-        setReportsItems(prev => prev.map(i => i.id === itemId ? { ...i, [field]: newVal } : i));
-        setTimeout(() => { ta.focus(); ta.setSelectionRange(start, newEnd); }, 0);
-    };
-
-    const outdentReportsField = (itemId, field) => {
-        const ta = reportsFieldRefs.current[`${itemId}-${field}`];
-        if (!ta) return;
-        const v = ta.value;
-        const selStart = ta.selectionStart;
-        const selEnd = ta.selectionEnd;
-        const { start, end } = getSelectionOrCurrentLine(v, selStart, selEnd);
-        const lines = v.split('\n');
-        let charIdx = 0;
-        const newLines = lines.map(line => {
-            const len = line.length;
-            const lineStart = charIdx;
-            charIdx += len + 1;
-            if (lineStart >= end || lineStart + len <= start) return line;
-            const toRemove = Math.min(4, line.match(/^[ \t]+/)?.[0]?.length ?? 0);
-            return line.slice(toRemove);
-        });
-        const newVal = newLines.join('\n');
-        setReportsItems(prev => prev.map(i => i.id === itemId ? { ...i, [field]: newVal } : i));
-        setTimeout(() => ta?.focus(), 0);
+        const newId = Math.max(...reportsItems.map(item => item.id), 0) + 1;
+        setReportsItems([...reportsItems, { id: newId, report: '', remarks: '' }]);
     };
 
     const removeReportsItem = (id) => {
-        setReportsItems(prev => {
-            if (prev.length <= 1) return prev;
-            return prev.filter(item => Number(item.id) !== Number(id));
-        });
+        if (reportsItems.length > 1) {
+            setReportsItems(reportsItems.filter(item => item.id !== id));
+        }
     };
 
     const addCommunicationRow = () => {
         const newId = Math.max(...communicationRows.map(row => row.id), 0) + 1;
-        setCommunicationRows([...communicationRows, { id: newId, particulars: '', noOfItems: 0, contact: '', status: '', contactAsBullets: false, statusAsBullets: false }]);
+        setCommunicationRows([...communicationRows, { id: newId, particulars: '', noOfItems: 0, contact: '', status: '' }]);
     };
 
     const removeCommunicationRow = (id) => {
@@ -319,7 +214,7 @@ function ADRForm() {
 
     const addOtherItemsRow = () => {
         const newId = Math.max(...otherItemsRows.map(row => row.id), 0) + 1;
-        setOtherItemsRows([...otherItemsRows, { id: newId, particulars: '', noOfItems: 0, status: '', statusAsBullets: false }]);
+        setOtherItemsRows([...otherItemsRows, { id: newId, particulars: '', noOfItems: 0, status: '' }]);
     };
 
     const removeOtherItemsRow = (id) => {
@@ -344,43 +239,42 @@ function ADRForm() {
         ));
     };
 
-    const addOtherAdminRow = () => {
-        const newId = Math.max(...otherAdminRows.map(row => row.id), 0) + 1;
-        setOtherAdminRows([...otherAdminRows, { id: newId, concern: '', concernAsBullets: false }]);
-    };
-
-    const removeOtherAdminRow = (id) => {
-        setOtherAdminRows(otherAdminRows.filter(row => row.id !== id));
-    };
-
-    const updateOtherAdminRow = (id, field, value) => {
-        setOtherAdminRows(otherAdminRows.map(row => 
-            row.id === id ? { ...row, [field]: value } : row
-        ));
-    };
-
-    if (isEditing && reportToEdit?.id && fullReport == null) {
-        return (
-            <div className="adr-form">
-                <p style={{ padding: '2rem', textAlign: 'center' }}>Loading report...</p>
-            </div>
-        );
-    }
-
     return (
         <div className="adr-form">
+            {notification && (
+                <div className={`adr-form__notification adr-form__notification--${notification.type}`}>
+                    <div className="adr-form__notification-content">
+                        {notification.message}
+                    </div>
+                    <button 
+                        className="adr-form__notification-close" 
+                        onClick={() => setNotification(null)}
+                        type="button"
+                    >
+                        &times;
+                    </button>
+                </div>
+            )}
+            <SuccessNotification 
+                message="Report submitted successfully!" 
+                isVisible={showSuccessNotification} 
+                onClose={() => setShowSuccessNotification(false)} 
+            />
+            <SuccessNotification 
+                message="Please enter a document name." 
+                isVisible={showErrorNotification} 
+                onClose={() => setShowErrorNotification(false)}
+                type="error"
+            />
             <div className="adr-form__top">
                 <div className="adr-form__top-left">
                     <h1 className="adr-form__title">RDRRMOC DUTY REPORT</h1>
                     <input 
                         type="text" 
-                        className={`adr-form__document-name ${errorField === 'documentName' ? 'adr-form__input-error' : ''}`}
+                        className="adr-form__document-name" 
                         placeholder="Enter document name..." 
                         value={documentName}
-                        onChange={(e) => {
-                            setDocumentName(e.target.value);
-                            if (errorField === 'documentName') setErrorField('');
-                        }}
+                        onChange={(e) => setDocumentName(e.target.value)}
                     />
                 </div>
                 <div className="adr-form__top-right">
@@ -393,17 +287,8 @@ function ADRForm() {
                     <div className="adr-form__actions">
                         <button className="adr-form__action-btn adr-form__action-btn--confirm" onClick={handleConfirm}>
                             <img src={`${window.location.origin}/images/confirm_icon.svg`} alt="Confirm" />
-                            {isEditing ? 'Update' : 'Confirm'}
+                            Confirm
                         </button>
-                        {!isEditing && (
-                            <button className="adr-form__action-btn adr-form__action-btn--view" onClick={handleViewDocument}>
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                                    <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                                View document
-                            </button>
-                        )}
                     </div>
                 </div>
             </div>
@@ -413,45 +298,21 @@ function ADRForm() {
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>For:</label>
-                            <input 
-                                type="text" 
-                                className={errorField === 'forName' ? 'adr-form__input-error' : ''}
-                                value={forName} 
-                                onChange={(e) => {
-                                    setForName(e.target.value);
-                                    if (errorField === 'forName') setErrorField('');
-                                }}
-                            />
+                            <input type="text" value={forName} onChange={(e) => setForName(e.target.value)} />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={forPosition} onChange={(e) => setForPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>Thru:</label>
-                            <input 
-                                type="text" 
-                                className={errorField === 'thruName' ? 'adr-form__input-error' : ''}
-                                value={thruName} 
-                                onChange={(e) => {
-                                    setThruName(e.target.value);
-                                    if (errorField === 'thruName') setErrorField('');
-                                }}
-                            />
+                            <input type="text" value={thruName} onChange={(e) => setThruName(e.target.value)} />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={thruPosition} onChange={(e) => setThruPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>From:</label>
-                            <input 
-                                type="text" 
-                                className={errorField === 'fromName' ? 'adr-form__input-error' : ''}
-                                value={fromName} 
-                                onChange={(e) => {
-                                    setFromName(e.target.value);
-                                    if (errorField === 'fromName') setErrorField('');
-                                }}
-                            />
+                            <input type="text" value={fromName} onChange={(e) => setFromName(e.target.value)} />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={fromPosition} onChange={(e) => setFromPosition(e.target.value)}></textarea>
                     </div>
@@ -459,7 +320,7 @@ function ADRForm() {
                         <div className="adr-form__subject-header">
                             <label>Subject:</label>
                             <span className="adr-form__subject-text">After Duty Report for the Period Covered</span>
-                            <input type="text" className="adr-form__subject-input" placeholder="Date and Time" value={dateTime} onChange={(e) => setDateTime(e.target.value)} />
+                            <input type="text" className="adr-form__subject-input" value={dateTime} onChange={(e) => setDateTime(e.target.value)} />
                         </div>
                     </div>
                 </div>
@@ -467,10 +328,9 @@ function ADRForm() {
                 <div className="adr-form__section">
                     <label className="adr-form__section-label">1. Status</label>
                     <select className="adr-form__select" value={status} onChange={(e) => setStatus(e.target.value)}>
-                        <option value="">Choose a status</option>
-                        <option value="WHITE ALERT">WHITE ALERT</option>
-                        <option value="BLUE ALERT">BLUE ALERT</option>
-                        <option value="RED ALERT">RED ALERT</option>
+                        <option>WHITE ALERT</option>
+                        <option>BLUE ALERT</option>
+                        <option>RED ALERT</option>
                     </select>
                 </div>
 
@@ -508,40 +368,20 @@ function ADRForm() {
                             CUSTOMIZE
                         </button>
                     </div>
-                    <div className="adr-form__customize-group">
-                        <label>C. Other Administrative Matters:</label>
-                        <button className="adr-form__customize-btn" type="button" onClick={() => setShowOtherAdminModal(true)}>
-                            CUSTOMIZE
-                        </button>
-                    </div>
-                    <div className="adr-form__other-admin-content">
-                        <div className="adr-form__other-admin-item">
-                            <span>(List down administrative concerns such as but not limited to: Duty driver on-call, vehicle activities, internet or other ICT equipment issues, parcel or documents received/delivered, untoward incidents that should be elevated to the management level).</span>
-                        </div>
-                        <div className="adr-form__other-admin-item">
-                            <span>1. The following were endorsed to incoming Operations Duty Staff:</span>
-                            <button className="adr-form__customize-btn" type="button" onClick={() => setShowEndorsedItemsModal(true)}>
-                                CUSTOMIZE
-                            </button>
-                        </div>
-                        <div className="adr-form__other-admin-item">
-                            <span>2. For information of the OCD Officer-In-Charge.</span>
-                        </div>
-                    </div>
                 </div>
 
                 <div className="adr-form__signature-fields">
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Prepared By:</label>
-                            <input type="text" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} placeholder="Name" />
+                            <input type="text" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={preparedPosition} onChange={(e) => setPreparedPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Received By:</label>
-                            <input type="text" value={receivedBy} onChange={(e) => setReceivedBy(e.target.value)} placeholder="Name" />
+                            <input type="text" value={receivedBy} onChange={(e) => setReceivedBy(e.target.value)} />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={receivedPosition} onChange={(e) => setReceivedPosition(e.target.value)}></textarea>
                     </div>
@@ -586,10 +426,10 @@ function ADRForm() {
                                     {communicationRows.map((row) => (
                                         <tr className="adr-form__modal-table-row" key={row.id}>
                                             <td>
-                                                <textarea 
-                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
-                                                    placeholder="Enter particulars (new line to break)"
-                                                    rows="2"
+                                                <input 
+                                                    type="text" 
+                                                    className="adr-form__modal-input" 
+                                                    placeholder="Enter particulars"
                                                     value={row.particulars}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'particulars', e.target.value)}
                                                 />
@@ -620,19 +460,19 @@ function ADRForm() {
                                                 </div>
                                             </td>
                                             <td>
-                                                <textarea 
-                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
-                                                    placeholder="Enter contact/freq/channel (press Enter for each bullet)"
-                                                    rows="2"
+                                                <input 
+                                                    type="text" 
+                                                    className="adr-form__modal-input" 
+                                                    placeholder="Enter contact/freq/channel"
                                                     value={row.contact}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'contact', e.target.value)}
                                                 />
                                             </td>
                                             <td>
-                                                <textarea 
-                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
-                                                    placeholder="Enter status/remarks (press Enter for each bullet)"
-                                                    rows="2"
+                                                <input 
+                                                    type="text" 
+                                                    className="adr-form__modal-input" 
+                                                    placeholder="Enter status/remarks"
                                                     value={row.status}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'status', e.target.value)}
                                                 />
@@ -680,44 +520,42 @@ function ADRForm() {
                                 <thead>
                                     <tr>
                                         <th className="adr-form__modal-table-number">#</th>
-                                        <th className="adr-form__modal-table-name-col">Name</th>
-                                        <th className="adr-form__modal-table-task-col">Task</th>
-                                        <th className="adr-form__modal-table-actions-col">Actions</th>
+                                        <th>Name</th>
+                                        <th>Task</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="adr-form__modal-table-body">
                                     {attendanceItems.map((item, index) => (
                                         <tr className="adr-form__modal-table-row" key={item.id}>
                                             <td className="adr-form__modal-table-number">{index + 1}</td>
-                                            <td className="adr-form__modal-table-name-col">
-                                                <textarea
-                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm"
-                                                    placeholder="Enter name(s) — add another line for more names"
-                                                    rows={2}
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    className="adr-form__modal-input" 
+                                                    placeholder="Enter name"
                                                     value={item.name}
                                                     onChange={(e) => {
-                                                        const value = e.target.value;
-                                                        setAttendanceItems(prev => prev.map(i =>
-                                                            i.id === item.id ? { ...i, name: value } : i
+                                                        setAttendanceItems(attendanceItems.map(i => 
+                                                            i.id === item.id ? { ...i, name: e.target.value } : i
                                                         ));
                                                     }}
                                                 />
                                             </td>
-                                            <td className="adr-form__modal-table-task-col">
+                                            <td>
                                                 <textarea 
                                                     className="adr-form__modal-input adr-form__modal-textarea" 
-                                                    placeholder="Enter task (press Enter for each bullet)"
-                                                    rows="3"
+                                                    placeholder="Enter task"
+                                                    rows="2"
                                                     value={item.task}
                                                     onChange={(e) => {
-                                                        const value = e.target.value;
-                                                        setAttendanceItems(prev => prev.map(i => 
-                                                            i.id === item.id ? { ...i, task: value } : i
+                                                        setAttendanceItems(attendanceItems.map(i => 
+                                                            i.id === item.id ? { ...i, task: e.target.value } : i
                                                         ));
                                                     }}
                                                 ></textarea>
                                             </td>
-                                            <td className="adr-form__modal-table-actions-col">
+                                            <td>
                                                 <button 
                                                     className="adr-form__modal-action-btn" 
                                                     type="button"
@@ -760,88 +598,42 @@ function ADRForm() {
                                 <thead>
                                     <tr>
                                         <th className="adr-form__modal-table-number">#</th>
-                                        <th className="adr-form__modal-table-report-col">Reports and Advisories Released</th>
-                                        <th className="adr-form__modal-table-remarks-col">Remarks</th>
-                                        <th className="adr-form__modal-table-actions-col">Actions</th>
+                                        <th>Reports and Advisories Released</th>
+                                        <th>Remarks</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="adr-form__modal-table-body">
                                     {reportsItems.map((item, index) => (
                                         <tr className="adr-form__modal-table-row" key={item.id}>
                                             <td className="adr-form__modal-table-number">{index + 1}</td>
-                                            <td className="adr-form__modal-table-report-col">
-                                                <div className="adr-form__field-toolbar">
-                                                    <span className="adr-form__field-toolbar-label">Align</span>
-                                                    {[
-                                                        { align: 'left', icon: '/images/left_align.svg' },
-                                                        { align: 'center', icon: '/images/center.svg' },
-                                                        { align: 'right', icon: '/images/right_align.svg' },
-                                                        { align: 'justify', icon: '/images/justify.svg' },
-                                                    ].map(({ align, icon }) => (
-                                                        <button key={align} type="button" className={`adr-form__toolbar-btn adr-form__toolbar-btn--icon ${(item.alignReport || 'left') === align ? 'adr-form__toolbar-btn--active' : ''}`} onClick={() => updateReportsAlign(item.id, 'alignReport', align)} title={`Align ${align}`}>
-                                                            <img src={icon} alt="" aria-hidden />
-                                                        </button>
-                                                    ))}
-                                                    <span className="adr-form__field-toolbar-sep" aria-hidden>|</span>
-                                                    <button type="button" className="adr-form__toolbar-btn adr-form__toolbar-btn--icon" onClick={() => indentReportsField(item.id, 'report')} title="Indent selected lines">
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M9 6h12M9 12h12M9 18h12M3 6v12l4-4-4-4z" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                                                    </button>
-                                                    <button type="button" className="adr-form__toolbar-btn adr-form__toolbar-btn--icon" onClick={() => outdentReportsField(item.id, 'report')} title="Outdent selected lines">
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M15 6H3M15 12H3M15 18H3M21 9l-4 4 4 4V9z" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                                                    </button>
-                                                </div>
+                                            <td>
                                                 <textarea 
-                                                    ref={(el) => { reportsFieldRefs.current[`${item.id}-report`] = el; }}
                                                     className="adr-form__modal-input adr-form__modal-textarea" 
-                                                    style={{ textAlign: item.alignReport || 'left' }}
-                                                    placeholder="Enter reports and advisories released (use new line to break text)"
-                                                    rows={3}
+                                                    placeholder="Enter reports and advisories released"
+                                                    rows="3"
                                                     value={item.report}
                                                     onChange={(e) => {
-                                                        const value = e.target.value;
-                                                        setReportsItems(prev => prev.map(i => 
-                                                            i.id === item.id ? { ...i, report: value } : i
+                                                        setReportsItems(reportsItems.map(i => 
+                                                            i.id === item.id ? { ...i, report: e.target.value } : i
                                                         ));
                                                     }}
                                                 ></textarea>
                                             </td>
-                                            <td className="adr-form__modal-table-remarks-col">
-                                                <div className="adr-form__field-toolbar">
-                                                    <span className="adr-form__field-toolbar-label">Align</span>
-                                                    {[
-                                                        { align: 'left', icon: '/images/left_align.svg' },
-                                                        { align: 'center', icon: '/images/center.svg' },
-                                                        { align: 'right', icon: '/images/right_align.svg' },
-                                                        { align: 'justify', icon: '/images/justify.svg' },
-                                                    ].map(({ align, icon }) => (
-                                                        <button key={align} type="button" className={`adr-form__toolbar-btn adr-form__toolbar-btn--icon ${(item.alignRemarks || 'left') === align ? 'adr-form__toolbar-btn--active' : ''}`} onClick={() => updateReportsAlign(item.id, 'alignRemarks', align)} title={`Align ${align}`}>
-                                                            <img src={icon} alt="" aria-hidden />
-                                                        </button>
-                                                    ))}
-                                                    <span className="adr-form__field-toolbar-sep" aria-hidden>|</span>
-                                                    <button type="button" className="adr-form__toolbar-btn adr-form__toolbar-btn--icon" onClick={() => indentReportsField(item.id, 'remarks')} title="Indent selected lines">
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M9 6h12M9 12h12M9 18h12M3 6v12l4-4-4-4z" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                                                    </button>
-                                                    <button type="button" className="adr-form__toolbar-btn adr-form__toolbar-btn--icon" onClick={() => outdentReportsField(item.id, 'remarks')} title="Outdent selected lines">
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M15 6H3M15 12H3M15 18H3M21 9l-4 4 4 4V9z" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                                                    </button>
-                                                </div>
-                                                <textarea 
-                                                    ref={(el) => { reportsFieldRefs.current[`${item.id}-remarks`] = el; }}
-                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--remarks" 
-                                                    style={{ textAlign: item.alignRemarks || 'left' }}
+                                            <td>
+                                                <input 
+                                                    type="text" 
+                                                    className="adr-form__modal-input" 
                                                     placeholder="Enter remarks"
-                                                    rows={3}
                                                     value={item.remarks}
                                                     onChange={(e) => {
-                                                        const value = e.target.value;
-                                                        setReportsItems(prev => prev.map(i => 
-                                                            i.id === item.id ? { ...i, remarks: value } : i
+                                                        setReportsItems(reportsItems.map(i => 
+                                                            i.id === item.id ? { ...i, remarks: e.target.value } : i
                                                         ));
                                                     }}
-                                                ></textarea>
+                                                />
                                             </td>
-                                            <td className="adr-form__modal-table-actions-col">
+                                            <td>
                                                 <button 
                                                     className="adr-form__modal-action-btn" 
                                                     type="button"
@@ -893,10 +685,10 @@ function ADRForm() {
                                     {otherItemsRows.map((row) => (
                                         <tr className="adr-form__modal-table-row" key={row.id}>
                                             <td>
-                                                <textarea 
-                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
-                                                    placeholder="Enter particulars (new line to break)"
-                                                    rows="2"
+                                                <input 
+                                                    type="text" 
+                                                    className="adr-form__modal-input" 
+                                                    placeholder="Enter particulars"
                                                     value={row.particulars}
                                                     onChange={(e) => updateOtherItemsRow(row.id, 'particulars', e.target.value)}
                                                 />
@@ -927,10 +719,10 @@ function ADRForm() {
                                                 </div>
                                             </td>
                                             <td>
-                                                <textarea 
-                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm" 
-                                                    placeholder="Enter status/remarks (press Enter for each bullet)"
-                                                    rows="2"
+                                                <input 
+                                                    type="text" 
+                                                    className="adr-form__modal-input" 
+                                                    placeholder="Enter status/remarks"
                                                     value={row.status}
                                                     onChange={(e) => updateOtherItemsRow(row.id, 'status', e.target.value)}
                                                 />
@@ -963,94 +755,6 @@ function ADRForm() {
                     </div>
                 </div>
             )}
-
-            {showOtherAdminModal && (
-                <div className="adr-form__modal adr-form__modal--active" onClick={() => setShowOtherAdminModal(false)}>
-                    <div className="adr-form__modal-content" onClick={(e) => e.stopPropagation()}>
-                        <div className="adr-form__modal-header">
-                            <h2>Administrative Concerns</h2>
-                            <button className="adr-form__modal-close" type="button" onClick={() => setShowOtherAdminModal(false)}>
-                                &times;
-                            </button>
-                        </div>
-                        <div className="adr-form__modal-body">
-                            <p className="adr-form__modal-hint">List down administrative concerns. Press Enter for each bullet.</p>
-                            <textarea
-                                className="adr-form__modal-input adr-form__modal-textarea"
-                                placeholder="e.g. No untoward incident"
-                                rows={6}
-                                value={otherAdminRows[0]?.concern ?? ''}
-                                onChange={(e) => {
-                                    const first = otherAdminRows[0];
-                                    if (first) updateOtherAdminRow(first.id, 'concern', e.target.value);
-                                    else setOtherAdminRows([{ id: 1, concern: e.target.value, concernAsBullets: false }]);
-                                }}
-                            />
-                        </div>
-                        <div className="adr-form__modal-footer">
-                            <button className="adr-form__modal-confirm" type="button" onClick={() => setShowOtherAdminModal(false)}>
-                                Confirm
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {showEndorsedItemsModal && (
-                <div className="adr-form__modal adr-form__modal--active" onClick={() => setShowEndorsedItemsModal(false)}>
-                    <div className="adr-form__modal-content" onClick={(e) => e.stopPropagation()}>
-                        <div className="adr-form__modal-header">
-                            <h2>Endorsed to Incoming Operations Duty Staff</h2>
-                            <button className="adr-form__modal-close" type="button" onClick={() => setShowEndorsedItemsModal(false)}>
-                                &times;
-                            </button>
-                        </div>
-                        <div className="adr-form__modal-body">
-                            <p className="adr-form__modal-hint">List endorsed items. Press Enter for each item (e.g. 1.1, 1.2, 1.3).</p>
-                            <textarea
-                                className="adr-form__modal-input adr-form__modal-textarea"
-                                placeholder="e.g. 3 keys, 4 bars"
-                                rows={6}
-                                value={endorsedItemsRows.map((r) => r.item).join('\n')}
-                                onChange={(e) => {
-                                    const text = e.target.value;
-                                    const lines = text.split('\n');
-                                    setEndorsedItemsRows(
-                                        lines.map((line, index) => ({
-                                            id: index + 1,
-                                            item: line,
-                                            itemAsBullets: false,
-                                        }))
-                                    );
-                                }}
-                            />
-                        </div>
-                        <div className="adr-form__modal-footer">
-                            <button className="adr-form__modal-confirm" type="button" onClick={() => setShowEndorsedItemsModal(false)}>
-                                Confirm
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            <DocumentViewModal
-                key={showPreviewModal ? `preview-${endorsedItemsRows?.length ?? 0}` : 'preview-closed'}
-                isOpen={showPreviewModal}
-                report={showPreviewModal ? getPreviewReport() : null}
-                onClose={() => {
-                    setShowPreviewModal(false);
-                    navigate('/adr-reports/create', { replace: true, state: isEditing && reportToEdit ? { report: reportToEdit } : {} });
-                }}
-            />
-
-            <ConfirmModal
-                isOpen={showValidationModal}
-                message={validationMessage}
-                onConfirm={() => setShowValidationModal(false)}
-                onCancel={() => setShowValidationModal(false)}
-                showCancel={false}
-            />
         </div>
     );
 }
