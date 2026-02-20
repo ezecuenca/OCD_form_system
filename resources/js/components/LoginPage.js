@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import LoadingScreen from './LoadingScreen';
+import FailNotification from './FailNotification';
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ function LoginPage() {
     const [noticeMessage, setNoticeMessage] = useState('');
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showFailNotification, setShowFailNotification] = useState(false);
 
     useEffect(() => {
         const reason = location?.state?.reason;
@@ -38,6 +40,7 @@ function LoginPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage('');
+        setShowFailNotification(false);
 
         try {
             setIsSubmitting(true);
@@ -49,12 +52,15 @@ function LoginPage() {
             navigate('/schedule', { state: { loginSuccess: true } });
         } catch (err) {
             const response = err?.response?.data;
+            let errorMsg = 'Login failed.';
             if (response?.errors) {
                 const firstError = Object.values(response.errors).flat()[0];
-                setErrorMessage(firstError || 'Login failed.');
-            } else {
-                setErrorMessage(response?.message || 'Login failed.');
+                errorMsg = firstError || errorMsg;
+            } else if (response?.message) {
+                errorMsg = response.message;
             }
+            setErrorMessage(errorMsg);
+            setShowFailNotification(true);
         } finally {
             setIsSubmitting(false);
         }
@@ -82,11 +88,6 @@ function LoginPage() {
                     {noticeMessage && (
                         <div className="login-form__notice">
                             {noticeMessage}
-                        </div>
-                    )}
-                    {errorMessage && (
-                        <div className="login-form__error">
-                            {errorMessage}
                         </div>
                     )}
                     <div className="login-form__group">
@@ -118,6 +119,11 @@ function LoginPage() {
                         Don't have an account? <Link to="/signup" className="login-form__signup-link">Sign up</Link> here.
                     </div>
                 </form>
+                <FailNotification 
+                    message={errorMessage} 
+                    isVisible={showFailNotification}
+                    onClose={() => setShowFailNotification(false)}
+                />
             </div>
         </div>
     );

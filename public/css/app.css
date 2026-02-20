@@ -4370,6 +4370,48 @@ body.document-modal-open .main-content {
     transform: translateX(-50%) translateY(0);
   }
 }
+.fail-notification {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10001;
+  animation: slideDown 0.3s ease-out;
+}
+.fail-notification__content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #dc3545;
+  color: white;
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: 90vw;
+}
+.fail-notification__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.fail-notification__message {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
 .login-page {
   position: fixed;
   top: 0;
