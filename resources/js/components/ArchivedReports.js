@@ -183,6 +183,31 @@ function ArchivedReports() {
     const years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
     const months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+    // Generate dynamic years based on archived reports
+    const getYearsFromArchivedReports = () => {
+        const yearsSet = new Set();
+        
+        if (reports && reports.length > 0) {
+            const archived = reports.filter(r => r.status === 'Archived');
+            archived.forEach(report => {
+                if (report.createdAt) {
+                    const year = new Date(report.createdAt).getFullYear();
+                    yearsSet.add(year);
+                }
+            });
+        }
+        
+        // Only add current year if there are archived reports
+        if (yearsSet.size > 0) {
+            yearsSet.add(new Date().getFullYear());
+        }
+        
+        const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
+        return ['All Years', ...sortedYears.map(String)];
+    };
+
+    const filteredYears = getYearsFromArchivedReports();
+
     const handleYearSelect = (year) => {
         setSelectedYear(year);
         setShowYearDropdown(false);
@@ -309,14 +334,14 @@ function ArchivedReports() {
                 <div className="archived-reports__filters">
                     <div className="archived-reports__filter-dropdown" ref={yearDropdownRef}>
                         <button onClick={() => setShowYearDropdown(!showYearDropdown)}>
-                            Year
+                            {selectedYear}
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                         </button>
                         {showYearDropdown && (
                             <div className="archived-reports__dropdown-menu">
-                                {years.map((year) => (
+                                {filteredYears.map((year) => (
                                     <div 
                                         key={year} 
                                         className="archived-reports__dropdown-item"
@@ -330,7 +355,7 @@ function ArchivedReports() {
                     </div>
                     <div className="archived-reports__filter-dropdown" ref={monthDropdownRef}>
                         <button onClick={() => setShowMonthDropdown(!showMonthDropdown)}>
-                            Month
+                            {selectedMonth}
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>

@@ -9,7 +9,9 @@ function Profile() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [viewerOpen, setViewerOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const editRef = useRef(null);
+    const editRef = useRef(null);                     // ← will now point to whole editable area
+    const sectionDropdownRef = useRef(null);
+    const [showSectionDropdown, setShowSectionDropdown] = useState(false);
 
     const profileImgSrc = profileImageUrl || '/images/default_profile.png';
     const [displayName, setDisplayName] = useState('Your Name');
@@ -68,6 +70,9 @@ function Profile() {
             if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
                 setDropdownOpen(false);
             }
+            if (sectionDropdownRef.current && !sectionDropdownRef.current.contains(e.target)) {
+                setShowSectionDropdown(false);
+            }
         };
         document.addEventListener('click', handleClickOutside);
         return () => document.removeEventListener('click', handleClickOutside);
@@ -75,19 +80,23 @@ function Profile() {
 
     useEffect(() => {
         if (!isEditing) return;
+
         const handleClickOutsideEdit = (e) => {
             if (editRef.current && !editRef.current.contains(e.target)) {
                 setIsEditing(false);
             }
         };
+
         const onKeyDown = (e) => {
             if (e.key === 'Escape') setIsEditing(false);
         };
-        // Delay so the click that opened edit mode doesn't immediately trigger close (button is unmounted after open)
+
+        // Small delay prevents immediate close from the edit button click itself
         const t = setTimeout(() => {
             document.addEventListener('click', handleClickOutsideEdit);
             document.addEventListener('keydown', onKeyDown);
         }, 0);
+
         return () => {
             clearTimeout(t);
             document.removeEventListener('click', handleClickOutsideEdit);
@@ -208,120 +217,155 @@ function Profile() {
                         </button>
                     )}
                 </div>
-                <div className="profile__card">
-                    <div className="profile__photo-wrap" ref={dropdownRef}>
-                        <div
-                            className={`profile__photo-preview ${!profileImageUrl ? 'profile__photo-preview--default' : ''} profile__photo-preview--clickable`}
-                            onClick={openViewer}
-                            role="button"
-                            tabIndex={0}
-                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openViewer(e); } }}
-                            aria-label="View profile picture"
-                        >
-                            <img src={profileImgSrc} alt="Profile" className="profile__photo-img" />
-                        </div>
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/bmp,image/svg+xml,image/*"
-                            onChange={handleFileChange}
-                            className="profile__photo-input"
-                            id="profile-photo-input"
-                        />
-                        <button
-                            type="button"
-                            className="profile__photo-plus"
-                            title="Profile options"
-                            aria-label="Profile options"
-                            aria-haspopup="true"
-                            aria-expanded={dropdownOpen}
-                            onClick={(e) => { e.stopPropagation(); setDropdownOpen((prev) => !prev); }}
-                        >
-                            <span className="profile__photo-plus-icon">+</span>
-                        </button>
-                        {dropdownOpen && (
-                            <div className="profile__photo-dropdown">
-                                <button type="button" className="profile__photo-dropdown-item" onClick={handleChangePhoto}>
-                                    Change profile picture
-                                </button>
-                                <button type="button" className="profile__photo-dropdown-item" onClick={handleRemovePhoto}>
-                                    Remove profile picture
-                                </button>
+
+                {/* ──────────────────────────────────────────────── */}
+                {/* THIS IS THE IMPORTANT CHANGE – ref moved here     */}
+                <div ref={editRef}>
+                    <div className="profile__card">
+                        <div className="profile__photo-wrap" ref={dropdownRef}>
+                            <div
+                                className={`profile__photo-preview ${!profileImageUrl ? 'profile__photo-preview--default' : ''} profile__photo-preview--clickable`}
+                                onClick={openViewer}
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openViewer(e); } }}
+                                aria-label="View profile picture"
+                            >
+                                <img src={profileImgSrc} alt="Profile" className="profile__photo-img" />
                             </div>
-                        )}
-                    </div>
-                    <div className="profile__info" ref={editRef}>
-                        {isEditing ? (
-                            <>
-                                <div className="profile__name-row">
-                                    <div className="profile__name-cell profile__name-cell--field">
-                                        <div className="profile__name-edit-wrap">
-                                            <input
-                                                type="text"
-                                                className="profile__name-input"
-                                                value={editName}
-                                                onChange={(e) => setEditName(e.target.value)}
-                                                placeholder="Your name"
-                                                autoFocus
-                                            />
-                                            {username && <span className="profile__username profile__username--readonly">{username}</span>}
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/bmp,image/svg+xml,image/*"
+                                onChange={handleFileChange}
+                                className="profile__photo-input"
+                                id="profile-photo-input"
+                            />
+                            <button
+                                type="button"
+                                className="profile__photo-plus"
+                                title="Profile options"
+                                aria-label="Profile options"
+                                aria-haspopup="true"
+                                aria-expanded={dropdownOpen}
+                                onClick={(e) => { e.stopPropagation(); setDropdownOpen((prev) => !prev); }}
+                            >
+                                <span className="profile__photo-plus-icon">+</span>
+                            </button>
+                            {dropdownOpen && (
+                                <div className="profile__photo-dropdown">
+                                    <button type="button" className="profile__photo-dropdown-item" onClick={handleChangePhoto}>
+                                        Change profile picture
+                                    </button>
+                                    <button type="button" className="profile__photo-dropdown-item" onClick={handleRemovePhoto}>
+                                        Remove profile picture
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                        <div className="profile__info">
+                            {isEditing ? (
+                                <>
+                                    <div className="profile__name-row">
+                                        <div className="profile__name-cell profile__name-cell--field">
+                                            <div className="profile__name-edit-wrap">
+                                                <input
+                                                    type="text"
+                                                    className="profile__name-input"
+                                                    value={editName}
+                                                    onChange={(e) => setEditName(e.target.value)}
+                                                    placeholder="Your name"
+                                                    autoFocus
+                                                />
+                                                {username && <span className="profile__username profile__username--readonly">@{username}</span>}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <div className="profile__name-row">
-                                    <div className="profile__name-cell">
-                                        <span className="profile__name">{displayName}</span>
-                                        {username && <span className="profile__username">{username}</span>}
+                                </>
+                            ) : (
+                                <>
+                                    <div className="profile__name-row">
+                                        <div className="profile__name-cell">
+                                            <span className="profile__name">{displayName}</span>
+                                            {username && <span className="profile__username">@{username}</span>}
+                                        </div>
                                     </div>
-                                </div>
-                            </>
-                        )}
+                                </>
+                            )}
+                        </div>
                     </div>
-                </div>
 
-                <div className="profile__fields">
-                    <div className="profile__field">
-                        <label className="profile__field-label" htmlFor="profile-position">POSITION</label>
-                        <input
-                            id="profile-position"
-                            type="text"
-                            className="profile__field-input"
-                            value={position}
-                            onChange={(e) => setPosition(e.target.value)}
-                            placeholder="Position"
-                        />
-                    </div>
-                    <div className="profile__field">
-                        <label className="profile__field-label" htmlFor="profile-section">SECTION</label>
-                        <select
-                            id="profile-section"
-                            className="profile__field-input"
-                            value={displaySectionId}
-                            onChange={(e) => setDisplaySectionId(e.target.value)}
-                            aria-label="Section"
-                        >
-                            {sectionOptions.map((opt) => (
-                                <option key={opt.value || 'blank'} value={opt.value}>{opt.label}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="profile__field">
-                        <label className="profile__field-label" htmlFor="profile-email">EMAIL</label>
-                        <input
-                            id="profile-email"
-                            type="email"
-                            className="profile__field-input"
-                            value={email}
-                            disabled
-                            placeholder="Email"
-                            readOnly
-                            aria-readonly="true"
-                        />
+                    <div className="profile__fields">
+                        <div className="profile__field">
+                            <label className="profile__field-label" htmlFor="profile-position">POSITION</label>
+                            {isEditing ? (
+                                <input
+                                    id="profile-position"
+                                    type="text"
+                                    className="profile__field-input"
+                                    value={position}
+                                    onChange={(e) => setPosition(e.target.value)}
+                                    placeholder="Position"
+                                />
+                            ) : (
+                                <div className="profile__section">
+                                    {position || '—'}
+                                </div>
+                            )}
+                        </div>
+                        <div className="profile__field">
+                            <label className="profile__field-label" htmlFor="profile-email">EMAIL</label>
+                            <input
+                                id="profile-email"
+                                type="email"
+                                className="profile__field-input"
+                                value={email}
+                                disabled
+                                placeholder="Email"
+                                readOnly
+                                aria-readonly="true"
+                            />
+                        </div>
+                        <div className="profile__field profile__field--wide">
+                            <label className="profile__field-label" htmlFor="profile-section">SECTION</label>
+                            {isEditing ? (
+                                <div className="profile__section-dropdown" ref={sectionDropdownRef}>
+                                    <button 
+                                        type="button" 
+                                        className="profile__section-select"
+                                        onClick={() => setShowSectionDropdown(!showSectionDropdown)}
+                                    >
+                                        {sectionOptions.find(opt => opt.value === displaySectionId)?.label || 'No section'}
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                        </svg>
+                                    </button>
+                                    {showSectionDropdown && (
+                                        <div className="profile__section-menu">
+                                            {sectionOptions.map((opt) => (
+                                                <div 
+                                                    key={opt.value || 'blank'} 
+                                                    className={`profile__section-item ${displaySectionId === opt.value ? 'profile__section-item--selected' : ''}`}
+                                                    onClick={() => {
+                                                        setDisplaySectionId(opt.value);
+                                                        setShowSectionDropdown(false);
+                                                    }}
+                                                >
+                                                    {opt.label}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="profile__section">
+                                    {sectionOptions.find(opt => opt.value === displaySectionId)?.label || 'No section'}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
+                {/* ──────────────────────────────────────────────── */}
             </div>
 
             {viewerOpen && (
