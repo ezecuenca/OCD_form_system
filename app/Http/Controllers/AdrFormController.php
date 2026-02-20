@@ -86,6 +86,7 @@ class AdrFormController extends Controller
                 'subject' => $report['subject'] ?? '',
                 'alert_status' => $report['alertStatus'] ?? $report['status'] ?? 'WHITE ALERT',
                 'is_archived' => false,
+                'templates_id' => $report['templates_id'] ?? null,
                 'form_data' => $report,
             ]);
             $this->syncChildTables($form, $profileId, $report);
@@ -117,6 +118,7 @@ class AdrFormController extends Controller
                 'document_name' => $report['documentName'] ?? $form->document_name,
                 'subject' => $report['subject'] ?? $form->subject,
                 'alert_status' => $report['alertStatus'] ?? $report['status'] ?? $form->alert_status,
+                'templates_id' => $report['templates_id'] ?? $form->templates_id,
                 'form_data' => $report,
             ]);
             $this->syncChildTables($form, $profileId, $report);

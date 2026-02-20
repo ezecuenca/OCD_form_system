@@ -68723,8 +68723,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
-/* harmony import */ var _ConfirmModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ConfirmModal */ "./resources/js/components/ConfirmModal.js");
-/* harmony import */ var _DocumentViewModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DocumentViewModal */ "./resources/js/components/DocumentViewModal.js");
+/* harmony import */ var _SuccessNotification__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SuccessNotification */ "./resources/js/components/SuccessNotification.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -68736,6 +68737,10 @@ function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArra
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -68748,590 +68753,333 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
-// Default data for new reports – Administrative Matters A to C (and endorsed). Editable, addable, removable.
-
-var getDefaultCommunicationRows = function getDefaultCommunicationRows() {
-  return [{
-    id: 1,
-    particulars: 'Hytera Digital Radio',
-    noOfItems: 2,
-    contact: 'LCL-Caraga / INRG-Caraga',
-    status: 'Operational',
-    contactAsBullets: false,
-    statusAsBullets: false
-  }, {
-    id: 2,
-    particulars: 'Hytera digital radio charger',
-    noOfItems: 2,
-    contact: '-',
-    status: 'Operational',
-    contactAsBullets: false,
-    statusAsBullets: false
-  }, {
-    id: 3,
-    particulars: 'Samsung mobile phone',
-    noOfItems: 1,
-    contact: '0947 946 8145 (SMART)',
-    status: 'Bal 0.50 No call/text promo',
-    contactAsBullets: false,
-    statusAsBullets: false
-  }, {
-    id: 4,
-    particulars: 'RedMi mobile phone',
-    noOfItems: 1,
-    contact: 'SIM 1: 096694832281 SIM 2: 091711637259 (GLOBE)',
-    status: 'SIM 1 Postpaid SIM 2: Bal 0.50 No call/text promo',
-    contactAsBullets: false,
-    statusAsBullets: false
-  }, {
-    id: 5,
-    particulars: 'TPLink Wifi (Temporary)',
-    noOfItems: 1,
-    contact: '-',
-    status: 'Stable connection',
-    contactAsBullets: false,
-    statusAsBullets: false
-  }, {
-    id: 6,
-    particulars: 'VoIP Line for Intercom',
-    noOfItems: 2,
-    contact: '1215. 1216',
-    status: 'Stable Connection',
-    contactAsBullets: false,
-    statusAsBullets: false
-  }, {
-    id: 7,
-    particulars: 'VoIP Line Inter Region and Central Office Connectivity',
-    noOfItems: 2,
-    contact: '926, 927',
-    status: 'Stable Connection',
-    contactAsBullets: false,
-    statusAsBullets: false
-  }];
-};
-var getDefaultOtherItemsRows = function getDefaultOtherItemsRows() {
-  return [{
-    id: 1,
-    particulars: '55-inch TV monitor (Sony)',
-    noOfItems: 3,
-    status: 'Wall-mounted inside OMCR; 1 at VIP Conference Room',
-    statusAsBullets: false
-  }, {
-    id: 2,
-    particulars: '65-inch TV monitor (TCL)',
-    noOfItems: 1,
-    status: 'Wall-mounted inside OMCR',
-    statusAsBullets: false
-  }, {
-    id: 3,
-    particulars: '40-inch TV monitors',
-    noOfItems: 2,
-    status: '1 unit wall-mounted outside OMCR; 1 unit wall-mounted at the lobby',
-    statusAsBullets: false
-  }, {
-    id: 4,
-    particulars: 'Desktop computers',
-    noOfItems: 4,
-    status: 'Workstations',
-    statusAsBullets: false
-  }, {
-    id: 5,
-    particulars: 'Portable Water Filtration Set',
-    noOfItems: 2,
-    status: 'Functional; At storage room near OS',
-    statusAsBullets: false
-  }, {
-    id: 6,
-    particulars: 'Solar Panel Power Source for Water Filter',
-    noOfItems: 2,
-    status: 'Functional; At storage room near OS',
-    statusAsBullets: false
-  }, {
-    id: 7,
-    particulars: 'Nissan Calibre',
-    noOfItems: 1,
-    status: 'Parked safely at GCCC',
-    statusAsBullets: false
-  }, {
-    id: 8,
-    particulars: 'Mitsubishi Pick-up',
-    noOfItems: 1,
-    status: 'Parked safely at GCCC',
-    statusAsBullets: false
-  }, {
-    id: 9,
-    particulars: 'Toyota Commuter Van',
-    noOfItems: 1,
-    status: 'Parked safely at GCCC',
-    statusAsBullets: false
-  }, {
-    id: 10,
-    particulars: 'Key - Nissan Calibre',
-    noOfItems: 1,
-    status: 'Under custody of security guard',
-    statusAsBullets: false
-  }, {
-    id: 11,
-    particulars: 'Key - Mitsubishi Pick-up',
-    noOfItems: 1,
-    status: 'Under custody of security guard',
-    statusAsBullets: false
-  }, {
-    id: 12,
-    particulars: 'Key - Toyota Commuter Van',
-    noOfItems: 1,
-    status: 'Under custody of security guard',
-    statusAsBullets: false
-  }];
-};
-var getDefaultOtherAdminRows = function getDefaultOtherAdminRows() {
-  return [{
-    id: 1,
-    concern: 'No untoward incident',
-    concernAsBullets: false
-  }];
-};
-var getDefaultEndorsedItemsRows = function getDefaultEndorsedItemsRows() {
-  return [{
-    id: 1,
-    item: '2 units of mobile phones',
-    itemAsBullets: false
-  }];
-};
 function ADRForm() {
-  var _location$state, _reportToEdit$communi, _reportToEdit$otherIt, _reportToEdit$otherAd, _reportToEdit$endorse, _otherAdminRows$0$con, _otherAdminRows$, _endorsedItemsRows$le;
+  var _location$state;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState2 = _slicedToArray(_useState, 2),
+    notification = _useState2[0],
+    setNotification = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState4 = _slicedToArray(_useState3, 2),
+    showSuccessNotification = _useState4[0],
+    setShowSuccessNotification = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState6 = _slicedToArray(_useState5, 2),
+    showErrorNotification = _useState6[0],
+    setShowErrorNotification = _useState6[1];
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useLocation)();
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     addReport = _useFormContext.addReport,
-    updateReport = _useFormContext.updateReport,
-    getReport = _useFormContext.getReport,
-    fetchReport = _useFormContext.fetchReport;
-  var reportToEdit = (_location$state = location.state) === null || _location$state === void 0 ? void 0 : _location$state.report;
-  var isEditing = !!reportToEdit;
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(reportToEdit && reportToEdit.attendanceItems != null ? reportToEdit : null),
-    _useState2 = _slicedToArray(_useState, 2),
-    fullReport = _useState2[0],
-    setFullReport = _useState2[1];
+    updateReport = _useFormContext.updateReport;
 
-  // Document name
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.documentName) || ''),
-    _useState4 = _slicedToArray(_useState3, 2),
-    documentName = _useState4[0],
-    setDocumentName = _useState4[1];
+  // Check if we're in edit mode (coming from existing report)
+  var editingReport = (_location$state = location.state) === null || _location$state === void 0 ? void 0 : _location$state.report;
+  var isEditing = !!editingReport;
 
-  // Top fields
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.forName) || ''),
-    _useState6 = _slicedToArray(_useState5, 2),
-    forName = _useState6[0],
-    setForName = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.forPosition) || ''),
+  // Load report data when editing
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (editingReport) {
+      // Load all the form fields from the editing report
+      setDocumentName(editingReport.documentName || '');
+      setSubject(editingReport.subject || '');
+      setForName(editingReport.forName || '');
+      setForPosition(editingReport.forPosition || '');
+      setThruName(editingReport.thruName || '');
+      setThruPosition(editingReport.thruPosition || '');
+      setFromName(editingReport.fromName || '');
+      setFromPosition(editingReport.fromPosition || '');
+      setDateTime(editingReport.dateTime || '');
+      setStatus(editingReport.alertStatus || editingReport.status || 'WHITE ALERT');
+      setAttendanceItems(editingReport.attendanceItems || [{
+        id: 1,
+        name: '',
+        task: ''
+      }]);
+      setReportsItems(editingReport.reportsItems || [{
+        id: 1,
+        report: '',
+        remarks: ''
+      }]);
+      setCommunicationRows(editingReport.communicationRows || [{
+        id: 1,
+        particulars: '',
+        noOfItems: 0,
+        contact: '',
+        status: ''
+      }]);
+      setOtherItemsRows(editingReport.otherItemsRows || [{
+        id: 1,
+        particulars: '',
+        noOfItems: 0,
+        status: ''
+      }]);
+      setPreparedBy(editingReport.preparedBy || '');
+      setPreparedPosition(editingReport.preparedPosition || '');
+      setReceivedBy(editingReport.receivedBy || '');
+      setReceivedPosition(editingReport.receivedPosition || '');
+      setNotedBy(editingReport.notedBy || '');
+      setNotedPosition(editingReport.notedPosition || '');
+      setApprovedBy(editingReport.approvedBy || '');
+      setApprovedPosition(editingReport.approvedPosition || '');
+    }
+  }, [editingReport]);
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState8 = _slicedToArray(_useState7, 2),
-    forPosition = _useState8[0],
-    setForPosition = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.thruName) || ''),
+    documentName = _useState8[0],
+    setDocumentName = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState0 = _slicedToArray(_useState9, 2),
-    thruName = _useState0[0],
-    setThruName = _useState0[1];
-  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.thruPosition) || ''),
+    forName = _useState0[0],
+    setForName = _useState0[1];
+  var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState10 = _slicedToArray(_useState1, 2),
-    thruPosition = _useState10[0],
-    setThruPosition = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.fromName) || ''),
+    forPosition = _useState10[0],
+    setForPosition = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState12 = _slicedToArray(_useState11, 2),
-    fromName = _useState12[0],
-    setFromName = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.fromPosition) || ''),
+    thruName = _useState12[0],
+    setThruName = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState14 = _slicedToArray(_useState13, 2),
-    fromPosition = _useState14[0],
-    setFromPosition = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.subject) || ''),
+    thruPosition = _useState14[0],
+    setThruPosition = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState16 = _slicedToArray(_useState15, 2),
-    subject = _useState16[0],
-    setSubject = _useState16[1];
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.dateTime) || ''),
+    fromName = _useState16[0],
+    setFromName = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState18 = _slicedToArray(_useState17, 2),
-    dateTime = _useState18[0],
-    setDateTime = _useState18[1];
-
-  // Status
-  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.alertStatus) || (reportToEdit !== null && reportToEdit !== void 0 && reportToEdit.status && (reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) !== 'Active' && (reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status) !== 'Archived' ? reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.status : '')),
+    fromPosition = _useState18[0],
+    setFromPosition = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState20 = _slicedToArray(_useState19, 2),
-    status = _useState20[0],
-    setStatus = _useState20[1];
-
-  // Attendance and Reports
-  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.attendanceItems) || [{
+    subject = _useState20[0],
+    setSubject = _useState20[1];
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState22 = _slicedToArray(_useState21, 2),
+    dateTime = _useState22[0],
+    setDateTime = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('WHITE ALERT'),
+    _useState24 = _slicedToArray(_useState23, 2),
+    status = _useState24[0],
+    setStatus = _useState24[1];
+  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       id: 1,
       name: '',
-      task: '',
-      taskAsBullets: false
+      task: ''
     }]),
-    _useState22 = _slicedToArray(_useState21, 2),
-    attendanceItems = _useState22[0],
-    setAttendanceItems = _useState22[1];
-  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.reportsItems) || [{
+    _useState26 = _slicedToArray(_useState25, 2),
+    attendanceItems = _useState26[0],
+    setAttendanceItems = _useState26[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       id: 1,
       report: '',
-      remarks: '',
-      reportAsBullets: false,
-      alignReport: 'left',
-      alignRemarks: 'left'
+      remarks: ''
     }]),
-    _useState24 = _slicedToArray(_useState23, 2),
-    reportsItems = _useState24[0],
-    setReportsItems = _useState24[1];
-  var reportsFieldRefs = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({});
-
-  // Modals
-  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    _useState26 = _slicedToArray(_useState25, 2),
-    showCommunicationModal = _useState26[0],
-    setShowCommunicationModal = _useState26[1];
-  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState28 = _slicedToArray(_useState27, 2),
-    showAttendanceModal = _useState28[0],
-    setShowAttendanceModal = _useState28[1];
+    reportsItems = _useState28[0],
+    setReportsItems = _useState28[1];
   var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState30 = _slicedToArray(_useState29, 2),
-    showReportsModal = _useState30[0],
-    setShowReportsModal = _useState30[1];
+    showCommunicationModal = _useState30[0],
+    setShowCommunicationModal = _useState30[1];
   var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState32 = _slicedToArray(_useState31, 2),
-    showOtherItemsModal = _useState32[0],
-    setShowOtherItemsModal = _useState32[1];
+    showAttendanceModal = _useState32[0],
+    setShowAttendanceModal = _useState32[1];
   var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState34 = _slicedToArray(_useState33, 2),
-    showOtherAdminModal = _useState34[0],
-    setShowOtherAdminModal = _useState34[1];
+    showReportsModal = _useState34[0],
+    setShowReportsModal = _useState34[1];
   var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState36 = _slicedToArray(_useState35, 2),
-    showEndorsedItemsModal = _useState36[0],
-    setShowEndorsedItemsModal = _useState36[1];
-  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    _useState38 = _slicedToArray(_useState37, 2),
-    showValidationModal = _useState38[0],
-    setShowValidationModal = _useState38[1];
-  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState40 = _slicedToArray(_useState39, 2),
-    validationMessage = _useState40[0],
-    setValidationMessage = _useState40[1];
-  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState42 = _slicedToArray(_useState41, 2),
-    errorField = _useState42[0],
-    setErrorField = _useState42[1];
-  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    _useState44 = _slicedToArray(_useState43, 2),
-    showPreviewModal = _useState44[0],
-    setShowPreviewModal = _useState44[1];
+    showOtherItemsModal = _useState36[0],
+    setShowOtherItemsModal = _useState36[1];
 
-  // Communication and Other Items – use default data for new reports (editable, addable, removable)
-  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$communi = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.communicationRows) !== null && _reportToEdit$communi !== void 0 ? _reportToEdit$communi : getDefaultCommunicationRows()),
-    _useState46 = _slicedToArray(_useState45, 2),
-    communicationRows = _useState46[0],
-    setCommunicationRows = _useState46[1];
-  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$otherIt = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherItemsRows) !== null && _reportToEdit$otherIt !== void 0 ? _reportToEdit$otherIt : getDefaultOtherItemsRows()),
-    _useState48 = _slicedToArray(_useState47, 2),
-    otherItemsRows = _useState48[0],
-    setOtherItemsRows = _useState48[1];
-  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$otherAd = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.otherAdminRows) !== null && _reportToEdit$otherAd !== void 0 ? _reportToEdit$otherAd : getDefaultOtherAdminRows()),
-    _useState50 = _slicedToArray(_useState49, 2),
-    otherAdminRows = _useState50[0],
-    setOtherAdminRows = _useState50[1];
-  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((_reportToEdit$endorse = reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.endorsedItemsRows) !== null && _reportToEdit$endorse !== void 0 ? _reportToEdit$endorse : getDefaultEndorsedItemsRows()),
-    _useState52 = _slicedToArray(_useState51, 2),
-    endorsedItemsRows = _useState52[0],
-    setEndorsedItemsRows = _useState52[1];
+  // Communication and Other Items
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+      id: 1,
+      particulars: '',
+      noOfItems: 0,
+      contact: '',
+      status: ''
+    }]),
+    _useState38 = _slicedToArray(_useState37, 2),
+    communicationRows = _useState38[0],
+    setCommunicationRows = _useState38[1];
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+      id: 1,
+      particulars: '',
+      noOfItems: 0,
+      status: ''
+    }]),
+    _useState40 = _slicedToArray(_useState39, 2),
+    otherItemsRows = _useState40[0],
+    setOtherItemsRows = _useState40[1];
 
   // Signatures
-  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedBy) || ''),
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState42 = _slicedToArray(_useState41, 2),
+    preparedBy = _useState42[0],
+    setPreparedBy = _useState42[1];
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState44 = _slicedToArray(_useState43, 2),
+    preparedPosition = _useState44[0],
+    setPreparedPosition = _useState44[1];
+  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState46 = _slicedToArray(_useState45, 2),
+    receivedBy = _useState46[0],
+    setReceivedBy = _useState46[1];
+  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState48 = _slicedToArray(_useState47, 2),
+    receivedPosition = _useState48[0],
+    setReceivedPosition = _useState48[1];
+  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState50 = _slicedToArray(_useState49, 2),
+    notedBy = _useState50[0],
+    setNotedBy = _useState50[1];
+  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState52 = _slicedToArray(_useState51, 2),
+    notedPosition = _useState52[0],
+    setNotedPosition = _useState52[1];
+  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState54 = _slicedToArray(_useState53, 2),
-    preparedBy = _useState54[0],
-    setPreparedBy = _useState54[1];
-  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.preparedPosition) || ''),
+    approvedBy = _useState54[0],
+    setApprovedBy = _useState54[1];
+  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState56 = _slicedToArray(_useState55, 2),
-    preparedPosition = _useState56[0],
-    setPreparedPosition = _useState56[1];
-  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedBy) || ''),
-    _useState58 = _slicedToArray(_useState57, 2),
-    receivedBy = _useState58[0],
-    setReceivedBy = _useState58[1];
-  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.receivedPosition) || ''),
-    _useState60 = _slicedToArray(_useState59, 2),
-    receivedPosition = _useState60[0],
-    setReceivedPosition = _useState60[1];
-  var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedBy) || ''),
-    _useState62 = _slicedToArray(_useState61, 2),
-    notedBy = _useState62[0],
-    setNotedBy = _useState62[1];
-  var _useState63 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.notedPosition) || ''),
-    _useState64 = _slicedToArray(_useState63, 2),
-    notedPosition = _useState64[0],
-    setNotedPosition = _useState64[1];
-  var _useState65 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedBy) || ''),
-    _useState66 = _slicedToArray(_useState65, 2),
-    approvedBy = _useState66[0],
-    setApprovedBy = _useState66[1];
-  var _useState67 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)((reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.approvedPosition) || ''),
-    _useState68 = _slicedToArray(_useState67, 2),
-    approvedPosition = _useState68[0],
-    setApprovedPosition = _useState68[1];
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (!isEditing || !(reportToEdit !== null && reportToEdit !== void 0 && reportToEdit.id)) return;
-    if (reportToEdit.attendanceItems != null && Array.isArray(reportToEdit.attendanceItems)) {
-      setFullReport(reportToEdit);
-      return;
-    }
-    fetchReport(reportToEdit.id).then(setFullReport)["catch"](function () {
-      return setFullReport(reportToEdit);
-    });
-  }, [isEditing, reportToEdit === null || reportToEdit === void 0 ? void 0 : reportToEdit.id]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var _fullReport$documentN, _fullReport$forName, _fullReport$forPositi, _fullReport$thruName, _fullReport$thruPosit, _fullReport$fromName, _fullReport$fromPosit, _fullReport$subject, _fullReport$dateTime, _ref, _fullReport$alertStat, _fullReport$attendanc, _fullReport$reportsIt, _fullReport$communica, _fullReport$otherItem, _fullReport$otherAdmi, _fullReport$endorsedI, _fullReport$preparedB, _fullReport$preparedP, _fullReport$receivedB, _fullReport$receivedP, _fullReport$notedBy, _fullReport$notedPosi, _fullReport$approvedB, _fullReport$approvedP;
-    if (!fullReport) return;
-    setDocumentName((_fullReport$documentN = fullReport.documentName) !== null && _fullReport$documentN !== void 0 ? _fullReport$documentN : '');
-    setForName((_fullReport$forName = fullReport.forName) !== null && _fullReport$forName !== void 0 ? _fullReport$forName : '');
-    setForPosition((_fullReport$forPositi = fullReport.forPosition) !== null && _fullReport$forPositi !== void 0 ? _fullReport$forPositi : '');
-    setThruName((_fullReport$thruName = fullReport.thruName) !== null && _fullReport$thruName !== void 0 ? _fullReport$thruName : '');
-    setThruPosition((_fullReport$thruPosit = fullReport.thruPosition) !== null && _fullReport$thruPosit !== void 0 ? _fullReport$thruPosit : '');
-    setFromName((_fullReport$fromName = fullReport.fromName) !== null && _fullReport$fromName !== void 0 ? _fullReport$fromName : '');
-    setFromPosition((_fullReport$fromPosit = fullReport.fromPosition) !== null && _fullReport$fromPosit !== void 0 ? _fullReport$fromPosit : '');
-    setSubject((_fullReport$subject = fullReport.subject) !== null && _fullReport$subject !== void 0 ? _fullReport$subject : '');
-    setDateTime((_fullReport$dateTime = fullReport.dateTime) !== null && _fullReport$dateTime !== void 0 ? _fullReport$dateTime : '');
-    setStatus((_ref = (_fullReport$alertStat = fullReport.alertStatus) !== null && _fullReport$alertStat !== void 0 ? _fullReport$alertStat : fullReport.status) !== null && _ref !== void 0 ? _ref : '');
-    setAttendanceItems((_fullReport$attendanc = fullReport.attendanceItems) !== null && _fullReport$attendanc !== void 0 && _fullReport$attendanc.length ? fullReport.attendanceItems : [{
-      id: 1,
-      name: '',
-      task: '',
-      taskAsBullets: false
-    }]);
-    setReportsItems((_fullReport$reportsIt = fullReport.reportsItems) !== null && _fullReport$reportsIt !== void 0 && _fullReport$reportsIt.length ? fullReport.reportsItems : [{
-      id: 1,
-      report: '',
-      remarks: '',
-      reportAsBullets: false
-    }]);
-    setCommunicationRows((_fullReport$communica = fullReport.communicationRows) !== null && _fullReport$communica !== void 0 ? _fullReport$communica : getDefaultCommunicationRows());
-    setOtherItemsRows((_fullReport$otherItem = fullReport.otherItemsRows) !== null && _fullReport$otherItem !== void 0 ? _fullReport$otherItem : getDefaultOtherItemsRows());
-    setOtherAdminRows((_fullReport$otherAdmi = fullReport.otherAdminRows) !== null && _fullReport$otherAdmi !== void 0 ? _fullReport$otherAdmi : getDefaultOtherAdminRows());
-    setEndorsedItemsRows((_fullReport$endorsedI = fullReport.endorsedItemsRows) !== null && _fullReport$endorsedI !== void 0 ? _fullReport$endorsedI : getDefaultEndorsedItemsRows());
-    setPreparedBy((_fullReport$preparedB = fullReport.preparedBy) !== null && _fullReport$preparedB !== void 0 ? _fullReport$preparedB : '');
-    setPreparedPosition((_fullReport$preparedP = fullReport.preparedPosition) !== null && _fullReport$preparedP !== void 0 ? _fullReport$preparedP : '');
-    setReceivedBy((_fullReport$receivedB = fullReport.receivedBy) !== null && _fullReport$receivedB !== void 0 ? _fullReport$receivedB : '');
-    setReceivedPosition((_fullReport$receivedP = fullReport.receivedPosition) !== null && _fullReport$receivedP !== void 0 ? _fullReport$receivedP : '');
-    setNotedBy((_fullReport$notedBy = fullReport.notedBy) !== null && _fullReport$notedBy !== void 0 ? _fullReport$notedBy : '');
-    setNotedPosition((_fullReport$notedPosi = fullReport.notedPosition) !== null && _fullReport$notedPosi !== void 0 ? _fullReport$notedPosi : '');
-    setApprovedBy((_fullReport$approvedB = fullReport.approvedBy) !== null && _fullReport$approvedB !== void 0 ? _fullReport$approvedB : '');
-    setApprovedPosition((_fullReport$approvedP = fullReport.approvedPosition) !== null && _fullReport$approvedP !== void 0 ? _fullReport$approvedP : '');
-  }, [fullReport === null || fullReport === void 0 ? void 0 : fullReport.id]);
+    approvedPosition = _useState56[0],
+    setApprovedPosition = _useState56[1];
   var handleReturn = function handleReturn() {
     navigate('/adr-reports');
   };
-  var handleConfirm = function handleConfirm() {
-    // Validation temporarily disabled for template work
-    // TODO: Re-enable validation after template is complete
+  var showNotification = function showNotification(message) {
+    var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'error';
+    setNotification({
+      message: message,
+      type: type
+    });
+    setTimeout(function () {
+      return setNotification(null);
+    }, 4000);
+  };
+  var handleConfirm = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+      var payload, _error$response, _t;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
+          case 0:
+            if (documentName.trim()) {
+              _context.n = 1;
+              break;
+            }
+            setShowErrorNotification(true);
+            return _context.a(2);
+          case 1:
+            // Wrap everything in { report: { ... } } — matches AdrFormController::store() expectation
+            payload = {
+              report: {
+                documentName: documentName,
+                subject: subject,
+                alertStatus: status,
+                templates_id: 10,
+                // links to your ADR_template (id=10)
 
-    var formData = {
-      documentName: documentName,
-      forName: forName,
-      forPosition: forPosition,
-      thruName: thruName,
-      thruPosition: thruPosition,
-      fromName: fromName,
-      fromPosition: fromPosition,
-      subject: subject,
-      dateTime: dateTime,
-      status: status,
-      attendanceItems: attendanceItems,
-      reportsItems: reportsItems,
-      communicationRows: communicationRows,
-      otherItemsRows: otherItemsRows,
-      otherAdminRows: otherAdminRows,
-      endorsedItemsRows: endorsedItemsRows,
-      preparedBy: preparedBy,
-      preparedPosition: preparedPosition,
-      receivedBy: receivedBy,
-      receivedPosition: receivedPosition,
-      notedBy: notedBy,
-      notedPosition: notedPosition,
-      approvedBy: approvedBy,
-      approvedPosition: approvedPosition
+                forName: forName,
+                forPosition: forPosition,
+                thruName: thruName,
+                thruPosition: thruPosition,
+                fromName: fromName,
+                fromPosition: fromPosition,
+                dateTime: dateTime,
+                status: status,
+                attendanceItems: attendanceItems,
+                reportsItems: reportsItems,
+                communicationRows: communicationRows,
+                otherItemsRows: otherItemsRows,
+                preparedBy: preparedBy,
+                preparedPosition: preparedPosition,
+                receivedBy: receivedBy,
+                receivedPosition: receivedPosition,
+                notedBy: notedBy,
+                notedPosition: notedPosition,
+                approvedBy: approvedBy,
+                approvedPosition: approvedPosition
+              }
+            };
+            _context.p = 2;
+            if (!(isEditing && editingReport.id)) {
+              _context.n = 4;
+              break;
+            }
+            _context.n = 3;
+            return updateReport(editingReport.id, payload.report);
+          case 3:
+            _context.n = 5;
+            break;
+          case 4:
+            _context.n = 5;
+            return addReport(payload.report);
+          case 5:
+            setShowSuccessNotification(true);
+            setTimeout(function () {
+              navigate('/adr-reports');
+            }, 1500);
+            _context.n = 7;
+            break;
+          case 6:
+            _context.p = 6;
+            _t = _context.v;
+            console.error("Failed to save ADR form:", _t);
+            showNotification(((_error$response = _t.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Failed to save report. Please try again.', 'error');
+          case 7:
+            return _context.a(2);
+        }
+      }, _callee, null, [[2, 6]]);
+    }));
+    return function handleConfirm() {
+      return _ref.apply(this, arguments);
     };
-    if (isEditing && reportToEdit && reportToEdit.id) {
-      updateReport(reportToEdit.id, formData).then(function () {
-        return navigate('/adr-reports', {
-          state: {
-            success: true,
-            message: 'Document updated successfully!'
-          }
-        });
-      })["catch"](function () {});
-    } else {
-      addReport(formData).then(function () {
-        return navigate('/adr-reports', {
-          state: {
-            success: true,
-            message: 'Document created successfully!'
-          }
-        });
-      })["catch"](function () {});
-    }
-  };
-  var handleViewDocument = function handleViewDocument() {
-    setShowPreviewModal(true);
-  };
-  var getPreviewReport = function getPreviewReport() {
-    var formData = {
-      documentName: documentName,
-      forName: forName,
-      forPosition: forPosition,
-      thruName: thruName,
-      thruPosition: thruPosition,
-      fromName: fromName,
-      fromPosition: fromPosition,
-      subject: subject,
-      dateTime: dateTime,
-      status: status,
-      attendanceItems: attendanceItems !== null && attendanceItems !== void 0 ? attendanceItems : [],
-      reportsItems: reportsItems !== null && reportsItems !== void 0 ? reportsItems : [],
-      communicationRows: communicationRows !== null && communicationRows !== void 0 ? communicationRows : [],
-      otherItemsRows: otherItemsRows !== null && otherItemsRows !== void 0 ? otherItemsRows : [],
-      otherAdminRows: otherAdminRows !== null && otherAdminRows !== void 0 ? otherAdminRows : [],
-      endorsedItemsRows: Array.isArray(endorsedItemsRows) ? _toConsumableArray(endorsedItemsRows) : [],
-      preparedBy: preparedBy,
-      preparedPosition: preparedPosition,
-      receivedBy: receivedBy,
-      receivedPosition: receivedPosition,
-      notedBy: notedBy,
-      notedPosition: notedPosition,
-      approvedBy: approvedBy,
-      approvedPosition: approvedPosition
-    };
-    return _objectSpread(_objectSpread({}, formData), {}, {
-      alertStatus: status || 'WHITE ALERT'
-    });
-  };
+  }();
+
+  // const handleViewDocument = () => {
+  //     // Functionality disabled for now
+  // };
+
   var addAttendanceItem = function addAttendanceItem() {
-    setAttendanceItems(function (prev) {
-      var newId = Math.max.apply(Math, _toConsumableArray(prev.map(function (item) {
-        return Number(item.id) || 0;
-      })).concat([0])) + 1;
-      return [].concat(_toConsumableArray(prev), [{
-        id: newId,
-        name: '',
-        task: '',
-        taskAsBullets: false
-      }]);
-    });
+    var newId = Math.max.apply(Math, _toConsumableArray(attendanceItems.map(function (item) {
+      return item.id;
+    })).concat([0])) + 1;
+    setAttendanceItems([].concat(_toConsumableArray(attendanceItems), [{
+      id: newId,
+      name: '',
+      task: ''
+    }]));
   };
   var removeAttendanceItem = function removeAttendanceItem(id) {
-    setAttendanceItems(function (prev) {
-      if (prev.length <= 1) return prev;
-      return prev.filter(function (item) {
-        return Number(item.id) !== Number(id);
-      });
-    });
+    if (attendanceItems.length > 1) {
+      setAttendanceItems(attendanceItems.filter(function (item) {
+        return item.id !== id;
+      }));
+    }
   };
   var addReportsItem = function addReportsItem() {
-    setReportsItems(function (prev) {
-      var newId = Math.max.apply(Math, _toConsumableArray(prev.map(function (item) {
-        return Number(item.id) || 0;
-      })).concat([0])) + 1;
-      return [].concat(_toConsumableArray(prev), [{
-        id: newId,
-        report: '',
-        remarks: '',
-        reportAsBullets: false,
-        alignReport: 'left',
-        alignRemarks: 'left'
-      }]);
-    });
-  };
-  var updateReportsAlign = function updateReportsAlign(itemId, field, align) {
-    setReportsItems(function (prev) {
-      return prev.map(function (i) {
-        return i.id === itemId ? _objectSpread(_objectSpread({}, i), {}, _defineProperty({}, field, align)) : i;
-      });
-    });
-  };
-  var getSelectionOrCurrentLine = function getSelectionOrCurrentLine(v, start, end) {
-    if (start < end) return {
-      start: start,
-      end: end
-    };
-    var lineStart = v.lastIndexOf('\n', start - 1) + 1;
-    var lineEnd = v.indexOf('\n', start);
-    if (lineEnd === -1) lineEnd = v.length;
-    return {
-      start: lineStart,
-      end: lineEnd
-    };
-  };
-  var indentReportsField = function indentReportsField(itemId, field) {
-    var ta = reportsFieldRefs.current["".concat(itemId, "-").concat(field)];
-    if (!ta) return;
-    var v = ta.value;
-    var selStart = ta.selectionStart;
-    var selEnd = ta.selectionEnd;
-    var _getSelectionOrCurren = getSelectionOrCurrentLine(v, selStart, selEnd),
-      start = _getSelectionOrCurren.start,
-      end = _getSelectionOrCurren.end;
-    var before = v.slice(0, start);
-    var sel = v.slice(start, end);
-    var after = v.slice(end);
-    var indentStr = '    ';
-    var newSel = sel.split('\n').map(function (line) {
-      return indentStr + line;
-    }).join('\n');
-    var newVal = before + newSel + after;
-    var newEnd = start + newSel.length;
-    setReportsItems(function (prev) {
-      return prev.map(function (i) {
-        return i.id === itemId ? _objectSpread(_objectSpread({}, i), {}, _defineProperty({}, field, newVal)) : i;
-      });
-    });
-    setTimeout(function () {
-      ta.focus();
-      ta.setSelectionRange(start, newEnd);
-    }, 0);
-  };
-  var outdentReportsField = function outdentReportsField(itemId, field) {
-    var ta = reportsFieldRefs.current["".concat(itemId, "-").concat(field)];
-    if (!ta) return;
-    var v = ta.value;
-    var selStart = ta.selectionStart;
-    var selEnd = ta.selectionEnd;
-    var _getSelectionOrCurren2 = getSelectionOrCurrentLine(v, selStart, selEnd),
-      start = _getSelectionOrCurren2.start,
-      end = _getSelectionOrCurren2.end;
-    var lines = v.split('\n');
-    var charIdx = 0;
-    var newLines = lines.map(function (line) {
-      var _line$match$0$length, _line$match;
-      var len = line.length;
-      var lineStart = charIdx;
-      charIdx += len + 1;
-      if (lineStart >= end || lineStart + len <= start) return line;
-      var toRemove = Math.min(4, (_line$match$0$length = (_line$match = line.match(/^[ \t]+/)) === null || _line$match === void 0 || (_line$match = _line$match[0]) === null || _line$match === void 0 ? void 0 : _line$match.length) !== null && _line$match$0$length !== void 0 ? _line$match$0$length : 0);
-      return line.slice(toRemove);
-    });
-    var newVal = newLines.join('\n');
-    setReportsItems(function (prev) {
-      return prev.map(function (i) {
-        return i.id === itemId ? _objectSpread(_objectSpread({}, i), {}, _defineProperty({}, field, newVal)) : i;
-      });
-    });
-    setTimeout(function () {
-      return ta === null || ta === void 0 ? void 0 : ta.focus();
-    }, 0);
+    var newId = Math.max.apply(Math, _toConsumableArray(reportsItems.map(function (item) {
+      return item.id;
+    })).concat([0])) + 1;
+    setReportsItems([].concat(_toConsumableArray(reportsItems), [{
+      id: newId,
+      report: '',
+      remarks: ''
+    }]));
   };
   var removeReportsItem = function removeReportsItem(id) {
-    setReportsItems(function (prev) {
-      if (prev.length <= 1) return prev;
-      return prev.filter(function (item) {
-        return Number(item.id) !== Number(id);
-      });
-    });
+    if (reportsItems.length > 1) {
+      setReportsItems(reportsItems.filter(function (item) {
+        return item.id !== id;
+      }));
+    }
   };
   var addCommunicationRow = function addCommunicationRow() {
     var newId = Math.max.apply(Math, _toConsumableArray(communicationRows.map(function (row) {
@@ -69342,9 +69090,7 @@ function ADRForm() {
       particulars: '',
       noOfItems: 0,
       contact: '',
-      status: '',
-      contactAsBullets: false,
-      statusAsBullets: false
+      status: ''
     }]));
   };
   var removeCommunicationRow = function removeCommunicationRow(id) {
@@ -69379,8 +69125,7 @@ function ADRForm() {
       id: newId,
       particulars: '',
       noOfItems: 0,
-      status: '',
-      statusAsBullets: false
+      status: ''
     }]));
   };
   var removeOtherItemsRow = function removeOtherItemsRow(id) {
@@ -69407,41 +69152,35 @@ function ADRForm() {
       }) : row;
     }));
   };
-  var addOtherAdminRow = function addOtherAdminRow() {
-    var newId = Math.max.apply(Math, _toConsumableArray(otherAdminRows.map(function (row) {
-      return row.id;
-    })).concat([0])) + 1;
-    setOtherAdminRows([].concat(_toConsumableArray(otherAdminRows), [{
-      id: newId,
-      concern: '',
-      concernAsBullets: false
-    }]));
-  };
-  var removeOtherAdminRow = function removeOtherAdminRow(id) {
-    setOtherAdminRows(otherAdminRows.filter(function (row) {
-      return row.id !== id;
-    }));
-  };
-  var updateOtherAdminRow = function updateOtherAdminRow(id, field, value) {
-    setOtherAdminRows(otherAdminRows.map(function (row) {
-      return row.id === id ? _objectSpread(_objectSpread({}, row), {}, _defineProperty({}, field, value)) : row;
-    }));
-  };
-  if (isEditing && reportToEdit !== null && reportToEdit !== void 0 && reportToEdit.id && fullReport == null) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-      className: "adr-form",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-        style: {
-          padding: '2rem',
-          textAlign: 'center'
-        },
-        children: "Loading report..."
-      })
-    });
-  }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     className: "adr-form",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    children: [notification && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      className: "adr-form__notification adr-form__notification--".concat(notification.type),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        className: "adr-form__notification-content",
+        children: notification.message
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+        className: "adr-form__notification-close",
+        onClick: function onClick() {
+          return setNotification(null);
+        },
+        type: "button",
+        children: "\xD7"
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_SuccessNotification__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      message: "Report submitted successfully!",
+      isVisible: showSuccessNotification,
+      onClose: function onClose() {
+        return setShowSuccessNotification(false);
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_SuccessNotification__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      message: "Please enter a document name.",
+      isVisible: showErrorNotification,
+      onClose: function onClose() {
+        return setShowErrorNotification(false);
+      },
+      type: "error"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "adr-form__top",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__top-left",
@@ -69450,12 +69189,11 @@ function ADRForm() {
           children: "RDRRMOC DUTY REPORT"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
           type: "text",
-          className: "adr-form__document-name ".concat(errorField === 'documentName' ? 'adr-form__input-error' : ''),
+          className: "adr-form__document-name",
           placeholder: "Enter document name...",
           value: documentName,
           onChange: function onChange(e) {
-            setDocumentName(e.target.value);
-            if (errorField === 'documentName') setErrorField('');
+            return setDocumentName(e.target.value);
           }
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
@@ -69475,41 +69213,16 @@ function ADRForm() {
               strokeLinejoin: "round"
             })
           }), "Return"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__actions",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
             className: "adr-form__action-btn adr-form__action-btn--confirm",
             onClick: handleConfirm,
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
               src: "".concat(window.location.origin, "/images/confirm_icon.svg"),
               alt: "Confirm"
-            }), isEditing ? 'Update' : 'Confirm']
-          }), !isEditing && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("button", {
-            className: "adr-form__action-btn adr-form__action-btn--view",
-            onClick: handleViewDocument,
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
-              viewBox: "0 0 24 24",
-              fill: "none",
-              xmlns: "http://www.w3.org/2000/svg",
-              width: "16",
-              height: "16",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
-                d: "M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z",
-                stroke: "currentColor",
-                strokeWidth: "2",
-                strokeLinecap: "round",
-                strokeLinejoin: "round"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("circle", {
-                cx: "12",
-                cy: "12",
-                r: "3",
-                stroke: "currentColor",
-                strokeWidth: "2",
-                strokeLinecap: "round",
-                strokeLinejoin: "round"
-              })]
-            }), "View document"]
-          })]
+            }), "Confirm"]
+          })
         })]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
@@ -69524,11 +69237,9 @@ function ADRForm() {
               children: "For:"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
               type: "text",
-              className: errorField === 'forName' ? 'adr-form__input-error' : '',
               value: forName,
               onChange: function onChange(e) {
-                setForName(e.target.value);
-                if (errorField === 'forName') setErrorField('');
+                return setForName(e.target.value);
               }
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
@@ -69548,11 +69259,9 @@ function ADRForm() {
               children: "Thru:"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
               type: "text",
-              className: errorField === 'thruName' ? 'adr-form__input-error' : '',
               value: thruName,
               onChange: function onChange(e) {
-                setThruName(e.target.value);
-                if (errorField === 'thruName') setErrorField('');
+                return setThruName(e.target.value);
               }
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
@@ -69572,11 +69281,9 @@ function ADRForm() {
               children: "From:"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
               type: "text",
-              className: errorField === 'fromName' ? 'adr-form__input-error' : '',
               value: fromName,
               onChange: function onChange(e) {
-                setFromName(e.target.value);
-                if (errorField === 'fromName') setErrorField('');
+                return setFromName(e.target.value);
               }
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
@@ -69600,7 +69307,6 @@ function ADRForm() {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
               type: "text",
               className: "adr-form__subject-input",
-              placeholder: "Date and Time",
               value: dateTime,
               onChange: function onChange(e) {
                 return setDateTime(e.target.value);
@@ -69620,16 +69326,10 @@ function ADRForm() {
             return setStatus(e.target.value);
           },
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-            value: "",
-            children: "Choose a status"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-            value: "WHITE ALERT",
             children: "WHITE ALERT"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-            value: "BLUE ALERT",
             children: "BLUE ALERT"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-            value: "RED ALERT",
             children: "RED ALERT"
           })]
         })]
@@ -69698,43 +69398,6 @@ function ADRForm() {
             },
             children: "CUSTOMIZE"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          className: "adr-form__customize-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
-            children: "C. Other Administrative Matters:"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-            className: "adr-form__customize-btn",
-            type: "button",
-            onClick: function onClick() {
-              return setShowOtherAdminModal(true);
-            },
-            children: "CUSTOMIZE"
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          className: "adr-form__other-admin-content",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            className: "adr-form__other-admin-item",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-              children: "(List down administrative concerns such as but not limited to: Duty driver on-call, vehicle activities, internet or other ICT equipment issues, parcel or documents received/delivered, untoward incidents that should be elevated to the management level)."
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-            className: "adr-form__other-admin-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-              children: "1. The following were endorsed to incoming Operations Duty Staff:"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-              className: "adr-form__customize-btn",
-              type: "button",
-              onClick: function onClick() {
-                return setShowEndorsedItemsModal(true);
-              },
-              children: "CUSTOMIZE"
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            className: "adr-form__other-admin-item",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-              children: "2. For information of the OCD Officer-In-Charge."
-            })
-          })]
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__signature-fields",
@@ -69749,8 +69412,7 @@ function ADRForm() {
               value: preparedBy,
               onChange: function onChange(e) {
                 return setPreparedBy(e.target.value);
-              },
-              placeholder: "Name"
+              }
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
@@ -69772,8 +69434,7 @@ function ADRForm() {
               value: receivedBy,
               onChange: function onChange(e) {
                 return setReceivedBy(e.target.value);
-              },
-              placeholder: "Name"
+              }
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
@@ -69876,10 +69537,10 @@ function ADRForm() {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
-                      placeholder: "Enter particulars (new line to break)",
-                      rows: "2",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                      type: "text",
+                      className: "adr-form__modal-input",
+                      placeholder: "Enter particulars",
                       value: row.particulars,
                       onChange: function onChange(e) {
                         return updateCommunicationRow(row.id, 'particulars', e.target.value);
@@ -69913,20 +69574,20 @@ function ADRForm() {
                       })]
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
-                      placeholder: "Enter contact/freq/channel (press Enter for each bullet)",
-                      rows: "2",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                      type: "text",
+                      className: "adr-form__modal-input",
+                      placeholder: "Enter contact/freq/channel",
                       value: row.contact,
                       onChange: function onChange(e) {
                         return updateCommunicationRow(row.id, 'contact', e.target.value);
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
-                      placeholder: "Enter status/remarks (press Enter for each bullet)",
-                      rows: "2",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                      type: "text",
+                      className: "adr-form__modal-input",
+                      placeholder: "Enter status/remarks",
                       value: row.status,
                       onChange: function onChange(e) {
                         return updateCommunicationRow(row.id, 'status', e.target.value);
@@ -70014,13 +69675,10 @@ function ADRForm() {
                   className: "adr-form__modal-table-number",
                   children: "#"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
-                  className: "adr-form__modal-table-name-col",
                   children: "Name"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
-                  className: "adr-form__modal-table-task-col",
                   children: "Task"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
-                  className: "adr-form__modal-table-actions-col",
                   children: "Actions"
                 })]
               })
@@ -70033,43 +69691,34 @@ function ADRForm() {
                     className: "adr-form__modal-table-number",
                     children: index + 1
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    className: "adr-form__modal-table-name-col",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
-                      placeholder: "Enter name(s) \u2014 add another line for more names",
-                      rows: 2,
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                      type: "text",
+                      className: "adr-form__modal-input",
+                      placeholder: "Enter name",
                       value: item.name,
                       onChange: function onChange(e) {
-                        var value = e.target.value;
-                        setAttendanceItems(function (prev) {
-                          return prev.map(function (i) {
-                            return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
-                              name: value
-                            }) : i;
-                          });
-                        });
+                        setAttendanceItems(attendanceItems.map(function (i) {
+                          return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
+                            name: e.target.value
+                          }) : i;
+                        }));
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    className: "adr-form__modal-table-task-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
                       className: "adr-form__modal-input adr-form__modal-textarea",
-                      placeholder: "Enter task (press Enter for each bullet)",
-                      rows: "3",
+                      placeholder: "Enter task",
+                      rows: "2",
                       value: item.task,
                       onChange: function onChange(e) {
-                        var value = e.target.value;
-                        setAttendanceItems(function (prev) {
-                          return prev.map(function (i) {
-                            return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
-                              task: value
-                            }) : i;
-                          });
-                        });
+                        setAttendanceItems(attendanceItems.map(function (i) {
+                          return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
+                            task: e.target.value
+                          }) : i;
+                        }));
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    className: "adr-form__modal-table-actions-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                       className: "adr-form__modal-action-btn",
                       type: "button",
@@ -70151,13 +69800,10 @@ function ADRForm() {
                   className: "adr-form__modal-table-number",
                   children: "#"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
-                  className: "adr-form__modal-table-report-col",
                   children: "Reports and Advisories Released"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
-                  className: "adr-form__modal-table-remarks-col",
                   children: "Remarks"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
-                  className: "adr-form__modal-table-actions-col",
                   children: "Actions"
                 })]
               })
@@ -70169,212 +69815,35 @@ function ADRForm() {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                     className: "adr-form__modal-table-number",
                     children: index + 1
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
-                    className: "adr-form__modal-table-report-col",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-                      className: "adr-form__field-toolbar",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                        className: "adr-form__field-toolbar-label",
-                        children: "Align"
-                      }), [{
-                        align: 'left',
-                        icon: '/images/left_align.svg'
-                      }, {
-                        align: 'center',
-                        icon: '/images/center.svg'
-                      }, {
-                        align: 'right',
-                        icon: '/images/right_align.svg'
-                      }, {
-                        align: 'justify',
-                        icon: '/images/justify.svg'
-                      }].map(function (_ref2) {
-                        var align = _ref2.align,
-                          icon = _ref2.icon;
-                        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-                          type: "button",
-                          className: "adr-form__toolbar-btn adr-form__toolbar-btn--icon ".concat((item.alignReport || 'left') === align ? 'adr-form__toolbar-btn--active' : ''),
-                          onClick: function onClick() {
-                            return updateReportsAlign(item.id, 'alignReport', align);
-                          },
-                          title: "Align ".concat(align),
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
-                            src: icon,
-                            alt: "",
-                            "aria-hidden": true
-                          })
-                        }, align);
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                        className: "adr-form__field-toolbar-sep",
-                        "aria-hidden": true,
-                        children: "|"
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-                        type: "button",
-                        className: "adr-form__toolbar-btn adr-form__toolbar-btn--icon",
-                        onClick: function onClick() {
-                          return indentReportsField(item.id, 'report');
-                        },
-                        title: "Indent selected lines",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
-                          viewBox: "0 0 24 24",
-                          fill: "none",
-                          stroke: "currentColor",
-                          strokeWidth: "2",
-                          width: "16",
-                          height: "16",
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
-                            d: "M9 6h12M9 12h12M9 18h12M3 6v12l4-4-4-4z",
-                            strokeLinecap: "round",
-                            strokeLinejoin: "round"
-                          })
-                        })
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-                        type: "button",
-                        className: "adr-form__toolbar-btn adr-form__toolbar-btn--icon",
-                        onClick: function onClick() {
-                          return outdentReportsField(item.id, 'report');
-                        },
-                        title: "Outdent selected lines",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
-                          viewBox: "0 0 24 24",
-                          fill: "none",
-                          stroke: "currentColor",
-                          strokeWidth: "2",
-                          width: "16",
-                          height: "16",
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
-                            d: "M15 6H3M15 12H3M15 18H3M21 9l-4 4 4 4V9z",
-                            strokeLinecap: "round",
-                            strokeLinejoin: "round"
-                          })
-                        })
-                      })]
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      ref: function ref(el) {
-                        reportsFieldRefs.current["".concat(item.id, "-report")] = el;
-                      },
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
                       className: "adr-form__modal-input adr-form__modal-textarea",
-                      style: {
-                        textAlign: item.alignReport || 'left'
-                      },
-                      placeholder: "Enter reports and advisories released (use new line to break text)",
-                      rows: 3,
+                      placeholder: "Enter reports and advisories released",
+                      rows: "3",
                       value: item.report,
                       onChange: function onChange(e) {
-                        var value = e.target.value;
-                        setReportsItems(function (prev) {
-                          return prev.map(function (i) {
-                            return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
-                              report: value
-                            }) : i;
-                          });
-                        });
+                        setReportsItems(reportsItems.map(function (i) {
+                          return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
+                            report: e.target.value
+                          }) : i;
+                        }));
                       }
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("td", {
-                    className: "adr-form__modal-table-remarks-col",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-                      className: "adr-form__field-toolbar",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                        className: "adr-form__field-toolbar-label",
-                        children: "Align"
-                      }), [{
-                        align: 'left',
-                        icon: '/images/left_align.svg'
-                      }, {
-                        align: 'center',
-                        icon: '/images/center.svg'
-                      }, {
-                        align: 'right',
-                        icon: '/images/right_align.svg'
-                      }, {
-                        align: 'justify',
-                        icon: '/images/justify.svg'
-                      }].map(function (_ref3) {
-                        var align = _ref3.align,
-                          icon = _ref3.icon;
-                        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-                          type: "button",
-                          className: "adr-form__toolbar-btn adr-form__toolbar-btn--icon ".concat((item.alignRemarks || 'left') === align ? 'adr-form__toolbar-btn--active' : ''),
-                          onClick: function onClick() {
-                            return updateReportsAlign(item.id, 'alignRemarks', align);
-                          },
-                          title: "Align ".concat(align),
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
-                            src: icon,
-                            alt: "",
-                            "aria-hidden": true
-                          })
-                        }, align);
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                        className: "adr-form__field-toolbar-sep",
-                        "aria-hidden": true,
-                        children: "|"
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-                        type: "button",
-                        className: "adr-form__toolbar-btn adr-form__toolbar-btn--icon",
-                        onClick: function onClick() {
-                          return indentReportsField(item.id, 'remarks');
-                        },
-                        title: "Indent selected lines",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
-                          viewBox: "0 0 24 24",
-                          fill: "none",
-                          stroke: "currentColor",
-                          strokeWidth: "2",
-                          width: "16",
-                          height: "16",
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
-                            d: "M9 6h12M9 12h12M9 18h12M3 6v12l4-4-4-4z",
-                            strokeLinecap: "round",
-                            strokeLinejoin: "round"
-                          })
-                        })
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-                        type: "button",
-                        className: "adr-form__toolbar-btn adr-form__toolbar-btn--icon",
-                        onClick: function onClick() {
-                          return outdentReportsField(item.id, 'remarks');
-                        },
-                        title: "Outdent selected lines",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
-                          viewBox: "0 0 24 24",
-                          fill: "none",
-                          stroke: "currentColor",
-                          strokeWidth: "2",
-                          width: "16",
-                          height: "16",
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
-                            d: "M15 6H3M15 12H3M15 18H3M21 9l-4 4 4 4V9z",
-                            strokeLinecap: "round",
-                            strokeLinejoin: "round"
-                          })
-                        })
-                      })]
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      ref: function ref(el) {
-                        reportsFieldRefs.current["".concat(item.id, "-remarks")] = el;
-                      },
-                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--remarks",
-                      style: {
-                        textAlign: item.alignRemarks || 'left'
-                      },
+                    })
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                      type: "text",
+                      className: "adr-form__modal-input",
                       placeholder: "Enter remarks",
-                      rows: 3,
                       value: item.remarks,
                       onChange: function onChange(e) {
-                        var value = e.target.value;
-                        setReportsItems(function (prev) {
-                          return prev.map(function (i) {
-                            return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
-                              remarks: value
-                            }) : i;
-                          });
-                        });
+                        setReportsItems(reportsItems.map(function (i) {
+                          return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
+                            remarks: e.target.value
+                          }) : i;
+                        }));
                       }
-                    })]
+                    })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    className: "adr-form__modal-table-actions-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                       className: "adr-form__modal-action-btn",
                       type: "button",
@@ -70468,10 +69937,10 @@ function ADRForm() {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
-                      placeholder: "Enter particulars (new line to break)",
-                      rows: "2",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                      type: "text",
+                      className: "adr-form__modal-input",
+                      placeholder: "Enter particulars",
                       value: row.particulars,
                       onChange: function onChange(e) {
                         return updateOtherItemsRow(row.id, 'particulars', e.target.value);
@@ -70505,10 +69974,10 @@ function ADRForm() {
                       })]
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--sm",
-                      placeholder: "Enter status/remarks (press Enter for each bullet)",
-                      rows: "2",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+                      type: "text",
+                      className: "adr-form__modal-input",
+                      placeholder: "Enter status/remarks",
                       value: row.status,
                       onChange: function onChange(e) {
                         return updateOtherItemsRow(row.id, 'status', e.target.value);
@@ -70564,139 +70033,6 @@ function ADRForm() {
           })
         })]
       })
-    }), showOtherAdminModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-      className: "adr-form__modal adr-form__modal--active",
-      onClick: function onClick() {
-        return setShowOtherAdminModal(false);
-      },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-        className: "adr-form__modal-content",
-        onClick: function onClick(e) {
-          return e.stopPropagation();
-        },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          className: "adr-form__modal-header",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
-            children: "Administrative Concerns"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-            className: "adr-form__modal-close",
-            type: "button",
-            onClick: function onClick() {
-              return setShowOtherAdminModal(false);
-            },
-            children: "\xD7"
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          className: "adr-form__modal-body",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-            className: "adr-form__modal-hint",
-            children: "List down administrative concerns. Press Enter for each bullet."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-            className: "adr-form__modal-input adr-form__modal-textarea",
-            placeholder: "e.g. No untoward incident",
-            rows: 6,
-            value: (_otherAdminRows$0$con = (_otherAdminRows$ = otherAdminRows[0]) === null || _otherAdminRows$ === void 0 ? void 0 : _otherAdminRows$.concern) !== null && _otherAdminRows$0$con !== void 0 ? _otherAdminRows$0$con : '',
-            onChange: function onChange(e) {
-              var first = otherAdminRows[0];
-              if (first) updateOtherAdminRow(first.id, 'concern', e.target.value);else setOtherAdminRows([{
-                id: 1,
-                concern: e.target.value,
-                concernAsBullets: false
-              }]);
-            }
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-          className: "adr-form__modal-footer",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-            className: "adr-form__modal-confirm",
-            type: "button",
-            onClick: function onClick() {
-              return setShowOtherAdminModal(false);
-            },
-            children: "Confirm"
-          })
-        })]
-      })
-    }), showEndorsedItemsModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-      className: "adr-form__modal adr-form__modal--active",
-      onClick: function onClick() {
-        return setShowEndorsedItemsModal(false);
-      },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-        className: "adr-form__modal-content",
-        onClick: function onClick(e) {
-          return e.stopPropagation();
-        },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          className: "adr-form__modal-header",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
-            children: "Endorsed to Incoming Operations Duty Staff"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-            className: "adr-form__modal-close",
-            type: "button",
-            onClick: function onClick() {
-              return setShowEndorsedItemsModal(false);
-            },
-            children: "\xD7"
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          className: "adr-form__modal-body",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-            className: "adr-form__modal-hint",
-            children: "List endorsed items. Press Enter for each item (e.g. 1.1, 1.2, 1.3)."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-            className: "adr-form__modal-input adr-form__modal-textarea",
-            placeholder: "e.g. 3 keys, 4 bars",
-            rows: 6,
-            value: endorsedItemsRows.map(function (r) {
-              return r.item;
-            }).join('\n'),
-            onChange: function onChange(e) {
-              var text = e.target.value;
-              var lines = text.split('\n');
-              setEndorsedItemsRows(lines.map(function (line, index) {
-                return {
-                  id: index + 1,
-                  item: line,
-                  itemAsBullets: false
-                };
-              }));
-            }
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-          className: "adr-form__modal-footer",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-            className: "adr-form__modal-confirm",
-            type: "button",
-            onClick: function onClick() {
-              return setShowEndorsedItemsModal(false);
-            },
-            children: "Confirm"
-          })
-        })]
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_DocumentViewModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
-      isOpen: showPreviewModal,
-      report: showPreviewModal ? getPreviewReport() : null,
-      onClose: function onClose() {
-        setShowPreviewModal(false);
-        navigate('/adr-reports/create', {
-          replace: true,
-          state: isEditing && reportToEdit ? {
-            report: reportToEdit
-          } : {}
-        });
-      }
-    }, showPreviewModal ? "preview-".concat((_endorsedItemsRows$le = endorsedItemsRows === null || endorsedItemsRows === void 0 ? void 0 : endorsedItemsRows.length) !== null && _endorsedItemsRows$le !== void 0 ? _endorsedItemsRows$le : 0) : 'preview-closed'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_ConfirmModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      isOpen: showValidationModal,
-      message: validationMessage,
-      onConfirm: function onConfirm() {
-        return setShowValidationModal(false);
-      },
-      onCancel: function onCancel() {
-        return setShowValidationModal(false);
-      },
-      showCancel: false
     })]
   });
 }
@@ -70930,6 +70266,32 @@ function ADRReports() {
   };
   var years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
   var months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  // Generate dynamic years based on reports
+  var getYearsFromReports = function getYearsFromReports() {
+    var yearsSet = new Set();
+    if (reports && reports.length > 0) {
+      var active = reports.filter(function (r) {
+        return r.status === 'Active';
+      });
+      active.forEach(function (report) {
+        if (report.createdAt) {
+          var year = new Date(report.createdAt).getFullYear();
+          yearsSet.add(year);
+        }
+      });
+    }
+
+    // Only add current year if there are active reports
+    if (yearsSet.size > 0) {
+      yearsSet.add(new Date().getFullYear());
+    }
+    var sortedYears = Array.from(yearsSet).sort(function (a, b) {
+      return b - a;
+    });
+    return ['All Years'].concat(_toConsumableArray(sortedYears.map(String)));
+  };
+  var filteredYears = getYearsFromReports();
   var handleYearSelect = function handleYearSelect(year) {
     setSelectedYear(year);
     setShowYearDropdown(false);
@@ -71042,7 +70404,7 @@ function ADRReports() {
             onClick: function onClick() {
               return setShowYearDropdown(!showYearDropdown);
             },
-            children: ["Year", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
+            children: [selectedYear, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
@@ -71056,7 +70418,7 @@ function ADRReports() {
             })]
           }), showYearDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
             className: "adr-reports__dropdown-menu",
-            children: years.map(function (year) {
+            children: filteredYears.map(function (year) {
               return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                 className: "adr-reports__dropdown-item",
                 onClick: function onClick() {
@@ -71073,7 +70435,7 @@ function ADRReports() {
             onClick: function onClick() {
               return setShowMonthDropdown(!showMonthDropdown);
             },
-            children: ["Month", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
+            children: [selectedMonth, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
@@ -72603,6 +71965,32 @@ function ArchivedReports() {
   };
   var years = ['All Years', '2026', '2025', '2024', '2023', '2022'];
   var months = ['All Months', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  // Generate dynamic years based on archived reports
+  var getYearsFromArchivedReports = function getYearsFromArchivedReports() {
+    var yearsSet = new Set();
+    if (reports && reports.length > 0) {
+      var archived = reports.filter(function (r) {
+        return r.status === 'Archived';
+      });
+      archived.forEach(function (report) {
+        if (report.createdAt) {
+          var year = new Date(report.createdAt).getFullYear();
+          yearsSet.add(year);
+        }
+      });
+    }
+
+    // Only add current year if there are archived reports
+    if (yearsSet.size > 0) {
+      yearsSet.add(new Date().getFullYear());
+    }
+    var sortedYears = Array.from(yearsSet).sort(function (a, b) {
+      return b - a;
+    });
+    return ['All Years'].concat(_toConsumableArray(sortedYears.map(String)));
+  };
+  var filteredYears = getYearsFromArchivedReports();
   var handleYearSelect = function handleYearSelect(year) {
     setSelectedYear(year);
     setShowYearDropdown(false);
@@ -72776,7 +72164,7 @@ function ArchivedReports() {
             onClick: function onClick() {
               return setShowYearDropdown(!showYearDropdown);
             },
-            children: ["Year", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
+            children: [selectedYear, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
@@ -72790,7 +72178,7 @@ function ArchivedReports() {
             })]
           }), showYearDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
             className: "archived-reports__dropdown-menu",
-            children: years.map(function (year) {
+            children: filteredYears.map(function (year) {
               return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                 className: "archived-reports__dropdown-item",
                 onClick: function onClick() {
@@ -72807,7 +72195,7 @@ function ArchivedReports() {
             onClick: function onClick() {
               return setShowMonthDropdown(!showMonthDropdown);
             },
-            children: ["Month", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
+            children: [selectedMonth, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
@@ -74510,6 +73898,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 function Profile() {
+  var _sectionOptions$find, _sectionOptions$find2;
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     profileImageUrl = _useFormContext.profileImageUrl,
     setProfileImageUrl = _useFormContext.setProfileImageUrl,
@@ -74524,71 +73913,76 @@ function Profile() {
     viewerOpen = _useState4[0],
     setViewerOpen = _useState4[1];
   var dropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var editRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var profileImgSrc = profileImageUrl || '/images/default_profile.png';
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('Your Name'),
+  var editRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null); // ← will now point to whole editable area
+  var sectionDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState6 = _slicedToArray(_useState5, 2),
-    displayName = _useState6[0],
-    setDisplayName = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    showSectionDropdown = _useState6[0],
+    setShowSectionDropdown = _useState6[1];
+  var profileImgSrc = profileImageUrl || '/images/default_profile.png';
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('Your Name'),
     _useState8 = _slicedToArray(_useState7, 2),
-    username = _useState8[0],
-    setUsername = _useState8[1];
+    displayName = _useState8[0],
+    setDisplayName = _useState8[1];
   var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState0 = _slicedToArray(_useState9, 2),
-    displaySectionId = _useState0[0],
-    setDisplaySectionId = _useState0[1];
+    username = _useState0[0],
+    setUsername = _useState0[1];
   var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState10 = _slicedToArray(_useState1, 2),
-    displaySectionName = _useState10[0],
-    setDisplaySectionName = _useState10[1];
+    displaySectionId = _useState10[0],
+    setDisplaySectionId = _useState10[1];
   var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState12 = _slicedToArray(_useState11, 2),
-    position = _useState12[0],
-    setPosition = _useState12[1];
+    displaySectionName = _useState12[0],
+    setDisplaySectionName = _useState12[1];
   var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState14 = _slicedToArray(_useState13, 2),
-    email = _useState14[0],
-    setEmail = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    position = _useState14[0],
+    setPosition = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState16 = _slicedToArray(_useState15, 2),
-    isEditing = _useState16[0],
-    setIsEditing = _useState16[1];
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    email = _useState16[0],
+    setEmail = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState18 = _slicedToArray(_useState17, 2),
-    editName = _useState18[0],
-    setEditName = _useState18[1];
-  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+    isEditing = _useState18[0],
+    setIsEditing = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState20 = _slicedToArray(_useState19, 2),
+    editName = _useState20[0],
+    setEditName = _useState20[1];
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       value: '',
       label: 'No section'
     }]),
-    _useState20 = _slicedToArray(_useState19, 2),
-    sectionOptions = _useState20[0],
-    setSectionOptions = _useState20[1];
-  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState22 = _slicedToArray(_useState21, 2),
-    profileLoading = _useState22[0],
-    setProfileLoading = _useState22[1];
-  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    sectionOptions = _useState22[0],
+    setSectionOptions = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState24 = _slicedToArray(_useState23, 2),
-    profileError = _useState24[0],
-    setProfileError = _useState24[1];
+    profileLoading = _useState24[0],
+    setProfileLoading = _useState24[1];
   var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState26 = _slicedToArray(_useState25, 2),
-    saveError = _useState26[0],
-    setSaveError = _useState26[1];
-  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    profileError = _useState26[0],
+    setProfileError = _useState26[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState28 = _slicedToArray(_useState27, 2),
-    showSuccessNotification = _useState28[0],
-    setShowSuccessNotification = _useState28[1];
-  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    saveError = _useState28[0],
+    setSaveError = _useState28[1];
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState30 = _slicedToArray(_useState29, 2),
-    successMessage = _useState30[0],
-    setSuccessMessage = _useState30[1];
-  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    showSuccessNotification = _useState30[0],
+    setShowSuccessNotification = _useState30[1];
+  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState32 = _slicedToArray(_useState31, 2),
-    isSaving = _useState32[0],
-    setIsSaving = _useState32[1];
+    successMessage = _useState32[0],
+    setSuccessMessage = _useState32[1];
+  var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState34 = _slicedToArray(_useState33, 2),
+    isSaving = _useState34[0],
+    setIsSaving = _useState34[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var isMounted = true;
     setProfileError('');
@@ -74633,6 +74027,9 @@ function Profile() {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false);
       }
+      if (sectionDropdownRef.current && !sectionDropdownRef.current.contains(e.target)) {
+        setShowSectionDropdown(false);
+      }
     };
     document.addEventListener('click', handleClickOutside);
     return function () {
@@ -74649,7 +74046,8 @@ function Profile() {
     var onKeyDown = function onKeyDown(e) {
       if (e.key === 'Escape') setIsEditing(false);
     };
-    // Delay so the click that opened edit mode doesn't immediately trigger close (button is unmounted after open)
+
+    // Small delay prevents immediate close from the edit button click itself
     var t = setTimeout(function () {
       document.addEventListener('click', handleClickOutsideEdit);
       document.addEventListener('keydown', onKeyDown);
@@ -74802,161 +74200,193 @@ function Profile() {
           children: isSaving ? 'Updating...' : 'Update'
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "profile__card",
+        ref: editRef,
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          className: "profile__photo-wrap",
-          ref: dropdownRef,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-            className: "profile__photo-preview ".concat(!profileImageUrl ? 'profile__photo-preview--default' : '', " profile__photo-preview--clickable"),
-            onClick: openViewer,
-            role: "button",
-            tabIndex: 0,
-            onKeyDown: function onKeyDown(e) {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                openViewer(e);
-              }
-            },
-            "aria-label": "View profile picture",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
-              src: profileImgSrc,
-              alt: "Profile",
-              className: "profile__photo-img"
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-            ref: fileInputRef,
-            type: "file",
-            accept: "image/jpeg,image/jpg,image/png,image/gif,image/webp,image/bmp,image/svg+xml,image/*",
-            onChange: handleFileChange,
-            className: "profile__photo-input",
-            id: "profile-photo-input"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
-            type: "button",
-            className: "profile__photo-plus",
-            title: "Profile options",
-            "aria-label": "Profile options",
-            "aria-haspopup": "true",
-            "aria-expanded": dropdownOpen,
-            onClick: function onClick(e) {
-              e.stopPropagation();
-              setDropdownOpen(function (prev) {
-                return !prev;
-              });
-            },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
-              className: "profile__photo-plus-icon",
-              children: "+"
-            })
-          }), dropdownOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-            className: "profile__photo-dropdown",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
-              type: "button",
-              className: "profile__photo-dropdown-item",
-              onClick: handleChangePhoto,
-              children: "Change profile picture"
+          className: "profile__card",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            className: "profile__photo-wrap",
+            ref: dropdownRef,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              className: "profile__photo-preview ".concat(!profileImageUrl ? 'profile__photo-preview--default' : '', " profile__photo-preview--clickable"),
+              onClick: openViewer,
+              role: "button",
+              tabIndex: 0,
+              onKeyDown: function onKeyDown(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  openViewer(e);
+                }
+              },
+              "aria-label": "View profile picture",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+                src: profileImgSrc,
+                alt: "Profile",
+                className: "profile__photo-img"
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+              ref: fileInputRef,
+              type: "file",
+              accept: "image/jpeg,image/jpg,image/png,image/gif,image/webp,image/bmp,image/svg+xml,image/*",
+              onChange: handleFileChange,
+              className: "profile__photo-input",
+              id: "profile-photo-input"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
               type: "button",
-              className: "profile__photo-dropdown-item",
-              onClick: handleRemovePhoto,
-              children: "Remove profile picture"
+              className: "profile__photo-plus",
+              title: "Profile options",
+              "aria-label": "Profile options",
+              "aria-haspopup": "true",
+              "aria-expanded": dropdownOpen,
+              onClick: function onClick(e) {
+                e.stopPropagation();
+                setDropdownOpen(function (prev) {
+                  return !prev;
+                });
+              },
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                className: "profile__photo-plus-icon",
+                children: "+"
+              })
+            }), dropdownOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+              className: "profile__photo-dropdown",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                type: "button",
+                className: "profile__photo-dropdown-item",
+                onClick: handleChangePhoto,
+                children: "Change profile picture"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+                type: "button",
+                className: "profile__photo-dropdown-item",
+                onClick: handleRemovePhoto,
+                children: "Remove profile picture"
+              })]
             })]
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-          className: "profile__info",
-          ref: editRef,
-          children: isEditing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "profile__name-row",
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: "profile__info",
+            children: isEditing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-                className: "profile__name-cell profile__name-cell--field",
+                className: "profile__name-row",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  className: "profile__name-cell profile__name-cell--field",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                    className: "profile__name-edit-wrap",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                      type: "text",
+                      className: "profile__name-input",
+                      value: editName,
+                      onChange: function onChange(e) {
+                        return setEditName(e.target.value);
+                      },
+                      placeholder: "Your name",
+                      autoFocus: true
+                    }), username && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+                      className: "profile__username profile__username--readonly",
+                      children: ["@", username]
+                    })]
+                  })
+                })
+              })
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                className: "profile__name-row",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-                  className: "profile__name-edit-wrap",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-                    type: "text",
-                    className: "profile__name-input",
-                    value: editName,
-                    onChange: function onChange(e) {
-                      return setEditName(e.target.value);
-                    },
-                    placeholder: "Your name",
-                    autoFocus: true
-                  }), username && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
-                    className: "profile__username profile__username--readonly",
-                    children: username
+                  className: "profile__name-cell",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                    className: "profile__name",
+                    children: displayName
+                  }), username && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+                    className: "profile__username",
+                    children: ["@", username]
                   })]
                 })
               })
             })
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "profile__name-row",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-                className: "profile__name-cell",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
-                  className: "profile__name",
-                  children: displayName
-                }), username && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
-                  className: "profile__username",
-                  children: username
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "profile__fields",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            className: "profile__field",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+              className: "profile__field-label",
+              htmlFor: "profile-position",
+              children: "POSITION"
+            }), isEditing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+              id: "profile-position",
+              type: "text",
+              className: "profile__field-input",
+              value: position,
+              onChange: function onChange(e) {
+                return setPosition(e.target.value);
+              },
+              placeholder: "Position"
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              className: "profile__section",
+              children: position || '—'
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            className: "profile__field",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+              className: "profile__field-label",
+              htmlFor: "profile-email",
+              children: "EMAIL"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+              id: "profile-email",
+              type: "email",
+              className: "profile__field-input",
+              value: email,
+              disabled: true,
+              placeholder: "Email",
+              readOnly: true,
+              "aria-readonly": "true"
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            className: "profile__field profile__field--wide",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+              className: "profile__field-label",
+              htmlFor: "profile-section",
+              children: "SECTION"
+            }), isEditing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+              className: "profile__section-dropdown",
+              ref: sectionDropdownRef,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
+                type: "button",
+                className: "profile__section-select",
+                onClick: function onClick() {
+                  return setShowSectionDropdown(!showSectionDropdown);
+                },
+                children: [((_sectionOptions$find = sectionOptions.find(function (opt) {
+                  return opt.value === displaySectionId;
+                })) === null || _sectionOptions$find === void 0 ? void 0 : _sectionOptions$find.label) || 'No section', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("svg", {
+                  viewBox: "0 0 24 24",
+                  fill: "none",
+                  xmlns: "http://www.w3.org/2000/svg",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("path", {
+                    d: "M6 9L12 15L18 9",
+                    stroke: "currentColor",
+                    strokeWidth: "2",
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round"
+                  })
                 })]
-              })
-            })
-          })
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "profile__fields",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          className: "profile__field",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-            className: "profile__field-label",
-            htmlFor: "profile-position",
-            children: "POSITION"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-            id: "profile-position",
-            type: "text",
-            className: "profile__field-input",
-            value: position,
-            onChange: function onChange(e) {
-              return setPosition(e.target.value);
-            },
-            placeholder: "Position"
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          className: "profile__field",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-            className: "profile__field-label",
-            htmlFor: "profile-section",
-            children: "SECTION"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("select", {
-            id: "profile-section",
-            className: "profile__field-input",
-            value: displaySectionId,
-            onChange: function onChange(e) {
-              return setDisplaySectionId(e.target.value);
-            },
-            "aria-label": "Section",
-            children: sectionOptions.map(function (opt) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
-                value: opt.value,
-                children: opt.label
-              }, opt.value || 'blank');
-            })
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-          className: "profile__field",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-            className: "profile__field-label",
-            htmlFor: "profile-email",
-            children: "EMAIL"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-            id: "profile-email",
-            type: "email",
-            className: "profile__field-input",
-            value: email,
-            disabled: true,
-            placeholder: "Email",
-            readOnly: true,
-            "aria-readonly": "true"
+              }), showSectionDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                className: "profile__section-menu",
+                children: sectionOptions.map(function (opt) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                    className: "profile__section-item ".concat(displaySectionId === opt.value ? 'profile__section-item--selected' : ''),
+                    onClick: function onClick() {
+                      setDisplaySectionId(opt.value);
+                      setShowSectionDropdown(false);
+                    },
+                    children: opt.label
+                  }, opt.value || 'blank');
+                })
+              })]
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              className: "profile__section",
+              children: ((_sectionOptions$find2 = sectionOptions.find(function (opt) {
+                return opt.value === displaySectionId;
+              })) === null || _sectionOptions$find2 === void 0 ? void 0 : _sectionOptions$find2.label) || 'No section'
+            })]
           })]
         })]
       })]
@@ -77495,7 +76925,9 @@ __webpack_require__.r(__webpack_exports__);
 function SuccessNotification(_ref) {
   var message = _ref.message,
     isVisible = _ref.isVisible,
-    onClose = _ref.onClose;
+    onClose = _ref.onClose,
+    _ref$type = _ref.type,
+    type = _ref$type === void 0 ? 'success' : _ref$type;
   var onCloseRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(onClose);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     onCloseRef.current = onClose;
@@ -77511,18 +76943,32 @@ function SuccessNotification(_ref) {
     }
   }, [isVisible]);
   if (!isVisible) return null;
+  var notificationClass = type === 'error' ? 'success-notification success-notification--error' : 'success-notification';
+  var iconColor = type === 'error' ? '#fff' : 'currentColor';
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    className: "success-notification",
+    className: notificationClass,
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
       className: "success-notification__content",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
+      children: [type === 'error' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
+        className: "success-notification__icon",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+          d: "M12 8V12M12 16H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z",
+          stroke: iconColor,
+          strokeWidth: "2",
+          strokeLinecap: "round",
+          strokeLinejoin: "round"
+        })
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
         className: "success-notification__icon",
         viewBox: "0 0 24 24",
         fill: "none",
         xmlns: "http://www.w3.org/2000/svg",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
           d: "M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z",
-          stroke: "currentColor",
+          stroke: iconColor,
           strokeWidth: "2",
           strokeLinecap: "round",
           strokeLinejoin: "round"
