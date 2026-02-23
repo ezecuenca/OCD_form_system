@@ -130,6 +130,22 @@
             }
         }
     }
+
+    &__swap-info {
+        background-color: #f0f7ff;
+        padding: 0.75rem 1rem !important;
+        border-radius: 6px;
+        border: 1px solid #d0e4ff !important;
+        margin-top: 0.5rem;
+
+        label {
+            color: #2f5eb8 !important;
+        }
+
+        .value {
+            color: #2d241d;
+        }
+    }
 }
 
 // ────────────────────────────────────────────────

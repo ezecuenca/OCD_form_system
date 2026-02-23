@@ -192,6 +192,33 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                                 )}
                             </div>
                         </div>
+
+                        {initialTask?.status === 'swap' && initialTask?.swapInfo && (
+                            <div className="view-task__row view-task__swap-info">
+                                <label>Swap Details</label>
+                                <div className="value" style={{ fontSize: '0.875rem', color: '#555' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                                        <span>⇄</span>
+                                        {initialTask.swapInfo.has_target_person && initialTask.swapInfo.swapped_with ? (
+                                            <span>Swapped with <strong>{initialTask.swapInfo.swapped_with}</strong></span>
+                                        ) : (
+                                            <span><strong>Swapped</strong></span>
+                                        )}
+                                    </div>
+                                    {initialTask.swapInfo.original_date && initialTask.swapInfo.new_date && (
+                                        <div style={{ fontSize: '0.8125rem', color: '#888', marginLeft: '1.5rem' }}>
+                                            {new Date(initialTask.swapInfo.original_date).toLocaleDateString('en-US', {
+                                                month: 'short',
+                                                day: 'numeric'
+                                            })} - {new Date(initialTask.swapInfo.new_date).toLocaleDateString('en-US', {
+                                                month: 'short',
+                                                day: 'numeric'
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 

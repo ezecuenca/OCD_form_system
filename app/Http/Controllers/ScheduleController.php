@@ -25,6 +25,49 @@ class ScheduleController extends Controller
             $profileName = $profile->user->username;
         }
 
+        $swapInfo = null;
+        if ($schedule->status === 'swap') {
+            // Find the swap request related to this schedule
+            $swapRequest = \App\Models\SwappingRequest::where('status', 'approved')
+                ->where(function ($query) use ($schedule) {
+                    $query->where('requester_schedule_id', $schedule->id)
+                          ->orWhere('target_schedule_id', $schedule->id);
+                })
+                ->with(['requesterSchedule.profile', 'targetSchedule.profile'])
+                ->first();
+
+            if ($swapRequest) {
+                $isRequester = $swapRequest->requester_schedule_id === $schedule->id;
+                $targetSchedule = $swapRequest->targetSchedule;
+
+                $originalRequesterDate = $swapRequest->original_requester_date?->format('Y-m-d');
+                $originalTargetDate = $swapRequest->original_target_date?->format('Y-m-d');
+
+                // Determine original and new dates using stored originals
+                if ($isRequester) {
+                    $originalDate = $originalRequesterDate;
+                    $newDate = $targetSchedule ? $originalTargetDate : $swapRequest->target_date?->format('Y-m-d');
+                } else {
+                    $originalDate = $originalTargetDate;
+                    $newDate = $originalRequesterDate;
+                }
+
+                $swapInfo = [
+                    'has_target_person' => $targetSchedule !== null,
+                    'original_date' => $originalDate,
+                    'new_date' => $newDate,
+                ];
+
+                // Only include swapped_with if there's a target person
+                if ($targetSchedule) {
+                    $otherSchedule = $isRequester ? $targetSchedule : $swapRequest->requesterSchedule;
+                    $otherProfile = $otherSchedule?->profile;
+                    $otherName = $otherProfile?->full_name ?? $otherProfile?->user?->username ?? 'Unknown';
+                    $swapInfo['swapped_with'] = $otherName;
+                }
+            }
+        }
+
         return [
             'id' => $schedule->id,
             'profile_id' => $schedule->profile_id,
@@ -32,6 +75,7 @@ class ScheduleController extends Controller
             'task_description' => $schedule->task_description,
             'task_date' => $schedule->task_date?->format('Y-m-d'),
             'status' => $schedule->status,
+            'swap_info' => $swapInfo,
             'created_at' => $schedule->created_at?->toIso8601String(),
             'updated_at' => $schedule->updated_at?->toIso8601String(),
         ];

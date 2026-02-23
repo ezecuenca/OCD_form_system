@@ -70142,6 +70142,11 @@ function ADRReports() {
     _useState26 = _slicedToArray(_useState25, 2),
     searchQuery = _useState26[0],
     setSearchQuery = _useState26[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1),
+    _useState28 = _slicedToArray(_useState27, 2),
+    currentPage = _useState28[0],
+    setCurrentPage = _useState28[1];
+  var itemsPerPage = 10;
   var yearDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var monthDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -70320,18 +70325,6 @@ function ADRReports() {
   var activeReports = reports.filter(function (r) {
     return r.status === 'Active';
   });
-  if (!reportsLoaded) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-      className: "adr-reports",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-        style: {
-          padding: '2rem',
-          textAlign: 'center'
-        },
-        children: "Loading reports..."
-      })
-    });
-  }
   var filteredReports = activeReports.filter(function (report) {
     var created = new Date(report.createdAt);
     var reportYear = created.getFullYear().toString();
@@ -70349,6 +70342,43 @@ function ADRReports() {
     }
     return true;
   });
+  var totalPages = Math.ceil(filteredReports.length / itemsPerPage);
+  var startIndex = (currentPage - 1) * itemsPerPage;
+  var endIndex = startIndex + itemsPerPage;
+  var paginatedReports = filteredReports.slice(startIndex, endIndex);
+  var goToFirstPage = function goToFirstPage() {
+    return setCurrentPage(1);
+  };
+  var goToPrevPage = function goToPrevPage() {
+    return setCurrentPage(function (prev) {
+      return Math.max(1, prev - 1);
+    });
+  };
+  var goToNextPage = function goToNextPage() {
+    return setCurrentPage(function (prev) {
+      return Math.min(totalPages, prev + 1);
+    });
+  };
+  var goToLastPage = function goToLastPage() {
+    return setCurrentPage(totalPages);
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [filteredReports.length, currentPage, totalPages]);
+  if (!reportsLoaded) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      className: "adr-reports",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
+        style: {
+          padding: '2rem',
+          textAlign: 'center'
+        },
+        children: "Loading reports..."
+      })
+    });
+  }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
     className: "adr-reports",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
@@ -70476,10 +70506,10 @@ function ADRReports() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
                 type: "checkbox",
-                checked: selectedReports.length === filteredReports.length && filteredReports.length > 0,
+                checked: selectedReports.length === paginatedReports.length && paginatedReports.length > 0,
                 onChange: function onChange(e) {
                   if (e.target.checked) {
-                    setSelectedReports(filteredReports.map(function (r) {
+                    setSelectedReports(paginatedReports.map(function (r) {
                       return r.id;
                     }));
                   } else {
@@ -70506,7 +70536,7 @@ function ADRReports() {
               },
               children: activeReports.length === 0 ? 'No reports yet. Click "Create New" to add one.' : 'No reports match the current filters.'
             })
-          }) : filteredReports.map(function (report) {
+          }) : paginatedReports.map(function (report) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
@@ -70572,6 +70602,9 @@ function ADRReports() {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "adr-reports__pagination",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        onClick: goToFirstPage,
+        disabled: currentPage === 1,
+        title: "First page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
@@ -70585,6 +70618,9 @@ function ADRReports() {
           })
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        onClick: goToPrevPage,
+        disabled: currentPage === 1,
+        title: "Previous page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
@@ -70597,7 +70633,13 @@ function ADRReports() {
             strokeLinejoin: "round"
           })
         })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+        className: "adr-reports__pagination-info",
+        children: filteredReports.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'No data'
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        onClick: goToNextPage,
+        disabled: currentPage === totalPages || filteredReports.length === 0,
+        title: "Next page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
@@ -70611,6 +70653,9 @@ function ADRReports() {
           })
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        onClick: goToLastPage,
+        disabled: currentPage === totalPages || filteredReports.length === 0,
+        title: "Last page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
@@ -71720,6 +71765,15 @@ function ArchivedReports() {
     _useState24 = _slicedToArray(_useState23, 2),
     searchQuery = _useState24[0],
     setSearchQuery = _useState24[1];
+  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1),
+    _useState26 = _slicedToArray(_useState25, 2),
+    currentAdrPage = _useState26[0],
+    setCurrentAdrPage = _useState26[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1),
+    _useState28 = _slicedToArray(_useState27, 2),
+    currentSwapPage = _useState28[0],
+    setCurrentSwapPage = _useState28[1];
+  var itemsPerPage = 10;
   var yearDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var monthDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -71747,6 +71801,8 @@ function ArchivedReports() {
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     setSelectedSwapRequests([]);
+    setCurrentAdrPage(1);
+    setCurrentSwapPage(1);
     if (activeTab === 'swapped') {
       axios__WEBPACK_IMPORTED_MODULE_2___default().get('/api/swapping-requests?include_archived=true').then(function (response) {
         var data = Array.isArray(response.data) ? response.data : [];
@@ -71999,18 +72055,6 @@ function ArchivedReports() {
     setSelectedMonth(month);
     setShowMonthDropdown(false);
   };
-  if (!reportsLoaded) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-      className: "archived-reports",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
-        style: {
-          padding: '2rem',
-          textAlign: 'center'
-        },
-        children: "Loading reports..."
-      })
-    });
-  }
   var archivedReports = reports.filter(function (r) {
     return r.status === 'Archived';
   });
@@ -72045,6 +72089,70 @@ function ArchivedReports() {
     }
     return true;
   });
+
+  // Pagination calculations
+  var totalAdrPages = Math.ceil(filteredArchivedReports.length / itemsPerPage);
+  var adrStartIndex = (currentAdrPage - 1) * itemsPerPage;
+  var adrEndIndex = adrStartIndex + itemsPerPage;
+  var paginatedArchivedReports = filteredArchivedReports.slice(adrStartIndex, adrEndIndex);
+  var totalSwapPages = Math.ceil(filteredArchivedSwapRequests.length / itemsPerPage);
+  var swapStartIndex = (currentSwapPage - 1) * itemsPerPage;
+  var swapEndIndex = swapStartIndex + itemsPerPage;
+  var paginatedArchivedSwapRequests = filteredArchivedSwapRequests.slice(swapStartIndex, swapEndIndex);
+  var goToAdrFirstPage = function goToAdrFirstPage() {
+    return setCurrentAdrPage(1);
+  };
+  var goToAdrPrevPage = function goToAdrPrevPage() {
+    return setCurrentAdrPage(function (prev) {
+      return Math.max(1, prev - 1);
+    });
+  };
+  var goToAdrNextPage = function goToAdrNextPage() {
+    return setCurrentAdrPage(function (prev) {
+      return Math.min(totalAdrPages, prev + 1);
+    });
+  };
+  var goToAdrLastPage = function goToAdrLastPage() {
+    return setCurrentAdrPage(totalAdrPages);
+  };
+  var goToSwapFirstPage = function goToSwapFirstPage() {
+    return setCurrentSwapPage(1);
+  };
+  var goToSwapPrevPage = function goToSwapPrevPage() {
+    return setCurrentSwapPage(function (prev) {
+      return Math.max(1, prev - 1);
+    });
+  };
+  var goToSwapNextPage = function goToSwapNextPage() {
+    return setCurrentSwapPage(function (prev) {
+      return Math.min(totalSwapPages, prev + 1);
+    });
+  };
+  var goToSwapLastPage = function goToSwapLastPage() {
+    return setCurrentSwapPage(totalSwapPages);
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (currentAdrPage > totalAdrPages && totalAdrPages > 0) {
+      setCurrentAdrPage(totalAdrPages);
+    }
+  }, [filteredArchivedReports.length, currentAdrPage, totalAdrPages]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (currentSwapPage > totalSwapPages && totalSwapPages > 0) {
+      setCurrentSwapPage(totalSwapPages);
+    }
+  }, [filteredArchivedSwapRequests.length, currentSwapPage, totalSwapPages]);
+  if (!reportsLoaded) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      className: "archived-reports",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
+        style: {
+          padding: '2rem',
+          textAlign: 'center'
+        },
+        children: "Loading reports..."
+      })
+    });
+  }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
     className: "archived-reports",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
@@ -72229,10 +72337,10 @@ function ArchivedReports() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
                 type: "checkbox",
-                checked: selectedReports.length === filteredArchivedReports.length && filteredArchivedReports.length > 0,
+                checked: selectedReports.length === paginatedArchivedReports.length && paginatedArchivedReports.length > 0,
                 onChange: function onChange(e) {
                   if (e.target.checked) {
-                    setSelectedReports(filteredArchivedReports.map(function (r) {
+                    setSelectedReports(paginatedArchivedReports.map(function (r) {
                       return r.id;
                     }));
                   } else {
@@ -72259,7 +72367,7 @@ function ArchivedReports() {
               },
               children: archivedReports.length === 0 ? 'No archived reports yet.' : 'No reports match the current filters.'
             })
-          }) : filteredArchivedReports.map(function (report) {
+          }) : paginatedArchivedReports.map(function (report) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
@@ -72318,10 +72426,10 @@ function ArchivedReports() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
                 type: "checkbox",
-                checked: selectedSwapRequests.length === filteredArchivedSwapRequests.length && filteredArchivedSwapRequests.length > 0,
+                checked: selectedSwapRequests.length === paginatedArchivedSwapRequests.length && paginatedArchivedSwapRequests.length > 0,
                 onChange: function onChange(e) {
                   if (e.target.checked) {
-                    setSelectedSwapRequests(filteredArchivedSwapRequests.map(function (r) {
+                    setSelectedSwapRequests(paginatedArchivedSwapRequests.map(function (r) {
                       return r.id;
                     }));
                   } else {
@@ -72350,7 +72458,7 @@ function ArchivedReports() {
               },
               children: archivedSwapRequests.length === 0 ? 'No archived swap requests yet.' : 'No swap requests match the current filters.'
             })
-          }) : filteredArchivedSwapRequests.map(function (req) {
+          }) : paginatedArchivedSwapRequests.map(function (req) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
@@ -72411,6 +72519,9 @@ function ArchivedReports() {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "archived-reports__pagination",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        onClick: activeTab === 'adr' ? goToAdrFirstPage : goToSwapFirstPage,
+        disabled: activeTab === 'adr' ? currentAdrPage === 1 : currentSwapPage === 1,
+        title: "First page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
@@ -72424,6 +72535,9 @@ function ArchivedReports() {
           })
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        onClick: activeTab === 'adr' ? goToAdrPrevPage : goToSwapPrevPage,
+        disabled: activeTab === 'adr' ? currentAdrPage === 1 : currentSwapPage === 1,
+        title: "Previous page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
@@ -72436,7 +72550,13 @@ function ArchivedReports() {
             strokeLinejoin: "round"
           })
         })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+        className: "archived-reports__pagination-info",
+        children: activeTab === 'adr' ? filteredArchivedReports.length > 0 ? "Page ".concat(currentAdrPage, " of ").concat(totalAdrPages) : 'No data' : filteredArchivedSwapRequests.length > 0 ? "Page ".concat(currentSwapPage, " of ").concat(totalSwapPages) : 'No data'
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        onClick: activeTab === 'adr' ? goToAdrNextPage : goToSwapNextPage,
+        disabled: activeTab === 'adr' ? currentAdrPage === totalAdrPages || filteredArchivedReports.length === 0 : currentSwapPage === totalSwapPages || filteredArchivedSwapRequests.length === 0,
+        title: "Next page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
@@ -72450,6 +72570,9 @@ function ArchivedReports() {
           })
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        onClick: activeTab === 'adr' ? goToAdrLastPage : goToSwapLastPage,
+        disabled: activeTab === 'adr' ? currentAdrPage === totalAdrPages || filteredArchivedReports.length === 0 : currentSwapPage === totalSwapPages || filteredArchivedSwapRequests.length === 0,
+        title: "Last page",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
@@ -74515,7 +74638,8 @@ function Schedule() {
       fullName: item.profile_name || '—',
       task: item.task_description || '',
       date: item.task_date,
-      status: item.status
+      status: item.status,
+      swapInfo: item.swap_info
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -74898,6 +75022,27 @@ function Schedule() {
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                 className: "schedule__day-tasks",
                 children: dayTasks.map(function (task, taskIndex) {
+                  var tooltipText = '';
+                  if (task.status === 'swap' && task.swapInfo) {
+                    var formatShortDate = function formatShortDate(dateStr) {
+                      if (!dateStr) return '';
+                      var date = new Date(dateStr);
+                      return date.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                      });
+                    };
+                    var originalDateStr = formatShortDate(task.swapInfo.original_date);
+                    var newDateStr = formatShortDate(task.swapInfo.new_date);
+                    var hasDates = Boolean(originalDateStr && newDateStr);
+                    if (task.swapInfo.has_target_person && task.swapInfo.swapped_with) {
+                      tooltipText = hasDates ? "Swapped with ".concat(task.swapInfo.swapped_with, ": ").concat(originalDateStr, " => ").concat(newDateStr) : "Swapped with ".concat(task.swapInfo.swapped_with);
+                    } else {
+                      tooltipText = hasDates ? "Swapped: ".concat(originalDateStr, " => ").concat(newDateStr) : 'Swapped';
+                    }
+                  } else if (task.status === 'swap') {
+                    tooltipText = 'This task has been swapped';
+                  }
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                     className: "schedule__task".concat(task.status === 'swap' ? ' schedule__task--swapped' : ''),
                     onClick: function onClick(event) {
@@ -74909,15 +75054,62 @@ function Schedule() {
                     },
                     role: "button",
                     tabIndex: 0,
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                    title: tooltipText,
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
                       className: "schedule__task-name",
-                      children: task.name
+                      children: [task.status === 'swap' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                        className: "schedule__task-swap-icon",
+                        children: "\u21C4 "
+                      }), task.name]
                     })
                   }, taskIndex);
                 })
               })]
             }, index);
           })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+          className: "schedule__task-summary",
+          children: function () {
+            var currentMonthTasks = tasks.filter(function (task) {
+              if (!task.date) return false;
+              var taskDate = new Date(task.date);
+              return taskDate.getFullYear() === currentDate.getFullYear() && taskDate.getMonth() === currentDate.getMonth();
+            });
+            var employeeTaskCounts = currentMonthTasks.reduce(function (acc, task) {
+              var name = task.fullName || 'Unknown';
+              acc[name] = (acc[name] || 0) + 1;
+              return acc;
+            }, {});
+            var entries = Object.entries(employeeTaskCounts).sort(function (a, b) {
+              return a[0].localeCompare(b[0]);
+            });
+            if (entries.length === 0) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
+                className: "schedule__task-summary-text",
+                children: "No tasks scheduled for this month."
+              });
+            }
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              className: "schedule__task-summary-content",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("p", {
+                className: "schedule__task-summary-title",
+                children: ["Task Distribution for ", monthName, ":"]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                className: "schedule__task-summary-list",
+                children: entries.map(function (_ref4) {
+                  var _ref5 = _slicedToArray(_ref4, 2),
+                    name = _ref5[0],
+                    count = _ref5[1];
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+                    className: "schedule__task-summary-item",
+                    children: [name, ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
+                      children: count
+                    }), " task", count !== 1 ? 's' : '']
+                  }, name);
+                })
+              })]
+            });
+          }()
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
           className: "schedule__actions",
           children: [((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
@@ -74956,7 +75148,7 @@ function Schedule() {
       initialTask: selectedTask,
       mode: modalMode,
       onUpdateTask: (/*#__PURE__*/function () {
-        var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(updateTask) {
+        var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(updateTask) {
           var payload, response, _t4;
           return _regenerator().w(function (_context4) {
             while (1) switch (_context4.p = _context4.n) {
@@ -74992,7 +75184,7 @@ function Schedule() {
           }, _callee4, null, [[0, 2]]);
         }));
         return function (_x2) {
-          return _ref4.apply(this, arguments);
+          return _ref6.apply(this, arguments);
         };
       }()),
       onSwitchToEdit: function onSwitchToEdit() {
@@ -78001,6 +78193,49 @@ function TasksModal(_ref) {
                   fontWeight: 500
                 },
                 children: "Swapped"
+              })]
+            })]
+          }), (initialTask === null || initialTask === void 0 ? void 0 : initialTask.status) === 'swap' && (initialTask === null || initialTask === void 0 ? void 0 : initialTask.swapInfo) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+            className: "view-task__row view-task__swap-info",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
+              children: "Swap Details"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+              className: "value",
+              style: {
+                fontSize: '0.875rem',
+                color: '#555'
+              },
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+                style: {
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  marginBottom: '0.25rem'
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+                  children: "\u21C4"
+                }), initialTask.swapInfo.has_target_person && initialTask.swapInfo.swapped_with ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
+                  children: ["Swapped with ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("strong", {
+                    children: initialTask.swapInfo.swapped_with
+                  })]
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("strong", {
+                    children: "Swapped"
+                  })
+                })]
+              }), initialTask.swapInfo.original_date && initialTask.swapInfo.new_date && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+                style: {
+                  fontSize: '0.8125rem',
+                  color: '#888',
+                  marginLeft: '1.5rem'
+                },
+                children: [new Date(initialTask.swapInfo.original_date).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric'
+                }), " - ", new Date(initialTask.swapInfo.new_date).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric'
+                })]
               })]
             })]
           })]
