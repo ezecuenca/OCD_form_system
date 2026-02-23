@@ -58,40 +58,29 @@ function Settings() {
     const [retentionPreview, setRetentionPreview] = useState({ adr_count: 0, swap_count: 0 });
     const [daysUntilArchive, setDaysUntilArchive] = useState({ adr_days: null, swap_days: null });
 
-    // FIXED: Correct cutoff date calculation
-    // Now for 1 day retention → cutoff = today (not yesterday)
-   // FIXED: Cutoff date should be TODAY or IN THE PAST (older records are archived)
-// For 1 day retention → cutoff = TODAY (records from today are kept, yesterday & older are due)
-const getCutoffDate = () => {
-    const now = new Date();
-    const cutoff = new Date(now); // start from current time
+    // FIXED: Cutoff date is now AFTER current date
+    const getCutoffDate = () => {
+        const cutoff = new Date();
 
-    let subtractDays = 0;
+        switch (retentionUnit) {
+            case 'days':
+                cutoff.setDate(cutoff.getDate() + retentionValue);
+                break;
+            case 'months':
+                cutoff.setMonth(cutoff.getMonth() + retentionValue);
+                break;
+            case 'years':
+                cutoff.setFullYear(cutoff.getFullYear() + retentionValue);
+                break;
+            default:
+                cutoff.setDate(cutoff.getDate() + retentionValue);
+        }
 
-    switch (retentionUnit) {
-        case 'days':
-            subtractDays = retentionValue; // subtract full N days → cutoff is N days ago
-            cutoff.setDate(cutoff.getDate() - subtractDays);
-            break;
+        // Set to end of the cutoff day (common for retention policies)
+        cutoff.setHours(23, 59, 59, 999);
 
-        case 'months':
-            cutoff.setMonth(cutoff.getMonth() - retentionValue);
-            break;
-
-        case 'years':
-            cutoff.setFullYear(cutoff.getFullYear() - retentionValue);
-            break;
-
-        default:
-            // fallback to days
-            cutoff.setDate(cutoff.getDate() - retentionValue);
-    }
-
-    // Set to END of the cutoff day (23:59:59) so records from the cutoff day itself are STILL KEPT
-    cutoff.setHours(23, 59, 59, 999);
-
-    return cutoff;
-};
+        return cutoff;
+    };
 
     // Fetch preview and days left when retention changes
     useEffect(() => {

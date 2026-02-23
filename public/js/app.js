@@ -75430,32 +75430,24 @@ function Settings() {
     daysUntilArchive = _useState74[0],
     setDaysUntilArchive = _useState74[1];
 
-  // FIXED: Correct cutoff date calculation
-  // Now for 1 day retention → cutoff = today (not yesterday)
-  // FIXED: Cutoff date should be TODAY or IN THE PAST (older records are archived)
-  // For 1 day retention → cutoff = TODAY (records from today are kept, yesterday & older are due)
+  // FIXED: Cutoff date is now AFTER current date
   var getCutoffDate = function getCutoffDate() {
-    var now = new Date();
-    var cutoff = new Date(now); // start from current time
-
-    var subtractDays = 0;
+    var cutoff = new Date();
     switch (retentionUnit) {
       case 'days':
-        subtractDays = retentionValue; // subtract full N days → cutoff is N days ago
-        cutoff.setDate(cutoff.getDate() - subtractDays);
+        cutoff.setDate(cutoff.getDate() + retentionValue);
         break;
       case 'months':
-        cutoff.setMonth(cutoff.getMonth() - retentionValue);
+        cutoff.setMonth(cutoff.getMonth() + retentionValue);
         break;
       case 'years':
-        cutoff.setFullYear(cutoff.getFullYear() - retentionValue);
+        cutoff.setFullYear(cutoff.getFullYear() + retentionValue);
         break;
       default:
-        // fallback to days
-        cutoff.setDate(cutoff.getDate() - retentionValue);
+        cutoff.setDate(cutoff.getDate() + retentionValue);
     }
 
-    // Set to END of the cutoff day (23:59:59) so records from the cutoff day itself are STILL KEPT
+    // Set to end of the cutoff day (common for retention policies)
     cutoff.setHours(23, 59, 59, 999);
     return cutoff;
   };
