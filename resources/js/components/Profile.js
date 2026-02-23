@@ -9,7 +9,7 @@ function Profile() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [viewerOpen, setViewerOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const editRef = useRef(null);                     // ← will now point to whole editable area
+    const editRef = useRef(null);                   
     const sectionDropdownRef = useRef(null);
     const [showSectionDropdown, setShowSectionDropdown] = useState(false);
 

@@ -40,8 +40,107 @@ function Settings() {
     const [templateToView, setTemplateToView] = useState(null);
     const [templateUploading, setTemplateUploading] = useState(false);
     const [selectedTemplateFilenames, setSelectedTemplateFilenames] = useState(() => new Set());
+    const [templateTab, setTemplateTab] = useState('adr');
     const templateFileInputRef = useRef(null);
     const selectAllTemplatesRef = useRef(null);
+
+    // Retention period state
+    const [retentionValue, setRetentionValue] = useState(() => {
+        const saved = localStorage.getItem('retentionValue');
+        return saved ? parseInt(saved, 10) : 30;
+    });
+    const [retentionUnit, setRetentionUnit] = useState(() => {
+        return localStorage.getItem('retentionUnit') || 'days';
+    });
+    const [isRetentionChanged, setIsRetentionChanged] = useState(false);
+
+    // Preview & days left
+    const [retentionPreview, setRetentionPreview] = useState({ adr_count: 0, swap_count: 0 });
+    const [daysUntilArchive, setDaysUntilArchive] = useState({ adr_days: null, swap_days: null });
+
+    // FIXED: Correct cutoff date calculation
+    // Now for 1 day retention → cutoff = today (not yesterday)
+   // FIXED: Cutoff date should be TODAY or IN THE PAST (older records are archived)
+// For 1 day retention → cutoff = TODAY (records from today are kept, yesterday & older are due)
+const getCutoffDate = () => {
+    const now = new Date();
+    const cutoff = new Date(now); // start from current time
+
+    let subtractDays = 0;
+
+    switch (retentionUnit) {
+        case 'days':
+            subtractDays = retentionValue; // subtract full N days → cutoff is N days ago
+            cutoff.setDate(cutoff.getDate() - subtractDays);
+            break;
+
+        case 'months':
+            cutoff.setMonth(cutoff.getMonth() - retentionValue);
+            break;
+
+        case 'years':
+            cutoff.setFullYear(cutoff.getFullYear() - retentionValue);
+            break;
+
+        default:
+            // fallback to days
+            cutoff.setDate(cutoff.getDate() - retentionValue);
+    }
+
+    // Set to END of the cutoff day (23:59:59) so records from the cutoff day itself are STILL KEPT
+    cutoff.setHours(23, 59, 59, 999);
+
+    return cutoff;
+};
+
+    // Fetch preview and days left when retention changes
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const cutoffDate = getCutoffDate();
+                const res = await axios.post('/api/data-retention/preview', {
+                    cutoff_date: cutoffDate.toISOString(),
+                });
+                setRetentionPreview({
+                    adr_count: res.data.adr_to_archive || 0,
+                    swap_count: res.data.swap_to_archive || 0,
+                });
+            } catch (err) {
+                console.error('Preview fetch failed:', err);
+            }
+
+            try {
+                const daysRes = await axios.post('/api/data-retention/days-until-archive', {
+                    retention_value: retentionValue,
+                    retention_unit: retentionUnit,
+                });
+                setDaysUntilArchive({
+                    adr_days: daysRes.data.days_until_adr_archive,
+                    swap_days: daysRes.data.days_until_swap_archive,
+                });
+            } catch (err) {
+                console.error('Days until archive fetch failed:', err);
+            }
+        };
+
+        fetchData();
+    }, [retentionValue, retentionUnit]);
+
+    // Reset changed flag when leaving tab
+    useEffect(() => {
+        if (activeSection !== 'data-retention') {
+            setIsRetentionChanged(false);
+        }
+    }, [activeSection]);
+
+    // Filter templates
+    const filteredTemplates = templates.filter(t => {
+        const name = (t.name || '').toLowerCase();
+        if (templateTab === 'adr') {
+            return name.includes('adr') || name.includes('after') || name.includes('duty') || name.includes('report') || !name.includes('swap');
+        }
+        return name.includes('swap') || name.includes('swapping');
+    });
 
     const roleIdLabels = {
         1: 'User',
@@ -139,10 +238,8 @@ function Settings() {
                     created_at: s.created_at || null,
                     archived_at: s.archived_at || null,
                 });
-                const activeData = Array.isArray(activeRes.data) ? activeRes.data : [];
-                const archivedData = Array.isArray(archivedRes.data) ? archivedRes.data : [];
-                setSections(activeData.map(toSection));
-                setArchivedSections(archivedData.map(toSection));
+                setSections(Array.isArray(activeRes.data) ? activeRes.data.map(toSection) : []);
+                setArchivedSections(Array.isArray(archivedRes.data) ? archivedRes.data.map(toSection) : []);
             })
             .catch((err) => {
                 setSectionsError(err?.response?.data?.message || 'Failed to load sections.');
@@ -389,6 +486,24 @@ function Settings() {
         setTemplateToView({ filename, name: name || filename });
     };
 
+    const handleEditTemplate = (tpl) => {
+        setConfirmMessage(`Edit template "${tpl.name}"?`);
+        setConfirmAction(() => () => {
+            const newName = prompt('Enter new template name:', tpl.name);
+            if (newName && newName !== tpl.name) {
+                axios.patch(`/api/templates/${tpl.id}`, { name: newName })
+                    .then(() => {
+                        // Refresh templates if needed
+                    })
+                    .catch(err => {
+                        setTemplatesError(err.response?.data?.message || 'Failed to update template');
+                    });
+            }
+            setShowConfirmModal(false);
+        });
+        setShowConfirmModal(true);
+    };
+
     const handleAddTemplateClick = () => {
         templateFileInputRef.current?.click();
     };
@@ -411,12 +526,12 @@ function Settings() {
                 setTemplates((prev) => {
                     const byName = (t) => t.name === data.name;
                     const next = prev.some(byName)
-                        ? prev.map((t) => (byName(t) ? { name: data.name, filename: data.filename, updated_at: data.updated_at, is_active: !!data.is_active } : t))
-                        : [...prev, { name: data.name, filename: data.filename, updated_at: data.updated_at, is_active: !!data.is_active }];
-                    return next.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+                        ? prev.map((t) => (byName(t) ? { ...t, ...data } : t))
+                        : [...prev, data];
+                    return next.sort((a, b) => a.name.localeCompare(b.name));
                 });
                 const replaced = templates.some((t) => t.name === data.name);
-                setSuccessMessage(replaced ? 'Template replaced successfully.' : 'Template added successfully.');
+                setSuccessMessage(replaced ? 'Template replaced.' : 'Template added.');
                 setShowSuccessNotification(true);
             })
             .catch((err) => {
@@ -437,7 +552,7 @@ function Settings() {
         const baseName = getTemplateBaseName(file.name);
         const existing = templates.find((t) => t.name === baseName);
         if (existing) {
-            setConfirmMessage(`A template named "${baseName}" already exists. Replace it?`);
+            setConfirmMessage(`Replace existing template "${baseName}"?`);
             setConfirmAction(() => () => {
                 uploadTemplateFile(file);
                 setShowConfirmModal(false);
@@ -451,7 +566,10 @@ function Settings() {
     const setTemplateInUse = (tpl) => {
         axios.patch('/api/templates/set-active', { template_name: tpl.name })
             .then(() => {
-                setTemplates((prev) => prev.map((t) => ({ ...t, is_active: t.filename === tpl.filename })));
+                setTemplates((prev) => prev.map((t) => ({
+                    ...t,
+                    is_active: t.filename === tpl.filename,
+                })));
                 setSuccessMessage('Template set as in use.');
                 setShowSuccessNotification(true);
             })
@@ -461,7 +579,7 @@ function Settings() {
     };
 
     const deleteTemplate = (tpl) => {
-        setConfirmMessage(`Permanently delete template "${tpl.name}"? This cannot be undone.`);
+        setConfirmMessage(`Delete template "${tpl.name}" permanently?`);
         setConfirmAction(() => () => {
             axios.delete(`/api/templates/${encodeURIComponent(tpl.filename)}`)
                 .then(() => {
@@ -497,15 +615,14 @@ function Settings() {
 
     const deleteSelectedTemplates = () => {
         const toDelete = new Set(selectedTemplateFilenames);
-        setConfirmMessage(`Permanently delete ${toDelete.size} templates? This cannot be undone.`);
+        setConfirmMessage(`Delete ${toDelete.size} selected template(s) permanently?`);
         setConfirmAction(() => () => {
-            const filenames = [...toDelete];
-            Promise.all(filenames.map((f) => axios.delete(`/api/templates/${encodeURIComponent(f)}`)))
+            Promise.all([...toDelete].map((f) => axios.delete(`/api/templates/${encodeURIComponent(f)}`)))
                 .then(() => {
                     setTemplates((prev) => prev.filter((t) => !toDelete.has(t.filename)));
                     if (templateToView && toDelete.has(templateToView.filename)) setTemplateToView(null);
                     setSelectedTemplateFilenames(new Set());
-                    setSuccessMessage('Templates deleted.');
+                    setSuccessMessage('Selected templates deleted.');
                     setShowSuccessNotification(true);
                     setShowConfirmModal(false);
                 })
@@ -517,9 +634,8 @@ function Settings() {
         setShowConfirmModal(true);
     };
 
-
     const deleteSection = (section) => {
-        if (!window.confirm(`Permanently delete section "${section.name}"? This cannot be undone.`)) return;
+        if (!window.confirm(`Permanently delete section "${section.name}"?`)) return;
         axios.delete(`/api/sections/${section.id}`)
             .then(() => {
                 setArchivedSections((prev) => prev.filter((s) => s.id !== section.id));
@@ -560,6 +676,26 @@ function Settings() {
             .finally(() => setAccountSaving(false));
     };
 
+    // Save retention settings
+    const handleSetRetention = () => {
+        localStorage.setItem('retentionValue', retentionValue.toString());
+        localStorage.setItem('retentionUnit', retentionUnit);
+
+        const total = retentionPreview.adr_count + retentionPreview.swap_count;
+        if (total > 0) {
+            setSuccessMessage(
+                `Retention set to ${retentionValue} ${retentionUnit}. ` +
+                `${retentionPreview.adr_count} ADR report(s) and ` +
+                `${retentionPreview.swap_count} swapping request(s) will be archived.`
+            );
+        } else {
+            setSuccessMessage(`Retention set to ${retentionValue} ${retentionUnit}. No records to archive.`);
+        }
+
+        setShowSuccessNotification(true);
+        setIsRetentionChanged(false);
+    };
+
     let sectionContent;
     switch (activeSection) {
         case 'accounts':
@@ -572,9 +708,7 @@ function Settings() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="settings__table-check">
-                                        <input type="checkbox" aria-label="Select all accounts" />
-                                    </th>
+                                    <th className="settings__table-check"><input type="checkbox" aria-label="Select all accounts" /></th>
                                     <th>User</th>
                                     <th>Status</th>
                                     <th>Role</th>
@@ -583,44 +717,23 @@ function Settings() {
                             </thead>
                             <tbody>
                                 {accountsLoading ? (
-                                    <tr>
-                                        <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                            Loading...
-                                        </td>
-                                    </tr>
+                                    <tr><td colSpan="5" style={{ textAlign: 'center', padding: '2rem' }}>Loading...</td></tr>
                                 ) : accountsError ? (
-                                    <tr>
-                                        <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#c00' }}>
-                                            {accountsError}
-                                        </td>
-                                    </tr>
+                                    <tr><td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#c00' }}>{accountsError}</td></tr>
                                 ) : accounts.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                            No accounts yet. Add an account to get started.
-                                        </td>
-                                    </tr>
+                                    <tr><td colSpan="5" style={{ textAlign: 'center', padding: '2rem' }}>No accounts yet.</td></tr>
                                 ) : (
                                     accounts.map((account) => (
                                         <tr key={account.id}>
-                                            <td className="settings__table-check">
-                                                <input type="checkbox" aria-label={`Select ${account.name}`} />
-                                            </td>
+                                            <td className="settings__table-check"><input type="checkbox" aria-label={`Select ${account.name}`} /></td>
                                             <td>{account.name}</td>
-                                            <td>
-                                                <span className="settings__status settings__status--online">{account.status}</span>
-                                            </td>
+                                            <td><span className="settings__status settings__status--online">{account.status}</span></td>
                                             <td>{account.role}</td>
                                             <td className="settings__table-actions">
-                                                <button
-                                                    type="button"
-                                                    className="settings__icon-button"
-                                                    aria-label="Edit account"
-                                                    onClick={() => openEditAccount(account)}
-                                                >
+                                                <button type="button" className="settings__icon-button" onClick={() => openEditAccount(account)}>
                                                     <img src="/images/edit_icon.svg" alt="" aria-hidden="true" />
                                                 </button>
-                                                <button type="button" className="settings__icon-button" aria-label="Disable account">
+                                                <button type="button" className="settings__icon-button">
                                                     <img src="/images/disable_icon.svg" alt="" aria-hidden="true" />
                                                 </button>
                                             </td>
@@ -633,6 +746,7 @@ function Settings() {
                 </>
             );
             break;
+
         case 'templates':
             sectionContent = (
                 <>
@@ -644,7 +758,6 @@ function Settings() {
                                 className="settings__archive-btn"
                                 onClick={deleteSelectedTemplates}
                                 disabled={selectedTemplateFilenames.size < 2}
-                                aria-label="Delete selected templates"
                             >
                                 <img src={`${window.location.origin}/images/delete_icon.svg`} alt="" />
                                 Delete
@@ -652,22 +765,36 @@ function Settings() {
                             <input
                                 ref={templateFileInputRef}
                                 type="file"
-                                accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                accept=".docx"
                                 onChange={handleTemplateFileChange}
                                 style={{ display: 'none' }}
-                                aria-hidden="true"
                             />
                             <button
                                 type="button"
                                 className="settings__create-btn"
                                 onClick={handleAddTemplateClick}
                                 disabled={templateUploading}
-                                aria-label="Add template"
                             >
                                 <img src={`${window.location.origin}/images/create_icon.svg`} alt="" />
                                 {templateUploading ? 'Adding...' : 'Add new template'}
                             </button>
                         </div>
+                    </div>
+                    <div className="settings__tabs">
+                        <button
+                            type="button"
+                            className={`settings__tab ${templateTab === 'adr' ? 'settings__tab--active' : ''}`}
+                            onClick={() => setTemplateTab('adr')}
+                        >
+                            After Duty Report
+                        </button>
+                        <button
+                            type="button"
+                            className={`settings__tab ${templateTab === 'swapping' ? 'settings__tab--active' : ''}`}
+                            onClick={() => setTemplateTab('swapping')}
+                        >
+                            Swapping Form
+                        </button>
                     </div>
                     <div className="settings__table">
                         <table className="settings__table--departments">
@@ -677,8 +804,7 @@ function Settings() {
                                         <input
                                             ref={selectAllTemplatesRef}
                                             type="checkbox"
-                                            aria-label="Select all templates"
-                                            checked={templates.length > 0 && selectedTemplateFilenames.size === templates.length}
+                                            checked={filteredTemplates.length > 0 && selectedTemplateFilenames.size === filteredTemplates.length}
                                             onChange={toggleSelectAllTemplates}
                                         />
                                     </th>
@@ -689,30 +815,19 @@ function Settings() {
                             </thead>
                             <tbody>
                                 {templatesLoading ? (
-                                    <tr>
-                                        <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                            Loading...
-                                        </td>
-                                    </tr>
+                                    <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem' }}>Loading...</td></tr>
                                 ) : templatesError ? (
-                                    <tr>
-                                        <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#c00' }}>
-                                            {templatesError}
-                                        </td>
-                                    </tr>
-                                ) : templates.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                            No templates yet. Click &quot;Add&quot; to upload a .docx template.
-                                        </td>
-                                    </tr>
+                                    <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#c00' }}>{templatesError}</td></tr>
+                                ) : filteredTemplates.length === 0 ? (
+                                    <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem' }}>
+                                        No templates yet. Click "Add new template".
+                                    </td></tr>
                                 ) : (
-                                    templates.map((tpl) => (
+                                    filteredTemplates.map((tpl) => (
                                         <tr key={tpl.filename}>
                                             <td className="settings__table-check">
                                                 <input
                                                     type="checkbox"
-                                                    aria-label={`Select ${tpl.name}`}
                                                     checked={selectedTemplateFilenames.has(tpl.filename)}
                                                     onChange={() => toggleTemplateSelection(tpl.filename)}
                                                 />
@@ -725,27 +840,13 @@ function Settings() {
                                                         <button
                                                             type="button"
                                                             className="settings__icon-button settings__icon-button--check"
-                                                            aria-label={`Set ${tpl.name} as in use`}
                                                             onClick={() => setTemplateInUse(tpl)}
                                                         >
-                                                            <img src="/images/check_icon.svg" alt="" aria-hidden="true" />
+                                                            <img src="/images/check_icon.svg" alt="" />
                                                         </button>
                                                     )}
-                                                    <button
-                                                        type="button"
-                                                        className="settings__icon-button"
-                                                        aria-label={`View ${tpl.name}`}
-                                                        onClick={() => viewTemplate(tpl.filename, tpl.name)}
-                                                    >
-                                                        <img src="/images/view_icon.svg" alt="" aria-hidden="true" />
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="settings__icon-button"
-                                                        aria-label={`Delete ${tpl.name}`}
-                                                        onClick={() => deleteTemplate(tpl)}
-                                                    >
-                                                        <img src="/images/delete_icon.svg" alt="" aria-hidden="true" />
+                                                    <button type="button" className="settings__icon-button" onClick={() => deleteTemplate(tpl)}>
+                                                        <img src="/images/delete_icon.svg" alt="" />
                                                     </button>
                                                 </div>
                                             </td>
@@ -767,8 +868,8 @@ function Settings() {
                 </>
             );
             break;
+
         case 'departments':
-        default:
             sectionContent = (
                 <>
                     <div className="settings__panel-header settings__panel-header--row">
@@ -833,7 +934,6 @@ function Settings() {
                                     <th className="settings__table-check">
                                         <input
                                             type="checkbox"
-                                            aria-label={departmentTab === 'active' ? 'Select all active sections' : 'Select all archived sections'}
                                             checked={
                                                 departmentTab === 'active'
                                                     ? sections.length > 0 && selectedActiveIds.length === sections.length
@@ -856,50 +956,27 @@ function Settings() {
                             <tbody>
                                 {departmentTab === 'active' ? (
                                     sectionsLoading ? (
-                                        <tr>
-                                            <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                                Loading...
-                                            </td>
-                                        </tr>
+                                        <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem' }}>Loading...</td></tr>
                                     ) : sectionsError ? (
-                                        <tr>
-                                            <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#c00' }}>
-                                                {sectionsError}
-                                            </td>
-                                        </tr>
+                                        <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#c00' }}>{sectionsError}</td></tr>
                                     ) : sections.length === 0 ? (
-                                        <tr>
-                                            <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                                No sections yet. Click "Create New" to add one.
-                                            </td>
-                                        </tr>
+                                        <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem' }}>No active sections yet.</td></tr>
                                     ) : (
                                         sections.map((section) => (
                                             <tr key={section.id}>
                                                 <td className="settings__table-check">
                                                     <input
                                                         type="checkbox"
-                                                        aria-label={`Select ${section.name}`}
                                                         checked={selectedActiveIds.includes(section.id)}
                                                         onChange={() => toggleActiveSelection(section.id)}
                                                     />
                                                 </td>
                                                 <td className="settings__table-actions">
-                                                    <button
-                                                        type="button"
-                                                        className="settings__icon-button"
-                                                        aria-label="Edit section"
-                                                        onClick={() => openEditSection(section)}
-                                                    >
-                                                        <img src="/images/edit_icon.svg" alt="" aria-hidden="true" />
+                                                    <button type="button" className="settings__icon-button" onClick={() => openEditSection(section)}>
+                                                        <img src="/images/edit_icon.svg" alt="" />
                                                     </button>
-                                                    <button
-                                                        type="button"
-                                                        className="settings__icon-button"
-                                                        aria-label="Archive section"
-                                                        onClick={() => archiveSection(section)}
-                                                    >
-                                                        <img src="/images/delete_icon.svg" alt="" aria-hidden="true" />
+                                                    <button type="button" className="settings__icon-button" onClick={() => archiveSection(section)}>
+                                                        <img src="/images/delete_icon.svg" alt="" />
                                                     </button>
                                                 </td>
                                                 <td>{section.name}</td>
@@ -916,36 +993,22 @@ function Settings() {
                                     )
                                 ) : (
                                     sectionsLoading ? (
-                                        <tr>
-                                            <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                                Loading...
-                                            </td>
-                                        </tr>
+                                        <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem' }}>Loading...</td></tr>
                                     ) : archivedSections.length === 0 ? (
-                                        <tr>
-                                            <td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                                                No archived sections.
-                                            </td>
-                                        </tr>
+                                        <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem' }}>No archived sections.</td></tr>
                                     ) : (
                                         archivedSections.map((section) => (
                                             <tr key={section.id}>
                                                 <td className="settings__table-check">
                                                     <input
                                                         type="checkbox"
-                                                        aria-label={`Select ${section.name}`}
                                                         checked={selectedArchivedIds.includes(section.id)}
                                                         onChange={() => toggleArchivedSelection(section.id)}
                                                     />
                                                 </td>
                                                 <td className="settings__table-actions">
-                                                    <button
-                                                        type="button"
-                                                        className="settings__icon-button"
-                                                        aria-label="Restore section"
-                                                        onClick={() => restoreSection(section)}
-                                                    >
-                                                        <img src="/images/restore_icon.svg" alt="" aria-hidden="true" />
+                                                    <button type="button" className="settings__icon-button" onClick={() => restoreSection(section)}>
+                                                        <img src="/images/restore_icon.svg" alt="" />
                                                     </button>
                                                 </td>
                                                 <td>{section.name}</td>
@@ -965,9 +1028,9 @@ function Settings() {
                         </table>
                     </div>
                     {showSectionModal && (
-                        <div className="settings__modal-overlay" onClick={closeSectionModal} role="presentation">
-                            <div className="settings__modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="section-modal-title">
-                                <h3 id="section-modal-title" className="settings__modal-title">
+                        <div className="settings__modal-overlay" onClick={closeSectionModal}>
+                            <div className="settings__modal" onClick={(e) => e.stopPropagation()}>
+                                <h3 className="settings__modal-title">
                                     {editingSection ? 'Edit Section' : 'New Section'}
                                 </h3>
                                 <div className="settings__modal-field">
@@ -985,7 +1048,12 @@ function Settings() {
                                     <button type="button" className="settings__modal-btn settings__modal-btn--cancel" onClick={closeSectionModal}>
                                         Cancel
                                     </button>
-                                    <button type="button" className="settings__modal-btn settings__modal-btn--save" onClick={saveSection} disabled={sectionSaving || !sectionNameInput.trim()}>
+                                    <button
+                                        type="button"
+                                        className="settings__modal-btn settings__modal-btn--save"
+                                        onClick={saveSection}
+                                        disabled={sectionSaving || !sectionNameInput.trim()}
+                                    >
                                         {sectionSaving ? 'Saving...' : 'Save'}
                                     </button>
                                 </div>
@@ -995,6 +1063,129 @@ function Settings() {
                 </>
             );
             break;
+
+        case 'data-retention':
+            sectionContent = (
+                <>
+                    <div className="settings__panel-header settings__panel-header--row">
+                        <h2 id="data-retention-title" className="settings__section-title">Data Retention</h2>
+                    </div>
+
+                    <div className="settings__retention-simple">
+                        <div className="settings__retention-period">
+                            <label>Retention Period</label>
+                            <div className="settings__retention-input-group">
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={retentionValue}
+                                    onChange={(e) => {
+                                        setRetentionValue(Math.max(1, parseInt(e.target.value) || 1));
+                                        setIsRetentionChanged(true);
+                                    }}
+                                    className="settings__retention-number"
+                                />
+                                <select
+                                    value={retentionUnit}
+                                    onChange={(e) => {
+                                        setRetentionUnit(e.target.value);
+                                        setIsRetentionChanged(true);
+                                    }}
+                                    className="settings__retention-select"
+                                >
+                                    <option value="days">days</option>
+                                    <option value="months">months</option>
+                                    <option value="years">years</option>
+                                </select>
+                                <span className="settings__retention-edit-icon">✏️</span>
+                            </div>
+                        </div>
+
+                        <div className="settings__retention-dates">
+                            <div>
+                                <span className="settings__retention-label-small">Current Date:</span>
+                                <span className="settings__retention-value">
+                                    {new Date().toLocaleString('en-US', {
+                                        month: 'long',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                        hour12: true,
+                                    })}
+                                </span>
+                            </div>
+                            <div>
+                                <span className="settings__retention-label-small">Cutoff Date:</span>
+                                <span className="settings__retention-value">
+                                    {getCutoffDate().toLocaleString('en-US', {
+                                        month: 'long',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                        hour12: true,
+                                    })}
+                                </span>
+                            </div>
+                        </div>
+
+                        {(daysUntilArchive.adr_days !== null || daysUntilArchive.swap_days !== null) && (
+                            <div className="settings__retention-info">
+                                <div className="settings__retention-info-row">
+                                    <span>ADR Reports</span>
+                                    <span className={daysUntilArchive.adr_days <= 0 ? 'warning' : ''}>
+                                        {daysUntilArchive.adr_days !== null
+                                            ? `${Math.abs(daysUntilArchive.adr_days)} day${Math.abs(daysUntilArchive.adr_days) !== 1 ? 's' : ''} ${daysUntilArchive.adr_days <= 0 ? 'overdue' : 'left'}`
+                                            : '—'}
+                                    </span>
+                                </div>
+                                <div className="settings__retention-info-row">
+                                    <span>Swapping Requests</span>
+                                    <span className={daysUntilArchive.swap_days <= 0 ? 'warning' : ''}>
+                                        {daysUntilArchive.swap_days !== null
+                                            ? `${Math.abs(daysUntilArchive.swap_days)} day${Math.abs(daysUntilArchive.swap_days) !== 1 ? 's' : ''} ${daysUntilArchive.swap_days <= 0 ? 'overdue' : 'left'}`
+                                            : '—'}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="settings__retention-preview">
+                            {retentionPreview.adr_count + retentionPreview.swap_count > 0 ? (
+                                <span>
+                                    {retentionPreview.adr_count} ADR report(s) and {retentionPreview.swap_count} swapping request(s) will be archived.
+                                </span>
+                            ) : (
+                                <span className="settings__retention-preview-none">
+                                    No records will be archived.
+                                </span>
+                            )}
+                        </div>
+
+                        <div className="settings__retention-actions">
+                            <button
+                                type="button"
+                                className="settings__set-btn"
+                                disabled={!isRetentionChanged}
+                                onClick={handleSetRetention}
+                            >
+                                Set
+                            </button>
+                        </div>
+                    </div>
+                </>
+            );
+            break;
+
+        default:
+            sectionContent = (
+                <>
+                    <div className="settings__panel-header settings__panel-header--row">
+                        <h2 id="departments-title" className="settings__section-title">Departments</h2>
+                    </div>
+                </>
+            );
     }
 
     return (
@@ -1002,7 +1193,7 @@ function Settings() {
             <div className="settings__header">
                 <h1 className="settings__title">Admin Settings</h1>
             </div>
-            
+
             <div className="settings__content">
                 <section className="settings__panel" aria-label="Admin settings">
                     <aside className="settings__subnav" aria-label="Settings sections">
@@ -1027,6 +1218,13 @@ function Settings() {
                         >
                             Departments
                         </button>
+                        <button
+                            type="button"
+                            className={`settings__subnav-item ${activeSection === 'data-retention' ? 'settings__subnav-item--active' : ''}`}
+                            onClick={() => setActiveSection('data-retention')}
+                        >
+                            Data Retention
+                        </button>
                     </aside>
 
                     <div className="settings__panel-body">
@@ -1038,7 +1236,7 @@ function Settings() {
             <ConfirmModal
                 isOpen={showConfirmModal}
                 message={confirmMessage}
-                onConfirm={() => { if (typeof confirmAction === 'function') confirmAction(); }}
+                onConfirm={() => confirmAction && confirmAction()}
                 onCancel={() => setShowConfirmModal(false)}
             />
 

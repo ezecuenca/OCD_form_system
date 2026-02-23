@@ -5389,7 +5389,7 @@ body.document-modal-open .main-content {
   flex-wrap: wrap;
 }
 
-/* Match Archived Reports action buttons: min-height 38px, padding, gap */
+/* Archive / Restore buttons (top-right) */
 .settings__archive-btn,
 .settings__restore-btn {
   display: inline-flex;
@@ -5404,10 +5404,8 @@ body.document-modal-open .main-content {
   cursor: pointer;
   border: 1px solid;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
-  font-family: inherit;
 }
 
-/* Archive button: red outline when active; hover fills with red */
 .settings__archive-btn {
   border-color: #dc3545;
   background: #fff;
@@ -5424,7 +5422,6 @@ body.document-modal-open .main-content {
   filter: brightness(0) invert(1);
 }
 
-/* Archive disabled: outline, text same light red/pink; icon lightened to match */
 .settings__archive-btn:disabled {
   border-color: #f0b4b4;
   background: #fff;
@@ -5437,12 +5434,6 @@ body.document-modal-open .main-content {
   filter: brightness(1.15);
 }
 
-.settings__archive-btn img {
-  width: 15px;
-  height: 15px;
-}
-
-/* Restore button: same as Archived Reports – blue (#1071ef) when active; hover fills */
 .settings__restore-btn {
   border-color: #1071ef;
   background: #fff;
@@ -5459,7 +5450,6 @@ body.document-modal-open .main-content {
   filter: brightness(0) invert(1);
 }
 
-/* Restore disabled: outline, text same light blue; icon lightened to match */
 .settings__restore-btn:disabled {
   border-color: #a8d0ee;
   background: #fff;
@@ -5472,19 +5462,17 @@ body.document-modal-open .main-content {
   filter: brightness(1.2);
 }
 
-.settings__restore-btn img {
-  width: 15px;
-  height: 15px;
-}
-
-.settings__dept-tabs {
+/* Tabs */
+.settings__dept-tabs,
+.settings__tabs {
   display: flex;
   gap: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   border-bottom: 2px solid #e0e0e0;
 }
 
-.settings__dept-tab {
+.settings__dept-tab,
+.settings__tab {
   padding: 0.75rem 1.5rem;
   border: none;
   background: none;
@@ -5497,28 +5485,30 @@ body.document-modal-open .main-content {
   transition: color 0.2s, border-color 0.2s;
 }
 
-.settings__dept-tab:hover {
+.settings__dept-tab:hover,
+.settings__tab:hover {
   color: #290081;
 }
 
-.settings__dept-tab--active {
+.settings__dept-tab--active,
+.settings__tab--active {
   color: #290081;
   border-bottom-color: #290081;
 }
 
+/* Create button */
 .settings__create-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  font-size: 0.87rem;
-  font-weight: none;
+  font-size: 0.875rem;
   border-radius: 6px;
   border: 2px solid #290081;
   background: #290081;
   color: #fff;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition: all 0.2s;
 }
 
 .settings__create-btn:hover {
@@ -5532,6 +5522,7 @@ body.document-modal-open .main-content {
   filter: brightness(0) invert(1);
 }
 
+/* Tables */
 .settings__section-title {
   font-size: 18px;
   font-weight: 700;
@@ -5564,13 +5555,6 @@ body.document-modal-open .main-content {
   border-bottom: 1px solid #e0e0e0;
 }
 
-.settings__table thead th:nth-child(3),
-.settings__table thead th:nth-child(4),
-.settings__table tbody td:nth-child(3),
-.settings__table tbody td:nth-child(4) {
-  padding-left: 6.5rem;
-}
-
 .settings__table tbody tr {
   border-bottom: 1px solid #e0e0e0;
   transition: background 0.2s;
@@ -5592,85 +5576,87 @@ body.document-modal-open .main-content {
 
 .settings__table-check {
   width: 38px;
-}
-
-.settings__table-actions {
-  width: 140px;
-  white-space: nowrap;
-}
-
-.settings__table tbody .settings__table-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  justify-content: flex-start;
-}
-
-/* Departments table: move action buttons (not the header) slightly left */
-.settings__table--departments tbody .settings__table-actions {
-  padding-left: 0.38rem;
-  justify-content: center;
-}
-
-.settings__table--departments thead th.settings__table-actions {
   text-align: center;
 }
 
-/* Departments table: smaller action icon buttons */
-.settings__table--departments .settings__icon-button {
-  width: 26px;
-  height: 26px;
-}
-
-.settings__table--departments .settings__icon-button img {
-  width: 14px;
-  height: 14px;
-}
-
-.settings__table--departments .settings__table-created {
-  text-align: left;
+.settings__table-actions {
+  width: 120px;
+  text-align: center;
   white-space: nowrap;
 }
 
-/* Templates table: Actions column with check (in use) + view + delete, spacing */
-.settings__template-actions {
-  width: 130px;
-  margin-left: 0.5rem;
-}
-
-.settings__template-actions-inner {
-  display: flex;
+/* Consistent action buttons across ALL tables */
+.settings__icon-button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  margin: 0 4px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  flex-wrap: nowrap;
+  justify-content: center;
+  transition: background 0.2s;
 }
 
+.settings__icon-button:hover {
+  background: #f0f0f0;
+}
+
+.settings__icon-button img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Specific: check / set-in-use button */
+.settings__icon-button--check {
+  background: transparent; /* no green bg by default */
+}
+
+.settings__icon-button--check:hover {
+  background: #e6ffed;
+}
+
+/* "In use" badge/text (only shown when already active) */
 .settings__in-use-text {
   font-size: 0.8125rem;
   font-weight: 500;
   color: #16a34a;
-  margin-right: 0.25rem;
+  background: #e6ffed;
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-block;
 }
 
-.settings__icon-button--check.settings__icon-button--in-use {
-  background: #dcfce7;
-  color: #16a34a;
+/* Template actions inner container */
+.settings__template-actions-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
-.settings__icon-button--check.settings__icon-button--in-use img {
-  opacity: 1;
+/* Departments table specific */
+.settings__table--departments .settings__table-actions {
+  text-align: center;
 }
 
-/* Created at: date on first line, time on second (match ADR reports table) */
+/* Created at column */
+.settings__table-created {
+  text-align: left;
+  white-space: nowrap;
+}
+
 .settings__table-created-datetime {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.2rem;
 }
 
 .settings__table-created-date {
   font-weight: 500;
-  color: #333;
 }
 
 .settings__table-created-time {
@@ -5678,6 +5664,7 @@ body.document-modal-open .main-content {
   color: #666;
 }
 
+/* Status badge */
 .settings__status {
   display: inline-flex;
   align-items: center;
@@ -5692,33 +5679,9 @@ body.document-modal-open .main-content {
   height: 8px;
   border-radius: 50%;
   background: #22c55e;
-  display: inline-block;
 }
 
-.settings__icon-button {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: none;
-  border-radius: 4px;
-  background: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.2s;
-}
-
-.settings__icon-button img {
-  width: 18px;
-  height: 18px;
-  display: block;
-}
-
-.settings__icon-button:hover {
-  opacity: 0.7;
-}
-
+/* Modal styles (unchanged) */
 .settings__modal-overlay {
   position: fixed;
   inset: 0;
@@ -5813,6 +5776,135 @@ body.document-modal-open .main-content {
   cursor: not-allowed;
 }
 
+/* Data Retention – unchanged from your last approved version */
+.settings__retention-simple {
+  padding: 0.5rem 0;
+}
+
+.settings__retention-period {
+  margin-bottom: 1.25rem;
+}
+
+.settings__retention-period label {
+  display: block;
+  font-size: 0.8125rem;
+  color: #555;
+  margin-bottom: 0.4rem;
+}
+
+.settings__retention-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.settings__retention-number {
+  width: 70px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.875rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.settings__retention-number:focus {
+  border-color: #290081;
+  outline: none;
+}
+
+.settings__retention-select {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.875rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  min-width: 110px;
+}
+
+.settings__retention-edit-icon {
+  color: #290081;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.settings__retention-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.8125rem;
+  color: #444;
+  margin-bottom: 1.25rem;
+}
+
+.settings__retention-dates strong {
+  color: #222;
+  font-weight: 500;
+}
+
+.settings__retention-info {
+  font-size: 0.8125rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.settings__retention-info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.settings__retention-info-row span:first-child {
+  font-weight: 500;
+}
+
+.warning {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.settings__retention-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.settings__set-btn {
+  padding: 0.45rem 1.2rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: white;
+  background: #290081;
+  border: 2px solid #290081;
+  border-radius: 6px;
+  cursor: pointer;
+  min-height: 34px;
+  transition: all 0.2s;
+}
+
+.settings__set-btn:hover:not(:disabled) {
+  background: #e99745;
+  border-color: #e99745;
+}
+
+.settings__set-btn:disabled {
+  background: rgba(41, 0, 129, 0.25);
+  border-color: rgba(41, 0, 129, 0.35);
+  color: rgba(255, 255, 255, 0.75);
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .settings__retention-input-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .settings__retention-number,
+  .settings__retention-select {
+    width: 100%;
+  }
+}
 @media (max-width: 640px) {
   .settings {
     padding: 18px 14px 32px;
