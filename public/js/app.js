@@ -73962,7 +73962,7 @@ function Profile() {
     viewerOpen = _useState4[0],
     setViewerOpen = _useState4[1];
   var dropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-  var editRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null); // ← will now point to whole editable area
+  var editRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var sectionDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState6 = _slicedToArray(_useState5, 2),
@@ -75166,6 +75166,10 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -75310,8 +75314,142 @@ function Settings() {
     _useState62 = _slicedToArray(_useState61, 2),
     selectedTemplateFilenames = _useState62[0],
     setSelectedTemplateFilenames = _useState62[1];
+  var _useState63 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('adr'),
+    _useState64 = _slicedToArray(_useState63, 2),
+    templateTab = _useState64[0],
+    setTemplateTab = _useState64[1];
   var templateFileInputRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var selectAllTemplatesRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+
+  // Retention period state
+  var _useState65 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
+      var saved = localStorage.getItem('retentionValue');
+      return saved ? parseInt(saved, 10) : 30;
+    }),
+    _useState66 = _slicedToArray(_useState65, 2),
+    retentionValue = _useState66[0],
+    setRetentionValue = _useState66[1];
+  var _useState67 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
+      return localStorage.getItem('retentionUnit') || 'days';
+    }),
+    _useState68 = _slicedToArray(_useState67, 2),
+    retentionUnit = _useState68[0],
+    setRetentionUnit = _useState68[1];
+  var _useState69 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState70 = _slicedToArray(_useState69, 2),
+    isRetentionChanged = _useState70[0],
+    setIsRetentionChanged = _useState70[1];
+
+  // Preview & days left
+  var _useState71 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+      adr_count: 0,
+      swap_count: 0
+    }),
+    _useState72 = _slicedToArray(_useState71, 2),
+    retentionPreview = _useState72[0],
+    setRetentionPreview = _useState72[1];
+  var _useState73 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+      adr_days: null,
+      swap_days: null
+    }),
+    _useState74 = _slicedToArray(_useState73, 2),
+    daysUntilArchive = _useState74[0],
+    setDaysUntilArchive = _useState74[1];
+
+  // FIXED: Cutoff date is now AFTER current date
+  var getCutoffDate = function getCutoffDate() {
+    var cutoff = new Date();
+    switch (retentionUnit) {
+      case 'days':
+        cutoff.setDate(cutoff.getDate() + retentionValue);
+        break;
+      case 'months':
+        cutoff.setMonth(cutoff.getMonth() + retentionValue);
+        break;
+      case 'years':
+        cutoff.setFullYear(cutoff.getFullYear() + retentionValue);
+        break;
+      default:
+        cutoff.setDate(cutoff.getDate() + retentionValue);
+    }
+
+    // Set to end of the cutoff day (common for retention policies)
+    cutoff.setHours(23, 59, 59, 999);
+    return cutoff;
+  };
+
+  // Fetch preview and days left when retention changes
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var fetchData = /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+        var cutoffDate, res, daysRes, _t, _t2;
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.p = _context.n) {
+            case 0:
+              _context.p = 0;
+              cutoffDate = getCutoffDate();
+              _context.n = 1;
+              return axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/data-retention/preview', {
+                cutoff_date: cutoffDate.toISOString()
+              });
+            case 1:
+              res = _context.v;
+              setRetentionPreview({
+                adr_count: res.data.adr_to_archive || 0,
+                swap_count: res.data.swap_to_archive || 0
+              });
+              _context.n = 3;
+              break;
+            case 2:
+              _context.p = 2;
+              _t = _context.v;
+              console.error('Preview fetch failed:', _t);
+            case 3:
+              _context.p = 3;
+              _context.n = 4;
+              return axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/data-retention/days-until-archive', {
+                retention_value: retentionValue,
+                retention_unit: retentionUnit
+              });
+            case 4:
+              daysRes = _context.v;
+              setDaysUntilArchive({
+                adr_days: daysRes.data.days_until_adr_archive,
+                swap_days: daysRes.data.days_until_swap_archive
+              });
+              _context.n = 6;
+              break;
+            case 5:
+              _context.p = 5;
+              _t2 = _context.v;
+              console.error('Days until archive fetch failed:', _t2);
+            case 6:
+              return _context.a(2);
+          }
+        }, _callee, null, [[3, 5], [0, 2]]);
+      }));
+      return function fetchData() {
+        return _ref.apply(this, arguments);
+      };
+    }();
+    fetchData();
+  }, [retentionValue, retentionUnit]);
+
+  // Reset changed flag when leaving tab
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (activeSection !== 'data-retention') {
+      setIsRetentionChanged(false);
+    }
+  }, [activeSection]);
+
+  // Filter templates
+  var filteredTemplates = templates.filter(function (t) {
+    var name = (t.name || '').toLowerCase();
+    if (templateTab === 'adr') {
+      return name.includes('adr') || name.includes('after') || name.includes('duty') || name.includes('report') || !name.includes('swap');
+    }
+    return name.includes('swap') || name.includes('swapping');
+  });
   var roleIdLabels = {
     1: 'User',
     2: 'Admin',
@@ -75392,10 +75530,10 @@ function Settings() {
     if (activeSection !== 'departments') return;
     setSectionsLoading(true);
     setSectionsError(null);
-    Promise.all([axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/sections'), axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/sections?archived=1')]).then(function (_ref) {
-      var _ref2 = _slicedToArray(_ref, 2),
-        activeRes = _ref2[0],
-        archivedRes = _ref2[1];
+    Promise.all([axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/sections'), axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/sections?archived=1')]).then(function (_ref2) {
+      var _ref3 = _slicedToArray(_ref2, 2),
+        activeRes = _ref3[0],
+        archivedRes = _ref3[1];
       var toSection = function toSection(s) {
         return {
           id: s.id,
@@ -75405,10 +75543,8 @@ function Settings() {
           archived_at: s.archived_at || null
         };
       };
-      var activeData = Array.isArray(activeRes.data) ? activeRes.data : [];
-      var archivedData = Array.isArray(archivedRes.data) ? archivedRes.data : [];
-      setSections(activeData.map(toSection));
-      setArchivedSections(archivedData.map(toSection));
+      setSections(Array.isArray(activeRes.data) ? activeRes.data.map(toSection) : []);
+      setArchivedSections(Array.isArray(archivedRes.data) ? archivedRes.data.map(toSection) : []);
     })["catch"](function (err) {
       var _err$response3;
       setSectionsError((err === null || err === void 0 || (_err$response3 = err.response) === null || _err$response3 === void 0 || (_err$response3 = _err$response3.data) === null || _err$response3 === void 0 ? void 0 : _err$response3.message) || 'Failed to load sections.');
@@ -75716,6 +75852,26 @@ function Settings() {
       name: name || filename
     });
   };
+  var handleEditTemplate = function handleEditTemplate(tpl) {
+    setConfirmMessage("Edit template \"".concat(tpl.name, "\"?"));
+    setConfirmAction(function () {
+      return function () {
+        var newName = prompt('Enter new template name:', tpl.name);
+        if (newName && newName !== tpl.name) {
+          axios__WEBPACK_IMPORTED_MODULE_1___default().patch("/api/templates/".concat(tpl.id), {
+            name: newName
+          }).then(function () {
+            // Refresh templates if needed
+          })["catch"](function (err) {
+            var _err$response1;
+            setTemplatesError(((_err$response1 = err.response) === null || _err$response1 === void 0 || (_err$response1 = _err$response1.data) === null || _err$response1 === void 0 ? void 0 : _err$response1.message) || 'Failed to update template');
+          });
+        }
+        setShowConfirmModal(false);
+      };
+    });
+    setShowConfirmModal(true);
+  };
   var handleAddTemplateClick = function handleAddTemplateClick() {
     var _templateFileInputRef;
     (_templateFileInputRef = templateFileInputRef.current) === null || _templateFileInputRef === void 0 || _templateFileInputRef.click();
@@ -75740,32 +75896,20 @@ function Settings() {
           return t.name === data.name;
         };
         var next = prev.some(byName) ? prev.map(function (t) {
-          return byName(t) ? {
-            name: data.name,
-            filename: data.filename,
-            updated_at: data.updated_at,
-            is_active: !!data.is_active
-          } : t;
-        }) : [].concat(_toConsumableArray(prev), [{
-          name: data.name,
-          filename: data.filename,
-          updated_at: data.updated_at,
-          is_active: !!data.is_active
-        }]);
+          return byName(t) ? _objectSpread(_objectSpread({}, t), data) : t;
+        }) : [].concat(_toConsumableArray(prev), [data]);
         return next.sort(function (a, b) {
-          return a.name.localeCompare(b.name, undefined, {
-            sensitivity: 'base'
-          });
+          return a.name.localeCompare(b.name);
         });
       });
       var replaced = templates.some(function (t) {
         return t.name === data.name;
       });
-      setSuccessMessage(replaced ? 'Template replaced successfully.' : 'Template added successfully.');
+      setSuccessMessage(replaced ? 'Template replaced.' : 'Template added.');
       setShowSuccessNotification(true);
     })["catch"](function (err) {
-      var _err$response1;
-      setTemplatesError((err === null || err === void 0 || (_err$response1 = err.response) === null || _err$response1 === void 0 || (_err$response1 = _err$response1.data) === null || _err$response1 === void 0 ? void 0 : _err$response1.message) || 'Failed to add template.');
+      var _err$response10;
+      setTemplatesError((err === null || err === void 0 || (_err$response10 = err.response) === null || _err$response10 === void 0 || (_err$response10 = _err$response10.data) === null || _err$response10 === void 0 ? void 0 : _err$response10.message) || 'Failed to add template.');
     })["finally"](function () {
       return setTemplateUploading(false);
     });
@@ -75785,7 +75929,7 @@ function Settings() {
       return t.name === baseName;
     });
     if (existing) {
-      setConfirmMessage("A template named \"".concat(baseName, "\" already exists. Replace it?"));
+      setConfirmMessage("Replace existing template \"".concat(baseName, "\"?"));
       setConfirmAction(function () {
         return function () {
           uploadTemplateFile(file);
@@ -75811,12 +75955,12 @@ function Settings() {
       setSuccessMessage('Template set as in use.');
       setShowSuccessNotification(true);
     })["catch"](function (err) {
-      var _err$response10;
-      setTemplatesError((err === null || err === void 0 || (_err$response10 = err.response) === null || _err$response10 === void 0 || (_err$response10 = _err$response10.data) === null || _err$response10 === void 0 ? void 0 : _err$response10.message) || 'Failed to set template in use.');
+      var _err$response11;
+      setTemplatesError((err === null || err === void 0 || (_err$response11 = err.response) === null || _err$response11 === void 0 || (_err$response11 = _err$response11.data) === null || _err$response11 === void 0 ? void 0 : _err$response11.message) || 'Failed to set template in use.');
     });
   };
   var deleteTemplate = function deleteTemplate(tpl) {
-    setConfirmMessage("Permanently delete template \"".concat(tpl.name, "\"? This cannot be undone."));
+    setConfirmMessage("Delete template \"".concat(tpl.name, "\" permanently?"));
     setConfirmAction(function () {
       return function () {
         axios__WEBPACK_IMPORTED_MODULE_1___default()["delete"]("/api/templates/".concat(encodeURIComponent(tpl.filename))).then(function () {
@@ -75830,8 +75974,8 @@ function Settings() {
           setShowSuccessNotification(true);
           setShowConfirmModal(false);
         })["catch"](function (err) {
-          var _err$response11;
-          setTemplatesError((err === null || err === void 0 || (_err$response11 = err.response) === null || _err$response11 === void 0 || (_err$response11 = _err$response11.data) === null || _err$response11 === void 0 ? void 0 : _err$response11.message) || 'Failed to delete template.');
+          var _err$response12;
+          setTemplatesError((err === null || err === void 0 || (_err$response12 = err.response) === null || _err$response12 === void 0 || (_err$response12 = _err$response12.data) === null || _err$response12 === void 0 ? void 0 : _err$response12.message) || 'Failed to delete template.');
           setShowConfirmModal(false);
         });
       };
@@ -75855,11 +75999,10 @@ function Settings() {
   };
   var deleteSelectedTemplates = function deleteSelectedTemplates() {
     var toDelete = new Set(selectedTemplateFilenames);
-    setConfirmMessage("Permanently delete ".concat(toDelete.size, " templates? This cannot be undone."));
+    setConfirmMessage("Delete ".concat(toDelete.size, " selected template(s) permanently?"));
     setConfirmAction(function () {
       return function () {
-        var filenames = _toConsumableArray(toDelete);
-        Promise.all(filenames.map(function (f) {
+        Promise.all(_toConsumableArray(toDelete).map(function (f) {
           return axios__WEBPACK_IMPORTED_MODULE_1___default()["delete"]("/api/templates/".concat(encodeURIComponent(f)));
         })).then(function () {
           setTemplates(function (prev) {
@@ -75869,12 +76012,12 @@ function Settings() {
           });
           if (templateToView && toDelete.has(templateToView.filename)) setTemplateToView(null);
           setSelectedTemplateFilenames(new Set());
-          setSuccessMessage('Templates deleted.');
+          setSuccessMessage('Selected templates deleted.');
           setShowSuccessNotification(true);
           setShowConfirmModal(false);
         })["catch"](function (err) {
-          var _err$response12;
-          setTemplatesError((err === null || err === void 0 || (_err$response12 = err.response) === null || _err$response12 === void 0 || (_err$response12 = _err$response12.data) === null || _err$response12 === void 0 ? void 0 : _err$response12.message) || 'Failed to delete some templates.');
+          var _err$response13;
+          setTemplatesError((err === null || err === void 0 || (_err$response13 = err.response) === null || _err$response13 === void 0 || (_err$response13 = _err$response13.data) === null || _err$response13 === void 0 ? void 0 : _err$response13.message) || 'Failed to delete some templates.');
           setShowConfirmModal(false);
         });
       };
@@ -75882,7 +76025,7 @@ function Settings() {
     setShowConfirmModal(true);
   };
   var deleteSection = function deleteSection(section) {
-    if (!window.confirm("Permanently delete section \"".concat(section.name, "\"? This cannot be undone."))) return;
+    if (!window.confirm("Permanently delete section \"".concat(section.name, "\"?"))) return;
     axios__WEBPACK_IMPORTED_MODULE_1___default()["delete"]("/api/sections/".concat(section.id)).then(function () {
       setArchivedSections(function (prev) {
         return prev.filter(function (s) {
@@ -75892,8 +76035,8 @@ function Settings() {
       setSuccessMessage('Section deleted successfully.');
       setShowSuccessNotification(true);
     })["catch"](function (err) {
-      var _err$response13;
-      alert((err === null || err === void 0 || (_err$response13 = err.response) === null || _err$response13 === void 0 || (_err$response13 = _err$response13.data) === null || _err$response13 === void 0 ? void 0 : _err$response13.message) || 'Failed to delete section.');
+      var _err$response14;
+      alert((err === null || err === void 0 || (_err$response14 = err.response) === null || _err$response14 === void 0 || (_err$response14 = _err$response14.data) === null || _err$response14 === void 0 ? void 0 : _err$response14.message) || 'Failed to delete section.');
     });
   };
   var openEditAccount = function openEditAccount(account) {
@@ -75918,11 +76061,25 @@ function Settings() {
       setShowSuccessNotification(true);
       closeAccountModal();
     })["catch"](function (err) {
-      var _err$response14;
-      alert((err === null || err === void 0 || (_err$response14 = err.response) === null || _err$response14 === void 0 || (_err$response14 = _err$response14.data) === null || _err$response14 === void 0 ? void 0 : _err$response14.message) || 'Failed to update account.');
+      var _err$response15;
+      alert((err === null || err === void 0 || (_err$response15 = err.response) === null || _err$response15 === void 0 || (_err$response15 = _err$response15.data) === null || _err$response15 === void 0 ? void 0 : _err$response15.message) || 'Failed to update account.');
     })["finally"](function () {
       return setAccountSaving(false);
     });
+  };
+
+  // Save retention settings
+  var handleSetRetention = function handleSetRetention() {
+    localStorage.setItem('retentionValue', retentionValue.toString());
+    localStorage.setItem('retentionUnit', retentionUnit);
+    var total = retentionPreview.adr_count + retentionPreview.swap_count;
+    if (total > 0) {
+      setSuccessMessage("Retention set to ".concat(retentionValue, " ").concat(retentionUnit, ". ") + "".concat(retentionPreview.adr_count, " ADR report(s) and ") + "".concat(retentionPreview.swap_count, " swapping request(s) will be archived."));
+    } else {
+      setSuccessMessage("Retention set to ".concat(retentionValue, " ").concat(retentionUnit, ". No records to archive."));
+    }
+    setShowSuccessNotification(true);
+    setIsRetentionChanged(false);
   };
   var sectionContent;
   switch (activeSection) {
@@ -75963,8 +76120,7 @@ function Settings() {
                   colSpan: "5",
                   style: {
                     textAlign: 'center',
-                    padding: '2rem',
-                    color: '#666'
+                    padding: '2rem'
                   },
                   children: "Loading..."
                 })
@@ -75983,10 +76139,9 @@ function Settings() {
                   colSpan: "5",
                   style: {
                     textAlign: 'center',
-                    padding: '2rem',
-                    color: '#666'
+                    padding: '2rem'
                   },
-                  children: "No accounts yet. Add an account to get started."
+                  children: "No accounts yet."
                 })
               }) : accounts.map(function (account) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
@@ -76010,7 +76165,6 @@ function Settings() {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
                       type: "button",
                       className: "settings__icon-button",
-                      "aria-label": "Edit account",
                       onClick: function onClick() {
                         return openEditAccount(account);
                       },
@@ -76022,7 +76176,6 @@ function Settings() {
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
                       type: "button",
                       className: "settings__icon-button",
-                      "aria-label": "Disable account",
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
                         src: "/images/disable_icon.svg",
                         alt: "",
@@ -76052,7 +76205,6 @@ function Settings() {
               className: "settings__archive-btn",
               onClick: deleteSelectedTemplates,
               disabled: selectedTemplateFilenames.size < 2,
-              "aria-label": "Delete selected templates",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
                 src: "".concat(window.location.origin, "/images/delete_icon.svg"),
                 alt: ""
@@ -76060,23 +76212,38 @@ function Settings() {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
               ref: templateFileInputRef,
               type: "file",
-              accept: ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              accept: ".docx",
               onChange: handleTemplateFileChange,
               style: {
                 display: 'none'
-              },
-              "aria-hidden": "true"
+              }
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
               type: "button",
               className: "settings__create-btn",
               onClick: handleAddTemplateClick,
               disabled: templateUploading,
-              "aria-label": "Add template",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
                 src: "".concat(window.location.origin, "/images/create_icon.svg"),
                 alt: ""
               }), templateUploading ? 'Adding...' : 'Add new template']
             })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+          className: "settings__tabs",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+            type: "button",
+            className: "settings__tab ".concat(templateTab === 'adr' ? 'settings__tab--active' : ''),
+            onClick: function onClick() {
+              return setTemplateTab('adr');
+            },
+            children: "After Duty Report"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+            type: "button",
+            className: "settings__tab ".concat(templateTab === 'swapping' ? 'settings__tab--active' : ''),
+            onClick: function onClick() {
+              return setTemplateTab('swapping');
+            },
+            children: "Swapping Form"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "settings__table",
@@ -76089,8 +76256,7 @@ function Settings() {
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
                     ref: selectAllTemplatesRef,
                     type: "checkbox",
-                    "aria-label": "Select all templates",
-                    checked: templates.length > 0 && selectedTemplateFilenames.size === templates.length,
+                    checked: filteredTemplates.length > 0 && selectedTemplateFilenames.size === filteredTemplates.length,
                     onChange: toggleSelectAllTemplates
                   })
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
@@ -76109,8 +76275,7 @@ function Settings() {
                   colSpan: "4",
                   style: {
                     textAlign: 'center',
-                    padding: '2rem',
-                    color: '#666'
+                    padding: '2rem'
                   },
                   children: "Loading..."
                 })
@@ -76124,23 +76289,21 @@ function Settings() {
                   },
                   children: templatesError
                 })
-              }) : templates.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tr", {
+              }) : filteredTemplates.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tr", {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
                   colSpan: "4",
                   style: {
                     textAlign: 'center',
-                    padding: '2rem',
-                    color: '#666'
+                    padding: '2rem'
                   },
-                  children: "No templates yet. Click \"Add\" to upload a .docx template."
+                  children: "No templates yet. Click \"Add new template\"."
                 })
-              }) : templates.map(function (tpl) {
+              }) : filteredTemplates.map(function (tpl) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
                     className: "settings__table-check",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
                       type: "checkbox",
-                      "aria-label": "Select ".concat(tpl.name),
                       checked: selectedTemplateFilenames.has(tpl.filename),
                       onChange: function onChange() {
                         return toggleTemplateSelection(tpl.filename);
@@ -76156,38 +76319,22 @@ function Settings() {
                       }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
                         type: "button",
                         className: "settings__icon-button settings__icon-button--check",
-                        "aria-label": "Set ".concat(tpl.name, " as in use"),
                         onClick: function onClick() {
                           return setTemplateInUse(tpl);
                         },
                         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
                           src: "/images/check_icon.svg",
-                          alt: "",
-                          "aria-hidden": "true"
+                          alt: ""
                         })
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
                         type: "button",
                         className: "settings__icon-button",
-                        "aria-label": "View ".concat(tpl.name),
-                        onClick: function onClick() {
-                          return viewTemplate(tpl.filename, tpl.name);
-                        },
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                          src: "/images/view_icon.svg",
-                          alt: "",
-                          "aria-hidden": "true"
-                        })
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
-                        type: "button",
-                        className: "settings__icon-button",
-                        "aria-label": "Delete ".concat(tpl.name),
                         onClick: function onClick() {
                           return deleteTemplate(tpl);
                         },
                         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
                           src: "/images/delete_icon.svg",
-                          alt: "",
-                          "aria-hidden": "true"
+                          alt: ""
                         })
                       })]
                     })
@@ -76214,7 +76361,6 @@ function Settings() {
       });
       break;
     case 'departments':
-    default:
       sectionContent = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.Fragment, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
           className: "settings__panel-header settings__panel-header--row",
@@ -76283,7 +76429,6 @@ function Settings() {
                   className: "settings__table-check",
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
                     type: "checkbox",
-                    "aria-label": departmentTab === 'active' ? 'Select all active sections' : 'Select all archived sections',
                     checked: departmentTab === 'active' ? sections.length > 0 && selectedActiveIds.length === sections.length : archivedSections.length > 0 && selectedArchivedIds.length === archivedSections.length,
                     onChange: function onChange(e) {
                       if (departmentTab === 'active') {
@@ -76313,8 +76458,7 @@ function Settings() {
                   colSpan: "4",
                   style: {
                     textAlign: 'center',
-                    padding: '2rem',
-                    color: '#666'
+                    padding: '2rem'
                   },
                   children: "Loading..."
                 })
@@ -76333,10 +76477,9 @@ function Settings() {
                   colSpan: "4",
                   style: {
                     textAlign: 'center',
-                    padding: '2rem',
-                    color: '#666'
+                    padding: '2rem'
                   },
-                  children: "No sections yet. Click \"Create New\" to add one."
+                  children: "No active sections yet."
                 })
               }) : sections.map(function (section) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
@@ -76344,7 +76487,6 @@ function Settings() {
                     className: "settings__table-check",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
                       type: "checkbox",
-                      "aria-label": "Select ".concat(section.name),
                       checked: selectedActiveIds.includes(section.id),
                       onChange: function onChange() {
                         return toggleActiveSelection(section.id);
@@ -76355,26 +76497,22 @@ function Settings() {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
                       type: "button",
                       className: "settings__icon-button",
-                      "aria-label": "Edit section",
                       onClick: function onClick() {
                         return openEditSection(section);
                       },
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
                         src: "/images/edit_icon.svg",
-                        alt: "",
-                        "aria-hidden": "true"
+                        alt: ""
                       })
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
                       type: "button",
                       className: "settings__icon-button",
-                      "aria-label": "Archive section",
                       onClick: function onClick() {
                         return archiveSection(section);
                       },
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
                         src: "/images/delete_icon.svg",
-                        alt: "",
-                        "aria-hidden": "true"
+                        alt: ""
                       })
                     })]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
@@ -76398,8 +76536,7 @@ function Settings() {
                   colSpan: "4",
                   style: {
                     textAlign: 'center',
-                    padding: '2rem',
-                    color: '#666'
+                    padding: '2rem'
                   },
                   children: "Loading..."
                 })
@@ -76408,8 +76545,7 @@ function Settings() {
                   colSpan: "4",
                   style: {
                     textAlign: 'center',
-                    padding: '2rem',
-                    color: '#666'
+                    padding: '2rem'
                   },
                   children: "No archived sections."
                 })
@@ -76419,7 +76555,6 @@ function Settings() {
                     className: "settings__table-check",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
                       type: "checkbox",
-                      "aria-label": "Select ".concat(section.name),
                       checked: selectedArchivedIds.includes(section.id),
                       onChange: function onChange() {
                         return toggleArchivedSelection(section.id);
@@ -76430,14 +76565,12 @@ function Settings() {
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
                       type: "button",
                       className: "settings__icon-button",
-                      "aria-label": "Restore section",
                       onClick: function onClick() {
                         return restoreSection(section);
                       },
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
                         src: "/images/restore_icon.svg",
-                        alt: "",
-                        "aria-hidden": "true"
+                        alt: ""
                       })
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
@@ -76462,17 +76595,12 @@ function Settings() {
         }), showSectionModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "settings__modal-overlay",
           onClick: closeSectionModal,
-          role: "presentation",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
             className: "settings__modal",
             onClick: function onClick(e) {
               return e.stopPropagation();
             },
-            role: "dialog",
-            "aria-modal": "true",
-            "aria-labelledby": "section-modal-title",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h3", {
-              id: "section-modal-title",
               className: "settings__modal-title",
               children: editingSection ? 'Edit Section' : 'New Section'
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
@@ -76509,6 +76637,138 @@ function Settings() {
         })]
       });
       break;
+    case 'data-retention':
+      sectionContent = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+          className: "settings__panel-header settings__panel-header--row",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h2", {
+            id: "data-retention-title",
+            className: "settings__section-title",
+            children: "Data Retention"
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+          className: "settings__retention-simple",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            className: "settings__retention-period",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("label", {
+              children: "Retention Period"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              className: "settings__retention-input-group",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+                type: "number",
+                min: "1",
+                value: retentionValue,
+                onChange: function onChange(e) {
+                  setRetentionValue(Math.max(1, parseInt(e.target.value) || 1));
+                  setIsRetentionChanged(true);
+                },
+                className: "settings__retention-number"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("select", {
+                value: retentionUnit,
+                onChange: function onChange(e) {
+                  setRetentionUnit(e.target.value);
+                  setIsRetentionChanged(true);
+                },
+                className: "settings__retention-select",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("option", {
+                  value: "days",
+                  children: "days"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("option", {
+                  value: "months",
+                  children: "months"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("option", {
+                  value: "years",
+                  children: "years"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                className: "settings__retention-edit-icon",
+                children: "\u270F\uFE0F"
+              })]
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            className: "settings__retention-dates",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                className: "settings__retention-label-small",
+                children: "Current Date:"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                className: "settings__retention-value",
+                children: new Date().toLocaleString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                className: "settings__retention-label-small",
+                children: "Cutoff Date:"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                className: "settings__retention-value",
+                children: getCutoffDate().toLocaleString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true
+                })
+              })]
+            })]
+          }), (daysUntilArchive.adr_days !== null || daysUntilArchive.swap_days !== null) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            className: "settings__retention-info",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              className: "settings__retention-info-row",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                children: "ADR Reports"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                className: daysUntilArchive.adr_days <= 0 ? 'warning' : '',
+                children: daysUntilArchive.adr_days !== null ? "".concat(Math.abs(daysUntilArchive.adr_days), " day").concat(Math.abs(daysUntilArchive.adr_days) !== 1 ? 's' : '', " ").concat(daysUntilArchive.adr_days <= 0 ? 'overdue' : 'left') : '—'
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              className: "settings__retention-info-row",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                children: "Swapping Requests"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                className: daysUntilArchive.swap_days <= 0 ? 'warning' : '',
+                children: daysUntilArchive.swap_days !== null ? "".concat(Math.abs(daysUntilArchive.swap_days), " day").concat(Math.abs(daysUntilArchive.swap_days) !== 1 ? 's' : '', " ").concat(daysUntilArchive.swap_days <= 0 ? 'overdue' : 'left') : '—'
+              })]
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+            className: "settings__retention-preview",
+            children: retentionPreview.adr_count + retentionPreview.swap_count > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+              children: [retentionPreview.adr_count, " ADR report(s) and ", retentionPreview.swap_count, " swapping request(s) will be archived."]
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+              className: "settings__retention-preview-none",
+              children: "No records will be archived."
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+            className: "settings__retention-actions",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+              type: "button",
+              className: "settings__set-btn",
+              disabled: !isRetentionChanged,
+              onClick: handleSetRetention,
+              children: "Set"
+            })
+          })]
+        })]
+      });
+      break;
+    default:
+      sectionContent = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.Fragment, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+          className: "settings__panel-header settings__panel-header--row",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h2", {
+            id: "departments-title",
+            className: "settings__section-title",
+            children: "Departments"
+          })
+        })
+      });
   }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
     className: "settings",
@@ -76547,6 +76807,13 @@ function Settings() {
               return setActiveSection('departments');
             },
             children: "Departments"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+            type: "button",
+            className: "settings__subnav-item ".concat(activeSection === 'data-retention' ? 'settings__subnav-item--active' : ''),
+            onClick: function onClick() {
+              return setActiveSection('data-retention');
+            },
+            children: "Data Retention"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "settings__panel-body",
@@ -76557,7 +76824,7 @@ function Settings() {
       isOpen: showConfirmModal,
       message: confirmMessage,
       onConfirm: function onConfirm() {
-        if (typeof confirmAction === 'function') confirmAction();
+        return confirmAction && confirmAction();
       },
       onCancel: function onCancel() {
         return setShowConfirmModal(false);

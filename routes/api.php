@@ -6,6 +6,7 @@ use App\Http\Controllers\ExportDocxController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SectionsController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SwappingRequestController;
 use App\Http\Controllers\TemplatesController;
 use Illuminate\Http\Request;
@@ -28,6 +29,8 @@ Route::get('/sections', [SectionsController::class, 'index'])->name('api.section
 Route::get('/section', [SectionsController::class, 'index'])->name('api.section.index');
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/data-retention/auto-archive', [SettingsController::class, 'autoArchive'])->name('api.data-retention.auto-archive');
+    Route::post('/data-retention/days-until-archive', [SettingsController::class, 'getDaysUntilArchive'])->name('api.data-retention.days-until-archive');
     Route::post('/sections', [SectionsController::class, 'store'])->name('api.sections.store');
     Route::put('/sections/{id}', [SectionsController::class, 'update'])->name('api.sections.update');
     Route::patch('/sections/{id}/archive', [SectionsController::class, 'archive'])->name('api.sections.archive');
