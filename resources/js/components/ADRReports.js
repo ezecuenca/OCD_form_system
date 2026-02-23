@@ -210,7 +210,6 @@ function ADRReports() {
         return true;
     });
 
-    // Pagination calculations
     const totalPages = Math.ceil(filteredReports.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;

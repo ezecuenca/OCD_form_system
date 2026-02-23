@@ -70342,8 +70342,6 @@ function ADRReports() {
     }
     return true;
   });
-
-  // Pagination calculations
   var totalPages = Math.ceil(filteredReports.length / itemsPerPage);
   var startIndex = (currentPage - 1) * itemsPerPage;
   var endIndex = startIndex + itemsPerPage;
