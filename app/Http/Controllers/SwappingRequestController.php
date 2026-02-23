@@ -180,6 +180,9 @@ class SwappingRequestController extends Controller
                 return null;
             }
 
+            $originalRequesterDate = $requesterSchedule->task_date;
+            $originalTargetDate = $targetSchedule?->task_date;
+
             if ($targetSchedule) {
                 $fromDate = $requesterSchedule->task_date;
                 $toDate = $targetSchedule->task_date;
@@ -203,6 +206,8 @@ class SwappingRequestController extends Controller
             $swapRequest->update([
                 'status' => 'approved',
                 'approved_by' => $approverProfileId,
+                'original_requester_date' => $originalRequesterDate,
+                'original_target_date' => $originalTargetDate,
             ]);
 
             return $swapRequest->fresh(['requesterSchedule.profile.user', 'targetSchedule.profile.user']);

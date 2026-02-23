@@ -74638,7 +74638,8 @@ function Schedule() {
       fullName: item.profile_name || '—',
       task: item.task_description || '',
       date: item.task_date,
-      status: item.status
+      status: item.status,
+      swapInfo: item.swap_info
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -75021,6 +75022,27 @@ function Schedule() {
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                 className: "schedule__day-tasks",
                 children: dayTasks.map(function (task, taskIndex) {
+                  var tooltipText = '';
+                  if (task.status === 'swap' && task.swapInfo) {
+                    var formatShortDate = function formatShortDate(dateStr) {
+                      if (!dateStr) return '';
+                      var date = new Date(dateStr);
+                      return date.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                      });
+                    };
+                    var originalDateStr = formatShortDate(task.swapInfo.original_date);
+                    var newDateStr = formatShortDate(task.swapInfo.new_date);
+                    var hasDates = Boolean(originalDateStr && newDateStr);
+                    if (task.swapInfo.has_target_person && task.swapInfo.swapped_with) {
+                      tooltipText = hasDates ? "Swapped with ".concat(task.swapInfo.swapped_with, ": ").concat(originalDateStr, " => ").concat(newDateStr) : "Swapped with ".concat(task.swapInfo.swapped_with);
+                    } else {
+                      tooltipText = hasDates ? "Swapped: ".concat(originalDateStr, " => ").concat(newDateStr) : 'Swapped';
+                    }
+                  } else if (task.status === 'swap') {
+                    tooltipText = 'This task has been swapped';
+                  }
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                     className: "schedule__task".concat(task.status === 'swap' ? ' schedule__task--swapped' : ''),
                     onClick: function onClick(event) {
@@ -75032,9 +75054,13 @@ function Schedule() {
                     },
                     role: "button",
                     tabIndex: 0,
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                    title: tooltipText,
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
                       className: "schedule__task-name",
-                      children: task.name
+                      children: [task.status === 'swap' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                        className: "schedule__task-swap-icon",
+                        children: "\u21C4 "
+                      }), task.name]
                     })
                   }, taskIndex);
                 })
@@ -78167,6 +78193,49 @@ function TasksModal(_ref) {
                   fontWeight: 500
                 },
                 children: "Swapped"
+              })]
+            })]
+          }), (initialTask === null || initialTask === void 0 ? void 0 : initialTask.status) === 'swap' && (initialTask === null || initialTask === void 0 ? void 0 : initialTask.swapInfo) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+            className: "view-task__row view-task__swap-info",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("label", {
+              children: "Swap Details"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+              className: "value",
+              style: {
+                fontSize: '0.875rem',
+                color: '#555'
+              },
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+                style: {
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  marginBottom: '0.25rem'
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+                  children: "\u21C4"
+                }), initialTask.swapInfo.has_target_person && initialTask.swapInfo.swapped_with ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
+                  children: ["Swapped with ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("strong", {
+                    children: initialTask.swapInfo.swapped_with
+                  })]
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("strong", {
+                    children: "Swapped"
+                  })
+                })]
+              }), initialTask.swapInfo.original_date && initialTask.swapInfo.new_date && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+                style: {
+                  fontSize: '0.8125rem',
+                  color: '#888',
+                  marginLeft: '1.5rem'
+                },
+                children: [new Date(initialTask.swapInfo.original_date).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric'
+                }), " - ", new Date(initialTask.swapInfo.new_date).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric'
+                })]
               })]
             })]
           })]

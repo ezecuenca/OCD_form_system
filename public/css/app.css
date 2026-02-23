@@ -1776,7 +1776,7 @@ body {
 .schedule__task {
   background: linear-gradient(135deg, #f0f9e8 0%, #f5fdf0 100%);
   border-left: 3px solid #7ED321;
-  padding: 0.5rem 0.75rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 4px;
   overflow: hidden;
   cursor: pointer;
@@ -1792,6 +1792,13 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.4px;
   margin-bottom: 0.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.schedule__task-swap-icon {
+  font-size: 0.7rem;
+  opacity: 0.8;
 }
 .schedule__task--swapped .schedule__task-name {
   color: #2f5eb8;
@@ -1808,7 +1815,7 @@ body {
   text-overflow: ellipsis;
 }
 .schedule__task-summary {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
   padding: 1rem 1.25rem;
   background-color: #f9f9f9;
   border: 1px solid #e0e0e0;
@@ -2591,6 +2598,19 @@ body {
   color: #a65a1b;
   font-weight: 700;
   font-size: 1.02rem;
+}
+.view-task__swap-info {
+  background-color: #f0f7ff;
+  padding: 0.75rem 1rem !important;
+  border-radius: 6px;
+  border: 1px solid #d0e4ff !important;
+  margin-top: 0.5rem;
+}
+.view-task__swap-info label {
+  color: #2f5eb8 !important;
+}
+.view-task__swap-info .value {
+  color: #2d241d;
 }
 
 .modal__actions {

@@ -174,7 +174,7 @@
     &__task {
         background: linear-gradient(135deg, #f0f9e8 0%, #f5fdf0 100%);
         border-left: 3px solid #7ED321;
-        padding: 0.5rem 0.75rem;
+        padding: 0.25rem 0.75rem;
         border-radius: 4px;
         overflow: hidden;
         cursor: pointer;
@@ -192,6 +192,14 @@
         text-transform: uppercase;
         letter-spacing: 0.4px;
         margin-bottom: 0.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    &__task-swap-icon {
+        font-size: 0.7rem;
+        opacity: 0.8;
     }
 
     &__task--swapped &__task-name {
@@ -211,7 +219,7 @@
     }
 
     &__task-summary {
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.75rem;
         padding: 1rem 1.25rem;
         background-color: #f9f9f9;
         border: 1px solid #e0e0e0;
