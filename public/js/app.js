@@ -75041,6 +75041,49 @@ function Schedule() {
               })]
             }, index);
           })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+          className: "schedule__task-summary",
+          children: function () {
+            var currentMonthTasks = tasks.filter(function (task) {
+              if (!task.date) return false;
+              var taskDate = new Date(task.date);
+              return taskDate.getFullYear() === currentDate.getFullYear() && taskDate.getMonth() === currentDate.getMonth();
+            });
+            var employeeTaskCounts = currentMonthTasks.reduce(function (acc, task) {
+              var name = task.fullName || 'Unknown';
+              acc[name] = (acc[name] || 0) + 1;
+              return acc;
+            }, {});
+            var entries = Object.entries(employeeTaskCounts).sort(function (a, b) {
+              return a[0].localeCompare(b[0]);
+            });
+            if (entries.length === 0) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
+                className: "schedule__task-summary-text",
+                children: "No tasks scheduled for this month."
+              });
+            }
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              className: "schedule__task-summary-content",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("p", {
+                className: "schedule__task-summary-title",
+                children: ["Task Distribution for ", monthName, ":"]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                className: "schedule__task-summary-list",
+                children: entries.map(function (_ref4) {
+                  var _ref5 = _slicedToArray(_ref4, 2),
+                    name = _ref5[0],
+                    count = _ref5[1];
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+                    className: "schedule__task-summary-item",
+                    children: [name, ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
+                      children: count
+                    }), " task", count !== 1 ? 's' : '']
+                  }, name);
+                })
+              })]
+            });
+          }()
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
           className: "schedule__actions",
           children: [((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
@@ -75079,7 +75122,7 @@ function Schedule() {
       initialTask: selectedTask,
       mode: modalMode,
       onUpdateTask: (/*#__PURE__*/function () {
-        var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(updateTask) {
+        var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(updateTask) {
           var payload, response, _t4;
           return _regenerator().w(function (_context4) {
             while (1) switch (_context4.p = _context4.n) {
@@ -75115,7 +75158,7 @@ function Schedule() {
           }, _callee4, null, [[0, 2]]);
         }));
         return function (_x2) {
-          return _ref4.apply(this, arguments);
+          return _ref6.apply(this, arguments);
         };
       }()),
       onSwitchToEdit: function onSwitchToEdit() {

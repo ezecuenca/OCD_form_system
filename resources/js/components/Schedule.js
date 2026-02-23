@@ -357,6 +357,42 @@ function Schedule() {
                         })}
                     </div>
 
+                    <div className="schedule__task-summary">
+                        {(() => {
+                            const currentMonthTasks = tasks.filter(task => {
+                                if (!task.date) return false;
+                                const taskDate = new Date(task.date);
+                                return taskDate.getFullYear() === currentDate.getFullYear() &&
+                                       taskDate.getMonth() === currentDate.getMonth();
+                            });
+
+                            const employeeTaskCounts = currentMonthTasks.reduce((acc, task) => {
+                                const name = task.fullName || 'Unknown';
+                                acc[name] = (acc[name] || 0) + 1;
+                                return acc;
+                            }, {});
+
+                            const entries = Object.entries(employeeTaskCounts).sort((a, b) => a[0].localeCompare(b[0]));
+
+                            if (entries.length === 0) {
+                                return <p className="schedule__task-summary-text">No tasks scheduled for this month.</p>;
+                            }
+
+                            return (
+                                <div className="schedule__task-summary-content">
+                                    <p className="schedule__task-summary-title">Task Distribution for {monthName}:</p>
+                                    <div className="schedule__task-summary-list">
+                                        {entries.map(([name, count]) => (
+                                            <span key={name} className="schedule__task-summary-item">
+                                                {name}: <strong>{count}</strong> task{count !== 1 ? 's' : ''}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })()}
+                    </div>
+
                     <div className="schedule__actions">
                         {(user?.role_id === 2 || user?.role_id === 3) && (
                             <button

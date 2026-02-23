@@ -1730,7 +1730,7 @@ body {
   border: 1px solid #eee;
   border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 .schedule__day {
   background-color: white;
@@ -1806,6 +1806,47 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.schedule__task-summary {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+.schedule__task-summary-text {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #666;
+  font-style: italic;
+}
+.schedule__task-summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.schedule__task-summary-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #333;
+}
+.schedule__task-summary-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.schedule__task-summary-item {
+  font-size: 0.8125rem;
+  color: #555;
+  padding: 0.25rem 0.75rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.schedule__task-summary-item strong {
+  color: #E99745;
+  font-weight: 600;
 }
 .schedule__actions {
   display: flex;
