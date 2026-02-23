@@ -14,6 +14,8 @@ class SwappingRequest extends Model
         'requester_schedule_id',
         'target_schedule_id',
         'target_date',
+        'original_requester_date',
+        'original_target_date',
         'status',
         'approved_by',
         'is_archived',
@@ -24,6 +26,8 @@ class SwappingRequest extends Model
         'is_archived' => 'boolean',
         'archived_at' => 'datetime',
         'target_date' => 'date:Y-m-d',
+        'original_requester_date' => 'date:Y-m-d',
+        'original_target_date' => 'date:Y-m-d',
     ];
 
     public function requesterProfile(): BelongsTo

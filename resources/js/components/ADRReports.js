@@ -23,6 +23,8 @@ function ADRReports() {
     const [showDocumentModal, setShowDocumentModal] = useState(false);
     const [selectedReportId, setSelectedReportId] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
     const yearDropdownRef = useRef(null);
     const monthDropdownRef = useRef(null);
 
@@ -188,14 +190,6 @@ function ADRReports() {
 
     const activeReports = reports.filter(r => r.status === 'Active');
 
-    if (!reportsLoaded) {
-        return (
-            <div className="adr-reports">
-                <p style={{ padding: '2rem', textAlign: 'center' }}>Loading reports...</p>
-            </div>
-        );
-    }
-
     const filteredReports = activeReports.filter((report) => {
         const created = new Date(report.createdAt);
         const reportYear = created.getFullYear().toString();
@@ -215,6 +209,30 @@ function ADRReports() {
         }
         return true;
     });
+
+    const totalPages = Math.ceil(filteredReports.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedReports = filteredReports.slice(startIndex, endIndex);
+
+    const goToFirstPage = () => setCurrentPage(1);
+    const goToPrevPage = () => setCurrentPage(prev => Math.max(1, prev - 1));
+    const goToNextPage = () => setCurrentPage(prev => Math.min(totalPages, prev + 1));
+    const goToLastPage = () => setCurrentPage(totalPages);
+
+    useEffect(() => {
+        if (currentPage > totalPages && totalPages > 0) {
+            setCurrentPage(totalPages);
+        }
+    }, [filteredReports.length, currentPage, totalPages]);
+
+    if (!reportsLoaded) {
+        return (
+            <div className="adr-reports">
+                <p style={{ padding: '2rem', textAlign: 'center' }}>Loading reports...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="adr-reports">
@@ -301,10 +319,10 @@ function ADRReports() {
                             <th>
                                 <input 
                                     type="checkbox" 
-                                    checked={selectedReports.length === filteredReports.length && filteredReports.length > 0}
+                                    checked={selectedReports.length === paginatedReports.length && paginatedReports.length > 0}
                                     onChange={(e) => {
                                         if (e.target.checked) {
-                                            setSelectedReports(filteredReports.map(r => r.id));
+                                            setSelectedReports(paginatedReports.map(r => r.id));
                                         } else {
                                             setSelectedReports([]);
                                         }
@@ -324,7 +342,7 @@ function ADRReports() {
                                 </td>
                             </tr>
                         ) : (
-                            filteredReports.map(report => (
+                            paginatedReports.map(report => (
                                 <tr key={report.id}>
                                     <td>
                                         <input 
@@ -375,22 +393,23 @@ function ADRReports() {
             </div>
 
             <div className="adr-reports__pagination">
-                <button>
+                <button onClick={goToFirstPage} disabled={currentPage === 1} title="First page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11 17L6 12L11 7M18 17L13 12L18 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <button>
+                <button onClick={goToPrevPage} disabled={currentPage === 1} title="Previous page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <button>
+                <span className="adr-reports__pagination-info">{filteredReports.length > 0 ? `Page ${currentPage} of ${totalPages}` : 'No data'}</span>
+                <button onClick={goToNextPage} disabled={currentPage === totalPages || filteredReports.length === 0} title="Next page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <button>
+                <button onClick={goToLastPage} disabled={currentPage === totalPages || filteredReports.length === 0} title="Last page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13 17L18 12L13 7M6 17L11 12L6 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>

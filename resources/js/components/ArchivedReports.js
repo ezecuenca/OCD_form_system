@@ -22,6 +22,9 @@ function ArchivedReports() {
     const [archivedSwapRequests, setArchivedSwapRequests] = useState([]);
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
     const [searchQuery, setSearchQuery] = useState('');
+    const [currentAdrPage, setCurrentAdrPage] = useState(1);
+    const [currentSwapPage, setCurrentSwapPage] = useState(1);
+    const itemsPerPage = 10;
     const yearDropdownRef = useRef(null);
     const monthDropdownRef = useRef(null);
 
@@ -51,6 +54,8 @@ function ArchivedReports() {
 
     useEffect(() => {
         setSelectedSwapRequests([]);
+        setCurrentAdrPage(1);
+        setCurrentSwapPage(1);
         if (activeTab === 'swapped') {
             axios.get('/api/swapping-requests?include_archived=true')
                 .then(response => {
@@ -243,14 +248,6 @@ function ArchivedReports() {
         setShowMonthDropdown(false);
     };
 
-    if (!reportsLoaded) {
-        return (
-            <div className="archived-reports">
-                <p style={{ padding: '2rem', textAlign: 'center' }}>Loading reports...</p>
-            </div>
-        );
-    }
-
     const archivedReports = reports.filter(r => r.status === 'Archived');
 
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -286,6 +283,47 @@ function ArchivedReports() {
         }
         return true;
     });
+
+    // Pagination calculations
+    const totalAdrPages = Math.ceil(filteredArchivedReports.length / itemsPerPage);
+    const adrStartIndex = (currentAdrPage - 1) * itemsPerPage;
+    const adrEndIndex = adrStartIndex + itemsPerPage;
+    const paginatedArchivedReports = filteredArchivedReports.slice(adrStartIndex, adrEndIndex);
+
+    const totalSwapPages = Math.ceil(filteredArchivedSwapRequests.length / itemsPerPage);
+    const swapStartIndex = (currentSwapPage - 1) * itemsPerPage;
+    const swapEndIndex = swapStartIndex + itemsPerPage;
+    const paginatedArchivedSwapRequests = filteredArchivedSwapRequests.slice(swapStartIndex, swapEndIndex);
+
+    const goToAdrFirstPage = () => setCurrentAdrPage(1);
+    const goToAdrPrevPage = () => setCurrentAdrPage(prev => Math.max(1, prev - 1));
+    const goToAdrNextPage = () => setCurrentAdrPage(prev => Math.min(totalAdrPages, prev + 1));
+    const goToAdrLastPage = () => setCurrentAdrPage(totalAdrPages);
+
+    const goToSwapFirstPage = () => setCurrentSwapPage(1);
+    const goToSwapPrevPage = () => setCurrentSwapPage(prev => Math.max(1, prev - 1));
+    const goToSwapNextPage = () => setCurrentSwapPage(prev => Math.min(totalSwapPages, prev + 1));
+    const goToSwapLastPage = () => setCurrentSwapPage(totalSwapPages);
+
+    useEffect(() => {
+        if (currentAdrPage > totalAdrPages && totalAdrPages > 0) {
+            setCurrentAdrPage(totalAdrPages);
+        }
+    }, [filteredArchivedReports.length, currentAdrPage, totalAdrPages]);
+
+    useEffect(() => {
+        if (currentSwapPage > totalSwapPages && totalSwapPages > 0) {
+            setCurrentSwapPage(totalSwapPages);
+        }
+    }, [filteredArchivedSwapRequests.length, currentSwapPage, totalSwapPages]);
+
+    if (!reportsLoaded) {
+        return (
+            <div className="archived-reports">
+                <p style={{ padding: '2rem', textAlign: 'center' }}>Loading reports...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="archived-reports">
@@ -410,10 +448,10 @@ function ArchivedReports() {
                             <th>
                                 <input 
                                     type="checkbox" 
-                                    checked={selectedReports.length === filteredArchivedReports.length && filteredArchivedReports.length > 0}
+                                    checked={selectedReports.length === paginatedArchivedReports.length && paginatedArchivedReports.length > 0}
                                     onChange={(e) => {
                                         if (e.target.checked) {
-                                            setSelectedReports(filteredArchivedReports.map(r => r.id));
+                                            setSelectedReports(paginatedArchivedReports.map(r => r.id));
                                         } else {
                                             setSelectedReports([]);
                                         }
@@ -433,7 +471,7 @@ function ArchivedReports() {
                                 </td>
                             </tr>
                         ) : (
-                            filteredArchivedReports.map(report => (
+                            paginatedArchivedReports.map(report => (
                                 <tr key={report.id}>
                                     <td>
                                         <input 
@@ -481,10 +519,10 @@ function ArchivedReports() {
                             <th>
                                 <input
                                     type="checkbox"
-                                    checked={selectedSwapRequests.length === filteredArchivedSwapRequests.length && filteredArchivedSwapRequests.length > 0}
+                                    checked={selectedSwapRequests.length === paginatedArchivedSwapRequests.length && paginatedArchivedSwapRequests.length > 0}
                                     onChange={(e) => {
                                         if (e.target.checked) {
-                                            setSelectedSwapRequests(filteredArchivedSwapRequests.map(r => r.id));
+                                            setSelectedSwapRequests(paginatedArchivedSwapRequests.map(r => r.id));
                                         } else {
                                             setSelectedSwapRequests([]);
                                         }
@@ -505,7 +543,7 @@ function ArchivedReports() {
                                 </td>
                             </tr>
                         ) : (
-                            filteredArchivedSwapRequests.map(req => (
+                            paginatedArchivedSwapRequests.map(req => (
                                 <tr key={req.id}>
                                     <td>
                                         <input
@@ -556,22 +594,47 @@ function ArchivedReports() {
             </div>
 
             <div className="archived-reports__pagination">
-                <button>
+                <button
+                    onClick={activeTab === 'adr' ? goToAdrFirstPage : goToSwapFirstPage}
+                    disabled={activeTab === 'adr' ? currentAdrPage === 1 : currentSwapPage === 1}
+                    title="First page"
+                >
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11 17L6 12L11 7M18 17L13 12L18 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <button>
+                <button
+                    onClick={activeTab === 'adr' ? goToAdrPrevPage : goToSwapPrevPage}
+                    disabled={activeTab === 'adr' ? currentAdrPage === 1 : currentSwapPage === 1}
+                    title="Previous page"
+                >
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <button>
+                <span className="archived-reports__pagination-info">
+                    {activeTab === 'adr'
+                        ? (filteredArchivedReports.length > 0 ? `Page ${currentAdrPage} of ${totalAdrPages}` : 'No data')
+                        : (filteredArchivedSwapRequests.length > 0 ? `Page ${currentSwapPage} of ${totalSwapPages}` : 'No data')}
+                </span>
+                <button
+                    onClick={activeTab === 'adr' ? goToAdrNextPage : goToSwapNextPage}
+                    disabled={activeTab === 'adr'
+                        ? currentAdrPage === totalAdrPages || filteredArchivedReports.length === 0
+                        : currentSwapPage === totalSwapPages || filteredArchivedSwapRequests.length === 0}
+                    title="Next page"
+                >
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <button>
+                <button
+                    onClick={activeTab === 'adr' ? goToAdrLastPage : goToSwapLastPage}
+                    disabled={activeTab === 'adr'
+                        ? currentAdrPage === totalAdrPages || filteredArchivedReports.length === 0
+                        : currentSwapPage === totalSwapPages || filteredArchivedSwapRequests.length === 0}
+                    title="Last page"
+                >
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13 17L18 12L13 7M6 17L11 12L6 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
