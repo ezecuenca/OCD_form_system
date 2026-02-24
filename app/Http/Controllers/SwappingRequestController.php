@@ -43,12 +43,14 @@ class SwappingRequestController extends Controller
             $targetTaskName = $targetSchedule->profile->user->username;
         }
 
-        $fromDate = $requesterSchedule?->task_date?->format('Y-m-d');
-        $toDate = $targetSchedule?->task_date?->format('Y-m-d') ?? $request->target_date?->format('Y-m-d');
-
-        if ($request->status === 'approved' && $requesterSchedule && $targetSchedule) {
-            $fromDate = $targetSchedule->task_date?->format('Y-m-d');
-            $toDate = $requesterSchedule->task_date?->format('Y-m-d');
+        // For approved swaps, use the stored original dates to show what was swapped
+        if ($request->status === 'approved') {
+            $fromDate = $request->original_requester_date?->format('Y-m-d');
+            $toDate = $request->original_target_date?->format('Y-m-d') ?? $request->target_date?->format('Y-m-d');
+        } else {
+            // For pending/denied, use current schedule dates
+            $fromDate = $requesterSchedule?->task_date?->format('Y-m-d');
+            $toDate = $targetSchedule?->task_date?->format('Y-m-d') ?? $request->target_date?->format('Y-m-d');
         }
 
         return [
