@@ -74993,8 +74993,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _TasksModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TasksModal */ "./resources/js/components/TasksModal.js");
-/* harmony import */ var _SuccessNotification__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./SuccessNotification */ "./resources/js/components/SuccessNotification.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _ConfirmModal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ConfirmModal */ "./resources/js/components/ConfirmModal.js");
+/* harmony import */ var _SuccessNotification__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./SuccessNotification */ "./resources/js/components/SuccessNotification.js");
+/* harmony import */ var _FailNotification__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./FailNotification */ "./resources/js/components/FailNotification.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -75009,6 +75011,8 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
+
 
 
 
@@ -75043,6 +75047,26 @@ function Schedule() {
     _useState10 = _slicedToArray(_useState1, 2),
     successMessage = _useState10[0],
     setSuccessMessage = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState12 = _slicedToArray(_useState11, 2),
+    showFailNotification = _useState12[0],
+    setShowFailNotification = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState14 = _slicedToArray(_useState13, 2),
+    failMessage = _useState14[0],
+    setFailMessage = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState16 = _slicedToArray(_useState15, 2),
+    showConfirmModal = _useState16[0],
+    setShowConfirmModal = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState18 = _slicedToArray(_useState17, 2),
+    confirmMessage = _useState18[0],
+    setConfirmMessage = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState20 = _slicedToArray(_useState19, 2),
+    confirmAction = _useState20[0],
+    setConfirmAction = _useState20[1];
   var getFirstName = function getFirstName(fullName) {
     if (!fullName) return '—';
     return String(fullName).trim().split(/\s+/)[0] || '—';
@@ -75194,34 +75218,34 @@ function Schedule() {
       isMounted = false;
     };
   }, []);
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
-    _useState12 = _slicedToArray(_useState11, 2),
-    currentDate = _useState12[0],
-    setCurrentDate = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    _useState14 = _slicedToArray(_useState13, 2),
-    showTaskForm = _useState14[0],
-    setShowTaskForm = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState16 = _slicedToArray(_useState15, 2),
-    selectedDate = _useState16[0],
-    setSelectedDate = _useState16[1];
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState18 = _slicedToArray(_useState17, 2),
-    selectedTask = _useState18[0],
-    setSelectedTask = _useState18[1];
-  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('add'),
-    _useState20 = _slicedToArray(_useState19, 2),
-    modalMode = _useState20[0],
-    setModalMode = _useState20[1]; // 'add' | 'view' | 'edit' | 'swap'
-  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
     _useState22 = _slicedToArray(_useState21, 2),
-    taskToSwap = _useState22[0],
-    setTaskToSwap = _useState22[1];
-  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    currentDate = _useState22[0],
+    setCurrentDate = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState24 = _slicedToArray(_useState23, 2),
-    pendingSwapCount = _useState24[0],
-    setPendingSwapCount = _useState24[1];
+    showTaskForm = _useState24[0],
+    setShowTaskForm = _useState24[1];
+  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState26 = _slicedToArray(_useState25, 2),
+    selectedDate = _useState26[0],
+    setSelectedDate = _useState26[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState28 = _slicedToArray(_useState27, 2),
+    selectedTask = _useState28[0],
+    setSelectedTask = _useState28[1];
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('add'),
+    _useState30 = _slicedToArray(_useState29, 2),
+    modalMode = _useState30[0],
+    setModalMode = _useState30[1]; // 'add' | 'view' | 'edit' | 'swap'
+  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState32 = _slicedToArray(_useState31, 2),
+    taskToSwap = _useState32[0],
+    setTaskToSwap = _useState32[1];
+  var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState34 = _slicedToArray(_useState33, 2),
+    pendingSwapCount = _useState34[0],
+    setPendingSwapCount = _useState34[1];
   var daysInMonth = function daysInMonth(date) {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -75279,7 +75303,7 @@ function Schedule() {
   };
   var handleAddTask = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(taskData) {
-      var payload, response, _t3;
+      var payload, response, _error$response, message, _t3;
       return _regenerator().w(function (_context3) {
         while (1) switch (_context3.p = _context3.n) {
           case 0:
@@ -75298,12 +75322,16 @@ function Schedule() {
               return [].concat(_toConsumableArray(prev), [mapScheduleToTask(response.data)]);
             });
             setShowTaskForm(false);
+            setSuccessMessage('Task added successfully.');
+            setShowSuccessNotification(true);
             _context3.n = 3;
             break;
           case 2:
             _context3.p = 2;
             _t3 = _context3.v;
-            alert('Could not save schedule. Please try again.');
+            message = (_t3 === null || _t3 === void 0 || (_error$response = _t3.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Could not save schedule. Please try again.';
+            setFailMessage(message);
+            setShowFailNotification(true);
           case 3:
             return _context3.a(2);
         }
@@ -75311,6 +75339,65 @@ function Schedule() {
     }));
     return function handleAddTask(_x) {
       return _ref3.apply(this, arguments);
+    };
+  }();
+  var handleDeleteTask = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(task) {
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.n) {
+          case 0:
+            if (task !== null && task !== void 0 && task.id) {
+              _context5.n = 1;
+              break;
+            }
+            return _context5.a(2);
+          case 1:
+            setConfirmMessage('Delete this task?');
+            setConfirmAction(function () {
+              return /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+                var _error$response2, rawMessage, isForeignKeyError, message, _t4;
+                return _regenerator().w(function (_context4) {
+                  while (1) switch (_context4.p = _context4.n) {
+                    case 0:
+                      _context4.p = 0;
+                      _context4.n = 1;
+                      return axios__WEBPACK_IMPORTED_MODULE_3___default()["delete"]("/api/schedules/".concat(task.id));
+                    case 1:
+                      setTasks(function (prev) {
+                        return prev.filter(function (t) {
+                          return t.id !== task.id;
+                        });
+                      });
+                      setSuccessMessage('Task deleted successfully.');
+                      setShowSuccessNotification(true);
+                      _context4.n = 3;
+                      break;
+                    case 2:
+                      _context4.p = 2;
+                      _t4 = _context4.v;
+                      rawMessage = (_t4 === null || _t4 === void 0 || (_error$response2 = _t4.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || '';
+                      isForeignKeyError = /foreign key|constraint/i.test(rawMessage);
+                      message = task.status === 'swap' || isForeignKeyError ? 'Cant delete swapped tasks.' : rawMessage || 'Could not delete task. Please try again.';
+                      setFailMessage(message);
+                      setShowFailNotification(true);
+                    case 3:
+                      _context4.p = 3;
+                      setShowConfirmModal(false);
+                      return _context4.f(3);
+                    case 4:
+                      return _context4.a(2);
+                  }
+                }, _callee4, null, [[0, 2, 3, 4]]);
+              }));
+            });
+            setShowConfirmModal(true);
+          case 2:
+            return _context5.a(2);
+        }
+      }, _callee5);
+    }));
+    return function handleDeleteTask(_x2) {
+      return _ref4.apply(this, arguments);
     };
   }();
   var handleTaskClick = function handleTaskClick(task) {
@@ -75324,10 +75411,13 @@ function Schedule() {
       setPendingSwapCount(function (prev) {
         return prev + 1;
       });
+      setSuccessMessage('Swap request sent successfully.');
+      setShowSuccessNotification(true);
     })["catch"](function (error) {
-      var _error$response;
-      var message = (error === null || error === void 0 || (_error$response = error.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Could not create swap request. Please try again.';
-      alert(message);
+      var _error$response3;
+      var message = (error === null || error === void 0 || (_error$response3 = error.response) === null || _error$response3 === void 0 || (_error$response3 = _error$response3.data) === null || _error$response3 === void 0 ? void 0 : _error$response3.message) || 'Could not create swap request. Please try again.';
+      setFailMessage(message);
+      setShowFailNotification(true);
     })["finally"](function () {
       setShowTaskForm(false);
       setModalMode('add');
@@ -75363,16 +75453,17 @@ function Schedule() {
     month: 'long',
     year: 'numeric'
   });
+  var canManageTasks = (user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3;
   var days = getDaysArray();
   var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
     className: "schedule",
-    children: [modalMode === 'swap' && taskToSwap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+    children: [modalMode === 'swap' && taskToSwap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
       className: "schedule__swap-banner",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("p", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
         className: "schedule__swap-banner-text",
         children: ["Request Swap: Click a day to select target date \u2014 Moving \"", taskToSwap === null || taskToSwap === void 0 ? void 0 : taskToSwap.name, "\" from ", formatDate(taskToSwap === null || taskToSwap === void 0 ? void 0 : taskToSwap.date)]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
         className: "schedule__swap-cancel",
         onClick: function onClick() {
           setModalMode('add');
@@ -75382,38 +75473,38 @@ function Schedule() {
         },
         children: "Cancel"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
       className: "schedule__content",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
         className: "schedule__card",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
           className: "schedule__month-header",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
             className: "schedule__month-btn",
             onClick: previousMonth,
             children: "\u2190 Previous"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h2", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h2", {
             className: "schedule__month-title",
             children: monthName
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
             className: "schedule__month-btn",
             onClick: nextMonth,
             children: "Next \u2192"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "schedule__weekdays",
           children: dayNames.map(function (day) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
               className: "schedule__weekday",
               children: day
             }, day);
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "schedule__grid",
           children: days.map(function (day, index) {
             var dayTasks = getTasksForDate(day);
             var isToday = day && currentDate.getFullYear() === new Date().getFullYear() && currentDate.getMonth() === new Date().getMonth() && day === new Date().getDate();
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
               className: "schedule__day \n                                        ".concat(day ? 'schedule__day--active' : 'schedule__day--empty', "\n                                        ").concat(isToday ? 'schedule__day--today' : ''),
               onClick: function onClick() {
                 if (modalMode === 'swap') {
@@ -75433,10 +75524,10 @@ function Schedule() {
                   }
                 }
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                 className: "schedule__day-number",
                 children: day
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                 className: "schedule__day-tasks",
                 children: dayTasks.map(function (task, taskIndex) {
                   var tooltipText = '';
@@ -75460,7 +75551,7 @@ function Schedule() {
                   } else if (task.status === 'swap') {
                     tooltipText = 'This task has been swapped';
                   }
-                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                     className: "schedule__task".concat(task.status === 'swap' ? ' schedule__task--swapped' : ''),
                     onClick: function onClick(event) {
                       if (modalMode === 'swap') {
@@ -75472,19 +75563,36 @@ function Schedule() {
                     role: "button",
                     tabIndex: 0,
                     title: tooltipText,
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                      className: "schedule__task-name",
-                      children: [task.status === 'swap' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-                        className: "schedule__task-swap-icon",
-                        children: "\u21C4 "
-                      }), task.name]
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                      className: "schedule__task-header",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "schedule__task-name",
+                        children: [task.status === 'swap' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                          className: "schedule__task-swap-icon",
+                          children: "\u21C4 "
+                        }), task.name]
+                      }), canManageTasks && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+                        type: "button",
+                        className: "schedule__task-delete",
+                        onClick: function onClick(event) {
+                          event.stopPropagation();
+                          handleDeleteTask(task);
+                        },
+                        title: "Delete task",
+                        "aria-label": "Delete task",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("img", {
+                          src: "/images/deny_icon.svg",
+                          alt: "",
+                          "aria-hidden": "true"
+                        })
+                      })]
                     })
                   }, taskIndex);
                 })
               })]
             }, index);
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "schedule__task-summary",
           children: function () {
             var currentMonthTasks = tasks.filter(function (task) {
@@ -75501,25 +75609,25 @@ function Schedule() {
               return a[0].localeCompare(b[0]);
             });
             if (entries.length === 0) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
                 className: "schedule__task-summary-text",
                 children: "No tasks scheduled for this month."
               });
             }
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
               className: "schedule__task-summary-content",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("p", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
                 className: "schedule__task-summary-title",
                 children: ["Task Distribution for ", monthName, ":"]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                 className: "schedule__task-summary-list",
-                children: entries.map(function (_ref4) {
-                  var _ref5 = _slicedToArray(_ref4, 2),
-                    name = _ref5[0],
-                    count = _ref5[1];
-                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+                children: entries.map(function (_ref6) {
+                  var _ref7 = _slicedToArray(_ref6, 2),
+                    name = _ref7[0],
+                    count = _ref7[1];
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("span", {
                     className: "schedule__task-summary-item",
-                    children: [name, ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
+                    children: [name, ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("strong", {
                       children: count
                     }), " task", count !== 1 ? 's' : '']
                   }, name);
@@ -75527,9 +75635,9 @@ function Schedule() {
               })]
             });
           }()
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
           className: "schedule__actions",
-          children: [((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+          children: [((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
             className: "schedule__btn schedule__btn--primary",
             onClick: function onClick() {
               var today = new Date();
@@ -75538,20 +75646,20 @@ function Schedule() {
               setShowTaskForm(true);
             },
             children: "Add Task (Today)"
-          }), ((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+          }), ((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
             className: "schedule__swap-btn-container",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.Link, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.Link, {
               to: "/swap-form",
               className: "schedule__btn schedule__btn--tertiary",
               children: "Swapping Form Requests"
-            }), pendingSwapCount > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+            }), pendingSwapCount > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
               className: "schedule__notification-badge",
               children: pendingSwapCount
             })]
           })]
         })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_TasksModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_TasksModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
       isOpen: showTaskForm,
       onClose: function onClose() {
         setModalMode('add');
@@ -75565,22 +75673,22 @@ function Schedule() {
       initialTask: selectedTask,
       mode: modalMode,
       onUpdateTask: (/*#__PURE__*/function () {
-        var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(updateTask) {
-          var payload, response, _t4;
-          return _regenerator().w(function (_context4) {
-            while (1) switch (_context4.p = _context4.n) {
+        var _ref8 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(updateTask) {
+          var payload, response, _error$response4, message, _t5;
+          return _regenerator().w(function (_context6) {
+            while (1) switch (_context6.p = _context6.n) {
               case 0:
-                _context4.p = 0;
+                _context6.p = 0;
                 payload = {
                   profile_id: Number(updateTask.profileId),
                   task_description: updateTask.task,
                   task_date: updateTask.date,
                   status: updateTask.status || 'active'
                 };
-                _context4.n = 1;
+                _context6.n = 1;
                 return axios__WEBPACK_IMPORTED_MODULE_3___default().put("/api/schedules/".concat(updateTask.id), payload);
               case 1:
-                response = _context4.v;
+                response = _context6.v;
                 setTasks(function (prev) {
                   return prev.map(function (t) {
                     return t.id === updateTask.id ? mapScheduleToTask(response.data) : t;
@@ -75589,19 +75697,23 @@ function Schedule() {
                 setShowTaskForm(false);
                 setSelectedTask(null);
                 setModalMode('add');
-                _context4.n = 3;
+                setSuccessMessage('Task updated successfully.');
+                setShowSuccessNotification(true);
+                _context6.n = 3;
                 break;
               case 2:
-                _context4.p = 2;
-                _t4 = _context4.v;
-                alert('Could not update schedule. Please try again.');
+                _context6.p = 2;
+                _t5 = _context6.v;
+                message = (_t5 === null || _t5 === void 0 || (_error$response4 = _t5.response) === null || _error$response4 === void 0 || (_error$response4 = _error$response4.data) === null || _error$response4 === void 0 ? void 0 : _error$response4.message) || 'Could not update schedule. Please try again.';
+                setFailMessage(message);
+                setShowFailNotification(true);
               case 3:
-                return _context4.a(2);
+                return _context6.a(2);
             }
-          }, _callee4, null, [[0, 2]]);
+          }, _callee6, null, [[0, 2]]);
         }));
-        return function (_x2) {
-          return _ref6.apply(this, arguments);
+        return function (_x3) {
+          return _ref8.apply(this, arguments);
         };
       }()),
       onSwitchToEdit: function onSwitchToEdit() {
@@ -75614,11 +75726,24 @@ function Schedule() {
       userRole: user === null || user === void 0 ? void 0 : user.role_id,
       profileOptions: profiles,
       currentProfileId: currentProfileId
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_SuccessNotification__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_SuccessNotification__WEBPACK_IMPORTED_MODULE_6__["default"], {
       message: successMessage,
       isVisible: showSuccessNotification,
       onClose: function onClose() {
         return setShowSuccessNotification(false);
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_FailNotification__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      message: failMessage,
+      isVisible: showFailNotification,
+      onClose: function onClose() {
+        return setShowFailNotification(false);
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ConfirmModal__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      isOpen: showConfirmModal,
+      message: confirmMessage,
+      onConfirm: confirmAction,
+      onCancel: function onCancel() {
+        return setShowConfirmModal(false);
       }
     })]
   });

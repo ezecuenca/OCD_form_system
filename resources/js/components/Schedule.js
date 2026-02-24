@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import TasksModal from './TasksModal';
+import ConfirmModal from './ConfirmModal';
 import SuccessNotification from './SuccessNotification';
+import FailNotification from './FailNotification';
 
 function Schedule() {
     const location = useLocation();
@@ -14,6 +16,11 @@ function Schedule() {
     const [user, setUser] = useState(null);
     const [showSuccessNotification, setShowSuccessNotification] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [showFailNotification, setShowFailNotification] = useState(false);
+    const [failMessage, setFailMessage] = useState('');
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [confirmMessage, setConfirmMessage] = useState('');
+    const [confirmAction, setConfirmAction] = useState(null);
 
     const getFirstName = (fullName) => {
         if (!fullName) return '—';
@@ -197,9 +204,37 @@ function Schedule() {
             const response = await axios.post('/api/schedules', payload);
             setTasks((prev) => [...prev, mapScheduleToTask(response.data)]);
             setShowTaskForm(false);
+            setSuccessMessage('Task added successfully.');
+            setShowSuccessNotification(true);
         } catch (error) {
-            alert('Could not save schedule. Please try again.');
+            const message = error?.response?.data?.message || 'Could not save schedule. Please try again.';
+            setFailMessage(message);
+            setShowFailNotification(true);
         }
+    };
+
+    const handleDeleteTask = async (task) => {
+        if (!task?.id) return;
+        setConfirmMessage('Delete this task?');
+        setConfirmAction(() => async () => {
+            try {
+                await axios.delete(`/api/schedules/${task.id}`);
+                setTasks((prev) => prev.filter((t) => t.id !== task.id));
+                setSuccessMessage('Task deleted successfully.');
+                setShowSuccessNotification(true);
+            } catch (error) {
+                const rawMessage = error?.response?.data?.message || '';
+                const isForeignKeyError = /foreign key|constraint/i.test(rawMessage);
+                const message = task.status === 'swap' || isForeignKeyError
+                    ? 'Cant delete swapped tasks.'
+                    : (rawMessage || 'Could not delete task. Please try again.');
+                setFailMessage(message);
+                setShowFailNotification(true);
+            } finally {
+                setShowConfirmModal(false);
+            }
+        });
+        setShowConfirmModal(true);
     };
 
     const handleTaskClick = (task) => {
@@ -213,10 +248,13 @@ function Schedule() {
         axios.post('/api/swapping-requests', payload)
             .then(() => {
                 setPendingSwapCount((prev) => prev + 1);
+                setSuccessMessage('Swap request sent successfully.');
+                setShowSuccessNotification(true);
             })
             .catch((error) => {
                 const message = error?.response?.data?.message || 'Could not create swap request. Please try again.';
-                alert(message);
+                setFailMessage(message);
+                setShowFailNotification(true);
             })
             .finally(() => {
                 setShowTaskForm(false);
@@ -255,6 +293,7 @@ function Schedule() {
     };
 
     const monthName = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const canManageTasks = user?.role_id === 2 || user?.role_id === 3;
     const days = getDaysArray();
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -377,9 +416,25 @@ function Schedule() {
                                                     tabIndex={0}
                                                     title={tooltipText}
                                                     >
-                                                    <div className="schedule__task-name">
-                                                        {task.status === 'swap' && <span className="schedule__task-swap-icon">⇄ </span>}
-                                                        {task.name}
+                                                    <div className="schedule__task-header">
+                                                        <div className="schedule__task-name">
+                                                            {task.status === 'swap' && <span className="schedule__task-swap-icon">⇄ </span>}
+                                                            {task.name}
+                                                        </div>
+                                                        {canManageTasks && (
+                                                            <button
+                                                                type="button"
+                                                                className="schedule__task-delete"
+                                                                onClick={(event) => {
+                                                                    event.stopPropagation();
+                                                                    handleDeleteTask(task);
+                                                                }}
+                                                                title="Delete task"
+                                                                aria-label="Delete task"
+                                                            >
+                                                                <img src="/images/deny_icon.svg" alt="" aria-hidden="true" />
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 </div>
                                             );
@@ -478,8 +533,12 @@ function Schedule() {
                         setShowTaskForm(false);
                         setSelectedTask(null);
                         setModalMode('add');
+                        setSuccessMessage('Task updated successfully.');
+                        setShowSuccessNotification(true);
                     } catch (error) {
-                        alert('Could not update schedule. Please try again.');
+                        const message = error?.response?.data?.message || 'Could not update schedule. Please try again.';
+                        setFailMessage(message);
+                        setShowFailNotification(true);
                     }
                 }}
                 onSwitchToEdit={() => setModalMode('edit')}
@@ -495,6 +554,17 @@ function Schedule() {
                 message={successMessage}
                 isVisible={showSuccessNotification}
                 onClose={() => setShowSuccessNotification(false)}
+            />
+            <FailNotification
+                message={failMessage}
+                isVisible={showFailNotification}
+                onClose={() => setShowFailNotification(false)}
+            />
+            <ConfirmModal
+                isOpen={showConfirmModal}
+                message={confirmMessage}
+                onConfirm={confirmAction}
+                onCancel={() => setShowConfirmModal(false)}
             />
         </div>
     );
