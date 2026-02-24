@@ -70342,7 +70342,7 @@ function ADRReports() {
     }
     return true;
   });
-  var totalPages = Math.ceil(filteredReports.length / itemsPerPage);
+  var totalPages = Math.max(1, Math.ceil(filteredReports.length / itemsPerPage));
   var startIndex = (currentPage - 1) * itemsPerPage;
   var endIndex = startIndex + itemsPerPage;
   var paginatedReports = filteredReports.slice(startIndex, endIndex);
@@ -70635,7 +70635,7 @@ function ADRReports() {
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
         className: "adr-reports__pagination-info",
-        children: filteredReports.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'No data'
+        children: "Page ".concat(currentPage, " of ").concat(totalPages)
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
         onClick: goToNextPage,
         disabled: currentPage === totalPages || filteredReports.length === 0,
@@ -72091,11 +72091,11 @@ function ArchivedReports() {
   });
 
   // Pagination calculations
-  var totalAdrPages = Math.ceil(filteredArchivedReports.length / itemsPerPage);
+  var totalAdrPages = Math.max(1, Math.ceil(filteredArchivedReports.length / itemsPerPage));
   var adrStartIndex = (currentAdrPage - 1) * itemsPerPage;
   var adrEndIndex = adrStartIndex + itemsPerPage;
   var paginatedArchivedReports = filteredArchivedReports.slice(adrStartIndex, adrEndIndex);
-  var totalSwapPages = Math.ceil(filteredArchivedSwapRequests.length / itemsPerPage);
+  var totalSwapPages = Math.max(1, Math.ceil(filteredArchivedSwapRequests.length / itemsPerPage));
   var swapStartIndex = (currentSwapPage - 1) * itemsPerPage;
   var swapEndIndex = swapStartIndex + itemsPerPage;
   var paginatedArchivedSwapRequests = filteredArchivedSwapRequests.slice(swapStartIndex, swapEndIndex);
@@ -72552,7 +72552,7 @@ function ArchivedReports() {
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
         className: "archived-reports__pagination-info",
-        children: activeTab === 'adr' ? filteredArchivedReports.length > 0 ? "Page ".concat(currentAdrPage, " of ").concat(totalAdrPages) : 'No data' : filteredArchivedSwapRequests.length > 0 ? "Page ".concat(currentSwapPage, " of ").concat(totalSwapPages) : 'No data'
+        children: activeTab === 'adr' ? "Page ".concat(currentAdrPage, " of ").concat(totalAdrPages) : "Page ".concat(currentSwapPage, " of ").concat(totalSwapPages)
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
         onClick: activeTab === 'adr' ? goToAdrNextPage : goToSwapNextPage,
         disabled: activeTab === 'adr' ? currentAdrPage === totalAdrPages || filteredArchivedReports.length === 0 : currentSwapPage === totalSwapPages || filteredArchivedSwapRequests.length === 0,
@@ -75036,9 +75036,9 @@ function Schedule() {
                     var newDateStr = formatShortDate(task.swapInfo.new_date);
                     var hasDates = Boolean(originalDateStr && newDateStr);
                     if (task.swapInfo.has_target_person && task.swapInfo.swapped_with) {
-                      tooltipText = hasDates ? "Swapped with ".concat(task.swapInfo.swapped_with, ": ").concat(originalDateStr, " => ").concat(newDateStr) : "Swapped with ".concat(task.swapInfo.swapped_with);
+                      tooltipText = hasDates ? "Swapped with ".concat(task.swapInfo.swapped_with, ": ").concat(originalDateStr, " - ").concat(newDateStr) : "Swapped with ".concat(task.swapInfo.swapped_with);
                     } else {
-                      tooltipText = hasDates ? "Swapped: ".concat(originalDateStr, " => ").concat(newDateStr) : 'Swapped';
+                      tooltipText = hasDates ? "Swapped: ".concat(originalDateStr, " - ").concat(newDateStr) : 'Swapped';
                     }
                   } else if (task.status === 'swap') {
                     tooltipText = 'This task has been swapped';
@@ -77782,7 +77782,7 @@ function SwapForm() {
   });
 
   // Pagination calculations
-  var totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
+  var totalPages = Math.max(1, Math.ceil(filteredRequests.length / itemsPerPage));
   var startIndex = (currentPage - 1) * itemsPerPage;
   var endIndex = startIndex + itemsPerPage;
   var paginatedRequests = filteredRequests.slice(startIndex, endIndex);
@@ -78115,7 +78115,7 @@ function SwapForm() {
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
         className: "swap-form__pagination-info",
-        children: filteredRequests.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'No data'
+        children: "Page ".concat(currentPage, " of ").concat(totalPages)
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
         onClick: goToNextPage,
         disabled: currentPage === totalPages || filteredRequests.length === 0,

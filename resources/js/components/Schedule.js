@@ -351,11 +351,11 @@ function Schedule() {
 
                                                 if (task.swapInfo.has_target_person && task.swapInfo.swapped_with) {
                                                     tooltipText = hasDates
-                                                        ? `Swapped with ${task.swapInfo.swapped_with}: ${originalDateStr} => ${newDateStr}`
+                                                        ? `Swapped with ${task.swapInfo.swapped_with}: ${originalDateStr} - ${newDateStr}`
                                                         : `Swapped with ${task.swapInfo.swapped_with}`;
                                                 } else {
                                                     tooltipText = hasDates
-                                                        ? `Swapped: ${originalDateStr} => ${newDateStr}`
+                                                        ? `Swapped: ${originalDateStr} - ${newDateStr}`
                                                         : 'Swapped';
                                                 }
                                             } else if (task.status === 'swap') {

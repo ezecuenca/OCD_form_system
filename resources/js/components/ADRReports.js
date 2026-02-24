@@ -210,7 +210,7 @@ function ADRReports() {
         return true;
     });
 
-    const totalPages = Math.ceil(filteredReports.length / itemsPerPage);
+    const totalPages = Math.max(1, Math.ceil(filteredReports.length / itemsPerPage));
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const paginatedReports = filteredReports.slice(startIndex, endIndex);
@@ -403,7 +403,7 @@ function ADRReports() {
                         <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <span className="adr-reports__pagination-info">{filteredReports.length > 0 ? `Page ${currentPage} of ${totalPages}` : 'No data'}</span>
+                <span className="adr-reports__pagination-info">{`Page ${currentPage} of ${totalPages}`}</span>
                 <button onClick={goToNextPage} disabled={currentPage === totalPages || filteredReports.length === 0} title="Next page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
