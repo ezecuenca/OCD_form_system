@@ -346,7 +346,7 @@ body {
   max-width: 320px;
   display: flex;
   align-items: center;
-  background: #f7f7f7;
+  background: white;
   border: 2px solid #290081;
   border-radius: 8px;
   padding: 0 0.85rem;
@@ -1780,6 +1780,13 @@ body {
   border-radius: 4px;
   overflow: hidden;
   cursor: pointer;
+  position: relative;
+}
+.schedule__task-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 .schedule__task--swapped {
   background: linear-gradient(135deg, #e9f2ff 0%, #f5f9ff 100%);
@@ -1795,6 +1802,28 @@ body {
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+.schedule__task-delete {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+.schedule__task-delete img {
+  width: 16px;
+  height: 16px;
+}
+.schedule__task:hover .schedule__task-delete {
+  opacity: 1;
+  pointer-events: auto;
 }
 .schedule__task-swap-icon {
   font-size: 0.7rem;

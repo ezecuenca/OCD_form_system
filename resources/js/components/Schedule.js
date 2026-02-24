@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import TasksModal from './TasksModal';
+import ConfirmModal from './ConfirmModal';
 import SuccessNotification from './SuccessNotification';
 
 function Schedule() {
@@ -14,6 +15,11 @@ function Schedule() {
     const [user, setUser] = useState(null);
     const [showSuccessNotification, setShowSuccessNotification] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [confirmState, setConfirmState] = useState({
+        isOpen: false,
+        message: '',
+        onConfirm: null,
+    });
 
     const getFirstName = (fullName) => {
         if (!fullName) return '—';
@@ -124,6 +130,7 @@ function Schedule() {
     const [modalMode, setModalMode] = useState('add'); // 'add' | 'view' | 'edit' | 'swap'
     const [taskToSwap, setTaskToSwap] = useState(null);
     const [pendingSwapCount, setPendingSwapCount] = useState(0);
+    const canManageSchedules = user?.role_id === 2 || user?.role_id === 3;
 
     const daysInMonth = (date) => {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -207,6 +214,30 @@ function Schedule() {
         setTaskToSwap(task);
         setModalMode('view');
         setShowTaskForm(true);
+    };
+
+    const handleDeleteTask = async (event, taskId) => {
+        event.stopPropagation();
+        setConfirmState({
+            isOpen: true,
+            message: 'Delete this task?',
+            onConfirm: async () => {
+                try {
+                    await axios.delete(`/api/schedules/${taskId}`);
+                    setTasks((prev) => prev.filter((task) => task.id !== taskId));
+
+                    if (selectedTask?.id === taskId) {
+                        setShowTaskForm(false);
+                        setSelectedTask(null);
+                        setTaskToSwap(null);
+                        setModalMode('add');
+                    }
+                } catch (error) {
+                    alert('Could not delete task. Please try again.');
+                }
+                setConfirmState({ isOpen: false, message: '', onConfirm: null });
+            },
+        });
     };
 
     const submitSwapRequest = (payload) => {
@@ -351,11 +382,11 @@ function Schedule() {
 
                                                 if (task.swapInfo.has_target_person && task.swapInfo.swapped_with) {
                                                     tooltipText = hasDates
-                                                        ? `Swapped with ${task.swapInfo.swapped_with}: ${originalDateStr} => ${newDateStr}`
+                                                        ? `Swapped with ${task.swapInfo.swapped_with}: ${originalDateStr} - ${newDateStr}`
                                                         : `Swapped with ${task.swapInfo.swapped_with}`;
                                                 } else {
                                                     tooltipText = hasDates
-                                                        ? `Swapped: ${originalDateStr} => ${newDateStr}`
+                                                        ? `Swapped: ${originalDateStr} - ${newDateStr}`
                                                         : 'Swapped';
                                                 }
                                             } else if (task.status === 'swap') {
@@ -377,9 +408,25 @@ function Schedule() {
                                                     tabIndex={0}
                                                     title={tooltipText}
                                                     >
-                                                    <div className="schedule__task-name">
-                                                        {task.status === 'swap' && <span className="schedule__task-swap-icon">⇄ </span>}
-                                                        {task.name}
+                                                    <div className="schedule__task-header">
+                                                        <div className="schedule__task-name">
+                                                            {task.status === 'swap' && <span className="schedule__task-swap-icon">⇄ </span>}
+                                                            {task.name}
+                                                        </div>
+                                                        {canManageSchedules && (
+                                                            <button
+                                                                type="button"
+                                                                className="schedule__task-delete"
+                                                                onClick={(event) => handleDeleteTask(event, task.id)}
+                                                                title="Delete task"
+                                                                aria-label="Delete task"
+                                                            >
+                                                                <img
+                                                                    src={`${window.location.origin}/images/deny_icon.svg`}
+                                                                    alt="Delete"
+                                                                />
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 </div>
                                             );
@@ -495,6 +542,12 @@ function Schedule() {
                 message={successMessage}
                 isVisible={showSuccessNotification}
                 onClose={() => setShowSuccessNotification(false)}
+            />
+            <ConfirmModal
+                isOpen={confirmState.isOpen}
+                message={confirmState.message}
+                onConfirm={confirmState.onConfirm || (() => {})}
+                onCancel={() => setConfirmState({ isOpen: false, message: '', onConfirm: null })}
             />
         </div>
     );
