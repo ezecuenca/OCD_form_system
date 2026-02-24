@@ -68767,6 +68767,10 @@ function ADRForm() {
     _useState6 = _slicedToArray(_useState5, 2),
     showErrorNotification = _useState6[0],
     setShowErrorNotification = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState8 = _slicedToArray(_useState7, 2),
+    templateId = _useState8[0],
+    setTemplateId = _useState8[1];
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useLocation)();
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
@@ -68776,6 +68780,41 @@ function ADRForm() {
   // Check if we're in edit mode (coming from existing report)
   var editingReport = (_location$state = location.state) === null || _location$state === void 0 ? void 0 : _location$state.report;
   var isEditing = !!editingReport;
+
+  // Fetch available template on component mount
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var fetchAvailableTemplate = /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+        var response, _t;
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.p = _context.n) {
+            case 0:
+              _context.p = 0;
+              _context.n = 1;
+              return axios__WEBPACK_IMPORTED_MODULE_4___default().get('/api/adr/available-template');
+            case 1:
+              response = _context.v;
+              if (response.data.template_id) {
+                setTemplateId(response.data.template_id);
+              }
+              _context.n = 3;
+              break;
+            case 2:
+              _context.p = 2;
+              _t = _context.v;
+              console.error('Failed to fetch available template:', _t);
+              // If template fetch fails, we'll handle it when saving
+            case 3:
+              return _context.a(2);
+          }
+        }, _callee, null, [[0, 2]]);
+      }));
+      return function fetchAvailableTemplate() {
+        return _ref.apply(this, arguments);
+      };
+    }();
+    fetchAvailableTemplate();
+  }, []);
 
   // Load report data when editing
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -68824,133 +68863,133 @@ function ADRForm() {
       setApprovedPosition(editingReport.approvedPosition || '');
     }
   }, [editingReport]);
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState8 = _slicedToArray(_useState7, 2),
-    documentName = _useState8[0],
-    setDocumentName = _useState8[1];
   var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState0 = _slicedToArray(_useState9, 2),
-    forName = _useState0[0],
-    setForName = _useState0[1];
+    documentName = _useState0[0],
+    setDocumentName = _useState0[1];
   var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState10 = _slicedToArray(_useState1, 2),
-    forPosition = _useState10[0],
-    setForPosition = _useState10[1];
+    forName = _useState10[0],
+    setForName = _useState10[1];
   var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState12 = _slicedToArray(_useState11, 2),
-    thruName = _useState12[0],
-    setThruName = _useState12[1];
+    forPosition = _useState12[0],
+    setForPosition = _useState12[1];
   var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState14 = _slicedToArray(_useState13, 2),
-    thruPosition = _useState14[0],
-    setThruPosition = _useState14[1];
+    thruName = _useState14[0],
+    setThruName = _useState14[1];
   var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState16 = _slicedToArray(_useState15, 2),
-    fromName = _useState16[0],
-    setFromName = _useState16[1];
+    thruPosition = _useState16[0],
+    setThruPosition = _useState16[1];
   var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState18 = _slicedToArray(_useState17, 2),
-    fromPosition = _useState18[0],
-    setFromPosition = _useState18[1];
+    fromName = _useState18[0],
+    setFromName = _useState18[1];
   var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState20 = _slicedToArray(_useState19, 2),
-    subject = _useState20[0],
-    setSubject = _useState20[1];
+    fromPosition = _useState20[0],
+    setFromPosition = _useState20[1];
   var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState22 = _slicedToArray(_useState21, 2),
-    dateTime = _useState22[0],
-    setDateTime = _useState22[1];
-  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('WHITE ALERT'),
+    subject = _useState22[0],
+    setSubject = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState24 = _slicedToArray(_useState23, 2),
-    status = _useState24[0],
-    setStatus = _useState24[1];
-  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+    dateTime = _useState24[0],
+    setDateTime = _useState24[1];
+  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('WHITE ALERT'),
+    _useState26 = _slicedToArray(_useState25, 2),
+    status = _useState26[0],
+    setStatus = _useState26[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       id: 1,
       name: '',
       task: ''
     }]),
-    _useState26 = _slicedToArray(_useState25, 2),
-    attendanceItems = _useState26[0],
-    setAttendanceItems = _useState26[1];
-  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+    _useState28 = _slicedToArray(_useState27, 2),
+    attendanceItems = _useState28[0],
+    setAttendanceItems = _useState28[1];
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       id: 1,
       report: '',
       remarks: ''
     }]),
-    _useState28 = _slicedToArray(_useState27, 2),
-    reportsItems = _useState28[0],
-    setReportsItems = _useState28[1];
-  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState30 = _slicedToArray(_useState29, 2),
-    showCommunicationModal = _useState30[0],
-    setShowCommunicationModal = _useState30[1];
+    reportsItems = _useState30[0],
+    setReportsItems = _useState30[1];
   var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState32 = _slicedToArray(_useState31, 2),
-    showAttendanceModal = _useState32[0],
-    setShowAttendanceModal = _useState32[1];
+    showCommunicationModal = _useState32[0],
+    setShowCommunicationModal = _useState32[1];
   var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState34 = _slicedToArray(_useState33, 2),
-    showReportsModal = _useState34[0],
-    setShowReportsModal = _useState34[1];
+    showAttendanceModal = _useState34[0],
+    setShowAttendanceModal = _useState34[1];
   var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState36 = _slicedToArray(_useState35, 2),
-    showOtherItemsModal = _useState36[0],
-    setShowOtherItemsModal = _useState36[1];
+    showReportsModal = _useState36[0],
+    setShowReportsModal = _useState36[1];
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState38 = _slicedToArray(_useState37, 2),
+    showOtherItemsModal = _useState38[0],
+    setShowOtherItemsModal = _useState38[1];
 
   // Communication and Other Items
-  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       id: 1,
       particulars: '',
       noOfItems: 0,
       contact: '',
       status: ''
     }]),
-    _useState38 = _slicedToArray(_useState37, 2),
-    communicationRows = _useState38[0],
-    setCommunicationRows = _useState38[1];
-  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+    _useState40 = _slicedToArray(_useState39, 2),
+    communicationRows = _useState40[0],
+    setCommunicationRows = _useState40[1];
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       id: 1,
       particulars: '',
       noOfItems: 0,
       status: ''
     }]),
-    _useState40 = _slicedToArray(_useState39, 2),
-    otherItemsRows = _useState40[0],
-    setOtherItemsRows = _useState40[1];
+    _useState42 = _slicedToArray(_useState41, 2),
+    otherItemsRows = _useState42[0],
+    setOtherItemsRows = _useState42[1];
 
   // Signatures
-  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState42 = _slicedToArray(_useState41, 2),
-    preparedBy = _useState42[0],
-    setPreparedBy = _useState42[1];
   var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState44 = _slicedToArray(_useState43, 2),
-    preparedPosition = _useState44[0],
-    setPreparedPosition = _useState44[1];
+    preparedBy = _useState44[0],
+    setPreparedBy = _useState44[1];
   var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState46 = _slicedToArray(_useState45, 2),
-    receivedBy = _useState46[0],
-    setReceivedBy = _useState46[1];
+    preparedPosition = _useState46[0],
+    setPreparedPosition = _useState46[1];
   var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState48 = _slicedToArray(_useState47, 2),
-    receivedPosition = _useState48[0],
-    setReceivedPosition = _useState48[1];
+    receivedBy = _useState48[0],
+    setReceivedBy = _useState48[1];
   var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState50 = _slicedToArray(_useState49, 2),
-    notedBy = _useState50[0],
-    setNotedBy = _useState50[1];
+    receivedPosition = _useState50[0],
+    setReceivedPosition = _useState50[1];
   var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState52 = _slicedToArray(_useState51, 2),
-    notedPosition = _useState52[0],
-    setNotedPosition = _useState52[1];
+    notedBy = _useState52[0],
+    setNotedBy = _useState52[1];
   var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState54 = _slicedToArray(_useState53, 2),
-    approvedBy = _useState54[0],
-    setApprovedBy = _useState54[1];
+    notedPosition = _useState54[0],
+    setNotedPosition = _useState54[1];
   var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState56 = _slicedToArray(_useState55, 2),
-    approvedPosition = _useState56[0],
-    setApprovedPosition = _useState56[1];
+    approvedBy = _useState56[0],
+    setApprovedBy = _useState56[1];
+  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState58 = _slicedToArray(_useState57, 2),
+    approvedPosition = _useState58[0],
+    setApprovedPosition = _useState58[1];
   var handleReturn = function handleReturn() {
     navigate('/adr-reports');
   };
@@ -68965,17 +69004,17 @@ function ADRForm() {
     }, 4000);
   };
   var handleConfirm = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-      var payload, _error$response, _t;
-      return _regenerator().w(function (_context) {
-        while (1) switch (_context.p = _context.n) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+      var payload, _error$response, _t2;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.p = _context2.n) {
           case 0:
             if (documentName.trim()) {
-              _context.n = 1;
+              _context2.n = 1;
               break;
             }
             setShowErrorNotification(true);
-            return _context.a(2);
+            return _context2.a(2);
           case 1:
             // Wrap everything in { report: { ... } } — matches AdrFormController::store() expectation
             payload = {
@@ -68983,8 +69022,8 @@ function ADRForm() {
                 documentName: documentName,
                 subject: subject,
                 alertStatus: status,
-                templates_id: 10,
-                // links to your ADR_template (id=10)
+                templates_id: templateId,
+                // dynamically fetched from available templates
 
                 forName: forName,
                 forPosition: forPosition,
@@ -69008,38 +69047,38 @@ function ADRForm() {
                 approvedPosition: approvedPosition
               }
             };
-            _context.p = 2;
+            _context2.p = 2;
             if (!(isEditing && editingReport.id)) {
-              _context.n = 4;
+              _context2.n = 4;
               break;
             }
-            _context.n = 3;
+            _context2.n = 3;
             return updateReport(editingReport.id, payload.report);
           case 3:
-            _context.n = 5;
+            _context2.n = 5;
             break;
           case 4:
-            _context.n = 5;
+            _context2.n = 5;
             return addReport(payload.report);
           case 5:
             setShowSuccessNotification(true);
             setTimeout(function () {
               navigate('/adr-reports');
             }, 1500);
-            _context.n = 7;
+            _context2.n = 7;
             break;
           case 6:
-            _context.p = 6;
-            _t = _context.v;
-            console.error("Failed to save ADR form:", _t);
-            showNotification(((_error$response = _t.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Failed to save report. Please try again.', 'error');
+            _context2.p = 6;
+            _t2 = _context2.v;
+            console.error("Failed to save ADR form:", _t2);
+            showNotification(((_error$response = _t2.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Failed to save report. Please try again.', 'error');
           case 7:
-            return _context.a(2);
+            return _context2.a(2);
         }
-      }, _callee, null, [[2, 6]]);
+      }, _callee2, null, [[2, 6]]);
     }));
     return function handleConfirm() {
-      return _ref.apply(this, arguments);
+      return _ref2.apply(this, arguments);
     };
   }();
 
@@ -75951,13 +75990,13 @@ function Settings() {
     }
   }, [activeSection]);
 
-  // Filter templates
+  // Filter templates by type
   var filteredTemplates = templates.filter(function (t) {
-    var name = (t.name || '').toLowerCase();
+    var type = t.type || 'adr';
     if (templateTab === 'adr') {
-      return name.includes('adr') || name.includes('after') || name.includes('duty') || name.includes('report') || !name.includes('swap');
+      return type === 'adr';
     }
-    return name.includes('swap') || name.includes('swapping');
+    return type === 'swap';
   });
   var roleIdLabels = {
     1: 'User',
@@ -76395,6 +76434,7 @@ function Settings() {
     setTemplatesError(null);
     var formData = new FormData();
     formData.append('template', file);
+    formData.append('type', templateTab === 'swapping' ? 'swap' : 'adr');
     axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/templates', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -76452,11 +76492,17 @@ function Settings() {
     uploadTemplateFile(file);
   };
   var setTemplateInUse = function setTemplateInUse(tpl) {
+    var nextType = tpl.type || 'adr';
     axios__WEBPACK_IMPORTED_MODULE_1___default().patch('/api/templates/set-active', {
-      template_name: tpl.name
+      template_name: tpl.name,
+      type: nextType
     }).then(function () {
       setTemplates(function (prev) {
         return prev.map(function (t) {
+          var tType = t.type || 'adr';
+          if (tType !== nextType) {
+            return t;
+          }
           return _objectSpread(_objectSpread({}, t), {}, {
             is_active: t.filename === tpl.filename
           });
@@ -78744,6 +78790,14 @@ var SwapViewModal = function SwapViewModal(_ref) {
     _useState6 = _slicedToArray(_useState5, 2),
     error = _useState6[0],
     setError = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState8 = _slicedToArray(_useState7, 2),
+    exportLoading = _useState8[0],
+    setExportLoading = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState0 = _slicedToArray(_useState9, 2),
+    exportError = _useState0[0],
+    setExportError = _useState0[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (isOpen && swapId) {
       fetchSwapData();
@@ -78788,215 +78842,105 @@ var SwapViewModal = function SwapViewModal(_ref) {
     };
   }();
   var getStatusBadge = function getStatusBadge(status) {
-    var statusConfig = {
-      'pending': {
-        bg: '#fff3cd',
-        color: '#856404',
-        label: 'Pending'
-      },
-      'approved': {
-        bg: '#d4edda',
-        color: '#155724',
-        label: 'Approved'
-      },
-      'denied': {
-        bg: '#f8d7da',
-        color: '#721c24',
-        label: 'Denied'
-      },
-      'cancelled': {
-        bg: '#e2e3e5',
-        color: '#383d41',
-        label: 'Cancelled'
-      }
+    var statusKey = (status || 'pending').toLowerCase();
+    var labelMap = {
+      pending: 'Pending',
+      approved: 'Approved',
+      denied: 'Denied',
+      cancelled: 'Cancelled'
     };
-    var config = statusConfig[status === null || status === void 0 ? void 0 : status.toLowerCase()] || statusConfig['pending'];
+    var label = labelMap[statusKey] || labelMap.pending;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-      style: {
-        backgroundColor: config.bg,
-        color: config.color,
-        padding: '4px 12px',
-        borderRadius: '12px',
-        fontSize: '0.85rem',
-        fontWeight: '600',
-        display: 'inline-block'
-      },
-      children: config.label
+      className: "swap-view-modal__status swap-view-modal__status--".concat(statusKey),
+      children: label
     });
   };
+  var handleExportWord = function handleExportWord() {
+    if (!swapId) return;
+    setExportError(null);
+    setExportLoading(true);
+    var url = "/api/swapping-requests/".concat(swapId, "/export");
+    window.location.assign(url);
+    setTimeout(function () {
+      return setExportLoading(false);
+    }, 1000);
+  };
   if (!isOpen) return null;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-    style: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000
-    },
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-      style: {
-        backgroundColor: 'white',
-        borderRadius: '12px',
-        width: '90%',
-        maxWidth: '600px',
-        maxHeight: '90vh',
-        overflow: 'hidden',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)'
-      },
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    className: "swap-view-modal",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: "swap-view-modal__overlay",
+      onClick: onClose
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "swap-view-modal__container",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-        style: {
-          padding: '20px 24px',
-          borderBottom: '1px solid #e0e0e0',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: '#f8f9fa'
-        },
+        className: "swap-view-modal__header",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h2", {
-          style: {
-            margin: 0,
-            fontSize: '1.25rem',
-            color: '#333',
-            fontWeight: '600'
-          },
+          className: "swap-view-modal__title",
           children: "Swap Request Details"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
           onClick: onClose,
-          style: {
-            background: 'none',
-            border: 'none',
-            fontSize: '1.5rem',
-            cursor: 'pointer',
-            color: '#666',
-            padding: '4px',
-            lineHeight: 1
-          },
+          className: "swap-view-modal__close",
           children: "\xD7"
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-        style: {
-          padding: '24px',
-          maxHeight: 'calc(90vh - 140px)',
-          overflowY: 'auto'
-        },
+        className: "swap-view-modal__content",
         children: [loading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-          style: {
-            textAlign: 'center',
-            padding: '40px',
-            color: '#666'
-          },
+          className: "swap-view-modal__loading",
           children: "Loading..."
         }), error && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-          style: {
-            textAlign: 'center',
-            padding: '40px',
-            color: '#dc3545'
-          },
+          className: "swap-view-modal__error",
           children: error
         }), !loading && !error && swapData && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-          style: {
-            display: 'grid',
-            gap: '16px'
-          },
+          className: "swap-view-modal__grid",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            style: {
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '12px 16px',
-              backgroundColor: '#f8f9fa',
-              borderRadius: '8px'
-            },
+            className: "swap-view-modal__card swap-view-modal__card--status",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-              style: {
-                fontWeight: '600',
-                color: '#333'
-              },
+              className: "swap-view-modal__label",
               children: "Status"
             }), getStatusBadge(swapData.status)]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            style: {
-              padding: '12px 16px',
-              backgroundColor: '#f8f9fa',
-              borderRadius: '8px'
-            },
+            className: "swap-view-modal__card",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-              style: {
-                fontWeight: '600',
-                color: '#333'
-              },
+              className: "swap-view-modal__label",
               children: "Date Created: "
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-              style: {
-                color: '#555'
-              },
+              className: "swap-view-modal__value",
               children: swapData.current_date || 'N/A'
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            style: {
-              padding: '16px',
-              border: '1px solid #e0e0e0',
-              borderRadius: '8px'
-            },
+            className: "swap-view-modal__card swap-view-modal__card--outline",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h3", {
-              style: {
-                margin: '0 0 12px 0',
-                fontSize: '1rem',
-                color: '#333',
-                fontWeight: '600'
-              },
+              className: "swap-view-modal__section-title",
               children: "Requester"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-              style: {
-                display: 'grid',
-                gap: '8px'
-              },
+              className: "swap-view-modal__details",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                style: {
-                  fontSize: '0.95rem',
-                  color: '#555'
-                },
+                className: "swap-view-modal__row",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
                   children: "Name:"
                 }), " ", swapData.requester_name || 'N/A']
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                style: {
-                  fontSize: '0.95rem',
-                  color: '#555'
-                },
+                className: "swap-view-modal__row",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
                   children: "Task:"
                 }), " ", swapData.requester_task || 'N/A']
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                style: {
-                  fontSize: '0.95rem',
-                  color: '#555'
-                },
+                className: "swap-view-modal__row",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
                   children: "Date:"
                 }), " ", swapData.from_date || 'N/A']
               })]
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-            style: {
-              textAlign: 'center',
-              padding: '8px',
-              color: '#666'
-            },
+            className: "swap-view-modal__arrow",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
               width: "24",
               height: "24",
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
-              style: {
-                transform: 'rotate(90deg)'
-              },
+              className: "swap-view-modal__arrow-icon",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
                 d: "M12 5V19M12 19L5 12M12 19L19 12",
                 stroke: "currentColor",
@@ -79006,45 +78950,24 @@ var SwapViewModal = function SwapViewModal(_ref) {
               })
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            style: {
-              padding: '16px',
-              border: '1px solid #e0e0e0',
-              borderRadius: '8px'
-            },
+            className: "swap-view-modal__card swap-view-modal__card--outline",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h3", {
-              style: {
-                margin: '0 0 12px 0',
-                fontSize: '1rem',
-                color: '#333',
-                fontWeight: '600'
-              },
+              className: "swap-view-modal__section-title",
               children: "Target"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-              style: {
-                display: 'grid',
-                gap: '8px'
-              },
+              className: "swap-view-modal__details",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                style: {
-                  fontSize: '0.95rem',
-                  color: '#555'
-                },
+                className: "swap-view-modal__row",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
                   children: "Name:"
                 }), " ", swapData.target_name || 'N/A']
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                style: {
-                  fontSize: '0.95rem',
-                  color: '#555'
-                },
+                className: "swap-view-modal__row",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
                   children: "Task:"
                 }), " ", swapData.target_task || 'N/A']
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                style: {
-                  fontSize: '0.95rem',
-                  color: '#555'
-                },
+                className: "swap-view-modal__row",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
                   children: "Date:"
                 }), " ", swapData.to_date || 'N/A']
@@ -79052,31 +78975,25 @@ var SwapViewModal = function SwapViewModal(_ref) {
             })]
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-        style: {
-          padding: '16px 24px',
-          borderTop: '1px solid #e0e0e0',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          gap: '12px',
-          backgroundColor: '#f8f9fa'
-        },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "swap-view-modal__footer",
+        children: [exportError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          className: "swap-view-modal__export-error",
+          role: "alert",
+          children: exportError
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+          onClick: handleExportWord,
+          className: "swap-view-modal__btn swap-view-modal__btn--primary",
+          disabled: exportLoading || !swapData,
+          title: "Export as Word document",
+          children: exportLoading ? 'Exporting…' : 'Export Word'
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
           onClick: onClose,
-          style: {
-            padding: '10px 20px',
-            borderRadius: '6px',
-            border: '1px solid #ddd',
-            backgroundColor: 'white',
-            color: '#333',
-            fontSize: '0.9rem',
-            cursor: 'pointer',
-            fontWeight: '500'
-          },
+          className: "swap-view-modal__btn",
           children: "Close"
-        })
+        })]
       })]
-    })
+    })]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SwapViewModal);

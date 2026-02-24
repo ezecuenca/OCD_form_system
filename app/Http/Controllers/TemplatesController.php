@@ -87,6 +87,20 @@ class TemplatesController extends Controller
         $baseName = preg_replace('/[^a-zA-Z0-9_\-\s]/', '', $baseName) ?: 'template';
         $baseName = substr(trim($baseName), 0, 100) ?: 'template';
 
+        // Detect template type from filename or use request parameter
+        $type = $request->input('type', 'adr');
+        if (!in_array($type, ['adr', 'swap'], true)) {
+            $type = 'adr';
+        }
+        
+        // Auto-detect type from template name if not explicitly provided
+        $lowerName = strtolower($baseName);
+        if (strpos($lowerName, 'swap') !== false) {
+            $type = 'swap';
+        } elseif (strpos($lowerName, 'adr') !== false || strpos($lowerName, 'after') !== false || strpos($lowerName, 'duty') !== false) {
+            $type = 'adr';
+        }
+
         $dir = resource_path('templates');
         if (!is_dir($dir)) {
             if (!File::makeDirectory($dir, 0755, true)) {
@@ -104,7 +118,7 @@ class TemplatesController extends Controller
         $name = pathinfo($filename, PATHINFO_FILENAME);
         $template = Template::firstOrCreate(
             ['template_name' => $name],
-            ['template_name' => $name, 'html_layout' => null, 'is_active' => false]
+            ['template_name' => $name, 'type' => $type, 'html_layout' => null, 'is_active' => false]
         );
         $template->touch();
 
@@ -114,19 +128,21 @@ class TemplatesController extends Controller
         return response()->json([
             'name' => $name,
             'filename' => $filename,
+            'type' => $template->type,
             'updated_at' => $updatedAt,
             'is_active' => (bool) $template->is_active,
         ], 201);
     }
 
     /**
-     * Set which template is "in use" (is_active = 1). Body: template_name or filename.
+     * Set which template is "in use" (is_active = 1) for a type. Body: template_name or filename, type.
      */
     public function setActive(Request $request)
     {
         $validated = $request->validate([
             'template_name' => ['nullable', 'string', 'max:255'],
             'filename' => ['nullable', 'string', 'max:255'],
+            'type' => ['nullable', 'string', 'in:adr,swap'],
         ]);
         $name = $validated['template_name'] ?? null;
         if (!$name && !empty($validated['filename'])) {
@@ -136,27 +152,42 @@ class TemplatesController extends Controller
             return response()->json(['message' => 'template_name or filename is required.'], 422);
         }
         $name = trim($name);
-        Template::where('is_active', 1)->update(['is_active' => 0]);
+        
+        // Get the template to find its type if not provided
+        $template = Template::where('template_name', $name)->first();
+        $type = $validated['type'];
+        
+        if ($template && !$type) {
+            $type = $template->type ?? 'adr';
+        } elseif (!$type) {
+            $type = 'adr';
+        }
+        
+        // Deactivate other templates of the same type
+        Template::where('type', $type)->where('is_active', 1)->update(['is_active' => 0]);
+        
+        // Activate the requested template
         $template = Template::updateOrCreate(
             ['template_name' => $name],
-            ['template_name' => $name, 'html_layout' => null, 'is_active' => 1]
+            ['template_name' => $name, 'type' => $type, 'html_layout' => null, 'is_active' => 1]
         );
         return response()->json([
             'message' => 'Template set as in use.',
             'template_name' => $name,
+            'type' => $type,
             'id' => $template->id,
         ]);
     }
 
     /**
      * List templates from the database. Only includes rows where the .docx file exists.
-     * When only one template remains, it is set "in use" by default.
+     * When only one template remains per type, it is set "in use" by default.
      */
     public function index()
     {
         $dir = resource_path('templates');
         $templates = [];
-        foreach (Template::orderBy('template_name')->get() as $row) {
+        foreach (Template::orderBy('type')->orderBy('template_name')->get() as $row) {
             $name = trim((string) $row->template_name);
             if ($name === '') {
                 continue;
@@ -166,19 +197,39 @@ class TemplatesController extends Controller
             if (!is_file($path) || !is_readable($path)) {
                 continue;
             }
+            $type = $row->type;
+            if (!$type) {
+                $lowerName = strtolower($name);
+                $type = (strpos($lowerName, 'swap') !== false) ? 'swap' : 'adr';
+                $row->type = $type;
+                $row->save();
+            }
             $templates[] = [
                 'name' => $name,
                 'filename' => $filename,
+                'type' => $type,
                 'updated_at' => date('c', filemtime($path)),
                 'is_active' => (bool) $row->is_active,
             ];
         }
 
-        // If only one template and none is active, set it as "in use" by default.
-        if (count($templates) === 1 && !$templates[0]['is_active']) {
-            $onlyName = $templates[0]['name'];
-            Template::where('template_name', $onlyName)->update(['is_active' => 1]);
-            $templates[0]['is_active'] = true;
+        // For each type (adr, swap), if only one template and none is active, set it as "in use" by default.
+        $typeGroups = [];
+        foreach ($templates as $tpl) {
+            $typeGroups[$tpl['type']][] = $tpl;
+        }
+        
+        foreach ($typeGroups as $type => $typeTemplates) {
+            if (count($typeTemplates) === 1 && !$typeTemplates[0]['is_active']) {
+                $onlyName = $typeTemplates[0]['name'];
+                Template::where('template_name', $onlyName)->update(['is_active' => 1]);
+                // Update in templates array
+                foreach ($templates as &$t) {
+                    if ($t['name'] === $onlyName) {
+                        $t['is_active'] = true;
+                    }
+                }
+            }
         }
 
         return response()->json($templates);

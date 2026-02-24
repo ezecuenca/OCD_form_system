@@ -176,13 +176,13 @@ function Settings() {
         }
     }, [activeSection]);
 
-    // Filter templates
+    // Filter templates by type
     const filteredTemplates = templates.filter(t => {
-        const name = (t.name || '').toLowerCase();
+        const type = t.type || 'adr';
         if (templateTab === 'adr') {
-            return name.includes('adr') || name.includes('after') || name.includes('duty') || name.includes('report') || !name.includes('swap');
+            return type === 'adr';
         }
-        return name.includes('swap') || name.includes('swapping');
+        return type === 'swap';
     });
 
     const roleIdLabels = {
@@ -562,6 +562,7 @@ function Settings() {
         setTemplatesError(null);
         const formData = new FormData();
         formData.append('template', file);
+        formData.append('type', templateTab === 'swapping' ? 'swap' : 'adr');
         axios.post('/api/templates', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
@@ -608,12 +609,19 @@ function Settings() {
     };
 
     const setTemplateInUse = (tpl) => {
-        axios.patch('/api/templates/set-active', { template_name: tpl.name })
+        const nextType = tpl.type || 'adr';
+        axios.patch('/api/templates/set-active', { template_name: tpl.name, type: nextType })
             .then(() => {
-                setTemplates((prev) => prev.map((t) => ({
-                    ...t,
-                    is_active: t.filename === tpl.filename,
-                })));
+                setTemplates((prev) => prev.map((t) => {
+                    const tType = t.type || 'adr';
+                    if (tType !== nextType) {
+                        return t;
+                    }
+                    return {
+                        ...t,
+                        is_active: t.filename === tpl.filename,
+                    };
+                }));
                 setSuccessMessage('Template set as in use.');
                 setShowSuccessNotification(true);
             })

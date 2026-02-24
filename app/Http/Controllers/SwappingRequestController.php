@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Profile;
 use App\Models\Schedule;
 use App\Models\SwappingRequest;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -29,6 +30,34 @@ class SwappingRequestController extends Controller
             return false;
         }
         return in_array($user->role_id, [2, 3], true);
+    }
+
+    /**
+     * Get an available Swap template ID.
+     * Returns the active swap template if available, otherwise the first available swap template.
+     */
+    public function getAvailableTemplate()
+    {
+        // Try to get the active swap template first
+        $active = Template::where('type', 'swap')->where('is_active', 1)->first();
+        if ($active) {
+            return response()->json(['template_id' => $active->id, 'template_name' => $active->template_name]);
+        }
+
+        // Fall back to the first available swap template
+        $swapTemplate = Template::where('type', 'swap')->first();
+        if ($swapTemplate) {
+            return response()->json(['template_id' => $swapTemplate->id, 'template_name' => $swapTemplate->template_name]);
+        }
+
+        // If no swap template found, return any available template
+        $anyTemplate = Template::first();
+        if ($anyTemplate) {
+            return response()->json(['template_id' => $anyTemplate->id, 'template_name' => $anyTemplate->template_name]);
+        }
+
+        // No templates available
+        return response()->json(['template_id' => null, 'template_name' => null], 404);
     }
 
     protected function formatRequest(SwappingRequest $request): array

@@ -64,9 +64,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/swapping-requests/{id}/deny', [SwappingRequestController::class, 'deny'])->name('api.swapping-requests.deny');
     Route::post('/swapping-requests/{id}/archive', [SwappingRequestController::class, 'archive'])->name('api.swapping-requests.archive');
     Route::post('/swapping-requests/{id}/restore', [SwappingRequestController::class, 'restore'])->name('api.swapping-requests.restore');
+    Route::get('/swap/available-template', [SwappingRequestController::class, 'getAvailableTemplate'])->name('api.swap.available-template');
 
     Route::get('/adr-forms', [AdrFormController::class, 'index'])->name('api.adr-forms.index');
     Route::get('/adr-forms/{id}', [AdrFormController::class, 'show'])->name('api.adr-forms.show');
+    Route::get('/adr/available-template', [AdrFormController::class, 'getAvailableTemplate'])->name('api.adr.available-template');
     Route::post('/adr-forms', [AdrFormController::class, 'store'])->name('api.adr-forms.store');
     Route::put('/adr-forms/{id}', [AdrFormController::class, 'update'])->name('api.adr-forms.update');
     Route::patch('/adr-forms/{id}/archive', [AdrFormController::class, 'archive'])->name('api.adr-forms.archive');

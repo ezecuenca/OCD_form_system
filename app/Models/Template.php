@@ -12,6 +12,7 @@ class Template extends Model
 
     protected $fillable = [
         'template_name',
+        'type',
         'html_layout',
         'is_active',
     ];
