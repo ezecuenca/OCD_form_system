@@ -1,18 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import LoadingScreen from './LoadingScreen';
 import ConfirmModal from './ConfirmModal';
 import SuccessNotification from './SuccessNotification';
 import TemplateViewModal from './TemplateViewModal';
 import AccountEditModal from './AccountEditModal';
 
-function SettingsContent({ userRoleId }) {
+function Settings() {
+    const [user, setUser] = useState(null);
     const [accounts, setAccounts] = useState([]);
     const [accountsLoading, setAccountsLoading] = useState(false);
     const [accountsError, setAccountsError] = useState(null);
-    const isSuperAdmin = userRoleId === 3;
-    const [activeSection, setActiveSection] = useState(isSuperAdmin ? 'accounts' : 'templates');
+    const [activeSection, setActiveSection] = useState('accounts');
     const [sections, setSections] = useState([]);
     const [archivedSections, setArchivedSections] = useState([]);
     const [sectionsLoading, setSectionsLoading] = useState(false);
@@ -47,6 +45,19 @@ function SettingsContent({ userRoleId }) {
     const templateFileInputRef = useRef(null);
     const selectAllTemplatesRef = useRef(null);
 
+    // Fetch user info for role check
+    useEffect(() => {
+        axios.get('/api/auth/me')
+            .then((res) => {
+                setUser(res.data);
+            })
+            .catch(() => {
+                setUser(null);
+            });
+    }, []);
+
+    const isSuperAdmin = user?.role_id === 3;
+
     // Retention period state
     const [retentionValue, setRetentionValue] = useState(() => {
         const saved = localStorage.getItem('retentionValue');
@@ -55,11 +66,23 @@ function SettingsContent({ userRoleId }) {
     const [retentionUnit, setRetentionUnit] = useState(() => {
         return localStorage.getItem('retentionUnit') || 'days';
     });
+    const [retentionEnabled, setRetentionEnabled] = useState(() => {
+        const saved = localStorage.getItem('retentionEnabled');
+        return saved ? JSON.parse(saved) : true;
+    });
     const [isRetentionChanged, setIsRetentionChanged] = useState(false);
 
     // Preview & days left
     const [retentionPreview, setRetentionPreview] = useState({ adr_count: 0, swap_count: 0 });
-    const [daysUntilArchive, setDaysUntilArchive] = useState({ adr_days: null, swap_days: null });
+    const [daysUntilArchive, setDaysUntilArchive] = useState({ 
+        retention_in_days: null,
+        retention_value: null,
+        retention_unit: 'days',
+        hours_left: null,
+        minutes_left: null,
+        adr_days: null, 
+        swap_days: null
+    });
 
     // FIXED: Cutoff date is now AFTER current date
     const getCutoffDate = () => {
@@ -85,6 +108,29 @@ function SettingsContent({ userRoleId }) {
         return cutoff;
     };
 
+    // Format time left - shows hours/minutes if within same day
+    const formatTimeLeft = () => {
+        const { hours_left, minutes_left, retention_value, retention_unit, retention_in_days } = daysUntilArchive;
+        
+        // If hours or minutes are available (within same day), show them
+        if (hours_left !== null || minutes_left !== null) {
+            if (hours_left !== null && minutes_left !== null) {
+                return `${hours_left} hour${hours_left !== 1 ? 's' : ''} ${minutes_left} min${minutes_left !== 1 ? 's' : ''} left`;
+            } else if (hours_left !== null) {
+                return `${hours_left} hour${hours_left !== 1 ? 's' : ''} left`;
+            } else if (minutes_left !== null) {
+                return `${minutes_left} minute${minutes_left !== 1 ? 's' : ''} left`;
+            }
+        }
+        
+        // Otherwise show the retention period
+        if (retention_value !== null) {
+            return `${retention_value} ${retention_value === 1 ? 'day' : retention_unit} left`;
+        }
+        
+        return `${retentionValue} ${retentionValue === 1 ? 'day' : retentionUnit} left`;
+    };
+
     // Fetch preview and days left when retention changes
     useEffect(() => {
         const fetchData = async () => {
@@ -107,6 +153,11 @@ function SettingsContent({ userRoleId }) {
                     retention_unit: retentionUnit,
                 });
                 setDaysUntilArchive({
+                    retention_in_days: daysRes.data.retention_in_days,
+                    retention_value: daysRes.data.retention_value,
+                    retention_unit: daysRes.data.retention_unit,
+                    hours_left: daysRes.data.hours_left,
+                    minutes_left: daysRes.data.minutes_left,
                     adr_days: daysRes.data.days_until_adr_archive,
                     swap_days: daysRes.data.days_until_swap_archive,
                 });
@@ -179,6 +230,7 @@ function SettingsContent({ userRoleId }) {
             name,
             status,
             role,
+            image_path: profile?.image_path || null,
         };
     };
 
@@ -691,6 +743,9 @@ function SettingsContent({ userRoleId }) {
     let sectionContent;
     switch (activeSection) {
         case 'accounts':
+            if (!isSuperAdmin) {
+                sectionContent = null;
+            } else {
             sectionContent = (
                 <>
                     <div className="settings__panel-header">
@@ -718,7 +773,24 @@ function SettingsContent({ userRoleId }) {
                                     accounts.map((account) => (
                                         <tr key={account.id}>
                                             <td className="settings__table-check"><input type="checkbox" aria-label={`Select ${account.name}`} /></td>
-                                            <td>{account.name}</td>
+                                            <td>
+                                                <div className="settings__user-cell">
+                                                    {account.image_path ? (
+                                                        <img 
+                                                            src={`/${account.image_path}`} 
+                                                            alt={account.name} 
+                                                            className="settings__user-avatar"
+                                                        />
+                                                    ) : (
+                                                        <img 
+                                                            src="/images/ocd_logo.svg" 
+                                                            alt={account.name} 
+                                                            className="settings__user-avatar"
+                                                        />
+                                                    )}
+                                                    <span>{account.name}</span>
+                                                </div>
+                                            </td>
                                             <td><span className="settings__status settings__status--online">{account.status}</span></td>
                                             <td>{account.role}</td>
                                             <td className="settings__table-actions">
@@ -738,6 +810,7 @@ function SettingsContent({ userRoleId }) {
                 </>
             );
             break;
+            }
 
         case 'templates':
             sectionContent = (
@@ -1064,6 +1137,23 @@ function SettingsContent({ userRoleId }) {
                     </div>
 
                     <div className="settings__retention-simple">
+                        <div className="settings__retention-header">
+                            <label className="settings__retention-toggle-label">
+                                <span>Auto-Archive</span>
+                                <div className="settings__retention-toggle">
+                                    <input
+                                        type="checkbox"
+                                        checked={retentionEnabled}
+                                        onChange={(e) => {
+                                            setRetentionEnabled(e.target.checked);
+                                            localStorage.setItem('retentionEnabled', JSON.stringify(e.target.checked));
+                                            setIsRetentionChanged(true);
+                                        }}
+                                    />
+                                    <span className="settings__retention-slider"></span>
+                                </div>
+                            </label>
+                        </div>
                         <div className="settings__retention-period">
                             <label>Retention Period</label>
                             <div className="settings__retention-input-group">
@@ -1076,6 +1166,7 @@ function SettingsContent({ userRoleId }) {
                                         setIsRetentionChanged(true);
                                     }}
                                     className="settings__retention-number"
+                                    disabled={!retentionEnabled}
                                 />
                                 <select
                                     value={retentionUnit}
@@ -1084,12 +1175,17 @@ function SettingsContent({ userRoleId }) {
                                         setIsRetentionChanged(true);
                                     }}
                                     className="settings__retention-select"
+                                    disabled={!retentionEnabled}
                                 >
                                     <option value="days">days</option>
                                     <option value="months">months</option>
                                     <option value="years">years</option>
                                 </select>
-                                <span className="settings__retention-edit-icon">✏️</span>
+                                <img 
+                                    src="/images/edit_icon.svg" 
+                                    alt="Edit" 
+                                    className="settings__retention-edit-icon"
+                                />
                             </div>
                         </div>
 
@@ -1122,35 +1218,17 @@ function SettingsContent({ userRoleId }) {
                             </div>
                         </div>
 
-                        {(daysUntilArchive.adr_days !== null || daysUntilArchive.swap_days !== null) && (
-                            <div className="settings__retention-info">
-                                <div className="settings__retention-info-row">
-                                    <span>ADR Reports</span>
-                                    <span className={daysUntilArchive.adr_days <= 0 ? 'warning' : ''}>
-                                        {daysUntilArchive.adr_days !== null
-                                            ? `${Math.abs(daysUntilArchive.adr_days)} day${Math.abs(daysUntilArchive.adr_days) !== 1 ? 's' : ''} ${daysUntilArchive.adr_days <= 0 ? 'overdue' : 'left'}`
-                                            : '—'}
-                                    </span>
-                                </div>
-                                <div className="settings__retention-info-row">
-                                    <span>Swapping Requests</span>
-                                    <span className={daysUntilArchive.swap_days <= 0 ? 'warning' : ''}>
-                                        {daysUntilArchive.swap_days !== null
-                                            ? `${Math.abs(daysUntilArchive.swap_days)} day${Math.abs(daysUntilArchive.swap_days) !== 1 ? 's' : ''} ${daysUntilArchive.swap_days <= 0 ? 'overdue' : 'left'}`
-                                            : '—'}
-                                    </span>
-                                </div>
-                            </div>
-                        )}
-
                         <div className="settings__retention-preview">
-                            {retentionPreview.adr_count + retentionPreview.swap_count > 0 ? (
-                                <span>
+                             {retentionPreview.adr_count + retentionPreview.swap_count > 0 ? (
+                                <span className="settings__preview-normal">
                                     {retentionPreview.adr_count} ADR report(s) and {retentionPreview.swap_count} swapping request(s) will be archived.
                                 </span>
                             ) : (
-                                <span className="settings__retention-preview-none">
-                                    No records will be archived.
+                                <span>
+                                    <span className={daysUntilArchive.adr_days <= 7 || daysUntilArchive.swap_days <= 7 ? 'warning' : ''}>
+                                          {formatTimeLeft()}
+                                </span>
+                                {' before archiving ADR Reports and Swapping Requests'}
                                 </span>
                             )}
                         </div>
@@ -1159,7 +1237,7 @@ function SettingsContent({ userRoleId }) {
                             <button
                                 type="button"
                                 className="settings__set-btn"
-                                disabled={!isRetentionChanged}
+                                disabled={!isRetentionChanged || !retentionEnabled}
                                 onClick={handleSetRetention}
                             >
                                 Set
@@ -1190,13 +1268,13 @@ function SettingsContent({ userRoleId }) {
                 <section className="settings__panel" aria-label="Admin settings">
                     <aside className="settings__subnav" aria-label="Settings sections">
                         {isSuperAdmin && (
-                            <button
-                                type="button"
-                                className={`settings__subnav-item ${activeSection === 'accounts' ? 'settings__subnav-item--active' : ''}`}
-                                onClick={() => setActiveSection('accounts')}
-                            >
-                                Accounts
-                            </button>
+                        <button
+                            type="button"
+                            className={`settings__subnav-item ${activeSection === 'accounts' ? 'settings__subnav-item--active' : ''}`}
+                            onClick={() => setActiveSection('accounts')}
+                        >
+                            Accounts
+                        </button>
                         )}
                         <button
                             type="button"
@@ -1259,48 +1337,6 @@ function SettingsContent({ userRoleId }) {
             />
         </div>
     );
-}
-
-function Settings() {
-    const navigate = useNavigate();
-    const [authStatus, setAuthStatus] = useState('loading');
-    const [userRoleId, setUserRoleId] = useState(null);
-
-    useEffect(() => {
-        let isMounted = true;
-        axios.get('/api/auth/me')
-            .then((res) => {
-                if (!isMounted) return;
-                const roleId = res?.data?.role_id;
-                if (roleId === 2 || roleId === 3) {
-                    setAuthStatus('allowed');
-                    setUserRoleId(roleId);
-                } else {
-                    setAuthStatus('denied');
-                    navigate('/schedule', { replace: true });
-                }
-            })
-            .catch(() => {
-                if (isMounted) {
-                    setAuthStatus('denied');
-                    navigate('/schedule', { replace: true });
-                }
-            });
-
-        return () => {
-            isMounted = false;
-        };
-    }, [navigate]);
-
-    if (authStatus === 'loading') {
-        return <LoadingScreen message="Checking permissions..." />;
-    }
-
-    if (authStatus === 'denied') {
-        return null;
-    }
-
-    return <SettingsContent userRoleId={userRoleId} />;
 }
 
 export default Settings;

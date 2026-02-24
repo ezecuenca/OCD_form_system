@@ -13,6 +13,7 @@ import Settings from './Settings';
 import Profile from './Profile';
 import LoginPage from './LoginPage';
 import SignupPage from './SignupPage';
+import ForgotPassword from './ForgotPassword';
 import LoadingScreen from './LoadingScreen';
 
 function ViewRedirect() {
@@ -83,6 +84,7 @@ function App() {
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignupPage />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route
                         path="/*"
                         element={

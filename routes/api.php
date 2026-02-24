@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/register', [AuthController::class, 'register'])->name('api.auth.register');
 Route::post('/auth/login', [AuthController::class, 'login'])->name('api.auth.login');
+Route::post('/auth/verify-email', [AuthController::class, 'verifyEmail'])->name('api.auth.verify-email');
+Route::post('/auth/reset-password', [AuthController::class, 'resetPassword'])->name('api.auth.reset-password');
 Route::get('/sections', [SectionsController::class, 'index'])->name('api.sections.index');
 Route::get('/section', [SectionsController::class, 'index'])->name('api.section.index');
 
@@ -44,6 +46,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('api.profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('api.profile.update');
+    Route::post('/profile/image', [ProfileController::class, 'uploadImage'])->name('api.profile.uploadImage');
+    Route::delete('/profile/image', [ProfileController::class, 'removeImage'])->name('api.profile.removeImage');
     Route::get('/profiles', [ProfileController::class, 'index'])->name('api.profiles.index');
     Route::put('/profiles/{id}', [ProfileController::class, 'updateById'])->name('api.profiles.update');
 
@@ -53,7 +57,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->name('api.schedules.destroy');
 
     Route::get('/swapping-requests', [SwappingRequestController::class, 'index'])->name('api.swapping-requests.index');
+    Route::get('/swapping-requests/{id}', [SwappingRequestController::class, 'show'])->name('api.swapping-requests.show');
     Route::post('/swapping-requests', [SwappingRequestController::class, 'store'])->name('api.swapping-requests.store');
+    Route::get('/swapping-requests/{id}/export', [SwappingRequestController::class, 'export'])->name('api.swapping-requests.export');
     Route::post('/swapping-requests/{id}/approve', [SwappingRequestController::class, 'approve'])->name('api.swapping-requests.approve');
     Route::post('/swapping-requests/{id}/deny', [SwappingRequestController::class, 'deny'])->name('api.swapping-requests.deny');
     Route::post('/swapping-requests/{id}/archive', [SwappingRequestController::class, 'archive'])->name('api.swapping-requests.archive');

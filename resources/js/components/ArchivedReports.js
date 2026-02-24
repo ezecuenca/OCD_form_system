@@ -285,12 +285,12 @@ function ArchivedReports() {
     });
 
     // Pagination calculations
-    const totalAdrPages = Math.max(1, Math.ceil(filteredArchivedReports.length / itemsPerPage));
+    const totalAdrPages = Math.ceil(filteredArchivedReports.length / itemsPerPage);
     const adrStartIndex = (currentAdrPage - 1) * itemsPerPage;
     const adrEndIndex = adrStartIndex + itemsPerPage;
     const paginatedArchivedReports = filteredArchivedReports.slice(adrStartIndex, adrEndIndex);
 
-    const totalSwapPages = Math.max(1, Math.ceil(filteredArchivedSwapRequests.length / itemsPerPage));
+    const totalSwapPages = Math.ceil(filteredArchivedSwapRequests.length / itemsPerPage);
     const swapStartIndex = (currentSwapPage - 1) * itemsPerPage;
     const swapEndIndex = swapStartIndex + itemsPerPage;
     const paginatedArchivedSwapRequests = filteredArchivedSwapRequests.slice(swapStartIndex, swapEndIndex);
@@ -614,8 +614,8 @@ function ArchivedReports() {
                 </button>
                 <span className="archived-reports__pagination-info">
                     {activeTab === 'adr'
-                        ? `Page ${currentAdrPage} of ${totalAdrPages}`
-                        : `Page ${currentSwapPage} of ${totalSwapPages}`}
+                        ? (filteredArchivedReports.length > 0 ? `Page ${currentAdrPage} of ${totalAdrPages}` : 'No data')
+                        : (filteredArchivedSwapRequests.length > 0 ? `Page ${currentSwapPage} of ${totalSwapPages}` : 'No data')}
                 </span>
                 <button
                     onClick={activeTab === 'adr' ? goToAdrNextPage : goToSwapNextPage}
