@@ -107,6 +107,69 @@ class ProfileController extends Controller
     }
 
     /**
+     * Upload profile image.
+     */
+    public function uploadImage(Request $request)
+    {
+        $request->validate([
+            'image' => ['required', 'image', 'max:2048'], // 2MB max
+        ]);
+
+        $user = $request->user();
+        $profile = Profile::where('user_id', $user->id)->first();
+
+        if (!$profile) {
+            $profile = Profile::create(['user_id' => $user->id]);
+        }
+
+        // Delete old image if exists
+        if ($profile->image_path && file_exists(public_path($profile->image_path))) {
+            unlink(public_path($profile->image_path));
+        }
+
+        // Store new image
+        $image = $request->file('image');
+        $filename = 'profile_' . $user->id . '_' . time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('images/profile'), $filename);
+        $imagePath = 'images/profile/' . $filename;
+
+        $profile->update(['image_path' => $imagePath]);
+
+        return response()->json([
+            'success' => true,
+            'image_path' => $imagePath,
+        ]);
+    }
+
+    /**
+     * Remove profile image.
+     */
+    public function removeImage(Request $request)
+    {
+        $user = $request->user();
+        $profile = Profile::where('user_id', $user->id)->first();
+
+        if (!$profile || !$profile->image_path) {
+            return response()->json([
+                'success' => true,
+                'image_path' => null,
+            ]);
+        }
+
+        // Delete image file if exists
+        if (file_exists(public_path($profile->image_path))) {
+            unlink(public_path($profile->image_path));
+        }
+
+        $profile->update(['image_path' => null]);
+
+        return response()->json([
+            'success' => true,
+            'image_path' => null,
+        ]);
+    }
+
+    /**
      * Update a profile by id (admin only).
      */
     public function updateById(Request $request, $id)
@@ -163,6 +226,7 @@ class ProfileController extends Controller
             'raw_full_name' => $profile->full_name,
             'section_id' => $profile->section_id,
             'position' => $profile->position,
+            'image_path' => $profile->image_path,
             'username' => $user ? $user->username : null,
             'email' => $user ? $user->email : null,
             'role_id' => $user ? $user->role_id : null,

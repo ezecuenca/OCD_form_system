@@ -3,24 +3,19 @@ import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 
 function Sidebar() {
-    const [canManageSettings, setCanManageSettings] = useState(false);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        let isMounted = true;
         axios.get('/api/auth/me')
             .then((res) => {
-                if (!isMounted) return;
-                const roleId = res?.data?.role_id;
-                setCanManageSettings(roleId === 2 || roleId === 3);
+                setUser(res.data);
             })
             .catch(() => {
-                if (isMounted) setCanManageSettings(false);
+                setUser(null);
             });
-
-        return () => {
-            isMounted = false;
-        };
     }, []);
+
+    const isAdmin = user?.role_id === 2 || user?.role_id === 3;
 
     return (
         <aside className="sidebar">
@@ -60,18 +55,18 @@ function Sidebar() {
                 </NavLink>
             </nav>
 
-            {canManageSettings && (
-                <div className="sidebar__settings">
-                    <NavLink 
-                        to="/settings" 
-                        className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
-                    >
-                        <span className="sidebar__link-icon">
-                            <img src="/images/setting_logo.svg" alt="Settings" className="sidebar__link-icon-img" />
-                        </span>
-                        <span className="sidebar__link-text">Settings</span>
-                    </NavLink>
-                </div>
+            {isAdmin && (
+            <div className="sidebar__settings">
+                <NavLink 
+                    to="/settings" 
+                    className={({ isActive }) => `sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
+                >
+                    <span className="sidebar__link-icon">
+                        <img src="/images/setting_logo.svg" alt="Settings" className="sidebar__link-icon-img" />
+                    </span>
+                    <span className="sidebar__link-text">Settings</span>
+                </NavLink>
+            </div>
             )}
         </aside>
     );

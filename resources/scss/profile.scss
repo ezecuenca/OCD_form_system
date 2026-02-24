@@ -503,8 +503,8 @@
         transition: all 0.3s ease;
 
         &:hover {
-            box-shadow: 0 0 0 4px rgba(41, 0, 129, 0.2), 0 4px 12px rgba(41, 0, 129, 0.15);
-            border-color: #290081;
+            box-shadow: 0 0 0 4px rgba(180, 90, 0, 0.3), 0 4px 12px rgba(180, 90, 0, 0.2);
+            border-color: #B45A00;
         }
 
         &--default {
@@ -512,8 +512,8 @@
             border: none;
 
             .profile__photo-img {
-                object-fit: cover;
-                transform: scale(1.9);
+                object-fit: contain;
+                transform: scale(1.1);
             }
         }
 
@@ -526,7 +526,7 @@
         width: 120px;
         height: 120px;
         min-width: 0;
-        object-fit: cover;
+        object-fit: contain;
     }
 
     &__photo-input {

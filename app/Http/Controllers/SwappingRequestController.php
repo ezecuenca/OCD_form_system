@@ -7,6 +7,9 @@ use App\Models\Schedule;
 use App\Models\SwappingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class SwappingRequestController extends Controller
 {
@@ -43,14 +46,12 @@ class SwappingRequestController extends Controller
             $targetTaskName = $targetSchedule->profile->user->username;
         }
 
-        // For approved swaps, use the stored original dates to show what was swapped
-        if ($request->status === 'approved') {
-            $fromDate = $request->original_requester_date?->format('Y-m-d');
-            $toDate = $request->original_target_date?->format('Y-m-d') ?? $request->target_date?->format('Y-m-d');
-        } else {
-            // For pending/denied, use current schedule dates
-            $fromDate = $requesterSchedule?->task_date?->format('Y-m-d');
-            $toDate = $targetSchedule?->task_date?->format('Y-m-d') ?? $request->target_date?->format('Y-m-d');
+        $fromDate = $requesterSchedule?->task_date?->format('Y-m-d');
+        $toDate = $targetSchedule?->task_date?->format('Y-m-d') ?? $request->target_date?->format('Y-m-d');
+
+        if ($request->status === 'approved' && $requesterSchedule && $targetSchedule) {
+            $fromDate = $targetSchedule->task_date?->format('Y-m-d');
+            $toDate = $requesterSchedule->task_date?->format('Y-m-d');
         }
 
         return [
@@ -96,6 +97,55 @@ class SwappingRequestController extends Controller
         return response()->json($requests->map(function (SwappingRequest $swapRequest) {
             return $this->formatRequest($swapRequest);
         }));
+    }
+
+    public function show(Request $request, int $id)
+    {
+        $swapRequest = SwappingRequest::with([
+            'requesterSchedule.profile.user',
+            'targetSchedule.profile.user',
+            'requesterProfile.user',
+        ])->find($id);
+
+        if (!$swapRequest) {
+            return response()->json(['message' => 'Swap request not found.'], 404);
+        }
+
+        // Get requester info
+        $requesterProfile = $swapRequest->requesterSchedule?->profile;
+        $requesterUser = $requesterProfile?->user;
+        $requesterName = $requesterProfile?->full_name ?? $requesterUser?->username ?? 'N/A';
+        
+        // Get target info
+        $targetProfile = $swapRequest->targetSchedule?->profile;
+        $targetUser = $targetProfile?->user;
+        $targetName = $targetProfile?->full_name ?? $targetUser?->username ?? 'N/A';
+        
+        $requesterTask = $swapRequest->requesterSchedule?->task_description ?? 'N/A';
+        $targetTask = $swapRequest->targetSchedule?->task_description ?? 'N/A';
+        
+        $fromDate = $swapRequest->requesterSchedule?->task_date?->format('F j, Y') ?? 'N/A';
+        $toDate = $swapRequest->targetSchedule?->task_date?->format('F j, Y') ?? 
+                  ($swapRequest->target_date ? \Carbon\Carbon::parse($swapRequest->target_date)->format('F j, Y') : 'N/A');
+        
+        $currentDate = $swapRequest->created_at?->format('F j, Y') ?? 'N/A';
+        $status = ucfirst($swapRequest->status);
+
+        $data = [
+            'id' => $swapRequest->id,
+            'requester_name' => $requesterName,
+            'target_name' => $targetName,
+            'requester_task' => $requesterTask,
+            'target_task' => $targetTask,
+            'from_date' => $fromDate,
+            'to_date' => $toDate,
+            'current_date' => $currentDate,
+            'status' => $status,
+            'created_at' => $swapRequest->created_at?->toIso8601String(),
+            'updated_at' => $swapRequest->updated_at?->toIso8601String(),
+        ];
+
+        return response()->json($data);
     }
 
     public function store(Request $request)
@@ -299,5 +349,69 @@ class SwappingRequestController extends Controller
 
         $swapRequest->load(['requesterSchedule.profile.user', 'targetSchedule.profile.user']);
         return response()->json($this->formatRequest($swapRequest));
+    }
+
+    public function export(Request $request, $id)
+    {
+        $swapRequest = SwappingRequest::with([
+            'requesterSchedule.profile.user',
+            'targetSchedule.profile.user',
+        ])->find($id);
+
+        if (!$swapRequest) {
+            return response()->json(['message' => 'Swap request not found.'], 404);
+        }
+
+        $templatePath = resource_path('templates/SwapForm_template.docx');
+        if (!file_exists($templatePath)) {
+            return response()->json(['message' => 'SwapForm template not found.'], 404);
+        }
+
+        try {
+            $template = new TemplateProcessor($templatePath);
+
+            $requesterProfile = $swapRequest->requesterSchedule?->profile;
+            $targetProfile = $swapRequest->targetSchedule?->profile;
+            
+            $requesterName = $requesterProfile?->full_name ?? $requesterProfile?->user?->username ?? 'N/A';
+            $targetName = $targetProfile?->full_name ?? $targetProfile?->user?->username ?? 'N/A';
+            
+            $requesterTask = $swapRequest->requesterSchedule?->task_description ?? 'N/A';
+            $targetTask = $swapRequest->targetSchedule?->task_description ?? 'N/A';
+            
+            $fromDate = $swapRequest->requesterSchedule?->task_date?->format('F j, Y') ?? 'N/A';
+            $toDate = $swapRequest->targetSchedule?->task_date?->format('F j, Y') ?? 
+                      ($swapRequest->target_date ? \Carbon\Carbon::parse($swapRequest->target_date)->format('F j, Y') : 'N/A');
+            
+            $currentDate = now()->format('F j, Y');
+            $status = ucfirst($swapRequest->status);
+
+            $template->setValues([
+                'requester_name' => $requesterName,
+                'target_name' => $targetName,
+                'requester_task' => $requesterTask,
+                'target_task' => $targetTask,
+                'from_date' => $fromDate,
+                'to_date' => $toDate,
+                'current_date' => $currentDate,
+                'status' => $status,
+            ]);
+
+            $tempFile = storage_path('app/temp_swap_' . Str::random(10) . '.docx');
+            $template->saveAs($tempFile);
+
+            $content = file_get_contents($tempFile);
+            unlink($tempFile);
+
+            $filename = 'SwapForm_' . $id . '_' . date('Ymd') . '.docx';
+
+            return response($content, 200, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                'Content-Length' => strlen($content),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Export failed: ' . $e->getMessage()], 500);
+        }
     }
 }

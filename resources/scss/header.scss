@@ -74,13 +74,13 @@ $header-height: 50px;
         transition: box-shadow 0.2s ease;
 
         &--default .header__profile-img {
-            object-fit: cover;
-            transform: scale(1.9);
+            object-fit: contain;
+            transform: scale(1.2);
         }
     }
 
     &__user:hover &__profile-wrap {
-        box-shadow: 0 0 0 2px #E99745;
+        box-shadow: 0 0 15px rgba(180, 90, 0, 0.9), 0 0 30px rgba(180, 90, 0, 0.5);
     }
 
     &__profile-img {

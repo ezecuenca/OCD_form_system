@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const FormContext = createContext();
@@ -12,24 +12,58 @@ export const useFormContext = () => {
 };
 
 const sameId = (a, b) => (a == null && b == null) || (Number(a) === Number(b));
-const PROFILE_IMAGE_KEY = 'adr_profile_image';
 
 export const FormProvider = ({ children }) => {
-    const [profileImageUrl, setProfileImageUrlState] = useState(() => {
-        return localStorage.getItem(PROFILE_IMAGE_KEY) || null;
-    });
+    const [profileImageUrl, setProfileImageUrlState] = useState(null);
     const [userFullName, setUserFullName] = useState('');
     const [reports, setReports] = useState([]);
     const [reportsLoaded, setReportsLoaded] = useState(false);
 
+    // Fetch profile from server on mount to get user-specific image
+    useEffect(() => {
+        let isMounted = true;
+        axios.get('/api/profile', { withCredentials: true })
+            .then((res) => {
+                if (isMounted) {
+                    if (res.data?.full_name) {
+                        setUserFullName(String(res.data.full_name).trim());
+                    }
+                    // Set profile image from server - this is user-specific
+                    if (res.data?.image_path) {
+                        setProfileImageUrlState(`/${res.data.image_path}`);
+                    }
+                }
+            })
+            .catch(() => {});
+        return () => { isMounted = false; };
+    }, []);
+
     const setProfileImageUrl = (url) => {
-        if (url) {
-            localStorage.setItem(PROFILE_IMAGE_KEY, url);
-        } else {
-            localStorage.removeItem(PROFILE_IMAGE_KEY);
-        }
+        // Just update state - no localStorage needed
         setProfileImageUrlState(url);
     };
+
+    // Function to refresh profile data (called after login)
+    const refreshProfile = useCallback(() => {
+        axios.get('/api/profile', { withCredentials: true })
+            .then((res) => {
+                if (res.data?.full_name) {
+                    setUserFullName(String(res.data.full_name).trim());
+                } else {
+                    setUserFullName('');
+                }
+                // Set profile image from server - this is user-specific
+                if (res.data?.image_path) {
+                    setProfileImageUrlState(`/${res.data.image_path}`);
+                } else {
+                    setProfileImageUrlState(null);
+                }
+            })
+            .catch(() => {
+                setUserFullName('');
+                setProfileImageUrlState(null);
+            });
+    }, []);
 
     // Load reports from API when app mounts (authenticated user)
     useEffect(() => {
@@ -128,7 +162,8 @@ export const FormProvider = ({ children }) => {
             profileImageUrl,
             setProfileImageUrl,
             userFullName,
-            setUserFullName
+            setUserFullName,
+            refreshProfile
         }}>
             {children}
         </FormContext.Provider>

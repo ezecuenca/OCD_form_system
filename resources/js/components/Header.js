@@ -1,25 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
-import axios from 'axios';
 
 function Header() {
-    const { profileImageUrl, userFullName, setUserFullName } = useFormContext();
+    const { profileImageUrl, userFullName } = useFormContext();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        let isMounted = true;
-        axios.get('/api/profile', { withCredentials: true })
-            .then((res) => {
-                if (isMounted && res.data?.full_name != null) {
-                    setUserFullName(String(res.data.full_name).trim());
-                }
-            })
-            .catch(() => {});
-        return () => { isMounted = false; };
-    }, [setUserFullName]);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -67,7 +54,7 @@ function Header() {
                         {profileImageUrl ? (
                             <img src={profileImageUrl} alt="Profile" className="header__profile-img" />
                         ) : (
-                            <img src="/images/default_profile.png" alt="" className="header__profile-img" aria-hidden />
+                            <img src="/images/ocd_logo.svg" alt="" className="header__profile-img" aria-hidden />
                         )}
                     </div>
                 </div>

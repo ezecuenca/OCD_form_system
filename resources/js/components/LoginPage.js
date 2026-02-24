@@ -3,10 +3,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import LoadingScreen from './LoadingScreen';
 import FailNotification from './FailNotification';
+import { useFormContext } from '../context/FormContext';
 
 function LoginPage() {
     const navigate = useNavigate();
     const location = useLocation();
+    const { refreshProfile } = useFormContext();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -49,6 +51,8 @@ function LoginPage() {
                 username,
                 password,
             });
+            // Refresh profile data for the new user
+            refreshProfile();
             navigate('/schedule', { state: { loginSuccess: true } });
         } catch (err) {
             const response = err?.response?.data;
@@ -117,6 +121,9 @@ function LoginPage() {
                     </button>
                     <div className="login-form__signup">
                         Don't have an account? <Link to="/signup" className="login-form__signup-link">Sign up</Link> here.
+                    </div>
+                    <div className="login-form__forgot">
+                        <Link to="/forgot-password" className="login-form__forgot-link">Forgot Password?</Link>
                     </div>
                 </form>
                 <FailNotification 

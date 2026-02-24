@@ -36,7 +36,7 @@ class AuthController extends Controller
         $user = User::where('username', $validated['username'])->first();
         $passwordHash = $user ? $user->getAuthPassword() : null;
         if (!$user || !$passwordHash || !Hash::check($validated['password'], $passwordHash)) {
-            return response()->json(['message' => 'Invalid credentials.'], 401);
+            return response()->json(['message' => 'Incorrect username or password.'], 401);
         }
 
         $request->session()->regenerate();
@@ -87,5 +87,30 @@ class AuthController extends Controller
             'email' => $user->email,
             'role_id' => $user->role_id,
         ], 201);
+    }
+
+    public function verifyEmail(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'],
+        ]);
+
+        return response()->json(['message' => 'Email verified successfully.']);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = User::where('email', $validated['email'])->first();
+        
+        if ($user) {
+            $user->update(['hashed_password' => Hash::make($validated['password'])]);
+        }
+
+        return response()->json(['message' => 'Password reset successfully.']);
     }
 }

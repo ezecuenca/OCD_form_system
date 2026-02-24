@@ -472,7 +472,10 @@
     cursor: not-allowed;
 }
 
-/* Data Retention – unchanged from your last approved version */
+/* ──────────────────────────────────────────────── */
+/* Data Retention – improved warning visibility      */
+/* ──────────────────────────────────────────────── */
+
 .settings__retention-simple {
     padding: 0.5rem 0;
 }
@@ -519,9 +522,17 @@
 }
 
 .settings__retention-edit-icon {
-    color: #290081;
-    font-size: 1rem;
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
     cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+    vertical-align: middle;
+}
+
+.settings__retention-edit-icon:hover {
+    opacity: 1;
 }
 
 .settings__retention-dates {
@@ -538,27 +549,114 @@
     font-weight: 500;
 }
 
-.settings__retention-info {
-    font-size: 0.8125rem;
-    color: #555;
-    margin-bottom: 1.5rem;
+/* Data Retention preview text */
+.settings__retention-preview {
+    font-size: 0.9375rem;
+    color: #444;
+    margin: 1.5rem 0 2rem 0;
+    line-height: 1.5;
+    font-weight: 400;
 }
 
-.settings__retention-info-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.4rem;
-}
-
-.settings__retention-info-row span:first-child {
-    font-weight: 500;
-}
-
-.warning {
+/* Warning: only apply red to the days-left part */
+.settings__retention-preview .warning {
     color: #dc3545;
-    font-weight: 600;
+    font-weight: 700;
 }
 
+.settings__retention-header {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.settings__retention-toggle-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.settings__retention-toggle-label span {
+    font-weight: 500;
+    color: #222;
+    font-size: 0.9rem;
+}
+
+.settings__retention-toggle {
+    position: relative;
+    width: 48px;
+    height: 24px;
+}
+
+.settings__retention-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.settings__retention-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.settings__retention-slider:hover {
+    box-shadow: 0 0 8px rgba(41, 0, 129, 0.4);
+}
+
+.settings__user-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.settings__user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: contain;
+    border: 2px solid #e5e7eb;
+    background-color: white;
+}
+
+.settings__user-avatar--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #290081;
+    color: white;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.settings__retention-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.settings__retention-toggle input:checked + .settings__retention-slider {
+    background-color: #290081;
+}
+
+.settings__retention-toggle input:checked + .settings__retention-slider:before {
+    transform: translateX(24px);
+}
+
+/* Set button */
 .settings__retention-actions {
     display: flex;
     justify-content: flex-end;

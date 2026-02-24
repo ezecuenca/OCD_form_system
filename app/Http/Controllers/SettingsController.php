@@ -50,21 +50,38 @@ class SettingsController extends Controller
         $retentionValue = $request->retention_value;
         $retentionUnit = $request->retention_unit;
 
-        // Calculate the date when records will be archived
-        $archiveDate = Carbon::now();
+        // Convert retention period to days for unified display
+        $retentionInDays = 0;
         switch ($retentionUnit) {
             case 'days':
-                $archiveDate->addDays($retentionValue);
+                $retentionInDays = $retentionValue;
                 break;
             case 'months':
-                $archiveDate->addMonths($retentionValue);
+                $retentionInDays = $retentionValue * 30;
                 break;
             case 'years':
-                $archiveDate->addYears($retentionValue);
+                $retentionInDays = $retentionValue * 365;
                 break;
         }
 
-        // Get the oldest active ADR form
+        // Calculate hours and minutes if within the same day
+        $hoursLeft = null;
+        $minutesLeft = null;
+        
+        if ($retentionInDays < 1) {
+            // Less than 1 day - show hours and minutes
+            $hoursLeft = (int)($retentionInDays * 24);
+            $minutesLeft = (int)(($retentionInDays * 24 * 60) % 60);
+        } elseif ($retentionInDays < 30) {
+            // Less than 30 days - calculate if within same day
+            $totalHours = $retentionInDays * 24;
+            if ($totalHours < 24) {
+                $hoursLeft = (int)$totalHours;
+                $minutesLeft = (int)(($totalHours * 60) % 60);
+            }
+        }
+
+        // Get the oldest active ADR form to calculate actual days until oldest form exceeds retention
         $oldestAdr = AdrForm::where('is_archived', false)
             ->orderBy('created_at', 'asc')
             ->first();
@@ -74,24 +91,24 @@ class SettingsController extends Controller
             ->orderBy('created_at', 'asc')
             ->first();
 
+        // Calculate days until oldest forms exceed retention period (for preview)
         $daysUntilAdrArchive = null;
         $daysUntilSwapArchive = null;
 
         if ($oldestAdr) {
-            $daysUntilAdrArchive = Carbon::now()->diffInDays($oldestAdr->created_at->addDays(
-                $retentionUnit === 'days' ? $retentionValue :
-                ($retentionUnit === 'months' ? $retentionValue * 30 : $retentionValue * 365)
-            ), false);
+            $daysUntilAdrArchive = Carbon::now()->diffInDays($oldestAdr->created_at->addDays($retentionInDays), false);
         }
 
         if ($oldestSwap) {
-            $daysUntilSwapArchive = Carbon::now()->diffInDays($oldestSwap->created_at->addDays(
-                $retentionUnit === 'days' ? $retentionValue :
-                ($retentionUnit === 'months' ? $retentionValue * 30 : $retentionValue * 365)
-            ), false);
+            $daysUntilSwapArchive = Carbon::now()->diffInDays($oldestSwap->created_at->addDays($retentionInDays), false);
         }
 
         return response()->json([
+            'retention_in_days' => $retentionInDays,
+            'retention_value' => $retentionValue,
+            'retention_unit' => $retentionUnit,
+            'hours_left' => $hoursLeft,
+            'minutes_left' => $minutesLeft,
             'days_until_adr_archive' => $daysUntilAdrArchive,
             'days_until_swap_archive' => $daysUntilSwapArchive,
             'oldest_adr_date' => $oldestAdr ? $oldestAdr->created_at->toIso8601String() : null,

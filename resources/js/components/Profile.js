@@ -13,7 +13,7 @@ function Profile() {
     const sectionDropdownRef = useRef(null);
     const [showSectionDropdown, setShowSectionDropdown] = useState(false);
 
-    const profileImgSrc = profileImageUrl || '/images/default_profile.png';
+    const profileImgSrc = profileImageUrl || '/images/ocd_logo.svg';
     const [displayName, setDisplayName] = useState('Your Name');
     const [username, setUsername] = useState('');
     const [displaySectionId, setDisplaySectionId] = useState('');
@@ -104,14 +104,33 @@ function Profile() {
         };
     }, [isEditing]);
 
-    const handleFileChange = (e) => {
+    const handleFileChange = async (e) => {
         const file = e.target.files?.[0];
         if (!file || !file.type.startsWith('image/')) return;
-        const reader = new FileReader();
-        reader.onload = () => {
-            setProfileImageUrl(reader.result);
-        };
-        reader.readAsDataURL(file);
+        
+        try {
+            // Upload to server
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            const res = await axios.post('/api/profile/image', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            
+            // Update localStorage with server response
+            if (res.data.image_path) {
+                setProfileImageUrl('/' + res.data.image_path);
+            }
+        } catch (err) {
+            console.error('Failed to upload image:', err);
+            // Fall back to local storage
+            const reader = new FileReader();
+            reader.onload = () => {
+                setProfileImageUrl(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+        
         e.target.value = '';
         setDropdownOpen(false);
     };
@@ -120,7 +139,12 @@ function Profile() {
         fileInputRef.current?.click();
     };
 
-    const handleRemovePhoto = () => {
+    const handleRemovePhoto = async () => {
+        try {
+            await axios.delete('/api/profile/image');
+        } catch (err) {
+            console.error('Failed to remove image:', err);
+        }
         setProfileImageUrl(null);
         if (fileInputRef.current) fileInputRef.current.value = '';
         setDropdownOpen(false);

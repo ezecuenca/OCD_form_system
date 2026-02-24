@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ConfirmModal from './ConfirmModal';
+import SwapViewModal from './SwapViewModal';
 
 function formatDate(dateStr) {
     if (!dateStr) return '—';
@@ -44,6 +45,7 @@ function SwapForm() {
     });
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
+    const [viewModalState, setViewModalState] = useState({ isOpen: false, swapId: null });
 
     const loadSwapRequests = async () => {
         try {
@@ -111,6 +113,18 @@ function SwapForm() {
                 setConfirmState({ isOpen: false, message: '', onConfirm: null });
             }
         });
+    };
+
+    const handleExport = (id) => {
+        window.location.href = `/api/swapping-requests/${id}/export`;
+    };
+
+    const handleView = (id) => {
+        setViewModalState({ isOpen: true, swapId: id });
+    };
+
+    const handleCloseViewModal = () => {
+        setViewModalState({ isOpen: false, swapId: null });
     };
 
     const handleBulkArchive = () => {
@@ -197,7 +211,7 @@ function SwapForm() {
     });
 
     // Pagination calculations
-    const totalPages = Math.max(1, Math.ceil(filteredRequests.length / itemsPerPage));
+    const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const paginatedRequests = filteredRequests.slice(startIndex, endIndex);
@@ -384,14 +398,24 @@ function SwapForm() {
                                                     </button>
                                                 </>
                                             ) : (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleArchive(req.id)}
-                                                    title="Archive"
-                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
-                                                >
-                                                    <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Archive" style={{ width: 20, height: 20 }} />
-                                                </button>
+                                                <>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleView(req.id)}
+                                                        title="View Details"
+                                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                                                    >
+                                                        <img src={`${window.location.origin}/images/view_icon.svg`} alt="View" style={{ width: 20, height: 20 }} />
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleArchive(req.id)}
+                                                        title="Archive"
+                                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                                                    >
+                                                        <img src={`${window.location.origin}/images/delete_icon.svg`} alt="Archive" style={{ width: 20, height: 20 }} />
+                                                    </button>
+                                                </>
                                             )}
                                         </div>
                                     </td>
@@ -413,7 +437,7 @@ function SwapForm() {
                         <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <span className="swap-form__pagination-info">{`Page ${currentPage} of ${totalPages}`}</span>
+                <span className="swap-form__pagination-info">{filteredRequests.length > 0 ? `Page ${currentPage} of ${totalPages}` : 'No data'}</span>
                 <button onClick={goToNextPage} disabled={currentPage === totalPages || filteredRequests.length === 0} title="Next page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -431,6 +455,12 @@ function SwapForm() {
                 message={confirmState.message}
                 onConfirm={confirmState.onConfirm || (() => {})}
                 onCancel={() => setConfirmState({ isOpen: false, message: '', onConfirm: null })}
+            />
+
+            <SwapViewModal
+                isOpen={viewModalState.isOpen}
+                swapId={viewModalState.swapId}
+                onClose={handleCloseViewModal}
             />
         </div>
     );
