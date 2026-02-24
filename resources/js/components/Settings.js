@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import LoadingScreen from './LoadingScreen';
 import ConfirmModal from './ConfirmModal';
 import SuccessNotification from './SuccessNotification';
 import TemplateViewModal from './TemplateViewModal';
 import AccountEditModal from './AccountEditModal';
 
-function Settings() {
+function SettingsContent({ userRoleId }) {
     const [accounts, setAccounts] = useState([]);
     const [accountsLoading, setAccountsLoading] = useState(false);
     const [accountsError, setAccountsError] = useState(null);
-    const [activeSection, setActiveSection] = useState('accounts');
+    const isSuperAdmin = userRoleId === 3;
+    const [activeSection, setActiveSection] = useState(isSuperAdmin ? 'accounts' : 'templates');
     const [sections, setSections] = useState([]);
     const [archivedSections, setArchivedSections] = useState([]);
     const [sectionsLoading, setSectionsLoading] = useState(false);
@@ -1186,13 +1189,15 @@ function Settings() {
             <div className="settings__content">
                 <section className="settings__panel" aria-label="Admin settings">
                     <aside className="settings__subnav" aria-label="Settings sections">
-                        <button
-                            type="button"
-                            className={`settings__subnav-item ${activeSection === 'accounts' ? 'settings__subnav-item--active' : ''}`}
-                            onClick={() => setActiveSection('accounts')}
-                        >
-                            Accounts
-                        </button>
+                        {isSuperAdmin && (
+                            <button
+                                type="button"
+                                className={`settings__subnav-item ${activeSection === 'accounts' ? 'settings__subnav-item--active' : ''}`}
+                                onClick={() => setActiveSection('accounts')}
+                            >
+                                Accounts
+                            </button>
+                        )}
                         <button
                             type="button"
                             className={`settings__subnav-item ${activeSection === 'templates' ? 'settings__subnav-item--active' : ''}`}
@@ -1254,6 +1259,48 @@ function Settings() {
             />
         </div>
     );
+}
+
+function Settings() {
+    const navigate = useNavigate();
+    const [authStatus, setAuthStatus] = useState('loading');
+    const [userRoleId, setUserRoleId] = useState(null);
+
+    useEffect(() => {
+        let isMounted = true;
+        axios.get('/api/auth/me')
+            .then((res) => {
+                if (!isMounted) return;
+                const roleId = res?.data?.role_id;
+                if (roleId === 2 || roleId === 3) {
+                    setAuthStatus('allowed');
+                    setUserRoleId(roleId);
+                } else {
+                    setAuthStatus('denied');
+                    navigate('/schedule', { replace: true });
+                }
+            })
+            .catch(() => {
+                if (isMounted) {
+                    setAuthStatus('denied');
+                    navigate('/schedule', { replace: true });
+                }
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [navigate]);
+
+    if (authStatus === 'loading') {
+        return <LoadingScreen message="Checking permissions..." />;
+    }
+
+    if (authStatus === 'denied') {
+        return null;
+    }
+
+    return <SettingsContent userRoleId={userRoleId} />;
 }
 
 export default Settings;
