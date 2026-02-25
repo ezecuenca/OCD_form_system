@@ -124,6 +124,54 @@ function Schedule() {
         };
     }, []);
 
+    useEffect(() => {
+        let isMounted = true;
+
+        const fetchSwapRequestStatus = async () => {
+            if (!currentProfileId) return;
+
+            try {
+                const response = await axios.get('/api/swapping-requests');
+                if (!isMounted) return;
+                
+                const allRequests = Array.isArray(response.data) ? response.data : [];
+                
+                // Filter to only current user's requests regardless of role
+                const userRequests = allRequests.filter(req => 
+                    String(req.requester_profile_id) === String(currentProfileId)
+                );
+                
+                if (userRequests.length === 0) {
+                    setSwapRequestStatus(null);
+                    setSwapRequestRequesterId(null);
+                    setSwapRequestRequesterName('');
+                    return;
+                }
+                
+                // Pick the most recent request from the current user
+                const latestRequest = [...userRequests].sort((a, b) => {
+                    const aTime = new Date(a.updatedAt || a.createdAt || 0).getTime();
+                    const bTime = new Date(b.updatedAt || b.createdAt || 0).getTime();
+                    return bTime - aTime;
+                })[0];
+                setSwapRequestStatus(latestRequest?.status || null);
+                setSwapRequestRequesterId(latestRequest?.requester_profile_id ?? null);
+                setSwapRequestRequesterName(getFirstName(latestRequest?.taskName));
+            } catch (error) {
+                if (!isMounted) return;
+                setSwapRequestStatus(null);
+                setSwapRequestRequesterId(null);
+                setSwapRequestRequesterName('');
+            }
+        };
+
+        fetchSwapRequestStatus();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [pendingSwapCount, currentProfileId]);
+
     const [currentDate, setCurrentDate] = useState(new Date());
     const [showTaskForm, setShowTaskForm] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
@@ -131,7 +179,9 @@ function Schedule() {
     const [modalMode, setModalMode] = useState('add'); // 'add' | 'view' | 'edit' | 'swap'
     const [taskToSwap, setTaskToSwap] = useState(null);
     const [pendingSwapCount, setPendingSwapCount] = useState(0);
-
+    const [swapRequestStatus, setSwapRequestStatus] = useState(null); // null, 'pending', 'accepted', 'approved', 'denied'
+    const [swapRequestRequesterId, setSwapRequestRequesterId] = useState(null);
+    const [swapRequestRequesterName, setSwapRequestRequesterName] = useState('');
     const daysInMonth = (date) => {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     };
@@ -247,6 +297,7 @@ function Schedule() {
     const submitSwapRequest = (payload) => {
         axios.post('/api/swapping-requests', payload)
             .then(() => {
+                setSwapRequestStatus('pending');
                 setPendingSwapCount((prev) => prev + 1);
                 setSuccessMessage('Swap request sent successfully.');
                 setShowSuccessNotification(true);
@@ -296,6 +347,10 @@ function Schedule() {
     const canManageTasks = user?.role_id === 2 || user?.role_id === 3;
     const days = getDaysArray();
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const swapRequesterLabel = swapRequestRequesterName || 'This user';
+    const swapRequestSubject = canManageTasks
+        ? `${swapRequesterLabel}'s`
+        : 'Your';
 
     return (
         <div className="schedule">
@@ -476,6 +531,24 @@ function Schedule() {
                                             </span>
                                         ))}
                                     </div>
+                                    {swapRequestStatus !== null && (
+                                        <div className="schedule__task-summary-swap-status">
+                                            <p className="schedule__task-summary-swap-title">Swap Request Status:</p>
+                                            <p className={`schedule__task-summary-swap-message schedule__task-summary-swap-message--${swapRequestStatus}`}>
+                                                {swapRequestStatus === 'pending' && `${swapRequestSubject} swap request is pending approval.`}
+                                                {swapRequestStatus === 'accepted' && `${swapRequestSubject} swap request has been accepted!`}
+                                                {swapRequestStatus === 'approved' && `${swapRequestSubject} swap request has been approved!`}
+                                                {swapRequestStatus === 'denied' && `${swapRequestSubject} swap request has been denied.`}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {swapRequestStatus === null && (
+                                        <div className="schedule__task-summary-swap-status">
+                                            <p className="schedule__task-summary-swap-message schedule__task-summary-swap-message--none">
+                                                You haven't made a request for swap yet.
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })()}

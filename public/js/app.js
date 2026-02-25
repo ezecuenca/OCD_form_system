@@ -75218,6 +75218,81 @@ function Schedule() {
       isMounted = false;
     };
   }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var isMounted = true;
+    var fetchSwapRequestStatus = /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+        var _latestRequest$reques, response, allRequests, userRequests, latestRequest, _t3;
+        return _regenerator().w(function (_context3) {
+          while (1) switch (_context3.p = _context3.n) {
+            case 0:
+              if (currentProfileId) {
+                _context3.n = 1;
+                break;
+              }
+              return _context3.a(2);
+            case 1:
+              _context3.p = 1;
+              _context3.n = 2;
+              return axios__WEBPACK_IMPORTED_MODULE_3___default().get('/api/swapping-requests');
+            case 2:
+              response = _context3.v;
+              if (isMounted) {
+                _context3.n = 3;
+                break;
+              }
+              return _context3.a(2);
+            case 3:
+              allRequests = Array.isArray(response.data) ? response.data : []; // Filter to only current user's requests regardless of role
+              userRequests = allRequests.filter(function (req) {
+                return String(req.requester_profile_id) === String(currentProfileId);
+              });
+              if (!(userRequests.length === 0)) {
+                _context3.n = 4;
+                break;
+              }
+              setSwapRequestStatus(null);
+              setSwapRequestRequesterId(null);
+              setSwapRequestRequesterName('');
+              return _context3.a(2);
+            case 4:
+              // Pick the most recent request from the current user
+              latestRequest = _toConsumableArray(userRequests).sort(function (a, b) {
+                var aTime = new Date(a.updatedAt || a.createdAt || 0).getTime();
+                var bTime = new Date(b.updatedAt || b.createdAt || 0).getTime();
+                return bTime - aTime;
+              })[0];
+              setSwapRequestStatus((latestRequest === null || latestRequest === void 0 ? void 0 : latestRequest.status) || null);
+              setSwapRequestRequesterId((_latestRequest$reques = latestRequest === null || latestRequest === void 0 ? void 0 : latestRequest.requester_profile_id) !== null && _latestRequest$reques !== void 0 ? _latestRequest$reques : null);
+              setSwapRequestRequesterName(getFirstName(latestRequest === null || latestRequest === void 0 ? void 0 : latestRequest.taskName));
+              _context3.n = 7;
+              break;
+            case 5:
+              _context3.p = 5;
+              _t3 = _context3.v;
+              if (isMounted) {
+                _context3.n = 6;
+                break;
+              }
+              return _context3.a(2);
+            case 6:
+              setSwapRequestStatus(null);
+              setSwapRequestRequesterId(null);
+              setSwapRequestRequesterName('');
+            case 7:
+              return _context3.a(2);
+          }
+        }, _callee3, null, [[1, 5]]);
+      }));
+      return function fetchSwapRequestStatus() {
+        return _ref3.apply(this, arguments);
+      };
+    }();
+    fetchSwapRequestStatus();
+    return function () {
+      isMounted = false;
+    };
+  }, [pendingSwapCount, currentProfileId]);
   var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
     _useState22 = _slicedToArray(_useState21, 2),
     currentDate = _useState22[0],
@@ -75246,6 +75321,18 @@ function Schedule() {
     _useState34 = _slicedToArray(_useState33, 2),
     pendingSwapCount = _useState34[0],
     setPendingSwapCount = _useState34[1];
+  var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState36 = _slicedToArray(_useState35, 2),
+    swapRequestStatus = _useState36[0],
+    setSwapRequestStatus = _useState36[1]; // null, 'pending', 'accepted', 'approved', 'denied'
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState38 = _slicedToArray(_useState37, 2),
+    swapRequestRequesterId = _useState38[0],
+    setSwapRequestRequesterId = _useState38[1];
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState40 = _slicedToArray(_useState39, 2),
+    swapRequestRequesterName = _useState40[0],
+    setSwapRequestRequesterName = _useState40[1];
   var daysInMonth = function daysInMonth(date) {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -75302,65 +75389,65 @@ function Schedule() {
     setShowTaskForm(true);
   };
   var handleAddTask = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(taskData) {
-      var payload, response, _error$response, message, _t3;
-      return _regenerator().w(function (_context3) {
-        while (1) switch (_context3.p = _context3.n) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(taskData) {
+      var payload, response, _error$response, message, _t4;
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.p = _context4.n) {
           case 0:
-            _context3.p = 0;
+            _context4.p = 0;
             payload = {
               profile_id: Number(taskData.profileId),
               task_description: taskData.task,
               task_date: taskData.date,
               status: 'active'
             };
-            _context3.n = 1;
+            _context4.n = 1;
             return axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/schedules', payload);
           case 1:
-            response = _context3.v;
+            response = _context4.v;
             setTasks(function (prev) {
               return [].concat(_toConsumableArray(prev), [mapScheduleToTask(response.data)]);
             });
             setShowTaskForm(false);
             setSuccessMessage('Task added successfully.');
             setShowSuccessNotification(true);
-            _context3.n = 3;
+            _context4.n = 3;
             break;
           case 2:
-            _context3.p = 2;
-            _t3 = _context3.v;
-            message = (_t3 === null || _t3 === void 0 || (_error$response = _t3.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Could not save schedule. Please try again.';
+            _context4.p = 2;
+            _t4 = _context4.v;
+            message = (_t4 === null || _t4 === void 0 || (_error$response = _t4.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Could not save schedule. Please try again.';
             setFailMessage(message);
             setShowFailNotification(true);
           case 3:
-            return _context3.a(2);
+            return _context4.a(2);
         }
-      }, _callee3, null, [[0, 2]]);
+      }, _callee4, null, [[0, 2]]);
     }));
     return function handleAddTask(_x) {
-      return _ref3.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
   var handleDeleteTask = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(task) {
-      return _regenerator().w(function (_context5) {
-        while (1) switch (_context5.n) {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(task) {
+      return _regenerator().w(function (_context6) {
+        while (1) switch (_context6.n) {
           case 0:
             if (task !== null && task !== void 0 && task.id) {
-              _context5.n = 1;
+              _context6.n = 1;
               break;
             }
-            return _context5.a(2);
+            return _context6.a(2);
           case 1:
             setConfirmMessage('Delete this task?');
             setConfirmAction(function () {
-              return /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
-                var _error$response2, rawMessage, isForeignKeyError, message, _t4;
-                return _regenerator().w(function (_context4) {
-                  while (1) switch (_context4.p = _context4.n) {
+              return /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
+                var _error$response2, rawMessage, isForeignKeyError, message, _t5;
+                return _regenerator().w(function (_context5) {
+                  while (1) switch (_context5.p = _context5.n) {
                     case 0:
-                      _context4.p = 0;
-                      _context4.n = 1;
+                      _context5.p = 0;
+                      _context5.n = 1;
                       return axios__WEBPACK_IMPORTED_MODULE_3___default()["delete"]("/api/schedules/".concat(task.id));
                     case 1:
                       setTasks(function (prev) {
@@ -75370,34 +75457,34 @@ function Schedule() {
                       });
                       setSuccessMessage('Task deleted successfully.');
                       setShowSuccessNotification(true);
-                      _context4.n = 3;
+                      _context5.n = 3;
                       break;
                     case 2:
-                      _context4.p = 2;
-                      _t4 = _context4.v;
-                      rawMessage = (_t4 === null || _t4 === void 0 || (_error$response2 = _t4.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || '';
+                      _context5.p = 2;
+                      _t5 = _context5.v;
+                      rawMessage = (_t5 === null || _t5 === void 0 || (_error$response2 = _t5.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || '';
                       isForeignKeyError = /foreign key|constraint/i.test(rawMessage);
                       message = task.status === 'swap' || isForeignKeyError ? 'Cant delete swapped tasks.' : rawMessage || 'Could not delete task. Please try again.';
                       setFailMessage(message);
                       setShowFailNotification(true);
                     case 3:
-                      _context4.p = 3;
+                      _context5.p = 3;
                       setShowConfirmModal(false);
-                      return _context4.f(3);
+                      return _context5.f(3);
                     case 4:
-                      return _context4.a(2);
+                      return _context5.a(2);
                   }
-                }, _callee4, null, [[0, 2, 3, 4]]);
+                }, _callee5, null, [[0, 2, 3, 4]]);
               }));
             });
             setShowConfirmModal(true);
           case 2:
-            return _context5.a(2);
+            return _context6.a(2);
         }
-      }, _callee5);
+      }, _callee6);
     }));
     return function handleDeleteTask(_x2) {
-      return _ref4.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
   var handleTaskClick = function handleTaskClick(task) {
@@ -75408,6 +75495,7 @@ function Schedule() {
   };
   var submitSwapRequest = function submitSwapRequest(payload) {
     axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/swapping-requests', payload).then(function () {
+      setSwapRequestStatus('pending');
       setPendingSwapCount(function (prev) {
         return prev + 1;
       });
@@ -75456,6 +75544,8 @@ function Schedule() {
   var canManageTasks = (user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3;
   var days = getDaysArray();
   var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var swapRequesterLabel = swapRequestRequesterName || 'This user';
+  var swapRequestSubject = canManageTasks ? "".concat(swapRequesterLabel, "'s") : 'Your';
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
     className: "schedule",
     children: [modalMode === 'swap' && taskToSwap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
@@ -75621,16 +75711,31 @@ function Schedule() {
                 children: ["Task Distribution for ", monthName, ":"]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                 className: "schedule__task-summary-list",
-                children: entries.map(function (_ref6) {
-                  var _ref7 = _slicedToArray(_ref6, 2),
-                    name = _ref7[0],
-                    count = _ref7[1];
+                children: entries.map(function (_ref7) {
+                  var _ref8 = _slicedToArray(_ref7, 2),
+                    name = _ref8[0],
+                    count = _ref8[1];
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("span", {
                     className: "schedule__task-summary-item",
                     children: [name, ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("strong", {
                       children: count
                     }), " task", count !== 1 ? 's' : '']
                   }, name);
+                })
+              }), swapRequestStatus !== null && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                className: "schedule__task-summary-swap-status",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+                  className: "schedule__task-summary-swap-title",
+                  children: "Swap Request Status:"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
+                  className: "schedule__task-summary-swap-message schedule__task-summary-swap-message--".concat(swapRequestStatus),
+                  children: [swapRequestStatus === 'pending' && "".concat(swapRequestSubject, " swap request is pending approval."), swapRequestStatus === 'accepted' && "".concat(swapRequestSubject, " swap request has been accepted!"), swapRequestStatus === 'approved' && "".concat(swapRequestSubject, " swap request has been approved!"), swapRequestStatus === 'denied' && "".concat(swapRequestSubject, " swap request has been denied.")]
+                })]
+              }), swapRequestStatus === null && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                className: "schedule__task-summary-swap-status",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+                  className: "schedule__task-summary-swap-message schedule__task-summary-swap-message--none",
+                  children: "You haven't made a request for swap yet."
                 })
               })]
             });
@@ -75673,22 +75778,22 @@ function Schedule() {
       initialTask: selectedTask,
       mode: modalMode,
       onUpdateTask: (/*#__PURE__*/function () {
-        var _ref8 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(updateTask) {
-          var payload, response, _error$response4, message, _t5;
-          return _regenerator().w(function (_context6) {
-            while (1) switch (_context6.p = _context6.n) {
+        var _ref9 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7(updateTask) {
+          var payload, response, _error$response4, message, _t6;
+          return _regenerator().w(function (_context7) {
+            while (1) switch (_context7.p = _context7.n) {
               case 0:
-                _context6.p = 0;
+                _context7.p = 0;
                 payload = {
                   profile_id: Number(updateTask.profileId),
                   task_description: updateTask.task,
                   task_date: updateTask.date,
                   status: updateTask.status || 'active'
                 };
-                _context6.n = 1;
+                _context7.n = 1;
                 return axios__WEBPACK_IMPORTED_MODULE_3___default().put("/api/schedules/".concat(updateTask.id), payload);
               case 1:
-                response = _context6.v;
+                response = _context7.v;
                 setTasks(function (prev) {
                   return prev.map(function (t) {
                     return t.id === updateTask.id ? mapScheduleToTask(response.data) : t;
@@ -75699,21 +75804,21 @@ function Schedule() {
                 setModalMode('add');
                 setSuccessMessage('Task updated successfully.');
                 setShowSuccessNotification(true);
-                _context6.n = 3;
+                _context7.n = 3;
                 break;
               case 2:
-                _context6.p = 2;
-                _t5 = _context6.v;
-                message = (_t5 === null || _t5 === void 0 || (_error$response4 = _t5.response) === null || _error$response4 === void 0 || (_error$response4 = _error$response4.data) === null || _error$response4 === void 0 ? void 0 : _error$response4.message) || 'Could not update schedule. Please try again.';
+                _context7.p = 2;
+                _t6 = _context7.v;
+                message = (_t6 === null || _t6 === void 0 || (_error$response4 = _t6.response) === null || _error$response4 === void 0 || (_error$response4 = _error$response4.data) === null || _error$response4 === void 0 ? void 0 : _error$response4.message) || 'Could not update schedule. Please try again.';
                 setFailMessage(message);
                 setShowFailNotification(true);
               case 3:
-                return _context6.a(2);
+                return _context7.a(2);
             }
-          }, _callee6, null, [[0, 2]]);
+          }, _callee7, null, [[0, 2]]);
         }));
         return function (_x3) {
-          return _ref8.apply(this, arguments);
+          return _ref9.apply(this, arguments);
         };
       }()),
       onSwitchToEdit: function onSwitchToEdit() {
@@ -78293,65 +78398,65 @@ function SwapForm() {
     };
   }, [showYearDropdown, showMonthDropdown]);
   var handleDeny = function handleDeny(id) {
-    if (!window.confirm('Deny this swap request?')) return;
-    axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/deny")).then(function () {
-      return loadSwapRequests();
-    })["catch"](function () {
-      return alert('Could not deny request. Please try again.');
-    });
-  };
-  var handleApprove = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(id) {
-      var _t2;
-      return _regenerator().w(function (_context2) {
-        while (1) switch (_context2.p = _context2.n) {
-          case 0:
-            _context2.p = 0;
-            _context2.n = 1;
-            return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/approve"));
-          case 1:
-            loadSwapRequests();
-            _context2.n = 3;
-            break;
-          case 2:
-            _context2.p = 2;
-            _t2 = _context2.v;
-            alert('Could not execute swap. Please try again.');
-          case 3:
-            return _context2.a(2);
-        }
-      }, _callee2, null, [[0, 2]]);
-    }));
-    return function handleApprove(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var handleArchive = function handleArchive(id) {
     setConfirmState({
       isOpen: true,
-      message: 'Archive this swap request?',
+      message: 'Deny this swap request?',
       onConfirm: function () {
-        var _onConfirm = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+        var _onConfirm = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+          var _t2;
+          return _regenerator().w(function (_context2) {
+            while (1) switch (_context2.p = _context2.n) {
+              case 0:
+                _context2.p = 0;
+                _context2.n = 1;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/deny"));
+              case 1:
+                loadSwapRequests();
+                _context2.n = 3;
+                break;
+              case 2:
+                _context2.p = 2;
+                _t2 = _context2.v;
+                alert('Could not deny request. Please try again.');
+              case 3:
+                setConfirmState({
+                  isOpen: false,
+                  message: '',
+                  onConfirm: null
+                });
+              case 4:
+                return _context2.a(2);
+            }
+          }, _callee2, null, [[0, 2]]);
+        }));
+        function onConfirm() {
+          return _onConfirm.apply(this, arguments);
+        }
+        return onConfirm;
+      }()
+    });
+  };
+  var handleApprove = function handleApprove(id) {
+    setConfirmState({
+      isOpen: true,
+      message: 'Approve this swap request?',
+      onConfirm: function () {
+        var _onConfirm2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
           var _t3;
           return _regenerator().w(function (_context3) {
             while (1) switch (_context3.p = _context3.n) {
               case 0:
                 _context3.p = 0;
                 _context3.n = 1;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/archive"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/approve"));
               case 1:
-                setSelectedRequests(function (prev) {
-                  return prev.filter(function (i) {
-                    return i !== id;
-                  });
-                });
                 loadSwapRequests();
                 _context3.n = 3;
                 break;
               case 2:
                 _context3.p = 2;
                 _t3 = _context3.v;
-                alert('Could not archive request. Please try again.');
+                alert('Could not execute swap. Please try again.');
               case 3:
                 setConfirmState({
                   isOpen: false,
@@ -78364,7 +78469,51 @@ function SwapForm() {
           }, _callee3, null, [[0, 2]]);
         }));
         function onConfirm() {
-          return _onConfirm.apply(this, arguments);
+          return _onConfirm2.apply(this, arguments);
+        }
+        return onConfirm;
+      }()
+    });
+  };
+  var handleArchive = function handleArchive(id) {
+    setConfirmState({
+      isOpen: true,
+      message: 'Archive this swap request?',
+      onConfirm: function () {
+        var _onConfirm3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+          var _t4;
+          return _regenerator().w(function (_context4) {
+            while (1) switch (_context4.p = _context4.n) {
+              case 0:
+                _context4.p = 0;
+                _context4.n = 1;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/archive"));
+              case 1:
+                setSelectedRequests(function (prev) {
+                  return prev.filter(function (i) {
+                    return i !== id;
+                  });
+                });
+                loadSwapRequests();
+                _context4.n = 3;
+                break;
+              case 2:
+                _context4.p = 2;
+                _t4 = _context4.v;
+                alert('Could not archive request. Please try again.');
+              case 3:
+                setConfirmState({
+                  isOpen: false,
+                  message: '',
+                  onConfirm: null
+                });
+              case 4:
+                return _context4.a(2);
+            }
+          }, _callee4, null, [[0, 2]]);
+        }));
+        function onConfirm() {
+          return _onConfirm3.apply(this, arguments);
         }
         return onConfirm;
       }()
@@ -78400,24 +78549,24 @@ function SwapForm() {
       isOpen: true,
       message: "Archive ".concat(toArchive.length, " request").concat(toArchive.length === 1 ? '' : 's', "?"),
       onConfirm: function () {
-        var _onConfirm2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
-          var _t4;
-          return _regenerator().w(function (_context4) {
-            while (1) switch (_context4.p = _context4.n) {
+        var _onConfirm4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
+          var _t5;
+          return _regenerator().w(function (_context5) {
+            while (1) switch (_context5.p = _context5.n) {
               case 0:
-                _context4.p = 0;
-                _context4.n = 1;
+                _context5.p = 0;
+                _context5.n = 1;
                 return Promise.all(toArchive.map(function (id) {
                   return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/archive"));
                 }));
               case 1:
                 setSelectedRequests([]);
                 loadSwapRequests();
-                _context4.n = 3;
+                _context5.n = 3;
                 break;
               case 2:
-                _context4.p = 2;
-                _t4 = _context4.v;
+                _context5.p = 2;
+                _t5 = _context5.v;
                 alert('Could not archive selected requests. Please try again.');
               case 3:
                 setConfirmState({
@@ -78426,12 +78575,12 @@ function SwapForm() {
                   onConfirm: null
                 });
               case 4:
-                return _context4.a(2);
+                return _context5.a(2);
             }
-          }, _callee4, null, [[0, 2]]);
+          }, _callee5, null, [[0, 2]]);
         }));
         function onConfirm() {
-          return _onConfirm2.apply(this, arguments);
+          return _onConfirm4.apply(this, arguments);
         }
         return onConfirm;
       }()

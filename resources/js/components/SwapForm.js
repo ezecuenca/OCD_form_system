@@ -82,20 +82,35 @@ function SwapForm() {
     }, [showYearDropdown, showMonthDropdown]);
 
     const handleDeny = (id) => {
-        if (!window.confirm('Deny this swap request?')) return;
-
-        axios.post(`/api/swapping-requests/${id}/deny`)
-            .then(() => loadSwapRequests())
-            .catch(() => alert('Could not deny request. Please try again.'));
+        setConfirmState({
+            isOpen: true,
+            message: 'Deny this swap request?',
+            onConfirm: async () => {
+                try {
+                    await axios.post(`/api/swapping-requests/${id}/deny`);
+                    loadSwapRequests();
+                } catch (error) {
+                    alert('Could not deny request. Please try again.');
+                }
+                setConfirmState({ isOpen: false, message: '', onConfirm: null });
+            }
+        });
     };
 
-    const handleApprove = async (id) => {
-        try {
-            await axios.post(`/api/swapping-requests/${id}/approve`);
-            loadSwapRequests();
-        } catch (error) {
-            alert('Could not execute swap. Please try again.');
-        }
+    const handleApprove = (id) => {
+        setConfirmState({
+            isOpen: true,
+            message: 'Approve this swap request?',
+            onConfirm: async () => {
+                try {
+                    await axios.post(`/api/swapping-requests/${id}/approve`);
+                    loadSwapRequests();
+                } catch (error) {
+                    alert('Could not execute swap. Please try again.');
+                }
+                setConfirmState({ isOpen: false, message: '', onConfirm: null });
+            }
+        });
     };
 
     const handleArchive = (id) => {

@@ -128,6 +128,14 @@ class SwappingRequestController extends Controller
             $query->where('status', $status);
         }
 
+        // Filter to current user's requests ONLY if they're not an admin/super admin
+        if (!$this->canManageRequests($request)) {
+            $profileId = $this->getProfileId($request);
+            if ($profileId !== null) {
+                $query->where('requester_profile_id', $profileId);
+            }
+        }
+
         $requests = $query->get();
 
         return response()->json($requests->map(function (SwappingRequest $swapRequest) {
