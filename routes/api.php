@@ -31,6 +31,9 @@ Route::get('/sections', [SectionsController::class, 'index'])->name('api.section
 Route::get('/section', [SectionsController::class, 'index'])->name('api.section.index');
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/data-retention/settings', [SettingsController::class, 'getRetentionSettings'])->name('api.data-retention.settings.get');
+    Route::put('/data-retention/settings', [SettingsController::class, 'updateRetentionSettings'])->name('api.data-retention.settings.update');
+    Route::post('/data-retention/preview', [SettingsController::class, 'previewRetention'])->name('api.data-retention.preview');
     Route::post('/data-retention/auto-archive', [SettingsController::class, 'autoArchive'])->name('api.data-retention.auto-archive');
     Route::post('/data-retention/days-until-archive', [SettingsController::class, 'getDaysUntilArchive'])->name('api.data-retention.days-until-archive');
     Route::post('/sections', [SectionsController::class, 'store'])->name('api.sections.store');
@@ -64,9 +67,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/swapping-requests/{id}/deny', [SwappingRequestController::class, 'deny'])->name('api.swapping-requests.deny');
     Route::post('/swapping-requests/{id}/archive', [SwappingRequestController::class, 'archive'])->name('api.swapping-requests.archive');
     Route::post('/swapping-requests/{id}/restore', [SwappingRequestController::class, 'restore'])->name('api.swapping-requests.restore');
+    Route::get('/swap/available-template', [SwappingRequestController::class, 'getAvailableTemplate'])->name('api.swap.available-template');
 
     Route::get('/adr-forms', [AdrFormController::class, 'index'])->name('api.adr-forms.index');
     Route::get('/adr-forms/{id}', [AdrFormController::class, 'show'])->name('api.adr-forms.show');
+    Route::get('/adr/available-template', [AdrFormController::class, 'getAvailableTemplate'])->name('api.adr.available-template');
     Route::post('/adr-forms', [AdrFormController::class, 'store'])->name('api.adr-forms.store');
     Route::put('/adr-forms/{id}', [AdrFormController::class, 'update'])->name('api.adr-forms.update');
     Route::patch('/adr-forms/{id}/archive', [AdrFormController::class, 'archive'])->name('api.adr-forms.archive');

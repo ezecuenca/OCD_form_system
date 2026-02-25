@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Profile;
 use App\Models\Schedule;
 use App\Models\SwappingRequest;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -31,6 +32,34 @@ class SwappingRequestController extends Controller
         return in_array($user->role_id, [2, 3], true);
     }
 
+    /**
+     * Get an available Swap template ID.
+     * Returns the active swap template if available, otherwise the first available swap template.
+     */
+    public function getAvailableTemplate()
+    {
+        // Try to get the active swap template first
+        $active = Template::where('type', 'swap')->where('is_active', 1)->first();
+        if ($active) {
+            return response()->json(['template_id' => $active->id, 'template_name' => $active->template_name]);
+        }
+
+        // Fall back to the first available swap template
+        $swapTemplate = Template::where('type', 'swap')->first();
+        if ($swapTemplate) {
+            return response()->json(['template_id' => $swapTemplate->id, 'template_name' => $swapTemplate->template_name]);
+        }
+
+        // If no swap template found, return any available template
+        $anyTemplate = Template::first();
+        if ($anyTemplate) {
+            return response()->json(['template_id' => $anyTemplate->id, 'template_name' => $anyTemplate->template_name]);
+        }
+
+        // No templates available
+        return response()->json(['template_id' => null, 'template_name' => null], 404);
+    }
+
     protected function formatRequest(SwappingRequest $request): array
     {
         $requesterSchedule = $request->requesterSchedule;
@@ -49,9 +78,16 @@ class SwappingRequestController extends Controller
         $fromDate = $requesterSchedule?->task_date?->format('Y-m-d');
         $toDate = $targetSchedule?->task_date?->format('Y-m-d') ?? $request->target_date?->format('Y-m-d');
 
-        if ($request->status === 'approved' && $requesterSchedule && $targetSchedule) {
-            $fromDate = $targetSchedule->task_date?->format('Y-m-d');
-            $toDate = $requesterSchedule->task_date?->format('Y-m-d');
+        if ($request->status === 'approved' && $requesterSchedule) {
+            if ($targetSchedule) {
+                // Swap with another task
+                $fromDate = $targetSchedule->task_date?->format('Y-m-d');
+                $toDate = $requesterSchedule->task_date?->format('Y-m-d');
+            } else {
+                // Swap to empty cell - use original dates
+                $fromDate = $request->original_requester_date?->format('Y-m-d');
+                $toDate = $request->original_target_date?->format('Y-m-d');
+            }
         }
 
         return [
@@ -90,6 +126,14 @@ class SwappingRequestController extends Controller
 
         if ($status = $request->query('status')) {
             $query->where('status', $status);
+        }
+
+        // Filter to current user's requests ONLY if they're not an admin/super admin
+        if (!$this->canManageRequests($request)) {
+            $profileId = $this->getProfileId($request);
+            if ($profileId !== null) {
+                $query->where('requester_profile_id', $profileId);
+            }
         }
 
         $requests = $query->get();
@@ -233,7 +277,7 @@ class SwappingRequestController extends Controller
             }
 
             $originalRequesterDate = $requesterSchedule->task_date;
-            $originalTargetDate = $targetSchedule?->task_date;
+            $originalTargetDate = $targetSchedule?->task_date ?? $swapRequest->target_date;
 
             if ($targetSchedule) {
                 $fromDate = $requesterSchedule->task_date;
@@ -370,31 +414,59 @@ class SwappingRequestController extends Controller
         try {
             $template = new TemplateProcessor($templatePath);
 
-            $requesterProfile = $swapRequest->requesterSchedule?->profile;
-            $targetProfile = $swapRequest->targetSchedule?->profile;
-            
-            $requesterName = $requesterProfile?->full_name ?? $requesterProfile?->user?->username ?? 'N/A';
-            $targetName = $targetProfile?->full_name ?? $targetProfile?->user?->username ?? 'N/A';
-            
-            $requesterTask = $swapRequest->requesterSchedule?->task_description ?? 'N/A';
-            $targetTask = $swapRequest->targetSchedule?->task_description ?? 'N/A';
-            
-            $fromDate = $swapRequest->requesterSchedule?->task_date?->format('F j, Y') ?? 'N/A';
-            $toDate = $swapRequest->targetSchedule?->task_date?->format('F j, Y') ?? 
-                      ($swapRequest->target_date ? \Carbon\Carbon::parse($swapRequest->target_date)->format('F j, Y') : 'N/A');
-            
-            $currentDate = now()->format('F j, Y');
-            $status = ucfirst($swapRequest->status);
+            $requesterSchedule = $swapRequest->requesterSchedule;
+            $targetSchedule = $swapRequest->targetSchedule;
+
+            $requesterProfile = $requesterSchedule?->profile;
+            $targetProfile = $targetSchedule?->profile;
+
+            $mainName = $requesterProfile?->full_name ?? $requesterProfile?->user?->username ?? 'N/A';
+            $subName = $targetProfile?->full_name ?? $targetProfile?->user?->username ?? 'N/A';
+
+            $mainTask = $requesterSchedule?->task_description ?? 'N/A';
+            $subTask = $targetSchedule?->task_description ?? 'N/A';
+
+            $formatDate = static function ($date): string {
+                return $date ? $date->format('F j, Y') : 'N/A';
+            };
+
+            $originalMainDate = $requesterSchedule?->task_date;
+            $originalSubDate = $targetSchedule?->task_date ?? $swapRequest->target_date;
+
+            if ($swapRequest->status === 'approved') {
+                $originalMainDate = $swapRequest->original_requester_date ?? $originalMainDate;
+                $originalSubDate = $swapRequest->original_target_date ?? $originalSubDate;
+            }
+
+            if ($swapRequest->status === 'approved') {
+                $newMainDate = $requesterSchedule?->task_date;
+                $newSubDate = $targetSchedule?->task_date;
+            } else {
+                $newMainDate = $targetSchedule?->task_date ?? $swapRequest->target_date;
+                $newSubDate = $targetSchedule ? $requesterSchedule?->task_date : null;
+            }
+
+            if (!$targetSchedule) {
+                $subName = 'N/A';
+                $subTask = 'N/A';
+                $originalSubDate = null;
+                $newSubDate = null;
+            }
+
+            $doneDate = now();
 
             $template->setValues([
-                'requester_name' => $requesterName,
-                'target_name' => $targetName,
-                'requester_task' => $requesterTask,
-                'target_task' => $targetTask,
-                'from_date' => $fromDate,
-                'to_date' => $toDate,
-                'current_date' => $currentDate,
-                'status' => $status,
+                'mainName' => $mainName,
+                'subName' => $subName,
+                'mainTask' => $mainTask,
+                'subTask' => $subTask,
+                'mainOrigsched' => $formatDate($originalMainDate),
+                'subOrigsched' => $formatDate($originalSubDate),
+                'mainNewsched' => $formatDate($newMainDate),
+                'subNewsched' => $formatDate($newSubDate),
+                'DAY' => $doneDate->format('j'),
+                'MONTH' => $doneDate->format('F'),
+                'YEAR' => $doneDate->format('Y'),
             ]);
 
             $tempFile = storage_path('app/temp_swap_' . Str::random(10) . '.docx');

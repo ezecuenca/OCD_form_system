@@ -38,6 +38,9 @@ class AuthController extends Controller
         if (!$user || !$passwordHash || !Hash::check($validated['password'], $passwordHash)) {
             return response()->json(['message' => 'Incorrect username or password.'], 401);
         }
+        if ($user->is_active === false) {
+            return response()->json(['message' => 'Account is disabled.'], 403);
+        }
 
         $request->session()->regenerate();
         Auth::login($user, $request->boolean('remember', false));

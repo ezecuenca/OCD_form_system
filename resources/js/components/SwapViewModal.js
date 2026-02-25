@@ -5,6 +5,8 @@ const SwapViewModal = ({ isOpen, onClose, swapId }) => {
     const [swapData, setSwapData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [exportLoading, setExportLoading] = useState(false);
+    const [exportError, setExportError] = useState(null);
 
     useEffect(() => {
         if (isOpen && swapId) {
@@ -31,198 +33,115 @@ const SwapViewModal = ({ isOpen, onClose, swapId }) => {
     };
 
     const getStatusBadge = (status) => {
-        const statusConfig = {
-            'pending': { bg: '#fff3cd', color: '#856404', label: 'Pending' },
-            'approved': { bg: '#d4edda', color: '#155724', label: 'Approved' },
-            'denied': { bg: '#f8d7da', color: '#721c24', label: 'Denied' },
-            'cancelled': { bg: '#e2e3e5', color: '#383d41', label: 'Cancelled' }
+        const statusKey = (status || 'pending').toLowerCase();
+        const labelMap = {
+            pending: 'Pending',
+            approved: 'Approved',
+            denied: 'Denied',
+            cancelled: 'Cancelled'
         };
-        
-        const config = statusConfig[status?.toLowerCase()] || statusConfig['pending'];
-        
+        const label = labelMap[statusKey] || labelMap.pending;
         return (
-            <span style={{
-                backgroundColor: config.bg,
-                color: config.color,
-                padding: '4px 12px',
-                borderRadius: '12px',
-                fontSize: '0.85rem',
-                fontWeight: '600',
-                display: 'inline-block'
-            }}>
-                {config.label}
+            <span className={`swap-view-modal__status swap-view-modal__status--${statusKey}`}>
+                {label}
             </span>
         );
+    };
+
+    const handleExportWord = () => {
+        if (!swapId) return;
+        setExportError(null);
+        setExportLoading(true);
+        const url = `/api/swapping-requests/${swapId}/export`;
+        window.location.assign(url);
+        setTimeout(() => setExportLoading(false), 1000);
     };
 
     if (!isOpen) return null;
 
     return (
-        <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000
-        }}>
-            <div style={{
-                backgroundColor: 'white',
-                borderRadius: '12px',
-                width: '90%',
-                maxWidth: '600px',
-                maxHeight: '90vh',
-                overflow: 'hidden',
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)'
-            }}>
+        <div className="swap-view-modal">
+            <div className="swap-view-modal__overlay" onClick={onClose}></div>
+            <div className="swap-view-modal__container">
                 {/* Header */}
-                <div style={{
-                    padding: '20px 24px',
-                    borderBottom: '1px solid #e0e0e0',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    backgroundColor: '#f8f9fa'
-                }}>
-                    <h2 style={{
-                        margin: 0,
-                        fontSize: '1.25rem',
-                        color: '#333',
-                        fontWeight: '600'
-                    }}>
+                <div className="swap-view-modal__header">
+                    <h2 className="swap-view-modal__title">
                         Swap Request Details
                     </h2>
                     <button
                         onClick={onClose}
-                        style={{
-                            background: 'none',
-                            border: 'none',
-                            fontSize: '1.5rem',
-                            cursor: 'pointer',
-                            color: '#666',
-                            padding: '4px',
-                            lineHeight: 1
-                        }}
+                        className="swap-view-modal__close"
                     >
                         &times;
                     </button>
                 </div>
 
                 {/* Content */}
-                <div style={{
-                    padding: '24px',
-                    maxHeight: 'calc(90vh - 140px)',
-                    overflowY: 'auto'
-                }}>
+                <div className="swap-view-modal__content">
                     {loading && (
-                        <div style={{
-                            textAlign: 'center',
-                            padding: '40px',
-                            color: '#666'
-                        }}>
+                        <div className="swap-view-modal__loading">
                             Loading...
                         </div>
                     )}
 
                     {error && (
-                        <div style={{
-                            textAlign: 'center',
-                            padding: '40px',
-                            color: '#dc3545'
-                        }}>
+                        <div className="swap-view-modal__error">
                             {error}
                         </div>
                     )}
 
                     {!loading && !error && swapData && (
-                        <div style={{ display: 'grid', gap: '16px' }}>
+                        <div className="swap-view-modal__grid">
                             {/* Status */}
-                            <div style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                padding: '12px 16px',
-                                backgroundColor: '#f8f9fa',
-                                borderRadius: '8px'
-                            }}>
-                                <span style={{ fontWeight: '600', color: '#333' }}>Status</span>
+                            <div className="swap-view-modal__card swap-view-modal__card--status">
+                                <span className="swap-view-modal__label">Status</span>
                                 {getStatusBadge(swapData.status)}
                             </div>
 
                             {/* Date */}
-                            <div style={{
-                                padding: '12px 16px',
-                                backgroundColor: '#f8f9fa',
-                                borderRadius: '8px'
-                            }}>
-                                <span style={{ fontWeight: '600', color: '#333' }}>Date Created: </span>
-                                <span style={{ color: '#555' }}>{swapData.current_date || 'N/A'}</span>
+                            <div className="swap-view-modal__card">
+                                <span className="swap-view-modal__label">Date Created: </span>
+                                <span className="swap-view-modal__value">{swapData.current_date || 'N/A'}</span>
                             </div>
 
                             {/* Requester Info */}
-                            <div style={{
-                                padding: '16px',
-                                border: '1px solid #e0e0e0',
-                                borderRadius: '8px'
-                            }}>
-                                <h3 style={{
-                                    margin: '0 0 12px 0',
-                                    fontSize: '1rem',
-                                    color: '#333',
-                                    fontWeight: '600'
-                                }}>
+                            <div className="swap-view-modal__card swap-view-modal__card--outline">
+                                <h3 className="swap-view-modal__section-title">
                                     Requester
                                 </h3>
-                                <div style={{ display: 'grid', gap: '8px' }}>
-                                    <div style={{ fontSize: '0.95rem', color: '#555' }}>
+                                <div className="swap-view-modal__details">
+                                    <div className="swap-view-modal__row">
                                         <strong>Name:</strong> {swapData.requester_name || 'N/A'}
                                     </div>
-                                    <div style={{ fontSize: '0.95rem', color: '#555' }}>
+                                    <div className="swap-view-modal__row">
                                         <strong>Task:</strong> {swapData.requester_task || 'N/A'}
                                     </div>
-                                    <div style={{ fontSize: '0.95rem', color: '#555' }}>
+                                    <div className="swap-view-modal__row">
                                         <strong>Date:</strong> {swapData.from_date || 'N/A'}
                                     </div>
                                 </div>
                             </div>
 
                             {/* Arrow */}
-                            <div style={{
-                                textAlign: 'center',
-                                padding: '8px',
-                                color: '#666'
-                            }}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transform: 'rotate(90deg)' }}>
+                            <div className="swap-view-modal__arrow">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="swap-view-modal__arrow-icon">
                                     <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
                             </div>
 
                             {/* Target Info */}
-                            <div style={{
-                                padding: '16px',
-                                border: '1px solid #e0e0e0',
-                                borderRadius: '8px'
-                            }}>
-                                <h3 style={{
-                                    margin: '0 0 12px 0',
-                                    fontSize: '1rem',
-                                    color: '#333',
-                                    fontWeight: '600'
-                                }}>
+                            <div className="swap-view-modal__card swap-view-modal__card--outline">
+                                <h3 className="swap-view-modal__section-title">
                                     Target
                                 </h3>
-                                <div style={{ display: 'grid', gap: '8px' }}>
-                                    <div style={{ fontSize: '0.95rem', color: '#555' }}>
+                                <div className="swap-view-modal__details">
+                                    <div className="swap-view-modal__row">
                                         <strong>Name:</strong> {swapData.target_name || 'N/A'}
                                     </div>
-                                    <div style={{ fontSize: '0.95rem', color: '#555' }}>
+                                    <div className="swap-view-modal__row">
                                         <strong>Task:</strong> {swapData.target_task || 'N/A'}
                                     </div>
-                                    <div style={{ fontSize: '0.95rem', color: '#555' }}>
+                                    <div className="swap-view-modal__row">
                                         <strong>Date:</strong> {swapData.to_date || 'N/A'}
                                     </div>
                                 </div>
@@ -232,26 +151,21 @@ const SwapViewModal = ({ isOpen, onClose, swapId }) => {
                 </div>
 
                 {/* Footer */}
-                <div style={{
-                    padding: '16px 24px',
-                    borderTop: '1px solid #e0e0e0',
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    gap: '12px',
-                    backgroundColor: '#f8f9fa'
-                }}>
+                <div className="swap-view-modal__footer">
+                    {exportError && (
+                        <span className="swap-view-modal__export-error" role="alert">{exportError}</span>
+                    )}
+                    <button
+                        onClick={handleExportWord}
+                        className="swap-view-modal__btn swap-view-modal__btn--primary"
+                        disabled={exportLoading || !swapData}
+                        title="Export as Word document"
+                    >
+                        {exportLoading ? 'Exporting…' : 'Export Word'}
+                    </button>
                     <button
                         onClick={onClose}
-                        style={{
-                            padding: '10px 20px',
-                            borderRadius: '6px',
-                            border: '1px solid #ddd',
-                            backgroundColor: 'white',
-                            color: '#333',
-                            fontSize: '0.9rem',
-                            cursor: 'pointer',
-                            fontWeight: '500'
-                        }}
+                        className="swap-view-modal__btn"
                     >
                         Close
                     </button>

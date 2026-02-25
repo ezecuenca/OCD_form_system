@@ -8,6 +8,7 @@ function ADRForm() {
     const [notification, setNotification] = useState(null);
     const [showSuccessNotification, setShowSuccessNotification] = useState(false);
     const [showErrorNotification, setShowErrorNotification] = useState(false);
+    const [templateId, setTemplateId] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
     const { addReport, updateReport } = useFormContext();
@@ -15,6 +16,22 @@ function ADRForm() {
     // Check if we're in edit mode (coming from existing report)
     const editingReport = location.state?.report;
     const isEditing = !!editingReport;
+
+    // Fetch available template on component mount
+    useEffect(() => {
+        const fetchAvailableTemplate = async () => {
+            try {
+                const response = await axios.get('/api/adr/available-template');
+                if (response.data.template_id) {
+                    setTemplateId(response.data.template_id);
+                }
+            } catch (error) {
+                console.error('Failed to fetch available template:', error);
+                // If template fetch fails, we'll handle it when saving
+            }
+        };
+        fetchAvailableTemplate();
+    }, []);
 
     // Load report data when editing
     useEffect(() => {
@@ -108,7 +125,7 @@ function ADRForm() {
                 documentName,
                 subject,
                 alertStatus: status,
-                templates_id: 10,  // links to your ADR_template (id=10)
+                templates_id: templateId,  // dynamically fetched from available templates
 
                 forName,
                 forPosition,
