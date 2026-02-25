@@ -31,6 +31,9 @@ Route::get('/sections', [SectionsController::class, 'index'])->name('api.section
 Route::get('/section', [SectionsController::class, 'index'])->name('api.section.index');
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/data-retention/settings', [SettingsController::class, 'getRetentionSettings'])->name('api.data-retention.settings.get');
+    Route::put('/data-retention/settings', [SettingsController::class, 'updateRetentionSettings'])->name('api.data-retention.settings.update');
+    Route::post('/data-retention/preview', [SettingsController::class, 'previewRetention'])->name('api.data-retention.preview');
     Route::post('/data-retention/auto-archive', [SettingsController::class, 'autoArchive'])->name('api.data-retention.auto-archive');
     Route::post('/data-retention/days-until-archive', [SettingsController::class, 'getDaysUntilArchive'])->name('api.data-retention.days-until-archive');
     Route::post('/sections', [SectionsController::class, 'store'])->name('api.sections.store');

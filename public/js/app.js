@@ -75878,10 +75878,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _AccountEditModal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./AccountEditModal */ "./resources/js/components/AccountEditModal.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
@@ -75891,6 +75887,10 @@ function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present,
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -76057,23 +76057,15 @@ function Settings() {
   var isSuperAdmin = (user === null || user === void 0 ? void 0 : user.role_id) === 3;
 
   // Retention period state
-  var _useState67 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      var saved = localStorage.getItem('retentionValue');
-      return saved ? parseInt(saved, 10) : 30;
-    }),
+  var _useState67 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(30),
     _useState68 = _slicedToArray(_useState67, 2),
     retentionValue = _useState68[0],
     setRetentionValue = _useState68[1];
-  var _useState69 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      return localStorage.getItem('retentionUnit') || 'days';
-    }),
+  var _useState69 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('days'),
     _useState70 = _slicedToArray(_useState69, 2),
     retentionUnit = _useState70[0],
     setRetentionUnit = _useState70[1];
-  var _useState71 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      var saved = localStorage.getItem('retentionEnabled');
-      return saved ? JSON.parse(saved) : true;
-    }),
+  var _useState71 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState72 = _slicedToArray(_useState71, 2),
     retentionEnabled = _useState72[0],
     setRetentionEnabled = _useState72[1];
@@ -76081,16 +76073,32 @@ function Settings() {
     _useState74 = _slicedToArray(_useState73, 2),
     isRetentionChanged = _useState74[0],
     setIsRetentionChanged = _useState74[1];
+  var _useState75 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState76 = _slicedToArray(_useState75, 2),
+    purgeEnabled = _useState76[0],
+    setPurgeEnabled = _useState76[1];
+  var _useState77 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(30),
+    _useState78 = _slicedToArray(_useState77, 2),
+    purgeAfterValue = _useState78[0],
+    setPurgeAfterValue = _useState78[1];
+  var _useState79 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('days'),
+    _useState80 = _slicedToArray(_useState79, 2),
+    purgeAfterUnit = _useState80[0],
+    setPurgeAfterUnit = _useState80[1];
+  var _useState81 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState82 = _slicedToArray(_useState81, 2),
+    isPurgeChanged = _useState82[0],
+    setIsPurgeChanged = _useState82[1];
 
   // Preview & days left
-  var _useState75 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+  var _useState83 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       adr_count: 0,
       swap_count: 0
     }),
-    _useState76 = _slicedToArray(_useState75, 2),
-    retentionPreview = _useState76[0],
-    setRetentionPreview = _useState76[1];
-  var _useState77 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    _useState84 = _slicedToArray(_useState83, 2),
+    retentionPreview = _useState84[0],
+    setRetentionPreview = _useState84[1];
+  var _useState85 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       retention_in_days: null,
       retention_value: null,
       retention_unit: 'days',
@@ -76099,25 +76107,25 @@ function Settings() {
       adr_days: null,
       swap_days: null
     }),
-    _useState78 = _slicedToArray(_useState77, 2),
-    daysUntilArchive = _useState78[0],
-    setDaysUntilArchive = _useState78[1];
+    _useState86 = _slicedToArray(_useState85, 2),
+    daysUntilArchive = _useState86[0],
+    setDaysUntilArchive = _useState86[1];
 
-  // FIXED: Cutoff date is now AFTER current date
+  // Cutoff date is the date before which records are considered expired
   var getCutoffDate = function getCutoffDate() {
     var cutoff = new Date();
     switch (retentionUnit) {
       case 'days':
-        cutoff.setDate(cutoff.getDate() + retentionValue);
+        cutoff.setDate(cutoff.getDate() - retentionValue);
         break;
       case 'months':
-        cutoff.setMonth(cutoff.getMonth() + retentionValue);
+        cutoff.setMonth(cutoff.getMonth() - retentionValue);
         break;
       case 'years':
-        cutoff.setFullYear(cutoff.getFullYear() + retentionValue);
+        cutoff.setFullYear(cutoff.getFullYear() - retentionValue);
         break;
       default:
-        cutoff.setDate(cutoff.getDate() + retentionValue);
+        cutoff.setDate(cutoff.getDate() - retentionValue);
     }
 
     // Set to end of the cutoff day (common for retention policies)
@@ -76127,24 +76135,20 @@ function Settings() {
 
   // Format time left - shows hours/minutes if within same day
   var formatTimeLeft = function formatTimeLeft() {
-    var hours_left = daysUntilArchive.hours_left,
-      minutes_left = daysUntilArchive.minutes_left,
+    var adr_days = daysUntilArchive.adr_days,
+      swap_days = daysUntilArchive.swap_days,
       retention_value = daysUntilArchive.retention_value,
-      retention_unit = daysUntilArchive.retention_unit,
-      retention_in_days = daysUntilArchive.retention_in_days;
-
-    // If hours or minutes are available (within same day), show them
-    if (hours_left !== null || minutes_left !== null) {
-      if (hours_left !== null && minutes_left !== null) {
-        return "".concat(hours_left, " hour").concat(hours_left !== 1 ? 's' : '', " ").concat(minutes_left, " min").concat(minutes_left !== 1 ? 's' : '', " left");
-      } else if (hours_left !== null) {
-        return "".concat(hours_left, " hour").concat(hours_left !== 1 ? 's' : '', " left");
-      } else if (minutes_left !== null) {
-        return "".concat(minutes_left, " minute").concat(minutes_left !== 1 ? 's' : '', " left");
+      retention_unit = daysUntilArchive.retention_unit;
+    var dayValues = [adr_days, swap_days].filter(function (value) {
+      return typeof value === 'number';
+    });
+    if (dayValues.length > 0) {
+      var minDays = Math.min.apply(Math, _toConsumableArray(dayValues));
+      if (minDays <= 0) {
+        return 'Ready to archive';
       }
+      return "".concat(minDays, " day").concat(minDays !== 1 ? 's' : '', " left");
     }
-
-    // Otherwise show the retention period
     if (retention_value !== null) {
       return "".concat(retention_value, " ").concat(retention_value === 1 ? 'day' : retention_unit, " left");
     }
@@ -76155,15 +76159,15 @@ function Settings() {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var fetchData = /*#__PURE__*/function () {
       var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-        var cutoffDate, res, daysRes, _t, _t2;
+        var res, daysRes, _t, _t2;
         return _regenerator().w(function (_context) {
           while (1) switch (_context.p = _context.n) {
             case 0:
               _context.p = 0;
-              cutoffDate = getCutoffDate();
               _context.n = 1;
               return axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/data-retention/preview', {
-                cutoff_date: cutoffDate.toISOString()
+                retention_value: retentionValue,
+                retention_unit: retentionUnit
               });
             case 1:
               res = _context.v;
@@ -76218,6 +76222,28 @@ function Settings() {
     if (activeSection !== 'data-retention') {
       setIsRetentionChanged(false);
     }
+  }, [activeSection]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (activeSection !== 'data-retention') return;
+    var isMounted = true;
+    axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/data-retention/settings').then(function (res) {
+      if (!isMounted) return;
+      setRetentionEnabled(!!res.data.enabled);
+      setRetentionValue(parseInt(res.data.retention_value, 10) || 30);
+      setRetentionUnit(res.data.retention_unit || 'days');
+      setPurgeEnabled(!!res.data.purge_enabled);
+      setPurgeAfterValue(parseInt(res.data.purge_after_value, 10) || 30);
+      setPurgeAfterUnit(res.data.purge_after_unit || 'days');
+      setIsRetentionChanged(false);
+      setIsPurgeChanged(false);
+    })["catch"](function () {
+      if (!isMounted) return;
+      setIsRetentionChanged(false);
+      setIsPurgeChanged(false);
+    });
+    return function () {
+      isMounted = false;
+    };
   }, [activeSection]);
 
   // Filter templates by type
@@ -76883,18 +76909,167 @@ function Settings() {
   };
 
   // Save retention settings
-  var handleSetRetention = function handleSetRetention() {
-    localStorage.setItem('retentionValue', retentionValue.toString());
-    localStorage.setItem('retentionUnit', retentionUnit);
-    var total = retentionPreview.adr_count + retentionPreview.swap_count;
-    if (total > 0) {
-      setSuccessMessage("Retention set to ".concat(retentionValue, " ").concat(retentionUnit, ". ") + "".concat(retentionPreview.adr_count, " ADR report(s) and ") + "".concat(retentionPreview.swap_count, " swapping request(s) will be archived."));
-    } else {
-      setSuccessMessage("Retention set to ".concat(retentionValue, " ").concat(retentionUnit, ". No records to archive."));
-    }
-    setShowSuccessNotification(true);
-    setIsRetentionChanged(false);
-  };
+  var handleSetRetention = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+      var archiveResult, archiveRes, archivedTotal, _err$response17, _t3;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.p = _context2.n) {
+          case 0:
+            _context2.p = 0;
+            _context2.n = 1;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().put('/api/data-retention/settings', {
+              enabled: retentionEnabled,
+              retention_value: retentionValue,
+              retention_unit: retentionUnit,
+              purge_enabled: purgeEnabled,
+              purge_after_value: purgeAfterValue,
+              purge_after_unit: purgeAfterUnit
+            });
+          case 1:
+            archiveResult = null;
+            if (!retentionEnabled) {
+              _context2.n = 3;
+              break;
+            }
+            _context2.n = 2;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/data-retention/auto-archive', {
+              retention_value: retentionValue,
+              retention_unit: retentionUnit
+            });
+          case 2:
+            archiveRes = _context2.v;
+            archiveResult = archiveRes.data;
+          case 3:
+            if (archiveResult) {
+              archivedTotal = (archiveResult.adr_archived || 0) + (archiveResult.swap_archived || 0);
+              if (archivedTotal > 0) {
+                setSuccessMessage("Retention set to ".concat(retentionValue, " ").concat(retentionUnit, ". ") + "".concat(archiveResult.adr_archived || 0, " ADR report(s) and ") + "".concat(archiveResult.swap_archived || 0, " swapping request(s) were archived."));
+              } else {
+                setSuccessMessage("Retention set to ".concat(retentionValue, " ").concat(retentionUnit, ". No records to archive."));
+              }
+            } else {
+              setSuccessMessage('Retention updated. Auto-archive is currently disabled.');
+            }
+            setShowSuccessNotification(true);
+            setIsRetentionChanged(false);
+            _context2.n = 5;
+            break;
+          case 4:
+            _context2.p = 4;
+            _t3 = _context2.v;
+            alert((_t3 === null || _t3 === void 0 || (_err$response17 = _t3.response) === null || _err$response17 === void 0 || (_err$response17 = _err$response17.data) === null || _err$response17 === void 0 ? void 0 : _err$response17.message) || 'Failed to update retention settings.');
+          case 5:
+            return _context2.a(2);
+        }
+      }, _callee2, null, [[0, 4]]);
+    }));
+    return function handleSetRetention() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+  var handleSetPurge = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+      var _err$response18, _t4;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
+          case 0:
+            _context3.p = 0;
+            _context3.n = 1;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().put('/api/data-retention/settings', {
+              enabled: retentionEnabled,
+              retention_value: retentionValue,
+              retention_unit: retentionUnit,
+              purge_enabled: purgeEnabled,
+              purge_after_value: purgeAfterValue,
+              purge_after_unit: purgeAfterUnit
+            });
+          case 1:
+            setSuccessMessage("Purge settings saved. Archived data older than ".concat(purgeAfterValue, " ").concat(purgeAfterUnit, " will be deleted."));
+            setShowSuccessNotification(true);
+            setIsPurgeChanged(false);
+            _context3.n = 3;
+            break;
+          case 2:
+            _context3.p = 2;
+            _t4 = _context3.v;
+            alert((_t4 === null || _t4 === void 0 || (_err$response18 = _t4.response) === null || _err$response18 === void 0 || (_err$response18 = _err$response18.data) === null || _err$response18 === void 0 ? void 0 : _err$response18.message) || 'Failed to update purge settings.');
+          case 3:
+            return _context3.a(2);
+        }
+      }, _callee3, null, [[0, 2]]);
+    }));
+    return function handleSetPurge() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+  var handleToggleRetention = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(enabled) {
+      var _err$response19, _t5;
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.p = _context4.n) {
+          case 0:
+            setRetentionEnabled(enabled);
+            _context4.p = 1;
+            _context4.n = 2;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().put('/api/data-retention/settings', {
+              enabled: enabled,
+              retention_value: retentionValue,
+              retention_unit: retentionUnit,
+              purge_enabled: purgeEnabled,
+              purge_after_value: purgeAfterValue,
+              purge_after_unit: purgeAfterUnit
+            });
+          case 2:
+            setIsRetentionChanged(false);
+            _context4.n = 4;
+            break;
+          case 3:
+            _context4.p = 3;
+            _t5 = _context4.v;
+            alert((_t5 === null || _t5 === void 0 || (_err$response19 = _t5.response) === null || _err$response19 === void 0 || (_err$response19 = _err$response19.data) === null || _err$response19 === void 0 ? void 0 : _err$response19.message) || 'Failed to update auto-archive setting.');
+          case 4:
+            return _context4.a(2);
+        }
+      }, _callee4, null, [[1, 3]]);
+    }));
+    return function handleToggleRetention(_x) {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+  var handleTogglePurge = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(enabled) {
+      var _err$response20, _t6;
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.p = _context5.n) {
+          case 0:
+            setPurgeEnabled(enabled);
+            _context5.p = 1;
+            _context5.n = 2;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().put('/api/data-retention/settings', {
+              enabled: retentionEnabled,
+              retention_value: retentionValue,
+              retention_unit: retentionUnit,
+              purge_enabled: enabled,
+              purge_after_value: purgeAfterValue,
+              purge_after_unit: purgeAfterUnit
+            });
+          case 2:
+            setIsPurgeChanged(false);
+            _context5.n = 4;
+            break;
+          case 3:
+            _context5.p = 3;
+            _t6 = _context5.v;
+            alert((_t6 === null || _t6 === void 0 || (_err$response20 = _t6.response) === null || _err$response20 === void 0 || (_err$response20 = _err$response20.data) === null || _err$response20 === void 0 ? void 0 : _err$response20.message) || 'Failed to update auto-purge setting.');
+          case 4:
+            return _context5.a(2);
+        }
+      }, _callee5, null, [[1, 3]]);
+    }));
+    return function handleTogglePurge(_x2) {
+      return _ref7.apply(this, arguments);
+    };
+  }();
   var sectionContent;
   switch (activeSection) {
     case 'accounts':
@@ -77495,9 +77670,7 @@ function Settings() {
                   type: "checkbox",
                   checked: retentionEnabled,
                   onChange: function onChange(e) {
-                    setRetentionEnabled(e.target.checked);
-                    localStorage.setItem('retentionEnabled', JSON.stringify(e.target.checked));
-                    setIsRetentionChanged(true);
+                    handleToggleRetention(e.target.checked);
                   }
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
                   className: "settings__retention-slider"
@@ -77593,8 +77766,79 @@ function Settings() {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
               type: "button",
               className: "settings__set-btn",
-              disabled: !isRetentionChanged || !retentionEnabled,
+              disabled: !isRetentionChanged,
               onClick: handleSetRetention,
+              children: "Set"
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+            className: "settings__retention-header",
+            style: {
+              marginTop: '2rem'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("label", {
+              className: "settings__retention-toggle-label",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                children: "Auto-Delete Archived"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+                className: "settings__retention-toggle",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+                  type: "checkbox",
+                  checked: purgeEnabled,
+                  onChange: function onChange(e) {
+                    handleTogglePurge(e.target.checked);
+                  }
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                  className: "settings__retention-slider"
+                })]
+              })]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            className: "settings__retention-period",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("label", {
+              children: "Deletion Period"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              className: "settings__retention-input-group",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+                type: "number",
+                min: "1",
+                value: purgeAfterValue,
+                onChange: function onChange(e) {
+                  setPurgeAfterValue(Math.max(1, parseInt(e.target.value) || 1));
+                  setIsPurgeChanged(true);
+                },
+                className: "settings__retention-number",
+                disabled: !purgeEnabled
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("select", {
+                value: purgeAfterUnit,
+                onChange: function onChange(e) {
+                  setPurgeAfterUnit(e.target.value);
+                  setIsPurgeChanged(true);
+                },
+                className: "settings__retention-select",
+                disabled: !purgeEnabled,
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("option", {
+                  value: "days",
+                  children: "days"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("option", {
+                  value: "months",
+                  children: "months"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("option", {
+                  value: "years",
+                  children: "years"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+                src: "/images/edit_icon.svg",
+                alt: "Edit",
+                className: "settings__retention-edit-icon"
+              })]
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+            className: "settings__retention-actions",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+              type: "button",
+              className: "settings__set-btn",
+              disabled: !isPurgeChanged,
+              onClick: handleSetPurge,
               children: "Set"
             })
           })]

@@ -59,18 +59,15 @@ function Settings() {
     const isSuperAdmin = user?.role_id === 3;
 
     // Retention period state
-    const [retentionValue, setRetentionValue] = useState(() => {
-        const saved = localStorage.getItem('retentionValue');
-        return saved ? parseInt(saved, 10) : 30;
-    });
-    const [retentionUnit, setRetentionUnit] = useState(() => {
-        return localStorage.getItem('retentionUnit') || 'days';
-    });
-    const [retentionEnabled, setRetentionEnabled] = useState(() => {
-        const saved = localStorage.getItem('retentionEnabled');
-        return saved ? JSON.parse(saved) : true;
-    });
+    const [retentionValue, setRetentionValue] = useState(30);
+    const [retentionUnit, setRetentionUnit] = useState('days');
+    const [retentionEnabled, setRetentionEnabled] = useState(true);
     const [isRetentionChanged, setIsRetentionChanged] = useState(false);
+
+    const [purgeEnabled, setPurgeEnabled] = useState(false);
+    const [purgeAfterValue, setPurgeAfterValue] = useState(30);
+    const [purgeAfterUnit, setPurgeAfterUnit] = useState('days');
+    const [isPurgeChanged, setIsPurgeChanged] = useState(false);
 
     // Preview & days left
     const [retentionPreview, setRetentionPreview] = useState({ adr_count: 0, swap_count: 0 });
@@ -84,22 +81,22 @@ function Settings() {
         swap_days: null
     });
 
-    // FIXED: Cutoff date is now AFTER current date
+    // Cutoff date is the date before which records are considered expired
     const getCutoffDate = () => {
         const cutoff = new Date();
 
         switch (retentionUnit) {
             case 'days':
-                cutoff.setDate(cutoff.getDate() + retentionValue);
+                cutoff.setDate(cutoff.getDate() - retentionValue);
                 break;
             case 'months':
-                cutoff.setMonth(cutoff.getMonth() + retentionValue);
+                cutoff.setMonth(cutoff.getMonth() - retentionValue);
                 break;
             case 'years':
-                cutoff.setFullYear(cutoff.getFullYear() + retentionValue);
+                cutoff.setFullYear(cutoff.getFullYear() - retentionValue);
                 break;
             default:
-                cutoff.setDate(cutoff.getDate() + retentionValue);
+                cutoff.setDate(cutoff.getDate() - retentionValue);
         }
 
         // Set to end of the cutoff day (common for retention policies)
@@ -110,24 +107,21 @@ function Settings() {
 
     // Format time left - shows hours/minutes if within same day
     const formatTimeLeft = () => {
-        const { hours_left, minutes_left, retention_value, retention_unit, retention_in_days } = daysUntilArchive;
-        
-        // If hours or minutes are available (within same day), show them
-        if (hours_left !== null || minutes_left !== null) {
-            if (hours_left !== null && minutes_left !== null) {
-                return `${hours_left} hour${hours_left !== 1 ? 's' : ''} ${minutes_left} min${minutes_left !== 1 ? 's' : ''} left`;
-            } else if (hours_left !== null) {
-                return `${hours_left} hour${hours_left !== 1 ? 's' : ''} left`;
-            } else if (minutes_left !== null) {
-                return `${minutes_left} minute${minutes_left !== 1 ? 's' : ''} left`;
+        const { adr_days, swap_days, retention_value, retention_unit } = daysUntilArchive;
+
+        const dayValues = [adr_days, swap_days].filter((value) => typeof value === 'number');
+        if (dayValues.length > 0) {
+            const minDays = Math.min(...dayValues);
+            if (minDays <= 0) {
+                return 'Ready to archive';
             }
+            return `${minDays} day${minDays !== 1 ? 's' : ''} left`;
         }
-        
-        // Otherwise show the retention period
+
         if (retention_value !== null) {
             return `${retention_value} ${retention_value === 1 ? 'day' : retention_unit} left`;
         }
-        
+
         return `${retentionValue} ${retentionValue === 1 ? 'day' : retentionUnit} left`;
     };
 
@@ -135,9 +129,9 @@ function Settings() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const cutoffDate = getCutoffDate();
                 const res = await axios.post('/api/data-retention/preview', {
-                    cutoff_date: cutoffDate.toISOString(),
+                    retention_value: retentionValue,
+                    retention_unit: retentionUnit,
                 });
                 setRetentionPreview({
                     adr_count: res.data.adr_to_archive || 0,
@@ -174,6 +168,33 @@ function Settings() {
         if (activeSection !== 'data-retention') {
             setIsRetentionChanged(false);
         }
+    }, [activeSection]);
+
+    useEffect(() => {
+        if (activeSection !== 'data-retention') return;
+
+        let isMounted = true;
+        axios.get('/api/data-retention/settings')
+            .then((res) => {
+                if (!isMounted) return;
+                setRetentionEnabled(!!res.data.enabled);
+                setRetentionValue(parseInt(res.data.retention_value, 10) || 30);
+                setRetentionUnit(res.data.retention_unit || 'days');
+                setPurgeEnabled(!!res.data.purge_enabled);
+                setPurgeAfterValue(parseInt(res.data.purge_after_value, 10) || 30);
+                setPurgeAfterUnit(res.data.purge_after_unit || 'days');
+                setIsRetentionChanged(false);
+                setIsPurgeChanged(false);
+            })
+            .catch(() => {
+                if (!isMounted) return;
+                setIsRetentionChanged(false);
+                setIsPurgeChanged(false);
+            });
+
+        return () => {
+            isMounted = false;
+        };
     }, [activeSection]);
 
     // Filter templates by type
@@ -760,23 +781,99 @@ function Settings() {
     };
 
     // Save retention settings
-    const handleSetRetention = () => {
-        localStorage.setItem('retentionValue', retentionValue.toString());
-        localStorage.setItem('retentionUnit', retentionUnit);
+    const handleSetRetention = async () => {
+        try {
+            await axios.put('/api/data-retention/settings', {
+                enabled: retentionEnabled,
+                retention_value: retentionValue,
+                retention_unit: retentionUnit,
+                purge_enabled: purgeEnabled,
+                purge_after_value: purgeAfterValue,
+                purge_after_unit: purgeAfterUnit,
+            });
 
-        const total = retentionPreview.adr_count + retentionPreview.swap_count;
-        if (total > 0) {
-            setSuccessMessage(
-                `Retention set to ${retentionValue} ${retentionUnit}. ` +
-                `${retentionPreview.adr_count} ADR report(s) and ` +
-                `${retentionPreview.swap_count} swapping request(s) will be archived.`
-            );
-        } else {
-            setSuccessMessage(`Retention set to ${retentionValue} ${retentionUnit}. No records to archive.`);
+            let archiveResult = null;
+            if (retentionEnabled) {
+                const archiveRes = await axios.post('/api/data-retention/auto-archive', {
+                    retention_value: retentionValue,
+                    retention_unit: retentionUnit,
+                });
+                archiveResult = archiveRes.data;
+            }
+
+            if (archiveResult) {
+                const archivedTotal = (archiveResult.adr_archived || 0) + (archiveResult.swap_archived || 0);
+                if (archivedTotal > 0) {
+                    setSuccessMessage(
+                        `Retention set to ${retentionValue} ${retentionUnit}. ` +
+                        `${archiveResult.adr_archived || 0} ADR report(s) and ` +
+                        `${archiveResult.swap_archived || 0} swapping request(s) were archived.`
+                    );
+                } else {
+                    setSuccessMessage(`Retention set to ${retentionValue} ${retentionUnit}. No records to archive.`);
+                }
+            } else {
+                setSuccessMessage('Retention updated. Auto-archive is currently disabled.');
+            }
+
+            setShowSuccessNotification(true);
+            setIsRetentionChanged(false);
+        } catch (err) {
+            alert(err?.response?.data?.message || 'Failed to update retention settings.');
         }
+    };
 
-        setShowSuccessNotification(true);
-        setIsRetentionChanged(false);
+    const handleSetPurge = async () => {
+        try {
+            await axios.put('/api/data-retention/settings', {
+                enabled: retentionEnabled,
+                retention_value: retentionValue,
+                retention_unit: retentionUnit,
+                purge_enabled: purgeEnabled,
+                purge_after_value: purgeAfterValue,
+                purge_after_unit: purgeAfterUnit,
+            });
+
+            setSuccessMessage(`Purge settings saved. Archived data older than ${purgeAfterValue} ${purgeAfterUnit} will be deleted.`);
+            setShowSuccessNotification(true);
+            setIsPurgeChanged(false);
+        } catch (err) {
+            alert(err?.response?.data?.message || 'Failed to update purge settings.');
+        }
+    };
+
+    const handleToggleRetention = async (enabled) => {
+        setRetentionEnabled(enabled);
+        try {
+            await axios.put('/api/data-retention/settings', {
+                enabled,
+                retention_value: retentionValue,
+                retention_unit: retentionUnit,
+                purge_enabled: purgeEnabled,
+                purge_after_value: purgeAfterValue,
+                purge_after_unit: purgeAfterUnit,
+            });
+            setIsRetentionChanged(false);
+        } catch (err) {
+            alert(err?.response?.data?.message || 'Failed to update auto-archive setting.');
+        }
+    };
+
+    const handleTogglePurge = async (enabled) => {
+        setPurgeEnabled(enabled);
+        try {
+            await axios.put('/api/data-retention/settings', {
+                enabled: retentionEnabled,
+                retention_value: retentionValue,
+                retention_unit: retentionUnit,
+                purge_enabled: enabled,
+                purge_after_value: purgeAfterValue,
+                purge_after_unit: purgeAfterUnit,
+            });
+            setIsPurgeChanged(false);
+        } catch (err) {
+            alert(err?.response?.data?.message || 'Failed to update auto-purge setting.');
+        }
     };
 
     let sectionContent;
@@ -1199,9 +1296,7 @@ function Settings() {
                                         type="checkbox"
                                         checked={retentionEnabled}
                                         onChange={(e) => {
-                                            setRetentionEnabled(e.target.checked);
-                                            localStorage.setItem('retentionEnabled', JSON.stringify(e.target.checked));
-                                            setIsRetentionChanged(true);
+                                            handleToggleRetention(e.target.checked);
                                         }}
                                     />
                                     <span className="settings__retention-slider"></span>
@@ -1291,8 +1386,69 @@ function Settings() {
                             <button
                                 type="button"
                                 className="settings__set-btn"
-                                disabled={!isRetentionChanged || !retentionEnabled}
+                                disabled={!isRetentionChanged}
                                 onClick={handleSetRetention}
+                            >
+                                Set
+                            </button>
+                        </div>
+
+                        <div className="settings__retention-header" style={{ marginTop: '2rem' }}>
+                            <label className="settings__retention-toggle-label">
+                                <span>Auto-Delete Archived</span>
+                                <div className="settings__retention-toggle">
+                                    <input
+                                        type="checkbox"
+                                        checked={purgeEnabled}
+                                        onChange={(e) => {
+                                            handleTogglePurge(e.target.checked);
+                                        }}
+                                    />
+                                    <span className="settings__retention-slider"></span>
+                                </div>
+                            </label>
+                        </div>
+                        <div className="settings__retention-period">
+                            <label>Deletion Period</label>
+                            <div className="settings__retention-input-group">
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={purgeAfterValue}
+                                    onChange={(e) => {
+                                        setPurgeAfterValue(Math.max(1, parseInt(e.target.value) || 1));
+                                        setIsPurgeChanged(true);
+                                    }}
+                                    className="settings__retention-number"
+                                    disabled={!purgeEnabled}
+                                />
+                                <select
+                                    value={purgeAfterUnit}
+                                    onChange={(e) => {
+                                        setPurgeAfterUnit(e.target.value);
+                                        setIsPurgeChanged(true);
+                                    }}
+                                    className="settings__retention-select"
+                                    disabled={!purgeEnabled}
+                                >
+                                    <option value="days">days</option>
+                                    <option value="months">months</option>
+                                    <option value="years">years</option>
+                                </select>
+                                <img
+                                    src="/images/edit_icon.svg"
+                                    alt="Edit"
+                                    className="settings__retention-edit-icon"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="settings__retention-actions">
+                            <button
+                                type="button"
+                                className="settings__set-btn"
+                                disabled={!isPurgeChanged}
+                                onClick={handleSetPurge}
                             >
                                 Set
                             </button>
