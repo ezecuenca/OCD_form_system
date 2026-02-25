@@ -211,13 +211,14 @@ function Settings() {
         const roleName = normalizeRoleLabel(profile?.role_name || profile?.role || user?.role_name || user?.role);
         const role = roleIdLabels[roleId] || roleName || '—';
         let status = profile?.status || user?.status || null;
-        if (!status && typeof profile?.is_active === 'boolean') {
-            status = profile.is_active ? 'Active' : 'Disabled';
+        const isActive = typeof profile?.is_active === 'boolean'
+            ? profile.is_active
+            : typeof user?.is_active === 'boolean'
+                ? user.is_active
+                : true;
+        if (!status) {
+            status = isActive ? 'Active' : 'Inactive';
         }
-        if (!status && typeof user?.is_active === 'boolean') {
-            status = user.is_active ? 'Active' : 'Disabled';
-        }
-        if (!status) status = 'Active';
         return {
             id: profile?.id || user?.id || name,
             profile_id: profile?.id || null,
@@ -231,6 +232,7 @@ function Settings() {
             status,
             role,
             image_path: profile?.image_path || null,
+            is_active: isActive,
         };
     };
 
@@ -704,6 +706,35 @@ function Settings() {
         setShowAccountModal(true);
     };
 
+    const toggleAccountStatus = (account) => {
+        if (!account?.profile_id) return;
+        const nextActive = !account.is_active;
+        const verb = nextActive ? 'Enable' : 'Disable';
+        setConfirmMessage(`${verb} account "${account.name}"?`);
+        setConfirmAction(() => () => {
+            axios.put(`/api/profiles/${account.profile_id}`, { is_active: nextActive })
+                .then(() => {
+                    setAccounts((prev) => prev.map((item) => (
+                        item.profile_id === account.profile_id
+                            ? {
+                                ...item,
+                                is_active: nextActive,
+                                status: nextActive ? 'Active' : 'Disabled',
+                            }
+                            : item
+                    )));
+                    setSuccessMessage(`Account ${nextActive ? 'enabled' : 'disabled'} successfully.`);
+                    setShowSuccessNotification(true);
+                    setShowConfirmModal(false);
+                })
+                .catch((err) => {
+                    alert(err?.response?.data?.message || 'Failed to update account status.');
+                    setShowConfirmModal(false);
+                });
+        });
+        setShowConfirmModal(true);
+    };
+
     const closeAccountModal = () => {
         setShowAccountModal(false);
         setEditingAccount(null);
@@ -799,14 +830,29 @@ function Settings() {
                                                     <span>{account.name}</span>
                                                 </div>
                                             </td>
-                                            <td><span className="settings__status settings__status--online">{account.status}</span></td>
+                                            <td>
+                                                <span
+                                                    className={`settings__status ${account.is_active ? 'settings__status--online' : 'settings__status--offline'}`}
+                                                >
+                                                    {account.status}
+                                                </span>
+                                            </td>
                                             <td>{account.role}</td>
                                             <td className="settings__table-actions">
                                                 <button type="button" className="settings__icon-button" onClick={() => openEditAccount(account)}>
                                                     <img src="/images/edit_icon.svg" alt="" aria-hidden="true" />
                                                 </button>
-                                                <button type="button" className="settings__icon-button">
-                                                    <img src="/images/disable_icon.svg" alt="" aria-hidden="true" />
+                                                <button
+                                                    type="button"
+                                                    className="settings__icon-button"
+                                                    onClick={() => toggleAccountStatus(account)}
+                                                    aria-label={account.is_active ? 'Disable account' : 'Restore account'}
+                                                >
+                                                    <img
+                                                        src={account.is_active ? '/images/disable_icon.svg' : '/images/restore_icon.svg'}
+                                                        alt=""
+                                                        aria-hidden="true"
+                                                    />
                                                 </button>
                                             </td>
                                         </tr>

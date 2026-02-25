@@ -76148,13 +76148,10 @@ function Settings() {
     var roleName = normalizeRoleLabel((profile === null || profile === void 0 ? void 0 : profile.role_name) || (profile === null || profile === void 0 ? void 0 : profile.role) || (user === null || user === void 0 ? void 0 : user.role_name) || (user === null || user === void 0 ? void 0 : user.role));
     var role = roleIdLabels[roleId] || roleName || '—';
     var status = (profile === null || profile === void 0 ? void 0 : profile.status) || (user === null || user === void 0 ? void 0 : user.status) || null;
-    if (!status && typeof (profile === null || profile === void 0 ? void 0 : profile.is_active) === 'boolean') {
-      status = profile.is_active ? 'Active' : 'Disabled';
+    var isActive = typeof (profile === null || profile === void 0 ? void 0 : profile.is_active) === 'boolean' ? profile.is_active : typeof (user === null || user === void 0 ? void 0 : user.is_active) === 'boolean' ? user.is_active : true;
+    if (!status) {
+      status = isActive ? 'Active' : 'Inactive';
     }
-    if (!status && typeof (user === null || user === void 0 ? void 0 : user.is_active) === 'boolean') {
-      status = user.is_active ? 'Active' : 'Disabled';
-    }
-    if (!status) status = 'Active';
     return {
       id: (profile === null || profile === void 0 ? void 0 : profile.id) || (user === null || user === void 0 ? void 0 : user.id) || name,
       profile_id: (profile === null || profile === void 0 ? void 0 : profile.id) || null,
@@ -76167,7 +76164,8 @@ function Settings() {
       name: name,
       status: status,
       role: role,
-      image_path: (profile === null || profile === void 0 ? void 0 : profile.image_path) || null
+      image_path: (profile === null || profile === void 0 ? void 0 : profile.image_path) || null,
+      is_active: isActive
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -76724,6 +76722,36 @@ function Settings() {
     setEditingAccount(account);
     setShowAccountModal(true);
   };
+  var toggleAccountStatus = function toggleAccountStatus(account) {
+    if (!(account !== null && account !== void 0 && account.profile_id)) return;
+    var nextActive = !account.is_active;
+    var verb = nextActive ? 'Enable' : 'Disable';
+    setConfirmMessage("".concat(verb, " account \"").concat(account.name, "\"?"));
+    setConfirmAction(function () {
+      return function () {
+        axios__WEBPACK_IMPORTED_MODULE_1___default().put("/api/profiles/".concat(account.profile_id), {
+          is_active: nextActive
+        }).then(function () {
+          setAccounts(function (prev) {
+            return prev.map(function (item) {
+              return item.profile_id === account.profile_id ? _objectSpread(_objectSpread({}, item), {}, {
+                is_active: nextActive,
+                status: nextActive ? 'Active' : 'Disabled'
+              }) : item;
+            });
+          });
+          setSuccessMessage("Account ".concat(nextActive ? 'enabled' : 'disabled', " successfully."));
+          setShowSuccessNotification(true);
+          setShowConfirmModal(false);
+        })["catch"](function (err) {
+          var _err$response15;
+          alert((err === null || err === void 0 || (_err$response15 = err.response) === null || _err$response15 === void 0 || (_err$response15 = _err$response15.data) === null || _err$response15 === void 0 ? void 0 : _err$response15.message) || 'Failed to update account status.');
+          setShowConfirmModal(false);
+        });
+      };
+    });
+    setShowConfirmModal(true);
+  };
   var closeAccountModal = function closeAccountModal() {
     setShowAccountModal(false);
     setEditingAccount(null);
@@ -76742,8 +76770,8 @@ function Settings() {
       setShowSuccessNotification(true);
       closeAccountModal();
     })["catch"](function (err) {
-      var _err$response15;
-      alert((err === null || err === void 0 || (_err$response15 = err.response) === null || _err$response15 === void 0 || (_err$response15 = _err$response15.data) === null || _err$response15 === void 0 ? void 0 : _err$response15.message) || 'Failed to update account.');
+      var _err$response16;
+      alert((err === null || err === void 0 || (_err$response16 = err.response) === null || _err$response16 === void 0 || (_err$response16 = _err$response16.data) === null || _err$response16 === void 0 ? void 0 : _err$response16.message) || 'Failed to update account.');
     })["finally"](function () {
       return setAccountSaving(false);
     });
@@ -76852,7 +76880,7 @@ function Settings() {
                       })
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-                        className: "settings__status settings__status--online",
+                        className: "settings__status ".concat(account.is_active ? 'settings__status--online' : 'settings__status--offline'),
                         children: account.status
                       })
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
@@ -76873,8 +76901,12 @@ function Settings() {
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
                         type: "button",
                         className: "settings__icon-button",
+                        onClick: function onClick() {
+                          return toggleAccountStatus(account);
+                        },
+                        "aria-label": account.is_active ? 'Disable account' : 'Restore account',
                         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                          src: "/images/disable_icon.svg",
+                          src: account.is_active ? '/images/disable_icon.svg' : '/images/restore_icon.svg',
                           alt: "",
                           "aria-hidden": "true"
                         })

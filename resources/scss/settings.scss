@@ -281,12 +281,23 @@
     white-space: nowrap;
 }
 
+.settings__table thead th.settings__table-actions {
+    text-align: center;
+}
+
+.settings__table tbody td.settings__table-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
 /* Consistent action buttons across ALL tables */
 .settings__icon-button {
     width: 28px;
     height: 28px;
     padding: 0;
-    margin: 0 4px;
+    margin: 0;
     border: none;
     border-radius: 4px;
     background: transparent;
@@ -375,6 +386,14 @@
     height: 8px;
     border-radius: 50%;
     background: #22c55e;
+}
+
+.settings__status--offline {
+    color: #dc2626;
+}
+
+.settings__status--offline::before {
+    background: #dc2626;
 }
 
 /* Modal styles (unchanged) */
