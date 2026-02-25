@@ -102,7 +102,6 @@ function ADRForm() {
             return;
         }
 
-        // Wrap everything in { report: { ... } } — matches AdrFormController::store() expectation
         const payload = {
             report: {
                 documentName,

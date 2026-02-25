@@ -68977,7 +68977,6 @@ function ADRForm() {
             setShowErrorNotification(true);
             return _context.a(2);
           case 1:
-            // Wrap everything in { report: { ... } } — matches AdrFormController::store() expectation
             payload = {
               report: {
                 documentName: documentName,
