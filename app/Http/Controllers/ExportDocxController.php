@@ -13,12 +13,19 @@ use Illuminate\Support\Facades\Storage;
 class ExportDocxController extends Controller
 {
     /**
-     * Path to the .docx template file: uses the template marked "in use" in the DB,
+     * Path to the .docx template file: uses the template marked "in use" in the DB for the given type,
      * or falls back to ADR_template.docx if none is active.
      */
-    private function getTemplatePath(): string
+    private function getTemplatePath(string $type = 'adr'): string
     {
-        $active = Template::where('is_active', 1)->first();
+        if (!in_array($type, ['adr', 'swap'], true)) {
+            $type = 'adr';
+        }
+        
+        $active = Template::where('type', $type)->where('is_active', 1)->first();
+        if (!$active || !trim((string) $active->template_name)) {
+            $active = Template::whereNull('type')->where('is_active', 1)->first();
+        }
         if (!$active || !trim((string) $active->template_name)) {
             return resource_path('templates/ADR_template.docx');
         }
@@ -54,10 +61,17 @@ class ExportDocxController extends Controller
             return response()->json(['error' => 'No report data provided.'], 422);
         }
 
-        $templatePath = $this->getTemplatePath();
+        // Detect template type from report data
+        $type = 'adr'; // default
+        if (isset($report['requestId']) || isset($report['request_id']) || 
+            isset($report['requester_name']) || isset($report['target_name'])) {
+            $type = 'swap';
+        }
+
+        $templatePath = $this->getTemplatePath($type);
         clearstatcache(true, $templatePath);
         if (!is_readable($templatePath)) {
-            Log::error('ADR template not found or not readable: ' . $templatePath);
+            Log::error('Template not found or not readable: ' . $templatePath);
             return response()->json(['error' => 'Export template not found.'], 500);
         }
 

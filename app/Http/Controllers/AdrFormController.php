@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AdrForm;
 use App\Models\Profile;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,6 +17,34 @@ class AdrFormController extends Controller
             return null;
         }
         return Profile::where('user_id', $user->id)->value('id');
+    }
+
+    /**
+     * Get an available ADR template ID.
+     * Returns the active ADR template if available, otherwise the first available ADR template.
+     */
+    public function getAvailableTemplate()
+    {
+        // Try to get the active ADR template first
+        $active = Template::where('type', 'adr')->where('is_active', 1)->first();
+        if ($active) {
+            return response()->json(['template_id' => $active->id, 'template_name' => $active->template_name]);
+        }
+
+        // Fall back to the first available ADR template
+        $adrTemplate = Template::where('type', 'adr')->first();
+        if ($adrTemplate) {
+            return response()->json(['template_id' => $adrTemplate->id, 'template_name' => $adrTemplate->template_name]);
+        }
+
+        // If no ADR template found, return any available template
+        $anyTemplate = Template::first();
+        if ($anyTemplate) {
+            return response()->json(['template_id' => $anyTemplate->id, 'template_name' => $anyTemplate->template_name]);
+        }
+
+        // No templates available
+        return response()->json(['template_id' => null, 'template_name' => null], 404);
     }
 
     /**

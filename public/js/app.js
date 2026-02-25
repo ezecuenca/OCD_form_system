@@ -68767,6 +68767,10 @@ function ADRForm() {
     _useState6 = _slicedToArray(_useState5, 2),
     showErrorNotification = _useState6[0],
     setShowErrorNotification = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState8 = _slicedToArray(_useState7, 2),
+    templateId = _useState8[0],
+    setTemplateId = _useState8[1];
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useLocation)();
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
@@ -68776,6 +68780,41 @@ function ADRForm() {
   // Check if we're in edit mode (coming from existing report)
   var editingReport = (_location$state = location.state) === null || _location$state === void 0 ? void 0 : _location$state.report;
   var isEditing = !!editingReport;
+
+  // Fetch available template on component mount
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var fetchAvailableTemplate = /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+        var response, _t;
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.p = _context.n) {
+            case 0:
+              _context.p = 0;
+              _context.n = 1;
+              return axios__WEBPACK_IMPORTED_MODULE_4___default().get('/api/adr/available-template');
+            case 1:
+              response = _context.v;
+              if (response.data.template_id) {
+                setTemplateId(response.data.template_id);
+              }
+              _context.n = 3;
+              break;
+            case 2:
+              _context.p = 2;
+              _t = _context.v;
+              console.error('Failed to fetch available template:', _t);
+              // If template fetch fails, we'll handle it when saving
+            case 3:
+              return _context.a(2);
+          }
+        }, _callee, null, [[0, 2]]);
+      }));
+      return function fetchAvailableTemplate() {
+        return _ref.apply(this, arguments);
+      };
+    }();
+    fetchAvailableTemplate();
+  }, []);
 
   // Load report data when editing
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -68824,133 +68863,133 @@ function ADRForm() {
       setApprovedPosition(editingReport.approvedPosition || '');
     }
   }, [editingReport]);
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState8 = _slicedToArray(_useState7, 2),
-    documentName = _useState8[0],
-    setDocumentName = _useState8[1];
   var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState0 = _slicedToArray(_useState9, 2),
-    forName = _useState0[0],
-    setForName = _useState0[1];
+    documentName = _useState0[0],
+    setDocumentName = _useState0[1];
   var _useState1 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState10 = _slicedToArray(_useState1, 2),
-    forPosition = _useState10[0],
-    setForPosition = _useState10[1];
+    forName = _useState10[0],
+    setForName = _useState10[1];
   var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState12 = _slicedToArray(_useState11, 2),
-    thruName = _useState12[0],
-    setThruName = _useState12[1];
+    forPosition = _useState12[0],
+    setForPosition = _useState12[1];
   var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState14 = _slicedToArray(_useState13, 2),
-    thruPosition = _useState14[0],
-    setThruPosition = _useState14[1];
+    thruName = _useState14[0],
+    setThruName = _useState14[1];
   var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState16 = _slicedToArray(_useState15, 2),
-    fromName = _useState16[0],
-    setFromName = _useState16[1];
+    thruPosition = _useState16[0],
+    setThruPosition = _useState16[1];
   var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState18 = _slicedToArray(_useState17, 2),
-    fromPosition = _useState18[0],
-    setFromPosition = _useState18[1];
+    fromName = _useState18[0],
+    setFromName = _useState18[1];
   var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState20 = _slicedToArray(_useState19, 2),
-    subject = _useState20[0],
-    setSubject = _useState20[1];
+    fromPosition = _useState20[0],
+    setFromPosition = _useState20[1];
   var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState22 = _slicedToArray(_useState21, 2),
-    dateTime = _useState22[0],
-    setDateTime = _useState22[1];
-  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('WHITE ALERT'),
+    subject = _useState22[0],
+    setSubject = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState24 = _slicedToArray(_useState23, 2),
-    status = _useState24[0],
-    setStatus = _useState24[1];
-  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+    dateTime = _useState24[0],
+    setDateTime = _useState24[1];
+  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('WHITE ALERT'),
+    _useState26 = _slicedToArray(_useState25, 2),
+    status = _useState26[0],
+    setStatus = _useState26[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       id: 1,
       name: '',
       task: ''
     }]),
-    _useState26 = _slicedToArray(_useState25, 2),
-    attendanceItems = _useState26[0],
-    setAttendanceItems = _useState26[1];
-  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+    _useState28 = _slicedToArray(_useState27, 2),
+    attendanceItems = _useState28[0],
+    setAttendanceItems = _useState28[1];
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       id: 1,
       report: '',
       remarks: ''
     }]),
-    _useState28 = _slicedToArray(_useState27, 2),
-    reportsItems = _useState28[0],
-    setReportsItems = _useState28[1];
-  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState30 = _slicedToArray(_useState29, 2),
-    showCommunicationModal = _useState30[0],
-    setShowCommunicationModal = _useState30[1];
+    reportsItems = _useState30[0],
+    setReportsItems = _useState30[1];
   var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState32 = _slicedToArray(_useState31, 2),
-    showAttendanceModal = _useState32[0],
-    setShowAttendanceModal = _useState32[1];
+    showCommunicationModal = _useState32[0],
+    setShowCommunicationModal = _useState32[1];
   var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState34 = _slicedToArray(_useState33, 2),
-    showReportsModal = _useState34[0],
-    setShowReportsModal = _useState34[1];
+    showAttendanceModal = _useState34[0],
+    setShowAttendanceModal = _useState34[1];
   var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState36 = _slicedToArray(_useState35, 2),
-    showOtherItemsModal = _useState36[0],
-    setShowOtherItemsModal = _useState36[1];
+    showReportsModal = _useState36[0],
+    setShowReportsModal = _useState36[1];
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState38 = _slicedToArray(_useState37, 2),
+    showOtherItemsModal = _useState38[0],
+    setShowOtherItemsModal = _useState38[1];
 
   // Communication and Other Items
-  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       id: 1,
       particulars: '',
       noOfItems: 0,
       contact: '',
       status: ''
     }]),
-    _useState38 = _slicedToArray(_useState37, 2),
-    communicationRows = _useState38[0],
-    setCommunicationRows = _useState38[1];
-  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+    _useState40 = _slicedToArray(_useState39, 2),
+    communicationRows = _useState40[0],
+    setCommunicationRows = _useState40[1];
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       id: 1,
       particulars: '',
       noOfItems: 0,
       status: ''
     }]),
-    _useState40 = _slicedToArray(_useState39, 2),
-    otherItemsRows = _useState40[0],
-    setOtherItemsRows = _useState40[1];
+    _useState42 = _slicedToArray(_useState41, 2),
+    otherItemsRows = _useState42[0],
+    setOtherItemsRows = _useState42[1];
 
   // Signatures
-  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState42 = _slicedToArray(_useState41, 2),
-    preparedBy = _useState42[0],
-    setPreparedBy = _useState42[1];
   var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState44 = _slicedToArray(_useState43, 2),
-    preparedPosition = _useState44[0],
-    setPreparedPosition = _useState44[1];
+    preparedBy = _useState44[0],
+    setPreparedBy = _useState44[1];
   var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState46 = _slicedToArray(_useState45, 2),
-    receivedBy = _useState46[0],
-    setReceivedBy = _useState46[1];
+    preparedPosition = _useState46[0],
+    setPreparedPosition = _useState46[1];
   var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState48 = _slicedToArray(_useState47, 2),
-    receivedPosition = _useState48[0],
-    setReceivedPosition = _useState48[1];
+    receivedBy = _useState48[0],
+    setReceivedBy = _useState48[1];
   var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState50 = _slicedToArray(_useState49, 2),
-    notedBy = _useState50[0],
-    setNotedBy = _useState50[1];
+    receivedPosition = _useState50[0],
+    setReceivedPosition = _useState50[1];
   var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState52 = _slicedToArray(_useState51, 2),
-    notedPosition = _useState52[0],
-    setNotedPosition = _useState52[1];
+    notedBy = _useState52[0],
+    setNotedBy = _useState52[1];
   var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState54 = _slicedToArray(_useState53, 2),
-    approvedBy = _useState54[0],
-    setApprovedBy = _useState54[1];
+    notedPosition = _useState54[0],
+    setNotedPosition = _useState54[1];
   var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState56 = _slicedToArray(_useState55, 2),
-    approvedPosition = _useState56[0],
-    setApprovedPosition = _useState56[1];
+    approvedBy = _useState56[0],
+    setApprovedBy = _useState56[1];
+  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState58 = _slicedToArray(_useState57, 2),
+    approvedPosition = _useState58[0],
+    setApprovedPosition = _useState58[1];
   var handleReturn = function handleReturn() {
     navigate('/adr-reports');
   };
@@ -68965,25 +69004,25 @@ function ADRForm() {
     }, 4000);
   };
   var handleConfirm = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-      var payload, _error$response, _t;
-      return _regenerator().w(function (_context) {
-        while (1) switch (_context.p = _context.n) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+      var payload, _error$response, _t2;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.p = _context2.n) {
           case 0:
             if (documentName.trim()) {
-              _context.n = 1;
+              _context2.n = 1;
               break;
             }
             setShowErrorNotification(true);
-            return _context.a(2);
+            return _context2.a(2);
           case 1:
             payload = {
               report: {
                 documentName: documentName,
                 subject: subject,
                 alertStatus: status,
-                templates_id: 10,
-                // links to your ADR_template (id=10)
+                templates_id: templateId,
+                // dynamically fetched from available templates
 
                 forName: forName,
                 forPosition: forPosition,
@@ -69007,38 +69046,38 @@ function ADRForm() {
                 approvedPosition: approvedPosition
               }
             };
-            _context.p = 2;
+            _context2.p = 2;
             if (!(isEditing && editingReport.id)) {
-              _context.n = 4;
+              _context2.n = 4;
               break;
             }
-            _context.n = 3;
+            _context2.n = 3;
             return updateReport(editingReport.id, payload.report);
           case 3:
-            _context.n = 5;
+            _context2.n = 5;
             break;
           case 4:
-            _context.n = 5;
+            _context2.n = 5;
             return addReport(payload.report);
           case 5:
             setShowSuccessNotification(true);
             setTimeout(function () {
               navigate('/adr-reports');
             }, 1500);
-            _context.n = 7;
+            _context2.n = 7;
             break;
           case 6:
-            _context.p = 6;
-            _t = _context.v;
-            console.error("Failed to save ADR form:", _t);
-            showNotification(((_error$response = _t.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Failed to save report. Please try again.', 'error');
+            _context2.p = 6;
+            _t2 = _context2.v;
+            console.error("Failed to save ADR form:", _t2);
+            showNotification(((_error$response = _t2.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Failed to save report. Please try again.', 'error');
           case 7:
-            return _context.a(2);
+            return _context2.a(2);
         }
-      }, _callee, null, [[2, 6]]);
+      }, _callee2, null, [[2, 6]]);
     }));
     return function handleConfirm() {
-      return _ref.apply(this, arguments);
+      return _ref2.apply(this, arguments);
     };
   }();
 
@@ -74953,8 +74992,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _TasksModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TasksModal */ "./resources/js/components/TasksModal.js");
-/* harmony import */ var _SuccessNotification__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./SuccessNotification */ "./resources/js/components/SuccessNotification.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _ConfirmModal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ConfirmModal */ "./resources/js/components/ConfirmModal.js");
+/* harmony import */ var _SuccessNotification__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./SuccessNotification */ "./resources/js/components/SuccessNotification.js");
+/* harmony import */ var _FailNotification__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./FailNotification */ "./resources/js/components/FailNotification.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -74969,6 +75010,8 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
+
 
 
 
@@ -75003,6 +75046,26 @@ function Schedule() {
     _useState10 = _slicedToArray(_useState1, 2),
     successMessage = _useState10[0],
     setSuccessMessage = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState12 = _slicedToArray(_useState11, 2),
+    showFailNotification = _useState12[0],
+    setShowFailNotification = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState14 = _slicedToArray(_useState13, 2),
+    failMessage = _useState14[0],
+    setFailMessage = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState16 = _slicedToArray(_useState15, 2),
+    showConfirmModal = _useState16[0],
+    setShowConfirmModal = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState18 = _slicedToArray(_useState17, 2),
+    confirmMessage = _useState18[0],
+    setConfirmMessage = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState20 = _slicedToArray(_useState19, 2),
+    confirmAction = _useState20[0],
+    setConfirmAction = _useState20[1];
   var getFirstName = function getFirstName(fullName) {
     if (!fullName) return '—';
     return String(fullName).trim().split(/\s+/)[0] || '—';
@@ -75154,34 +75217,121 @@ function Schedule() {
       isMounted = false;
     };
   }, []);
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
-    _useState12 = _slicedToArray(_useState11, 2),
-    currentDate = _useState12[0],
-    setCurrentDate = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    _useState14 = _slicedToArray(_useState13, 2),
-    showTaskForm = _useState14[0],
-    setShowTaskForm = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState16 = _slicedToArray(_useState15, 2),
-    selectedDate = _useState16[0],
-    setSelectedDate = _useState16[1];
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState18 = _slicedToArray(_useState17, 2),
-    selectedTask = _useState18[0],
-    setSelectedTask = _useState18[1];
-  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('add'),
-    _useState20 = _slicedToArray(_useState19, 2),
-    modalMode = _useState20[0],
-    setModalMode = _useState20[1]; // 'add' | 'view' | 'edit' | 'swap'
-  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var isMounted = true;
+    var fetchSwapRequestStatus = /*#__PURE__*/function () {
+      var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+        var _latestRequest$reques, response, allRequests, userRequests, latestRequest, _t3;
+        return _regenerator().w(function (_context3) {
+          while (1) switch (_context3.p = _context3.n) {
+            case 0:
+              if (currentProfileId) {
+                _context3.n = 1;
+                break;
+              }
+              return _context3.a(2);
+            case 1:
+              _context3.p = 1;
+              _context3.n = 2;
+              return axios__WEBPACK_IMPORTED_MODULE_3___default().get('/api/swapping-requests');
+            case 2:
+              response = _context3.v;
+              if (isMounted) {
+                _context3.n = 3;
+                break;
+              }
+              return _context3.a(2);
+            case 3:
+              allRequests = Array.isArray(response.data) ? response.data : []; // Filter to only current user's requests regardless of role
+              userRequests = allRequests.filter(function (req) {
+                return String(req.requester_profile_id) === String(currentProfileId);
+              });
+              if (!(userRequests.length === 0)) {
+                _context3.n = 4;
+                break;
+              }
+              setSwapRequestStatus(null);
+              setSwapRequestRequesterId(null);
+              setSwapRequestRequesterName('');
+              return _context3.a(2);
+            case 4:
+              // Pick the most recent request from the current user
+              latestRequest = _toConsumableArray(userRequests).sort(function (a, b) {
+                var aTime = new Date(a.updatedAt || a.createdAt || 0).getTime();
+                var bTime = new Date(b.updatedAt || b.createdAt || 0).getTime();
+                return bTime - aTime;
+              })[0];
+              setSwapRequestStatus((latestRequest === null || latestRequest === void 0 ? void 0 : latestRequest.status) || null);
+              setSwapRequestRequesterId((_latestRequest$reques = latestRequest === null || latestRequest === void 0 ? void 0 : latestRequest.requester_profile_id) !== null && _latestRequest$reques !== void 0 ? _latestRequest$reques : null);
+              setSwapRequestRequesterName(getFirstName(latestRequest === null || latestRequest === void 0 ? void 0 : latestRequest.taskName));
+              _context3.n = 7;
+              break;
+            case 5:
+              _context3.p = 5;
+              _t3 = _context3.v;
+              if (isMounted) {
+                _context3.n = 6;
+                break;
+              }
+              return _context3.a(2);
+            case 6:
+              setSwapRequestStatus(null);
+              setSwapRequestRequesterId(null);
+              setSwapRequestRequesterName('');
+            case 7:
+              return _context3.a(2);
+          }
+        }, _callee3, null, [[1, 5]]);
+      }));
+      return function fetchSwapRequestStatus() {
+        return _ref3.apply(this, arguments);
+      };
+    }();
+    fetchSwapRequestStatus();
+    return function () {
+      isMounted = false;
+    };
+  }, [pendingSwapCount, currentProfileId]);
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(new Date()),
     _useState22 = _slicedToArray(_useState21, 2),
-    taskToSwap = _useState22[0],
-    setTaskToSwap = _useState22[1];
-  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    currentDate = _useState22[0],
+    setCurrentDate = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState24 = _slicedToArray(_useState23, 2),
-    pendingSwapCount = _useState24[0],
-    setPendingSwapCount = _useState24[1];
+    showTaskForm = _useState24[0],
+    setShowTaskForm = _useState24[1];
+  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState26 = _slicedToArray(_useState25, 2),
+    selectedDate = _useState26[0],
+    setSelectedDate = _useState26[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState28 = _slicedToArray(_useState27, 2),
+    selectedTask = _useState28[0],
+    setSelectedTask = _useState28[1];
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('add'),
+    _useState30 = _slicedToArray(_useState29, 2),
+    modalMode = _useState30[0],
+    setModalMode = _useState30[1]; // 'add' | 'view' | 'edit' | 'swap'
+  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState32 = _slicedToArray(_useState31, 2),
+    taskToSwap = _useState32[0],
+    setTaskToSwap = _useState32[1];
+  var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState34 = _slicedToArray(_useState33, 2),
+    pendingSwapCount = _useState34[0],
+    setPendingSwapCount = _useState34[1];
+  var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState36 = _slicedToArray(_useState35, 2),
+    swapRequestStatus = _useState36[0],
+    setSwapRequestStatus = _useState36[1]; // null, 'pending', 'accepted', 'approved', 'denied'
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState38 = _slicedToArray(_useState37, 2),
+    swapRequestRequesterId = _useState38[0],
+    setSwapRequestRequesterId = _useState38[1];
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState40 = _slicedToArray(_useState39, 2),
+    swapRequestRequesterName = _useState40[0],
+    setSwapRequestRequesterName = _useState40[1];
   var daysInMonth = function daysInMonth(date) {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -75238,39 +75388,102 @@ function Schedule() {
     setShowTaskForm(true);
   };
   var handleAddTask = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(taskData) {
-      var payload, response, _t3;
-      return _regenerator().w(function (_context3) {
-        while (1) switch (_context3.p = _context3.n) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(taskData) {
+      var payload, response, _error$response, message, _t4;
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.p = _context4.n) {
           case 0:
-            _context3.p = 0;
+            _context4.p = 0;
             payload = {
               profile_id: Number(taskData.profileId),
               task_description: taskData.task,
               task_date: taskData.date,
               status: 'active'
             };
-            _context3.n = 1;
+            _context4.n = 1;
             return axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/schedules', payload);
           case 1:
-            response = _context3.v;
+            response = _context4.v;
             setTasks(function (prev) {
               return [].concat(_toConsumableArray(prev), [mapScheduleToTask(response.data)]);
             });
             setShowTaskForm(false);
-            _context3.n = 3;
+            setSuccessMessage('Task added successfully.');
+            setShowSuccessNotification(true);
+            _context4.n = 3;
             break;
           case 2:
-            _context3.p = 2;
-            _t3 = _context3.v;
-            alert('Could not save schedule. Please try again.');
+            _context4.p = 2;
+            _t4 = _context4.v;
+            message = (_t4 === null || _t4 === void 0 || (_error$response = _t4.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Could not save schedule. Please try again.';
+            setFailMessage(message);
+            setShowFailNotification(true);
           case 3:
-            return _context3.a(2);
+            return _context4.a(2);
         }
-      }, _callee3, null, [[0, 2]]);
+      }, _callee4, null, [[0, 2]]);
     }));
     return function handleAddTask(_x) {
-      return _ref3.apply(this, arguments);
+      return _ref4.apply(this, arguments);
+    };
+  }();
+  var handleDeleteTask = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(task) {
+      return _regenerator().w(function (_context6) {
+        while (1) switch (_context6.n) {
+          case 0:
+            if (task !== null && task !== void 0 && task.id) {
+              _context6.n = 1;
+              break;
+            }
+            return _context6.a(2);
+          case 1:
+            setConfirmMessage('Delete this task?');
+            setConfirmAction(function () {
+              return /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
+                var _error$response2, rawMessage, isForeignKeyError, message, _t5;
+                return _regenerator().w(function (_context5) {
+                  while (1) switch (_context5.p = _context5.n) {
+                    case 0:
+                      _context5.p = 0;
+                      _context5.n = 1;
+                      return axios__WEBPACK_IMPORTED_MODULE_3___default()["delete"]("/api/schedules/".concat(task.id));
+                    case 1:
+                      setTasks(function (prev) {
+                        return prev.filter(function (t) {
+                          return t.id !== task.id;
+                        });
+                      });
+                      setSuccessMessage('Task deleted successfully.');
+                      setShowSuccessNotification(true);
+                      _context5.n = 3;
+                      break;
+                    case 2:
+                      _context5.p = 2;
+                      _t5 = _context5.v;
+                      rawMessage = (_t5 === null || _t5 === void 0 || (_error$response2 = _t5.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || '';
+                      isForeignKeyError = /foreign key|constraint/i.test(rawMessage);
+                      message = task.status === 'swap' || isForeignKeyError ? 'Cant delete swapped tasks.' : rawMessage || 'Could not delete task. Please try again.';
+                      setFailMessage(message);
+                      setShowFailNotification(true);
+                    case 3:
+                      _context5.p = 3;
+                      setShowConfirmModal(false);
+                      return _context5.f(3);
+                    case 4:
+                      return _context5.a(2);
+                  }
+                }, _callee5, null, [[0, 2, 3, 4]]);
+              }));
+            });
+            setShowConfirmModal(true);
+          case 2:
+            return _context6.a(2);
+        }
+      }, _callee6);
+    }));
+    return function handleDeleteTask(_x2) {
+      return _ref5.apply(this, arguments);
     };
   }();
   var handleTaskClick = function handleTaskClick(task) {
@@ -75281,13 +75494,17 @@ function Schedule() {
   };
   var submitSwapRequest = function submitSwapRequest(payload) {
     axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/swapping-requests', payload).then(function () {
+      setSwapRequestStatus('pending');
       setPendingSwapCount(function (prev) {
         return prev + 1;
       });
+      setSuccessMessage('Swap request sent successfully.');
+      setShowSuccessNotification(true);
     })["catch"](function (error) {
-      var _error$response;
-      var message = (error === null || error === void 0 || (_error$response = error.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Could not create swap request. Please try again.';
-      alert(message);
+      var _error$response3;
+      var message = (error === null || error === void 0 || (_error$response3 = error.response) === null || _error$response3 === void 0 || (_error$response3 = _error$response3.data) === null || _error$response3 === void 0 ? void 0 : _error$response3.message) || 'Could not create swap request. Please try again.';
+      setFailMessage(message);
+      setShowFailNotification(true);
     })["finally"](function () {
       setShowTaskForm(false);
       setModalMode('add');
@@ -75323,16 +75540,19 @@ function Schedule() {
     month: 'long',
     year: 'numeric'
   });
+  var canManageTasks = (user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3;
   var days = getDaysArray();
   var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+  var swapRequesterLabel = swapRequestRequesterName || 'This user';
+  var swapRequestSubject = canManageTasks ? "".concat(swapRequesterLabel, "'s") : 'Your';
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
     className: "schedule",
-    children: [modalMode === 'swap' && taskToSwap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+    children: [modalMode === 'swap' && taskToSwap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
       className: "schedule__swap-banner",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("p", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
         className: "schedule__swap-banner-text",
         children: ["Request Swap: Click a day to select target date \u2014 Moving \"", taskToSwap === null || taskToSwap === void 0 ? void 0 : taskToSwap.name, "\" from ", formatDate(taskToSwap === null || taskToSwap === void 0 ? void 0 : taskToSwap.date)]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
         className: "schedule__swap-cancel",
         onClick: function onClick() {
           setModalMode('add');
@@ -75342,38 +75562,38 @@ function Schedule() {
         },
         children: "Cancel"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
       className: "schedule__content",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
         className: "schedule__card",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
           className: "schedule__month-header",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
             className: "schedule__month-btn",
             onClick: previousMonth,
             children: "\u2190 Previous"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h2", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h2", {
             className: "schedule__month-title",
             children: monthName
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
             className: "schedule__month-btn",
             onClick: nextMonth,
             children: "Next \u2192"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "schedule__weekdays",
           children: dayNames.map(function (day) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
               className: "schedule__weekday",
               children: day
             }, day);
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "schedule__grid",
           children: days.map(function (day, index) {
             var dayTasks = getTasksForDate(day);
             var isToday = day && currentDate.getFullYear() === new Date().getFullYear() && currentDate.getMonth() === new Date().getMonth() && day === new Date().getDate();
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
               className: "schedule__day \n                                        ".concat(day ? 'schedule__day--active' : 'schedule__day--empty', "\n                                        ").concat(isToday ? 'schedule__day--today' : ''),
               onClick: function onClick() {
                 if (modalMode === 'swap') {
@@ -75393,10 +75613,10 @@ function Schedule() {
                   }
                 }
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                 className: "schedule__day-number",
                 children: day
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                 className: "schedule__day-tasks",
                 children: dayTasks.map(function (task, taskIndex) {
                   var tooltipText = '';
@@ -75420,7 +75640,7 @@ function Schedule() {
                   } else if (task.status === 'swap') {
                     tooltipText = 'This task has been swapped';
                   }
-                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                     className: "schedule__task".concat(task.status === 'swap' ? ' schedule__task--swapped' : ''),
                     onClick: function onClick(event) {
                       if (modalMode === 'swap') {
@@ -75432,19 +75652,36 @@ function Schedule() {
                     role: "button",
                     tabIndex: 0,
                     title: tooltipText,
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-                      className: "schedule__task-name",
-                      children: [task.status === 'swap' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-                        className: "schedule__task-swap-icon",
-                        children: "\u21C4 "
-                      }), task.name]
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                      className: "schedule__task-header",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "schedule__task-name",
+                        children: [task.status === 'swap' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                          className: "schedule__task-swap-icon",
+                          children: "\u21C4 "
+                        }), task.name]
+                      }), canManageTasks && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+                        type: "button",
+                        className: "schedule__task-delete",
+                        onClick: function onClick(event) {
+                          event.stopPropagation();
+                          handleDeleteTask(task);
+                        },
+                        title: "Delete task",
+                        "aria-label": "Delete task",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("img", {
+                          src: "/images/deny_icon.svg",
+                          alt: "",
+                          "aria-hidden": "true"
+                        })
+                      })]
                     })
                   }, taskIndex);
                 })
               })]
             }, index);
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "schedule__task-summary",
           children: function () {
             var currentMonthTasks = tasks.filter(function (task) {
@@ -75461,35 +75698,50 @@ function Schedule() {
               return a[0].localeCompare(b[0]);
             });
             if (entries.length === 0) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
                 className: "schedule__task-summary-text",
                 children: "No tasks scheduled for this month."
               });
             }
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
               className: "schedule__task-summary-content",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("p", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
                 className: "schedule__task-summary-title",
                 children: ["Task Distribution for ", monthName, ":"]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                 className: "schedule__task-summary-list",
-                children: entries.map(function (_ref4) {
-                  var _ref5 = _slicedToArray(_ref4, 2),
-                    name = _ref5[0],
-                    count = _ref5[1];
-                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+                children: entries.map(function (_ref7) {
+                  var _ref8 = _slicedToArray(_ref7, 2),
+                    name = _ref8[0],
+                    count = _ref8[1];
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("span", {
                     className: "schedule__task-summary-item",
-                    children: [name, ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
+                    children: [name, ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("strong", {
                       children: count
                     }), " task", count !== 1 ? 's' : '']
                   }, name);
                 })
+              }), swapRequestStatus !== null && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                className: "schedule__task-summary-swap-status",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+                  className: "schedule__task-summary-swap-title",
+                  children: "Swap Request Status:"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
+                  className: "schedule__task-summary-swap-message schedule__task-summary-swap-message--".concat(swapRequestStatus),
+                  children: [swapRequestStatus === 'pending' && "".concat(swapRequestSubject, " swap request is pending approval."), swapRequestStatus === 'accepted' && "".concat(swapRequestSubject, " swap request has been accepted!"), swapRequestStatus === 'approved' && "".concat(swapRequestSubject, " swap request has been approved!"), swapRequestStatus === 'denied' && "".concat(swapRequestSubject, " swap request has been denied.")]
+                })]
+              }), swapRequestStatus === null && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                className: "schedule__task-summary-swap-status",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("p", {
+                  className: "schedule__task-summary-swap-message schedule__task-summary-swap-message--none",
+                  children: "You haven't made a request for swap yet."
+                })
               })]
             });
           }()
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
           className: "schedule__actions",
-          children: [((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+          children: [((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
             className: "schedule__btn schedule__btn--primary",
             onClick: function onClick() {
               var today = new Date();
@@ -75498,20 +75750,20 @@ function Schedule() {
               setShowTaskForm(true);
             },
             children: "Add Task (Today)"
-          }), ((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+          }), ((user === null || user === void 0 ? void 0 : user.role_id) === 2 || (user === null || user === void 0 ? void 0 : user.role_id) === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
             className: "schedule__swap-btn-container",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.Link, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.Link, {
               to: "/swap-form",
               className: "schedule__btn schedule__btn--tertiary",
               children: "Swapping Form Requests"
-            }), pendingSwapCount > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+            }), pendingSwapCount > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
               className: "schedule__notification-badge",
               children: pendingSwapCount
             })]
           })]
         })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_TasksModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_TasksModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
       isOpen: showTaskForm,
       onClose: function onClose() {
         setModalMode('add');
@@ -75525,22 +75777,22 @@ function Schedule() {
       initialTask: selectedTask,
       mode: modalMode,
       onUpdateTask: (/*#__PURE__*/function () {
-        var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(updateTask) {
-          var payload, response, _t4;
-          return _regenerator().w(function (_context4) {
-            while (1) switch (_context4.p = _context4.n) {
+        var _ref9 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7(updateTask) {
+          var payload, response, _error$response4, message, _t6;
+          return _regenerator().w(function (_context7) {
+            while (1) switch (_context7.p = _context7.n) {
               case 0:
-                _context4.p = 0;
+                _context7.p = 0;
                 payload = {
                   profile_id: Number(updateTask.profileId),
                   task_description: updateTask.task,
                   task_date: updateTask.date,
                   status: updateTask.status || 'active'
                 };
-                _context4.n = 1;
+                _context7.n = 1;
                 return axios__WEBPACK_IMPORTED_MODULE_3___default().put("/api/schedules/".concat(updateTask.id), payload);
               case 1:
-                response = _context4.v;
+                response = _context7.v;
                 setTasks(function (prev) {
                   return prev.map(function (t) {
                     return t.id === updateTask.id ? mapScheduleToTask(response.data) : t;
@@ -75549,19 +75801,23 @@ function Schedule() {
                 setShowTaskForm(false);
                 setSelectedTask(null);
                 setModalMode('add');
-                _context4.n = 3;
+                setSuccessMessage('Task updated successfully.');
+                setShowSuccessNotification(true);
+                _context7.n = 3;
                 break;
               case 2:
-                _context4.p = 2;
-                _t4 = _context4.v;
-                alert('Could not update schedule. Please try again.');
+                _context7.p = 2;
+                _t6 = _context7.v;
+                message = (_t6 === null || _t6 === void 0 || (_error$response4 = _t6.response) === null || _error$response4 === void 0 || (_error$response4 = _error$response4.data) === null || _error$response4 === void 0 ? void 0 : _error$response4.message) || 'Could not update schedule. Please try again.';
+                setFailMessage(message);
+                setShowFailNotification(true);
               case 3:
-                return _context4.a(2);
+                return _context7.a(2);
             }
-          }, _callee4, null, [[0, 2]]);
+          }, _callee7, null, [[0, 2]]);
         }));
-        return function (_x2) {
-          return _ref6.apply(this, arguments);
+        return function (_x3) {
+          return _ref9.apply(this, arguments);
         };
       }()),
       onSwitchToEdit: function onSwitchToEdit() {
@@ -75574,11 +75830,24 @@ function Schedule() {
       userRole: user === null || user === void 0 ? void 0 : user.role_id,
       profileOptions: profiles,
       currentProfileId: currentProfileId
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_SuccessNotification__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_SuccessNotification__WEBPACK_IMPORTED_MODULE_6__["default"], {
       message: successMessage,
       isVisible: showSuccessNotification,
       onClose: function onClose() {
         return setShowSuccessNotification(false);
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_FailNotification__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      message: failMessage,
+      isVisible: showFailNotification,
+      onClose: function onClose() {
+        return setShowFailNotification(false);
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ConfirmModal__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      isOpen: showConfirmModal,
+      message: confirmMessage,
+      onConfirm: confirmAction,
+      onCancel: function onCancel() {
+        return setShowConfirmModal(false);
       }
     })]
   });
@@ -75608,10 +75877,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _AccountEditModal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./AccountEditModal */ "./resources/js/components/AccountEditModal.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
@@ -75621,6 +75886,10 @@ function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present,
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -75787,23 +76056,15 @@ function Settings() {
   var isSuperAdmin = (user === null || user === void 0 ? void 0 : user.role_id) === 3;
 
   // Retention period state
-  var _useState67 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      var saved = localStorage.getItem('retentionValue');
-      return saved ? parseInt(saved, 10) : 30;
-    }),
+  var _useState67 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(30),
     _useState68 = _slicedToArray(_useState67, 2),
     retentionValue = _useState68[0],
     setRetentionValue = _useState68[1];
-  var _useState69 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      return localStorage.getItem('retentionUnit') || 'days';
-    }),
+  var _useState69 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('days'),
     _useState70 = _slicedToArray(_useState69, 2),
     retentionUnit = _useState70[0],
     setRetentionUnit = _useState70[1];
-  var _useState71 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(function () {
-      var saved = localStorage.getItem('retentionEnabled');
-      return saved ? JSON.parse(saved) : true;
-    }),
+  var _useState71 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState72 = _slicedToArray(_useState71, 2),
     retentionEnabled = _useState72[0],
     setRetentionEnabled = _useState72[1];
@@ -75811,16 +76072,32 @@ function Settings() {
     _useState74 = _slicedToArray(_useState73, 2),
     isRetentionChanged = _useState74[0],
     setIsRetentionChanged = _useState74[1];
+  var _useState75 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState76 = _slicedToArray(_useState75, 2),
+    purgeEnabled = _useState76[0],
+    setPurgeEnabled = _useState76[1];
+  var _useState77 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(30),
+    _useState78 = _slicedToArray(_useState77, 2),
+    purgeAfterValue = _useState78[0],
+    setPurgeAfterValue = _useState78[1];
+  var _useState79 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('days'),
+    _useState80 = _slicedToArray(_useState79, 2),
+    purgeAfterUnit = _useState80[0],
+    setPurgeAfterUnit = _useState80[1];
+  var _useState81 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState82 = _slicedToArray(_useState81, 2),
+    isPurgeChanged = _useState82[0],
+    setIsPurgeChanged = _useState82[1];
 
   // Preview & days left
-  var _useState75 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+  var _useState83 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       adr_count: 0,
       swap_count: 0
     }),
-    _useState76 = _slicedToArray(_useState75, 2),
-    retentionPreview = _useState76[0],
-    setRetentionPreview = _useState76[1];
-  var _useState77 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    _useState84 = _slicedToArray(_useState83, 2),
+    retentionPreview = _useState84[0],
+    setRetentionPreview = _useState84[1];
+  var _useState85 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
       retention_in_days: null,
       retention_value: null,
       retention_unit: 'days',
@@ -75829,25 +76106,25 @@ function Settings() {
       adr_days: null,
       swap_days: null
     }),
-    _useState78 = _slicedToArray(_useState77, 2),
-    daysUntilArchive = _useState78[0],
-    setDaysUntilArchive = _useState78[1];
+    _useState86 = _slicedToArray(_useState85, 2),
+    daysUntilArchive = _useState86[0],
+    setDaysUntilArchive = _useState86[1];
 
-  // FIXED: Cutoff date is now AFTER current date
+  // Cutoff date is the date before which records are considered expired
   var getCutoffDate = function getCutoffDate() {
     var cutoff = new Date();
     switch (retentionUnit) {
       case 'days':
-        cutoff.setDate(cutoff.getDate() + retentionValue);
+        cutoff.setDate(cutoff.getDate() - retentionValue);
         break;
       case 'months':
-        cutoff.setMonth(cutoff.getMonth() + retentionValue);
+        cutoff.setMonth(cutoff.getMonth() - retentionValue);
         break;
       case 'years':
-        cutoff.setFullYear(cutoff.getFullYear() + retentionValue);
+        cutoff.setFullYear(cutoff.getFullYear() - retentionValue);
         break;
       default:
-        cutoff.setDate(cutoff.getDate() + retentionValue);
+        cutoff.setDate(cutoff.getDate() - retentionValue);
     }
 
     // Set to end of the cutoff day (common for retention policies)
@@ -75857,24 +76134,20 @@ function Settings() {
 
   // Format time left - shows hours/minutes if within same day
   var formatTimeLeft = function formatTimeLeft() {
-    var hours_left = daysUntilArchive.hours_left,
-      minutes_left = daysUntilArchive.minutes_left,
+    var adr_days = daysUntilArchive.adr_days,
+      swap_days = daysUntilArchive.swap_days,
       retention_value = daysUntilArchive.retention_value,
-      retention_unit = daysUntilArchive.retention_unit,
-      retention_in_days = daysUntilArchive.retention_in_days;
-
-    // If hours or minutes are available (within same day), show them
-    if (hours_left !== null || minutes_left !== null) {
-      if (hours_left !== null && minutes_left !== null) {
-        return "".concat(hours_left, " hour").concat(hours_left !== 1 ? 's' : '', " ").concat(minutes_left, " min").concat(minutes_left !== 1 ? 's' : '', " left");
-      } else if (hours_left !== null) {
-        return "".concat(hours_left, " hour").concat(hours_left !== 1 ? 's' : '', " left");
-      } else if (minutes_left !== null) {
-        return "".concat(minutes_left, " minute").concat(minutes_left !== 1 ? 's' : '', " left");
+      retention_unit = daysUntilArchive.retention_unit;
+    var dayValues = [adr_days, swap_days].filter(function (value) {
+      return typeof value === 'number';
+    });
+    if (dayValues.length > 0) {
+      var minDays = Math.min.apply(Math, _toConsumableArray(dayValues));
+      if (minDays <= 0) {
+        return 'Ready to archive';
       }
+      return "".concat(minDays, " day").concat(minDays !== 1 ? 's' : '', " left");
     }
-
-    // Otherwise show the retention period
     if (retention_value !== null) {
       return "".concat(retention_value, " ").concat(retention_value === 1 ? 'day' : retention_unit, " left");
     }
@@ -75885,15 +76158,15 @@ function Settings() {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var fetchData = /*#__PURE__*/function () {
       var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-        var cutoffDate, res, daysRes, _t, _t2;
+        var res, daysRes, _t, _t2;
         return _regenerator().w(function (_context) {
           while (1) switch (_context.p = _context.n) {
             case 0:
               _context.p = 0;
-              cutoffDate = getCutoffDate();
               _context.n = 1;
               return axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/data-retention/preview', {
-                cutoff_date: cutoffDate.toISOString()
+                retention_value: retentionValue,
+                retention_unit: retentionUnit
               });
             case 1:
               res = _context.v;
@@ -75949,14 +76222,36 @@ function Settings() {
       setIsRetentionChanged(false);
     }
   }, [activeSection]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (activeSection !== 'data-retention') return;
+    var isMounted = true;
+    axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/data-retention/settings').then(function (res) {
+      if (!isMounted) return;
+      setRetentionEnabled(!!res.data.enabled);
+      setRetentionValue(parseInt(res.data.retention_value, 10) || 30);
+      setRetentionUnit(res.data.retention_unit || 'days');
+      setPurgeEnabled(!!res.data.purge_enabled);
+      setPurgeAfterValue(parseInt(res.data.purge_after_value, 10) || 30);
+      setPurgeAfterUnit(res.data.purge_after_unit || 'days');
+      setIsRetentionChanged(false);
+      setIsPurgeChanged(false);
+    })["catch"](function () {
+      if (!isMounted) return;
+      setIsRetentionChanged(false);
+      setIsPurgeChanged(false);
+    });
+    return function () {
+      isMounted = false;
+    };
+  }, [activeSection]);
 
-  // Filter templates
+  // Filter templates by type
   var filteredTemplates = templates.filter(function (t) {
-    var name = (t.name || '').toLowerCase();
+    var type = t.type || 'adr';
     if (templateTab === 'adr') {
-      return name.includes('adr') || name.includes('after') || name.includes('duty') || name.includes('report') || !name.includes('swap');
+      return type === 'adr';
     }
-    return name.includes('swap') || name.includes('swapping');
+    return type === 'swap';
   });
   var roleIdLabels = {
     1: 'User',
@@ -75983,13 +76278,10 @@ function Settings() {
     var roleName = normalizeRoleLabel((profile === null || profile === void 0 ? void 0 : profile.role_name) || (profile === null || profile === void 0 ? void 0 : profile.role) || (user === null || user === void 0 ? void 0 : user.role_name) || (user === null || user === void 0 ? void 0 : user.role));
     var role = roleIdLabels[roleId] || roleName || '—';
     var status = (profile === null || profile === void 0 ? void 0 : profile.status) || (user === null || user === void 0 ? void 0 : user.status) || null;
-    if (!status && typeof (profile === null || profile === void 0 ? void 0 : profile.is_active) === 'boolean') {
-      status = profile.is_active ? 'Active' : 'Disabled';
+    var isActive = typeof (profile === null || profile === void 0 ? void 0 : profile.is_active) === 'boolean' ? profile.is_active : typeof (user === null || user === void 0 ? void 0 : user.is_active) === 'boolean' ? user.is_active : true;
+    if (!status) {
+      status = isActive ? 'Active' : 'Inactive';
     }
-    if (!status && typeof (user === null || user === void 0 ? void 0 : user.is_active) === 'boolean') {
-      status = user.is_active ? 'Active' : 'Disabled';
-    }
-    if (!status) status = 'Active';
     return {
       id: (profile === null || profile === void 0 ? void 0 : profile.id) || (user === null || user === void 0 ? void 0 : user.id) || name,
       profile_id: (profile === null || profile === void 0 ? void 0 : profile.id) || null,
@@ -76002,7 +76294,8 @@ function Settings() {
       name: name,
       status: status,
       role: role,
-      image_path: (profile === null || profile === void 0 ? void 0 : profile.image_path) || null
+      image_path: (profile === null || profile === void 0 ? void 0 : profile.image_path) || null,
+      is_active: isActive
     };
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -76394,6 +76687,7 @@ function Settings() {
     setTemplatesError(null);
     var formData = new FormData();
     formData.append('template', file);
+    formData.append('type', templateTab === 'swapping' ? 'swap' : 'adr');
     axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/templates', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -76451,11 +76745,17 @@ function Settings() {
     uploadTemplateFile(file);
   };
   var setTemplateInUse = function setTemplateInUse(tpl) {
+    var nextType = tpl.type || 'adr';
     axios__WEBPACK_IMPORTED_MODULE_1___default().patch('/api/templates/set-active', {
-      template_name: tpl.name
+      template_name: tpl.name,
+      type: nextType
     }).then(function () {
       setTemplates(function (prev) {
         return prev.map(function (t) {
+          var tType = t.type || 'adr';
+          if (tType !== nextType) {
+            return t;
+          }
           return _objectSpread(_objectSpread({}, t), {}, {
             is_active: t.filename === tpl.filename
           });
@@ -76552,6 +76852,36 @@ function Settings() {
     setEditingAccount(account);
     setShowAccountModal(true);
   };
+  var toggleAccountStatus = function toggleAccountStatus(account) {
+    if (!(account !== null && account !== void 0 && account.profile_id)) return;
+    var nextActive = !account.is_active;
+    var verb = nextActive ? 'Enable' : 'Disable';
+    setConfirmMessage("".concat(verb, " account \"").concat(account.name, "\"?"));
+    setConfirmAction(function () {
+      return function () {
+        axios__WEBPACK_IMPORTED_MODULE_1___default().put("/api/profiles/".concat(account.profile_id), {
+          is_active: nextActive
+        }).then(function () {
+          setAccounts(function (prev) {
+            return prev.map(function (item) {
+              return item.profile_id === account.profile_id ? _objectSpread(_objectSpread({}, item), {}, {
+                is_active: nextActive,
+                status: nextActive ? 'Active' : 'Disabled'
+              }) : item;
+            });
+          });
+          setSuccessMessage("Account ".concat(nextActive ? 'enabled' : 'disabled', " successfully."));
+          setShowSuccessNotification(true);
+          setShowConfirmModal(false);
+        })["catch"](function (err) {
+          var _err$response15;
+          alert((err === null || err === void 0 || (_err$response15 = err.response) === null || _err$response15 === void 0 || (_err$response15 = _err$response15.data) === null || _err$response15 === void 0 ? void 0 : _err$response15.message) || 'Failed to update account status.');
+          setShowConfirmModal(false);
+        });
+      };
+    });
+    setShowConfirmModal(true);
+  };
   var closeAccountModal = function closeAccountModal() {
     setShowAccountModal(false);
     setEditingAccount(null);
@@ -76570,26 +76900,175 @@ function Settings() {
       setShowSuccessNotification(true);
       closeAccountModal();
     })["catch"](function (err) {
-      var _err$response15;
-      alert((err === null || err === void 0 || (_err$response15 = err.response) === null || _err$response15 === void 0 || (_err$response15 = _err$response15.data) === null || _err$response15 === void 0 ? void 0 : _err$response15.message) || 'Failed to update account.');
+      var _err$response16;
+      alert((err === null || err === void 0 || (_err$response16 = err.response) === null || _err$response16 === void 0 || (_err$response16 = _err$response16.data) === null || _err$response16 === void 0 ? void 0 : _err$response16.message) || 'Failed to update account.');
     })["finally"](function () {
       return setAccountSaving(false);
     });
   };
 
   // Save retention settings
-  var handleSetRetention = function handleSetRetention() {
-    localStorage.setItem('retentionValue', retentionValue.toString());
-    localStorage.setItem('retentionUnit', retentionUnit);
-    var total = retentionPreview.adr_count + retentionPreview.swap_count;
-    if (total > 0) {
-      setSuccessMessage("Retention set to ".concat(retentionValue, " ").concat(retentionUnit, ". ") + "".concat(retentionPreview.adr_count, " ADR report(s) and ") + "".concat(retentionPreview.swap_count, " swapping request(s) will be archived."));
-    } else {
-      setSuccessMessage("Retention set to ".concat(retentionValue, " ").concat(retentionUnit, ". No records to archive."));
-    }
-    setShowSuccessNotification(true);
-    setIsRetentionChanged(false);
-  };
+  var handleSetRetention = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+      var archiveResult, archiveRes, archivedTotal, _err$response17, _t3;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.p = _context2.n) {
+          case 0:
+            _context2.p = 0;
+            _context2.n = 1;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().put('/api/data-retention/settings', {
+              enabled: retentionEnabled,
+              retention_value: retentionValue,
+              retention_unit: retentionUnit,
+              purge_enabled: purgeEnabled,
+              purge_after_value: purgeAfterValue,
+              purge_after_unit: purgeAfterUnit
+            });
+          case 1:
+            archiveResult = null;
+            if (!retentionEnabled) {
+              _context2.n = 3;
+              break;
+            }
+            _context2.n = 2;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/data-retention/auto-archive', {
+              retention_value: retentionValue,
+              retention_unit: retentionUnit
+            });
+          case 2:
+            archiveRes = _context2.v;
+            archiveResult = archiveRes.data;
+          case 3:
+            if (archiveResult) {
+              archivedTotal = (archiveResult.adr_archived || 0) + (archiveResult.swap_archived || 0);
+              if (archivedTotal > 0) {
+                setSuccessMessage("Retention set to ".concat(retentionValue, " ").concat(retentionUnit, ". ") + "".concat(archiveResult.adr_archived || 0, " ADR report(s) and ") + "".concat(archiveResult.swap_archived || 0, " swapping request(s) were archived."));
+              } else {
+                setSuccessMessage("Retention set to ".concat(retentionValue, " ").concat(retentionUnit, ". No records to archive."));
+              }
+            } else {
+              setSuccessMessage('Retention updated. Auto-archive is currently disabled.');
+            }
+            setShowSuccessNotification(true);
+            setIsRetentionChanged(false);
+            _context2.n = 5;
+            break;
+          case 4:
+            _context2.p = 4;
+            _t3 = _context2.v;
+            alert((_t3 === null || _t3 === void 0 || (_err$response17 = _t3.response) === null || _err$response17 === void 0 || (_err$response17 = _err$response17.data) === null || _err$response17 === void 0 ? void 0 : _err$response17.message) || 'Failed to update retention settings.');
+          case 5:
+            return _context2.a(2);
+        }
+      }, _callee2, null, [[0, 4]]);
+    }));
+    return function handleSetRetention() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+  var handleSetPurge = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+      var _err$response18, _t4;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
+          case 0:
+            _context3.p = 0;
+            _context3.n = 1;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().put('/api/data-retention/settings', {
+              enabled: retentionEnabled,
+              retention_value: retentionValue,
+              retention_unit: retentionUnit,
+              purge_enabled: purgeEnabled,
+              purge_after_value: purgeAfterValue,
+              purge_after_unit: purgeAfterUnit
+            });
+          case 1:
+            setSuccessMessage("Purge settings saved. Archived data older than ".concat(purgeAfterValue, " ").concat(purgeAfterUnit, " will be deleted."));
+            setShowSuccessNotification(true);
+            setIsPurgeChanged(false);
+            _context3.n = 3;
+            break;
+          case 2:
+            _context3.p = 2;
+            _t4 = _context3.v;
+            alert((_t4 === null || _t4 === void 0 || (_err$response18 = _t4.response) === null || _err$response18 === void 0 || (_err$response18 = _err$response18.data) === null || _err$response18 === void 0 ? void 0 : _err$response18.message) || 'Failed to update purge settings.');
+          case 3:
+            return _context3.a(2);
+        }
+      }, _callee3, null, [[0, 2]]);
+    }));
+    return function handleSetPurge() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+  var handleToggleRetention = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(enabled) {
+      var _err$response19, _t5;
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.p = _context4.n) {
+          case 0:
+            setRetentionEnabled(enabled);
+            _context4.p = 1;
+            _context4.n = 2;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().put('/api/data-retention/settings', {
+              enabled: enabled,
+              retention_value: retentionValue,
+              retention_unit: retentionUnit,
+              purge_enabled: purgeEnabled,
+              purge_after_value: purgeAfterValue,
+              purge_after_unit: purgeAfterUnit
+            });
+          case 2:
+            setIsRetentionChanged(false);
+            _context4.n = 4;
+            break;
+          case 3:
+            _context4.p = 3;
+            _t5 = _context4.v;
+            alert((_t5 === null || _t5 === void 0 || (_err$response19 = _t5.response) === null || _err$response19 === void 0 || (_err$response19 = _err$response19.data) === null || _err$response19 === void 0 ? void 0 : _err$response19.message) || 'Failed to update auto-archive setting.');
+          case 4:
+            return _context4.a(2);
+        }
+      }, _callee4, null, [[1, 3]]);
+    }));
+    return function handleToggleRetention(_x) {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+  var handleTogglePurge = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(enabled) {
+      var _err$response20, _t6;
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.p = _context5.n) {
+          case 0:
+            setPurgeEnabled(enabled);
+            _context5.p = 1;
+            _context5.n = 2;
+            return axios__WEBPACK_IMPORTED_MODULE_1___default().put('/api/data-retention/settings', {
+              enabled: retentionEnabled,
+              retention_value: retentionValue,
+              retention_unit: retentionUnit,
+              purge_enabled: enabled,
+              purge_after_value: purgeAfterValue,
+              purge_after_unit: purgeAfterUnit
+            });
+          case 2:
+            setIsPurgeChanged(false);
+            _context5.n = 4;
+            break;
+          case 3:
+            _context5.p = 3;
+            _t6 = _context5.v;
+            alert((_t6 === null || _t6 === void 0 || (_err$response20 = _t6.response) === null || _err$response20 === void 0 || (_err$response20 = _err$response20.data) === null || _err$response20 === void 0 ? void 0 : _err$response20.message) || 'Failed to update auto-purge setting.');
+          case 4:
+            return _context5.a(2);
+        }
+      }, _callee5, null, [[1, 3]]);
+    }));
+    return function handleTogglePurge(_x2) {
+      return _ref7.apply(this, arguments);
+    };
+  }();
   var sectionContent;
   switch (activeSection) {
     case 'accounts':
@@ -76680,7 +77159,7 @@ function Settings() {
                       })
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-                        className: "settings__status settings__status--online",
+                        className: "settings__status ".concat(account.is_active ? 'settings__status--online' : 'settings__status--offline'),
                         children: account.status
                       })
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
@@ -76701,8 +77180,12 @@ function Settings() {
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
                         type: "button",
                         className: "settings__icon-button",
+                        onClick: function onClick() {
+                          return toggleAccountStatus(account);
+                        },
+                        "aria-label": account.is_active ? 'Disable account' : 'Restore account',
                         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
-                          src: "/images/disable_icon.svg",
+                          src: account.is_active ? '/images/disable_icon.svg' : '/images/restore_icon.svg',
                           alt: "",
                           "aria-hidden": "true"
                         })
@@ -77186,9 +77669,7 @@ function Settings() {
                   type: "checkbox",
                   checked: retentionEnabled,
                   onChange: function onChange(e) {
-                    setRetentionEnabled(e.target.checked);
-                    localStorage.setItem('retentionEnabled', JSON.stringify(e.target.checked));
-                    setIsRetentionChanged(true);
+                    handleToggleRetention(e.target.checked);
                   }
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
                   className: "settings__retention-slider"
@@ -77284,8 +77765,79 @@ function Settings() {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
               type: "button",
               className: "settings__set-btn",
-              disabled: !isRetentionChanged || !retentionEnabled,
+              disabled: !isRetentionChanged,
               onClick: handleSetRetention,
+              children: "Set"
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+            className: "settings__retention-header",
+            style: {
+              marginTop: '2rem'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("label", {
+              className: "settings__retention-toggle-label",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                children: "Auto-Delete Archived"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+                className: "settings__retention-toggle",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+                  type: "checkbox",
+                  checked: purgeEnabled,
+                  onChange: function onChange(e) {
+                    handleTogglePurge(e.target.checked);
+                  }
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                  className: "settings__retention-slider"
+                })]
+              })]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            className: "settings__retention-period",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("label", {
+              children: "Deletion Period"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              className: "settings__retention-input-group",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+                type: "number",
+                min: "1",
+                value: purgeAfterValue,
+                onChange: function onChange(e) {
+                  setPurgeAfterValue(Math.max(1, parseInt(e.target.value) || 1));
+                  setIsPurgeChanged(true);
+                },
+                className: "settings__retention-number",
+                disabled: !purgeEnabled
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("select", {
+                value: purgeAfterUnit,
+                onChange: function onChange(e) {
+                  setPurgeAfterUnit(e.target.value);
+                  setIsPurgeChanged(true);
+                },
+                className: "settings__retention-select",
+                disabled: !purgeEnabled,
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("option", {
+                  value: "days",
+                  children: "days"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("option", {
+                  value: "months",
+                  children: "months"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("option", {
+                  value: "years",
+                  children: "years"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+                src: "/images/edit_icon.svg",
+                alt: "Edit",
+                className: "settings__retention-edit-icon"
+              })]
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+            className: "settings__retention-actions",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+              type: "button",
+              className: "settings__set-btn",
+              disabled: !isPurgeChanged,
+              onClick: handleSetPurge,
               children: "Set"
             })
           })]
@@ -78089,65 +78641,65 @@ function SwapForm() {
     };
   }, [showYearDropdown, showMonthDropdown]);
   var handleDeny = function handleDeny(id) {
-    if (!window.confirm('Deny this swap request?')) return;
-    axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/deny")).then(function () {
-      return loadSwapRequests();
-    })["catch"](function () {
-      return alert('Could not deny request. Please try again.');
-    });
-  };
-  var handleApprove = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(id) {
-      var _t2;
-      return _regenerator().w(function (_context2) {
-        while (1) switch (_context2.p = _context2.n) {
-          case 0:
-            _context2.p = 0;
-            _context2.n = 1;
-            return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/approve"));
-          case 1:
-            loadSwapRequests();
-            _context2.n = 3;
-            break;
-          case 2:
-            _context2.p = 2;
-            _t2 = _context2.v;
-            alert('Could not execute swap. Please try again.');
-          case 3:
-            return _context2.a(2);
-        }
-      }, _callee2, null, [[0, 2]]);
-    }));
-    return function handleApprove(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var handleArchive = function handleArchive(id) {
     setConfirmState({
       isOpen: true,
-      message: 'Archive this swap request?',
+      message: 'Deny this swap request?',
       onConfirm: function () {
-        var _onConfirm = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+        var _onConfirm = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+          var _t2;
+          return _regenerator().w(function (_context2) {
+            while (1) switch (_context2.p = _context2.n) {
+              case 0:
+                _context2.p = 0;
+                _context2.n = 1;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/deny"));
+              case 1:
+                loadSwapRequests();
+                _context2.n = 3;
+                break;
+              case 2:
+                _context2.p = 2;
+                _t2 = _context2.v;
+                alert('Could not deny request. Please try again.');
+              case 3:
+                setConfirmState({
+                  isOpen: false,
+                  message: '',
+                  onConfirm: null
+                });
+              case 4:
+                return _context2.a(2);
+            }
+          }, _callee2, null, [[0, 2]]);
+        }));
+        function onConfirm() {
+          return _onConfirm.apply(this, arguments);
+        }
+        return onConfirm;
+      }()
+    });
+  };
+  var handleApprove = function handleApprove(id) {
+    setConfirmState({
+      isOpen: true,
+      message: 'Approve this swap request?',
+      onConfirm: function () {
+        var _onConfirm2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
           var _t3;
           return _regenerator().w(function (_context3) {
             while (1) switch (_context3.p = _context3.n) {
               case 0:
                 _context3.p = 0;
                 _context3.n = 1;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/archive"));
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/approve"));
               case 1:
-                setSelectedRequests(function (prev) {
-                  return prev.filter(function (i) {
-                    return i !== id;
-                  });
-                });
                 loadSwapRequests();
                 _context3.n = 3;
                 break;
               case 2:
                 _context3.p = 2;
                 _t3 = _context3.v;
-                alert('Could not archive request. Please try again.');
+                alert('Could not execute swap. Please try again.');
               case 3:
                 setConfirmState({
                   isOpen: false,
@@ -78160,7 +78712,51 @@ function SwapForm() {
           }, _callee3, null, [[0, 2]]);
         }));
         function onConfirm() {
-          return _onConfirm.apply(this, arguments);
+          return _onConfirm2.apply(this, arguments);
+        }
+        return onConfirm;
+      }()
+    });
+  };
+  var handleArchive = function handleArchive(id) {
+    setConfirmState({
+      isOpen: true,
+      message: 'Archive this swap request?',
+      onConfirm: function () {
+        var _onConfirm3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+          var _t4;
+          return _regenerator().w(function (_context4) {
+            while (1) switch (_context4.p = _context4.n) {
+              case 0:
+                _context4.p = 0;
+                _context4.n = 1;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/archive"));
+              case 1:
+                setSelectedRequests(function (prev) {
+                  return prev.filter(function (i) {
+                    return i !== id;
+                  });
+                });
+                loadSwapRequests();
+                _context4.n = 3;
+                break;
+              case 2:
+                _context4.p = 2;
+                _t4 = _context4.v;
+                alert('Could not archive request. Please try again.');
+              case 3:
+                setConfirmState({
+                  isOpen: false,
+                  message: '',
+                  onConfirm: null
+                });
+              case 4:
+                return _context4.a(2);
+            }
+          }, _callee4, null, [[0, 2]]);
+        }));
+        function onConfirm() {
+          return _onConfirm3.apply(this, arguments);
         }
         return onConfirm;
       }()
@@ -78196,24 +78792,24 @@ function SwapForm() {
       isOpen: true,
       message: "Archive ".concat(toArchive.length, " request").concat(toArchive.length === 1 ? '' : 's', "?"),
       onConfirm: function () {
-        var _onConfirm2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
-          var _t4;
-          return _regenerator().w(function (_context4) {
-            while (1) switch (_context4.p = _context4.n) {
+        var _onConfirm4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
+          var _t5;
+          return _regenerator().w(function (_context5) {
+            while (1) switch (_context5.p = _context5.n) {
               case 0:
-                _context4.p = 0;
-                _context4.n = 1;
+                _context5.p = 0;
+                _context5.n = 1;
                 return Promise.all(toArchive.map(function (id) {
                   return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/swapping-requests/".concat(id, "/archive"));
                 }));
               case 1:
                 setSelectedRequests([]);
                 loadSwapRequests();
-                _context4.n = 3;
+                _context5.n = 3;
                 break;
               case 2:
-                _context4.p = 2;
-                _t4 = _context4.v;
+                _context5.p = 2;
+                _t5 = _context5.v;
                 alert('Could not archive selected requests. Please try again.');
               case 3:
                 setConfirmState({
@@ -78222,12 +78818,12 @@ function SwapForm() {
                   onConfirm: null
                 });
               case 4:
-                return _context4.a(2);
+                return _context5.a(2);
             }
-          }, _callee4, null, [[0, 2]]);
+          }, _callee5, null, [[0, 2]]);
         }));
         function onConfirm() {
-          return _onConfirm2.apply(this, arguments);
+          return _onConfirm4.apply(this, arguments);
         }
         return onConfirm;
       }()
@@ -78743,6 +79339,14 @@ var SwapViewModal = function SwapViewModal(_ref) {
     _useState6 = _slicedToArray(_useState5, 2),
     error = _useState6[0],
     setError = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState8 = _slicedToArray(_useState7, 2),
+    exportLoading = _useState8[0],
+    setExportLoading = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState0 = _slicedToArray(_useState9, 2),
+    exportError = _useState0[0],
+    setExportError = _useState0[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (isOpen && swapId) {
       fetchSwapData();
@@ -78787,215 +79391,105 @@ var SwapViewModal = function SwapViewModal(_ref) {
     };
   }();
   var getStatusBadge = function getStatusBadge(status) {
-    var statusConfig = {
-      'pending': {
-        bg: '#fff3cd',
-        color: '#856404',
-        label: 'Pending'
-      },
-      'approved': {
-        bg: '#d4edda',
-        color: '#155724',
-        label: 'Approved'
-      },
-      'denied': {
-        bg: '#f8d7da',
-        color: '#721c24',
-        label: 'Denied'
-      },
-      'cancelled': {
-        bg: '#e2e3e5',
-        color: '#383d41',
-        label: 'Cancelled'
-      }
+    var statusKey = (status || 'pending').toLowerCase();
+    var labelMap = {
+      pending: 'Pending',
+      approved: 'Approved',
+      denied: 'Denied',
+      cancelled: 'Cancelled'
     };
-    var config = statusConfig[status === null || status === void 0 ? void 0 : status.toLowerCase()] || statusConfig['pending'];
+    var label = labelMap[statusKey] || labelMap.pending;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-      style: {
-        backgroundColor: config.bg,
-        color: config.color,
-        padding: '4px 12px',
-        borderRadius: '12px',
-        fontSize: '0.85rem',
-        fontWeight: '600',
-        display: 'inline-block'
-      },
-      children: config.label
+      className: "swap-view-modal__status swap-view-modal__status--".concat(statusKey),
+      children: label
     });
   };
+  var handleExportWord = function handleExportWord() {
+    if (!swapId) return;
+    setExportError(null);
+    setExportLoading(true);
+    var url = "/api/swapping-requests/".concat(swapId, "/export");
+    window.location.assign(url);
+    setTimeout(function () {
+      return setExportLoading(false);
+    }, 1000);
+  };
   if (!isOpen) return null;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-    style: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000
-    },
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-      style: {
-        backgroundColor: 'white',
-        borderRadius: '12px',
-        width: '90%',
-        maxWidth: '600px',
-        maxHeight: '90vh',
-        overflow: 'hidden',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)'
-      },
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    className: "swap-view-modal",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: "swap-view-modal__overlay",
+      onClick: onClose
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "swap-view-modal__container",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-        style: {
-          padding: '20px 24px',
-          borderBottom: '1px solid #e0e0e0',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: '#f8f9fa'
-        },
+        className: "swap-view-modal__header",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h2", {
-          style: {
-            margin: 0,
-            fontSize: '1.25rem',
-            color: '#333',
-            fontWeight: '600'
-          },
+          className: "swap-view-modal__title",
           children: "Swap Request Details"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
           onClick: onClose,
-          style: {
-            background: 'none',
-            border: 'none',
-            fontSize: '1.5rem',
-            cursor: 'pointer',
-            color: '#666',
-            padding: '4px',
-            lineHeight: 1
-          },
+          className: "swap-view-modal__close",
           children: "\xD7"
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-        style: {
-          padding: '24px',
-          maxHeight: 'calc(90vh - 140px)',
-          overflowY: 'auto'
-        },
+        className: "swap-view-modal__content",
         children: [loading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-          style: {
-            textAlign: 'center',
-            padding: '40px',
-            color: '#666'
-          },
+          className: "swap-view-modal__loading",
           children: "Loading..."
         }), error && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-          style: {
-            textAlign: 'center',
-            padding: '40px',
-            color: '#dc3545'
-          },
+          className: "swap-view-modal__error",
           children: error
         }), !loading && !error && swapData && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-          style: {
-            display: 'grid',
-            gap: '16px'
-          },
+          className: "swap-view-modal__grid",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            style: {
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '12px 16px',
-              backgroundColor: '#f8f9fa',
-              borderRadius: '8px'
-            },
+            className: "swap-view-modal__card swap-view-modal__card--status",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-              style: {
-                fontWeight: '600',
-                color: '#333'
-              },
+              className: "swap-view-modal__label",
               children: "Status"
             }), getStatusBadge(swapData.status)]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            style: {
-              padding: '12px 16px',
-              backgroundColor: '#f8f9fa',
-              borderRadius: '8px'
-            },
+            className: "swap-view-modal__card",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-              style: {
-                fontWeight: '600',
-                color: '#333'
-              },
+              className: "swap-view-modal__label",
               children: "Date Created: "
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-              style: {
-                color: '#555'
-              },
+              className: "swap-view-modal__value",
               children: swapData.current_date || 'N/A'
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            style: {
-              padding: '16px',
-              border: '1px solid #e0e0e0',
-              borderRadius: '8px'
-            },
+            className: "swap-view-modal__card swap-view-modal__card--outline",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h3", {
-              style: {
-                margin: '0 0 12px 0',
-                fontSize: '1rem',
-                color: '#333',
-                fontWeight: '600'
-              },
+              className: "swap-view-modal__section-title",
               children: "Requester"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-              style: {
-                display: 'grid',
-                gap: '8px'
-              },
+              className: "swap-view-modal__details",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                style: {
-                  fontSize: '0.95rem',
-                  color: '#555'
-                },
+                className: "swap-view-modal__row",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
                   children: "Name:"
                 }), " ", swapData.requester_name || 'N/A']
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                style: {
-                  fontSize: '0.95rem',
-                  color: '#555'
-                },
+                className: "swap-view-modal__row",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
                   children: "Task:"
                 }), " ", swapData.requester_task || 'N/A']
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                style: {
-                  fontSize: '0.95rem',
-                  color: '#555'
-                },
+                className: "swap-view-modal__row",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
                   children: "Date:"
                 }), " ", swapData.from_date || 'N/A']
               })]
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-            style: {
-              textAlign: 'center',
-              padding: '8px',
-              color: '#666'
-            },
+            className: "swap-view-modal__arrow",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
               width: "24",
               height: "24",
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
-              style: {
-                transform: 'rotate(90deg)'
-              },
+              className: "swap-view-modal__arrow-icon",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
                 d: "M12 5V19M12 19L5 12M12 19L19 12",
                 stroke: "currentColor",
@@ -79005,45 +79499,24 @@ var SwapViewModal = function SwapViewModal(_ref) {
               })
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            style: {
-              padding: '16px',
-              border: '1px solid #e0e0e0',
-              borderRadius: '8px'
-            },
+            className: "swap-view-modal__card swap-view-modal__card--outline",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h3", {
-              style: {
-                margin: '0 0 12px 0',
-                fontSize: '1rem',
-                color: '#333',
-                fontWeight: '600'
-              },
+              className: "swap-view-modal__section-title",
               children: "Target"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-              style: {
-                display: 'grid',
-                gap: '8px'
-              },
+              className: "swap-view-modal__details",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                style: {
-                  fontSize: '0.95rem',
-                  color: '#555'
-                },
+                className: "swap-view-modal__row",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
                   children: "Name:"
                 }), " ", swapData.target_name || 'N/A']
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                style: {
-                  fontSize: '0.95rem',
-                  color: '#555'
-                },
+                className: "swap-view-modal__row",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
                   children: "Task:"
                 }), " ", swapData.target_task || 'N/A']
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                style: {
-                  fontSize: '0.95rem',
-                  color: '#555'
-                },
+                className: "swap-view-modal__row",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
                   children: "Date:"
                 }), " ", swapData.to_date || 'N/A']
@@ -79051,31 +79524,25 @@ var SwapViewModal = function SwapViewModal(_ref) {
             })]
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-        style: {
-          padding: '16px 24px',
-          borderTop: '1px solid #e0e0e0',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          gap: '12px',
-          backgroundColor: '#f8f9fa'
-        },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "swap-view-modal__footer",
+        children: [exportError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          className: "swap-view-modal__export-error",
+          role: "alert",
+          children: exportError
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+          onClick: handleExportWord,
+          className: "swap-view-modal__btn swap-view-modal__btn--primary",
+          disabled: exportLoading || !swapData,
+          title: "Export as Word document",
+          children: exportLoading ? 'Exporting…' : 'Export Word'
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
           onClick: onClose,
-          style: {
-            padding: '10px 20px',
-            borderRadius: '6px',
-            border: '1px solid #ddd',
-            backgroundColor: 'white',
-            color: '#333',
-            fontSize: '0.9rem',
-            cursor: 'pointer',
-            fontWeight: '500'
-          },
+          className: "swap-view-modal__btn",
           children: "Close"
-        })
+        })]
       })]
-    })
+    })]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SwapViewModal);

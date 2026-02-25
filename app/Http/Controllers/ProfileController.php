@@ -189,21 +189,35 @@ class ProfileController extends Controller
             'section_id' => ['nullable', 'integer', 'exists:section,id'],
             'position' => ['nullable', 'string', 'max:255'],
             'role_id' => ['nullable', 'integer', Rule::in([1, 2, 3])],
+            'is_active' => ['nullable', 'boolean'],
         ]);
 
         DB::transaction(function () use ($profile, $validated) {
-            $profile->update([
-                'full_name' => $validated['full_name'] ?? null,
-                'section_id' => $validated['section_id'] ?? null,
-                'position' => $validated['position'] ?? null,
-            ]);
+            $profileUpdates = [];
+            if (array_key_exists('full_name', $validated)) {
+                $profileUpdates['full_name'] = $validated['full_name'];
+            }
+            if (array_key_exists('section_id', $validated)) {
+                $profileUpdates['section_id'] = $validated['section_id'];
+            }
+            if (array_key_exists('position', $validated)) {
+                $profileUpdates['position'] = $validated['position'];
+            }
+            if (!empty($profileUpdates)) {
+                $profile->update($profileUpdates);
+            }
 
-            if (
-                array_key_exists('role_id', $validated)
-                && $validated['role_id'] !== null
-                && $profile->user
-            ) {
-                $profile->user->update(['role_id' => $validated['role_id']]);
+            if ($profile->user) {
+                $userUpdates = [];
+                if (array_key_exists('role_id', $validated) && $validated['role_id'] !== null) {
+                    $userUpdates['role_id'] = $validated['role_id'];
+                }
+                if (array_key_exists('is_active', $validated)) {
+                    $userUpdates['is_active'] = (bool) $validated['is_active'];
+                }
+                if (!empty($userUpdates)) {
+                    $profile->user->update($userUpdates);
+                }
             }
         });
 
@@ -231,11 +245,13 @@ class ProfileController extends Controller
             'email' => $user ? $user->email : null,
             'role_id' => $user ? $user->role_id : null,
             'user_id' => $user ? $user->id : null,
+            'is_active' => $user ? (bool) $user->is_active : null,
             'user' => $user ? [
                 'id' => $user->id,
                 'username' => $user->username,
                 'email' => $user->email,
                 'role_id' => $user->role_id,
+                'is_active' => (bool) $user->is_active,
             ] : null,
         ];
     }

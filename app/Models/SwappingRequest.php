@@ -18,6 +18,7 @@ class SwappingRequest extends Model
         'original_target_date',
         'status',
         'approved_by',
+        'templates_id',
         'is_archived',
         'archived_at',
     ];
