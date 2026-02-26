@@ -447,12 +447,12 @@ class ExportDocxController extends Controller
             ],
             [
                 'marker'  => 'ADM_CONCERN',
-                'count'   => min(count($report['otherAdminRows'] ?? []), self::MAX_OTHER_ADMIN) ?: 1,
+                'count'   => 1,
                 'placeholders' => [['ADM_CONCERN']],
             ],
             [
                 'marker'  => 'END_ITEM',
-                'count'   => min(count($report['endorsedItemsRows'] ?? []), self::MAX_ENDORSED) ?: 1,
+                'count'   => min(count($report['endorsed'] ?? $report['endorsedItemsRows'] ?? []), self::MAX_ENDORSED) ?: 1,
                 'placeholders' => [['END_ITEM', 'END_NUM']],
             ],
         ];
@@ -786,9 +786,23 @@ class ExportDocxController extends Controller
 
     private function setOtherAdminRows(\PhpOffice\PhpWord\TemplateProcessor $tp, array $report): void
     {
-        $rows = $report['otherAdminRows'] ?? [];
-        $first = $rows[0] ?? null;
-        $this->setValue($tp, 'ADM_CONCERN', $first ? $this->formatConcernForDocx($first) : '-');
+        // Support new field name 'concerns' (from DB) and old 'otherAdminRows' (legacy)
+        $raw = $report['concerns'] ?? $report['otherAdminRows'] ?? [];
+        $rows = array_values(array_filter($raw, fn ($r) => trim((string) ($r['concern'] ?? '')) !== ''));
+
+        // ${ADM_CONCERN} is a single-cell placeholder – combine ALL concerns into one value
+        // so that every line the user typed appears, not just the first one.
+        $bullets = [];
+        foreach ($rows as $r) {
+            $formatted = $this->formatConcernForDocx($r);
+            if ($formatted !== '-') {
+                $bullets[] = $formatted;
+            }
+        }
+        $combined = implode("\n", $bullets);
+        $this->setValue($tp, 'ADM_CONCERN', $combined ?: '-');
+
+        // Also fill numbered variants for templates that use per-row expansion
         for ($i = 1; $i <= self::MAX_OTHER_ADMIN; $i++) {
             $r = $rows[$i - 1] ?? null;
             $this->setValue($tp, 'ADM_CONCERN#' . $i, $r ? $this->formatConcernForDocx($r) : '-');
@@ -797,16 +811,17 @@ class ExportDocxController extends Controller
 
     private function setEndorsedItemsRows(\PhpOffice\PhpWord\TemplateProcessor $tp, array $report): void
     {
-        $rows = array_values(array_filter(
-            $report['endorsedItemsRows'] ?? [],
-            fn ($r) => trim((string) ($r['item'] ?? '')) !== ''
-        ));
-        $first = $rows[0] ?? null;
-        // Always put numbering (1.1, 1.2, ...) inside END_ITEM so template can use only ${END_ITEM} and get consistent numbering for 1 or more items (no hyphen, no missing number).
+        // Support new field name 'endorsed' (from DB) with key 'endorsed', and old 'endorsedItemsRows' with key 'item'
+        $raw = $report['endorsed'] ?? $report['endorsedItemsRows'] ?? [];
+        $rows = array_values(array_filter($raw, function ($r) {
+            $val = trim((string) ($r['endorsed'] ?? $r['item'] ?? ''));
+            return $val !== '' && $val !== '-';
+        }));
+        // Always put numbering (1.1, 1.2, ...) inside END_ITEM so template can use only ${END_ITEM} and get consistent numbering for 1 or more items.
         $lines = [];
         foreach ($rows as $i => $r) {
             $num = '1.' . ($i + 1);
-            $itemText = $this->clean($r['item'] ?? '');
+            $itemText = $this->clean($r['endorsed'] ?? $r['item'] ?? '');
             $lines[] = $itemText !== '' ? $num . ' ' . $itemText : $num;
         }
         $endItemFirst = implode("\n", $lines);
@@ -815,7 +830,7 @@ class ExportDocxController extends Controller
         for ($i = 1; $i <= self::MAX_ENDORSED; $i++) {
             $r = $rows[$i - 1] ?? null;
             $this->setValue($tp, 'END_NUM#' . $i, $r ? '1.' . $i : '-');
-            $itemText = $r ? $this->clean($r['item'] ?? '') : '';
+            $itemText = $r ? $this->clean($r['endorsed'] ?? $r['item'] ?? '') : '';
             $this->setValue($tp, 'END_ITEM#' . $i, $itemText);
         }
     }

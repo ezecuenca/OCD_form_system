@@ -68728,15 +68728,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
-function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -68803,7 +68803,6 @@ function ADRForm() {
               _context.p = 2;
               _t = _context.v;
               console.error('Failed to fetch available template:', _t);
-              // If template fetch fails, we'll handle it when saving
             case 3:
               return _context.a(2);
           }
@@ -68816,9 +68815,78 @@ function ADRForm() {
     fetchAvailableTemplate();
   }, []);
 
+  // Pre-fill Administrative Matters from the latest saved form (new form only)
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (isEditing) return;
+    var fetchLatestAdminMatters = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+        var _data$communicationRo, _data$otherItemsRows, _data$concerns, _data$endorsed, response, data, _t2;
+        return _regenerator().w(function (_context2) {
+          while (1) switch (_context2.p = _context2.n) {
+            case 0:
+              _context2.p = 0;
+              _context2.n = 1;
+              return axios__WEBPACK_IMPORTED_MODULE_4___default().get('/api/adr/latest-admin-matters');
+            case 1:
+              response = _context2.v;
+              data = response.data;
+              if (data) {
+                _context2.n = 2;
+                break;
+              }
+              return _context2.a(2);
+            case 2:
+              if ((_data$communicationRo = data.communicationRows) !== null && _data$communicationRo !== void 0 && _data$communicationRo.length) {
+                setCommunicationRows(data.communicationRows.map(function (r, i) {
+                  return _objectSpread(_objectSpread({}, r), {}, {
+                    id: i + 1
+                  });
+                }));
+              }
+              if ((_data$otherItemsRows = data.otherItemsRows) !== null && _data$otherItemsRows !== void 0 && _data$otherItemsRows.length) {
+                setOtherItemsRows(data.otherItemsRows.map(function (r, i) {
+                  return _objectSpread(_objectSpread({}, r), {}, {
+                    id: i + 1
+                  });
+                }));
+              }
+              if ((_data$concerns = data.concerns) !== null && _data$concerns !== void 0 && _data$concerns.length) {
+                setAdminMatters(data.concerns.map(function (r, i) {
+                  return {
+                    id: i + 1,
+                    concern: r.concern || ''
+                  };
+                }));
+              }
+              if ((_data$endorsed = data.endorsed) !== null && _data$endorsed !== void 0 && _data$endorsed.length) {
+                setEndorsedItems(data.endorsed.map(function (r, i) {
+                  return {
+                    id: i + 1,
+                    endorsed: r.endorsed || ''
+                  };
+                }));
+              }
+              _context2.n = 4;
+              break;
+            case 3:
+              _context2.p = 3;
+              _t2 = _context2.v;
+            case 4:
+              return _context2.a(2);
+          }
+        }, _callee2, null, [[0, 3]]);
+      }));
+      return function fetchLatestAdminMatters() {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+    fetchLatestAdminMatters();
+  }, [isEditing]);
+
   // Load report data when editing
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (editingReport) {
+      var _editingReport$concer, _editingReport$endors;
       // Load all the form fields from the editing report
       setDocumentName(editingReport.documentName || '');
       setSubject(editingReport.subject || '');
@@ -68853,6 +68921,12 @@ function ADRForm() {
         noOfItems: 0,
         status: ''
       }]);
+      if ((_editingReport$concer = editingReport.concerns) !== null && _editingReport$concer !== void 0 && _editingReport$concer.length) {
+        setAdminMatters(editingReport.concerns);
+      }
+      if ((_editingReport$endors = editingReport.endorsed) !== null && _editingReport$endors !== void 0 && _editingReport$endors.length) {
+        setEndorsedItems(editingReport.endorsed);
+      }
       setPreparedBy(editingReport.preparedBy || '');
       setPreparedPosition(editingReport.preparedPosition || '');
       setReceivedBy(editingReport.receivedBy || '');
@@ -68935,61 +69009,81 @@ function ADRForm() {
     _useState38 = _slicedToArray(_useState37, 2),
     showOtherItemsModal = _useState38[0],
     setShowOtherItemsModal = _useState38[1];
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState40 = _slicedToArray(_useState39, 2),
+    showAdminMattersModal = _useState40[0],
+    setShowAdminMattersModal = _useState40[1];
+
+  // C. Other Administrative Matters
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+      id: 1,
+      concern: ''
+    }]),
+    _useState42 = _slicedToArray(_useState41, 2),
+    adminMatters = _useState42[0],
+    setAdminMatters = _useState42[1];
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+      id: 1,
+      endorsed: ''
+    }]),
+    _useState44 = _slicedToArray(_useState43, 2),
+    endorsedItems = _useState44[0],
+    setEndorsedItems = _useState44[1];
 
   // Communication and Other Items
-  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       id: 1,
       particulars: '',
       noOfItems: 0,
       contact: '',
       status: ''
     }]),
-    _useState40 = _slicedToArray(_useState39, 2),
-    communicationRows = _useState40[0],
-    setCommunicationRows = _useState40[1];
-  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+    _useState46 = _slicedToArray(_useState45, 2),
+    communicationRows = _useState46[0],
+    setCommunicationRows = _useState46[1];
+  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
       id: 1,
       particulars: '',
       noOfItems: 0,
       status: ''
     }]),
-    _useState42 = _slicedToArray(_useState41, 2),
-    otherItemsRows = _useState42[0],
-    setOtherItemsRows = _useState42[1];
+    _useState48 = _slicedToArray(_useState47, 2),
+    otherItemsRows = _useState48[0],
+    setOtherItemsRows = _useState48[1];
 
   // Signatures
-  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState44 = _slicedToArray(_useState43, 2),
-    preparedBy = _useState44[0],
-    setPreparedBy = _useState44[1];
-  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState46 = _slicedToArray(_useState45, 2),
-    preparedPosition = _useState46[0],
-    setPreparedPosition = _useState46[1];
-  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState48 = _slicedToArray(_useState47, 2),
-    receivedBy = _useState48[0],
-    setReceivedBy = _useState48[1];
   var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState50 = _slicedToArray(_useState49, 2),
-    receivedPosition = _useState50[0],
-    setReceivedPosition = _useState50[1];
+    preparedBy = _useState50[0],
+    setPreparedBy = _useState50[1];
   var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState52 = _slicedToArray(_useState51, 2),
-    notedBy = _useState52[0],
-    setNotedBy = _useState52[1];
+    preparedPosition = _useState52[0],
+    setPreparedPosition = _useState52[1];
   var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState54 = _slicedToArray(_useState53, 2),
-    notedPosition = _useState54[0],
-    setNotedPosition = _useState54[1];
+    receivedBy = _useState54[0],
+    setReceivedBy = _useState54[1];
   var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState56 = _slicedToArray(_useState55, 2),
-    approvedBy = _useState56[0],
-    setApprovedBy = _useState56[1];
+    receivedPosition = _useState56[0],
+    setReceivedPosition = _useState56[1];
   var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState58 = _slicedToArray(_useState57, 2),
-    approvedPosition = _useState58[0],
-    setApprovedPosition = _useState58[1];
+    notedBy = _useState58[0],
+    setNotedBy = _useState58[1];
+  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState60 = _slicedToArray(_useState59, 2),
+    notedPosition = _useState60[0],
+    setNotedPosition = _useState60[1];
+  var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState62 = _slicedToArray(_useState61, 2),
+    approvedBy = _useState62[0],
+    setApprovedBy = _useState62[1];
+  var _useState63 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState64 = _slicedToArray(_useState63, 2),
+    approvedPosition = _useState64[0],
+    setApprovedPosition = _useState64[1];
   var handleReturn = function handleReturn() {
     navigate('/adr-reports');
   };
@@ -69004,27 +69098,24 @@ function ADRForm() {
     }, 4000);
   };
   var handleConfirm = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-      var payload, _error$response, _t2;
-      return _regenerator().w(function (_context2) {
-        while (1) switch (_context2.p = _context2.n) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+      var payload, _error$response, _t3;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
           case 0:
             if (documentName.trim()) {
-              _context2.n = 1;
+              _context3.n = 1;
               break;
             }
             setShowErrorNotification(true);
-            return _context2.a(2);
+            return _context3.a(2);
           case 1:
-            // Wrap everything in { report: { ... } } — matches AdrFormController::store() expectation
             payload = {
               report: {
                 documentName: documentName,
                 subject: subject,
                 alertStatus: status,
                 templates_id: templateId,
-                // dynamically fetched from available templates
-
                 forName: forName,
                 forPosition: forPosition,
                 thruName: thruName,
@@ -69037,6 +69128,8 @@ function ADRForm() {
                 reportsItems: reportsItems,
                 communicationRows: communicationRows,
                 otherItemsRows: otherItemsRows,
+                concerns: adminMatters,
+                endorsed: endorsedItems,
                 preparedBy: preparedBy,
                 preparedPosition: preparedPosition,
                 receivedBy: receivedBy,
@@ -69047,38 +69140,38 @@ function ADRForm() {
                 approvedPosition: approvedPosition
               }
             };
-            _context2.p = 2;
+            _context3.p = 2;
             if (!(isEditing && editingReport.id)) {
-              _context2.n = 4;
+              _context3.n = 4;
               break;
             }
-            _context2.n = 3;
+            _context3.n = 3;
             return updateReport(editingReport.id, payload.report);
           case 3:
-            _context2.n = 5;
+            _context3.n = 5;
             break;
           case 4:
-            _context2.n = 5;
+            _context3.n = 5;
             return addReport(payload.report);
           case 5:
             setShowSuccessNotification(true);
             setTimeout(function () {
               navigate('/adr-reports');
             }, 1500);
-            _context2.n = 7;
+            _context3.n = 7;
             break;
           case 6:
-            _context2.p = 6;
-            _t2 = _context2.v;
-            console.error("Failed to save ADR form:", _t2);
-            showNotification(((_error$response = _t2.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Failed to save report. Please try again.', 'error');
+            _context3.p = 6;
+            _t3 = _context3.v;
+            console.error("Failed to save ADR form:", _t3);
+            showNotification(((_error$response = _t3.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Failed to save report. Please try again.', 'error');
           case 7:
-            return _context2.a(2);
+            return _context3.a(2);
         }
-      }, _callee2, null, [[2, 6]]);
+      }, _callee3, null, [[2, 6]]);
     }));
     return function handleConfirm() {
-      return _ref2.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
 
@@ -69279,7 +69372,8 @@ function ADRForm() {
               value: forName,
               onChange: function onChange(e) {
                 return setForName(e.target.value);
-              }
+              },
+              placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
@@ -69301,7 +69395,8 @@ function ADRForm() {
               value: thruName,
               onChange: function onChange(e) {
                 return setThruName(e.target.value);
-              }
+              },
+              placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
@@ -69323,7 +69418,8 @@ function ADRForm() {
               value: fromName,
               onChange: function onChange(e) {
                 return setFromName(e.target.value);
-              }
+              },
+              placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
@@ -69349,7 +69445,8 @@ function ADRForm() {
               value: dateTime,
               onChange: function onChange(e) {
                 return setDateTime(e.target.value);
-              }
+              },
+              placeholder: "e.g. Jan 01 to Jan 02, 2025 (0800H to 0800H)"
             })]
           })
         })]
@@ -69437,6 +69534,18 @@ function ADRForm() {
             },
             children: "CUSTOMIZE"
           })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          className: "adr-form__customize-group",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
+            children: "C. Other Administrative Matters"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+            className: "adr-form__customize-btn",
+            type: "button",
+            onClick: function onClick() {
+              return setShowAdminMattersModal(true);
+            },
+            children: "CUSTOMIZE"
+          })]
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "adr-form__signature-fields",
@@ -69451,7 +69560,8 @@ function ADRForm() {
               value: preparedBy,
               onChange: function onChange(e) {
                 return setPreparedBy(e.target.value);
-              }
+              },
+              placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
@@ -69473,7 +69583,8 @@ function ADRForm() {
               value: receivedBy,
               onChange: function onChange(e) {
                 return setReceivedBy(e.target.value);
-              }
+              },
+              placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
@@ -69495,7 +69606,8 @@ function ADRForm() {
               value: notedBy,
               onChange: function onChange(e) {
                 return setNotedBy(e.target.value);
-              }
+              },
+              placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
@@ -69517,7 +69629,8 @@ function ADRForm() {
               value: approvedBy,
               onChange: function onChange(e) {
                 return setApprovedBy(e.target.value);
-              }
+              },
+              placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
             className: "adr-form__position-line",
@@ -69668,7 +69781,7 @@ function ADRForm() {
             className: "adr-form__modal-add-row",
             type: "button",
             onClick: addCommunicationRow,
-            children: "Add Row"
+            children: "+"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__modal-footer",
@@ -69793,7 +69906,7 @@ function ADRForm() {
             className: "adr-form__modal-add-row",
             type: "button",
             onClick: addAttendanceItem,
-            children: "Add Row"
+            children: "+"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__modal-footer",
@@ -69918,7 +70031,7 @@ function ADRForm() {
             className: "adr-form__modal-add-row",
             type: "button",
             onClick: addReportsItem,
-            children: "Add Row"
+            children: "+"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__modal-footer",
@@ -70058,7 +70171,7 @@ function ADRForm() {
             className: "adr-form__modal-add-row",
             type: "button",
             onClick: addOtherItemsRow,
-            children: "Add Row"
+            children: "+"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "adr-form__modal-footer",
@@ -70067,6 +70180,133 @@ function ADRForm() {
             type: "button",
             onClick: function onClick() {
               return setShowOtherItemsModal(false);
+            },
+            children: "Confirm"
+          })
+        })]
+      })
+    }), showAdminMattersModal && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      className: "adr-form__modal adr-form__modal--active",
+      onClick: function onClick() {
+        return setShowAdminMattersModal(false);
+      },
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+        className: "adr-form__modal-content",
+        onClick: function onClick(e) {
+          return e.stopPropagation();
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          className: "adr-form__modal-header",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
+            children: "C. Other Administrative Matters"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+            className: "adr-form__modal-close",
+            type: "button",
+            onClick: function onClick() {
+              return setShowAdminMattersModal(false);
+            },
+            children: "\xD7"
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          className: "adr-form__modal-body",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            className: "adr-form__admin-matters-description",
+            children: "List down administrative concerns such as but not limited to: Duty driver on-call, vehicle activities, internet or other ICT equipment issues, parcel or documents received/delivered, untoward incidents that should be elevated to the management level."
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+            className: "adr-form__field",
+            style: {
+              marginBottom: 0
+            },
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
+              children: "C. Other Administrative Matters:"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+              className: "adr-form__modal-input adr-form__modal-textarea",
+              rows: "4",
+              placeholder: "Enter each concern on a new line...",
+              value: adminMatters.map(function (m) {
+                return m.concern;
+              }).join('\n'),
+              onChange: function onChange(e) {
+                var lines = e.target.value.split('\n');
+                setAdminMatters(lines.map(function (concern, index) {
+                  return {
+                    id: index + 1,
+                    concern: concern || ''
+                  };
+                }));
+              },
+              onKeyDown: function onKeyDown(e) {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  var selectionStart = e.target.selectionStart;
+                  var val = e.target.value;
+                  var newVal = val.substring(0, selectionStart) + '\n' + val.substring(selectionStart);
+                  var lines = newVal.split('\n');
+                  setAdminMatters(lines.map(function (concern, index) {
+                    return {
+                      id: index + 1,
+                      concern: concern || ''
+                    };
+                  }));
+                  setTimeout(function () {
+                    e.target.setSelectionRange(selectionStart + 1, selectionStart + 1);
+                  }, 0);
+                }
+              }
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+            className: "adr-form__field",
+            style: {
+              marginBottom: 0
+            },
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
+              children: "1. The following were endorsed to incoming Operations Duty Staff:"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+              className: "adr-form__modal-input adr-form__modal-textarea",
+              rows: "3",
+              placeholder: "Enter each endorsed item on a new line (e.g. 2 units of mobile phones)...",
+              value: endorsedItems.map(function (e) {
+                return e.endorsed;
+              }).join('\n'),
+              onChange: function onChange(e) {
+                var lines = e.target.value.split('\n');
+                setEndorsedItems(lines.map(function (endorsed, index) {
+                  return {
+                    id: index + 1,
+                    endorsed: endorsed || ''
+                  };
+                }));
+              },
+              onKeyDown: function onKeyDown(e) {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  var selectionStart = e.target.selectionStart;
+                  var val = e.target.value;
+                  var newVal = val.substring(0, selectionStart) + '\n' + val.substring(selectionStart);
+                  var lines = newVal.split('\n');
+                  setEndorsedItems(lines.map(function (endorsed, index) {
+                    return {
+                      id: index + 1,
+                      endorsed: endorsed || ''
+                    };
+                  }));
+                  setTimeout(function () {
+                    e.target.setSelectionRange(selectionStart + 1, selectionStart + 1);
+                  }, 0);
+                }
+              }
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            className: "adr-form__info-static",
+            children: "2. For information of the OCD Officer-In-Charge."
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+          className: "adr-form__modal-footer",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+            className: "adr-form__modal-confirm",
+            type: "button",
+            onClick: function onClick() {
+              return setShowAdminMattersModal(false);
             },
             children: "Confirm"
           })
@@ -73048,35 +73288,9 @@ function DocumentViewModal(_ref) {
       return observer.disconnect();
     };
   }, [report]);
-  var handleExportWord = function handleExportWord() {
-    if (!report) return;
-    if (exportInProgressRef.current) return;
-    exportInProgressRef.current = true;
-    setExportError(null);
-    setExportLoading(true);
-    var reportPayload = _objectSpread(_objectSpread({}, report), {}, {
-      alertStatus: report.alertStatus || report.status || 'WHITE ALERT'
-    });
-    var form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/api/adr/export-docx';
-    form.target = '_self';
-    form.style.display = 'none';
-    form.setAttribute('accept-charset', 'UTF-8');
-    var input = document.createElement('input');
-    input.name = 'report';
-    input.type = 'hidden';
-    input.value = JSON.stringify(reportPayload);
-    form.appendChild(input);
-    document.body.appendChild(form);
-    form.submit();
-    form.remove();
-    setExportLoading(false);
-    exportInProgressRef.current = false;
-  };
-  var handleExportPdf = /*#__PURE__*/function () {
+  var handleExportWord = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-      var reportPayload, csrfToken, headers, res, contentType, text, msg, j, blob, url, _t;
+      var reportPayload, csrfToken, headers, res, text, msg, j, data, a, _t;
       return _regenerator().w(function (_context) {
         while (1) switch (_context.p = _context.n) {
           case 0:
@@ -73102,12 +73316,12 @@ function DocumentViewModal(_ref) {
             csrfToken = getCsrfToken();
             headers = {
               'Content-Type': 'application/json',
-              'Accept': 'application/pdf',
+              'Accept': 'application/json',
               'X-Requested-With': 'XMLHttpRequest'
             };
             if (csrfToken) headers['X-XSRF-TOKEN'] = csrfToken;
             _context.n = 4;
-            return fetch('/api/adr/export-pdf', {
+            return fetch('/api/adr/export-docx', {
               method: 'POST',
               credentials: 'include',
               headers: headers,
@@ -73117,7 +73331,6 @@ function DocumentViewModal(_ref) {
             });
           case 4:
             res = _context.v;
-            contentType = res.headers.get('Content-Type') || '';
             if (res.ok) {
               _context.n = 6;
               break;
@@ -73126,7 +73339,7 @@ function DocumentViewModal(_ref) {
             return res.text();
           case 5:
             text = _context.v;
-            msg = res.status === 503 ? 'PDF export requires LibreOffice. Install LibreOffice and set LIBREOFFICE_PATH if needed.' : res.status === 422 ? 'No report data.' : 'Export failed.';
+            msg = 'Export failed.';
             try {
               j = JSON.parse(text);
               if (j && j.error) msg = j.error;
@@ -73136,38 +73349,132 @@ function DocumentViewModal(_ref) {
             exportInProgressRef.current = false;
             return _context.a(2);
           case 6:
-            if (!contentType.includes('application/pdf')) {
-              _context.n = 8;
+            _context.n = 7;
+            return res.json();
+          case 7:
+            data = _context.v;
+            if (data.downloadUrl) {
+              a = document.createElement('a');
+              a.href = data.downloadUrl;
+              a.download = data.filename || 'ADR_Report.docx';
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+            } else {
+              setExportError('Unexpected response from server.');
+            }
+            _context.n = 9;
+            break;
+          case 8:
+            _context.p = 8;
+            _t = _context.v;
+            setExportError(_t.message || 'Export failed.');
+          case 9:
+            setExportLoading(false);
+            exportInProgressRef.current = false;
+          case 10:
+            return _context.a(2);
+        }
+      }, _callee, null, [[3, 8]]);
+    }));
+    return function handleExportWord() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+  var handleExportPdf = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+      var reportPayload, csrfToken, headers, res, contentType, text, msg, j, blob, url, _t2;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.p = _context2.n) {
+          case 0:
+            if (report) {
+              _context2.n = 1;
               break;
             }
-            _context.n = 7;
+            return _context2.a(2);
+          case 1:
+            if (!exportInProgressRef.current) {
+              _context2.n = 2;
+              break;
+            }
+            return _context2.a(2);
+          case 2:
+            exportInProgressRef.current = true;
+            setExportError(null);
+            setExportLoading(true);
+            reportPayload = _objectSpread(_objectSpread({}, report), {}, {
+              alertStatus: report.alertStatus || report.status || 'WHITE ALERT'
+            });
+            _context2.p = 3;
+            csrfToken = getCsrfToken();
+            headers = {
+              'Content-Type': 'application/json',
+              'Accept': 'application/pdf',
+              'X-Requested-With': 'XMLHttpRequest'
+            };
+            if (csrfToken) headers['X-XSRF-TOKEN'] = csrfToken;
+            _context2.n = 4;
+            return fetch('/api/adr/export-pdf', {
+              method: 'POST',
+              credentials: 'include',
+              headers: headers,
+              body: JSON.stringify({
+                report: reportPayload
+              })
+            });
+          case 4:
+            res = _context2.v;
+            contentType = res.headers.get('Content-Type') || '';
+            if (res.ok) {
+              _context2.n = 6;
+              break;
+            }
+            _context2.n = 5;
+            return res.text();
+          case 5:
+            text = _context2.v;
+            msg = res.status === 503 ? 'PDF export requires LibreOffice. Install LibreOffice and set LIBREOFFICE_PATH if needed.' : res.status === 422 ? 'No report data.' : 'Export failed.';
+            try {
+              j = JSON.parse(text);
+              if (j && j.error) msg = j.error;
+            } catch (_) {}
+            setExportError(msg);
+            setExportLoading(false);
+            exportInProgressRef.current = false;
+            return _context2.a(2);
+          case 6:
+            if (!contentType.includes('application/pdf')) {
+              _context2.n = 8;
+              break;
+            }
+            _context2.n = 7;
             return res.blob();
           case 7:
-            blob = _context.v;
+            blob = _context2.v;
             url = URL.createObjectURL(blob);
             window.location.assign(url);
             URL.revokeObjectURL(url);
-            _context.n = 9;
+            _context2.n = 9;
             break;
           case 8:
             setExportError('Unexpected response from server.');
           case 9:
-            _context.n = 11;
+            _context2.n = 11;
             break;
           case 10:
-            _context.p = 10;
-            _t = _context.v;
-            setExportError(_t.message || 'Export failed.');
+            _context2.p = 10;
+            _t2 = _context2.v;
+            setExportError(_t2.message || 'Export failed.');
           case 11:
             setExportLoading(false);
             exportInProgressRef.current = false;
           case 12:
-            return _context.a(2);
+            return _context2.a(2);
         }
-      }, _callee, null, [[3, 10]]);
+      }, _callee2, null, [[3, 10]]);
     }));
     return function handleExportPdf() {
-      return _ref3.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
   var renderBodyContent = function renderBodyContent() {
@@ -73286,7 +73593,7 @@ function DocumentViewModal(_ref) {
           }), Array.from({
             length: totalPages
           }, function (_, i) {
-            var _ref4;
+            var _ref5;
             var range = pageRanges[i];
             var useRange = range && contentAreaHeightPx != null;
             var height = useRange ? range.end - range.start : contentAreaHeightPx !== null && contentAreaHeightPx !== void 0 ? contentAreaHeightPx : undefined;
@@ -73320,7 +73627,7 @@ function DocumentViewModal(_ref) {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                   className: "document-viewer__sheet-body",
                   style: {
-                    height: "".concat((_ref4 = height !== null && height !== void 0 ? height : contentAreaHeightPx) !== null && _ref4 !== void 0 ? _ref4 : 0, "px"),
+                    height: "".concat((_ref5 = height !== null && height !== void 0 ? height : contentAreaHeightPx) !== null && _ref5 !== void 0 ? _ref5 : 0, "px"),
                     overflow: 'hidden',
                     position: 'relative'
                   },

@@ -27,11 +27,38 @@ function ADRForm() {
                 }
             } catch (error) {
                 console.error('Failed to fetch available template:', error);
-                // If template fetch fails, we'll handle it when saving
             }
         };
         fetchAvailableTemplate();
     }, []);
+
+    // Pre-fill Administrative Matters from the latest saved form (new form only)
+    useEffect(() => {
+        if (isEditing) return;
+        const fetchLatestAdminMatters = async () => {
+            try {
+                const response = await axios.get('/api/adr/latest-admin-matters');
+                const data = response.data;
+                if (!data) return;
+
+                if (data.communicationRows?.length) {
+                    setCommunicationRows(data.communicationRows.map((r, i) => ({ ...r, id: i + 1 })));
+                }
+                if (data.otherItemsRows?.length) {
+                    setOtherItemsRows(data.otherItemsRows.map((r, i) => ({ ...r, id: i + 1 })));
+                }
+                if (data.concerns?.length) {
+                    setAdminMatters(data.concerns.map((r, i) => ({ id: i + 1, concern: r.concern || '' })));
+                }
+                if (data.endorsed?.length) {
+                    setEndorsedItems(data.endorsed.map((r, i) => ({ id: i + 1, endorsed: r.endorsed || '' })));
+                }
+            } catch (error) {
+                // No previous form or network error – start with empty defaults
+            }
+        };
+        fetchLatestAdminMatters();
+    }, [isEditing]);
 
     // Load report data when editing
     useEffect(() => {
@@ -51,6 +78,12 @@ function ADRForm() {
             setReportsItems(editingReport.reportsItems || [{ id: 1, report: '', remarks: '' }]);
             setCommunicationRows(editingReport.communicationRows || [{ id: 1, particulars: '', noOfItems: 0, contact: '', status: '' }]);
             setOtherItemsRows(editingReport.otherItemsRows || [{ id: 1, particulars: '', noOfItems: 0, status: '' }]);
+            if (editingReport.concerns?.length) {
+                setAdminMatters(editingReport.concerns);
+            }
+            if (editingReport.endorsed?.length) {
+                setEndorsedItems(editingReport.endorsed);
+            }
             setPreparedBy(editingReport.preparedBy || '');
             setPreparedPosition(editingReport.preparedPosition || '');
             setReceivedBy(editingReport.receivedBy || '');
@@ -85,6 +118,11 @@ function ADRForm() {
     const [showAttendanceModal, setShowAttendanceModal] = useState(false);
     const [showReportsModal, setShowReportsModal] = useState(false);
     const [showOtherItemsModal, setShowOtherItemsModal] = useState(false);
+    const [showAdminMattersModal, setShowAdminMattersModal] = useState(false);
+
+    // C. Other Administrative Matters
+    const [adminMatters, setAdminMatters] = useState([{ id: 1, concern: '' }]);
+    const [endorsedItems, setEndorsedItems] = useState([{ id: 1, endorsed: '' }]);
     
     // Communication and Other Items
     const [communicationRows, setCommunicationRows] = useState([
@@ -119,13 +157,12 @@ function ADRForm() {
             return;
         }
 
-        // Wrap everything in { report: { ... } } — matches AdrFormController::store() expectation
         const payload = {
             report: {
                 documentName,
                 subject,
                 alertStatus: status,
-                templates_id: templateId,  // dynamically fetched from available templates
+                templates_id: templateId, 
 
                 forName,
                 forPosition,
@@ -139,6 +176,8 @@ function ADRForm() {
                 reportsItems,
                 communicationRows,
                 otherItemsRows,
+                concerns: adminMatters,
+                endorsed: endorsedItems,
                 preparedBy,
                 preparedPosition,
                 receivedBy,
@@ -315,21 +354,21 @@ function ADRForm() {
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>For:</label>
-                            <input type="text" value={forName} onChange={(e) => setForName(e.target.value)} />
+                            <input type="text" value={forName} onChange={(e) => setForName(e.target.value)} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={forPosition} onChange={(e) => setForPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>Thru:</label>
-                            <input type="text" value={thruName} onChange={(e) => setThruName(e.target.value)} />
+                            <input type="text" value={thruName} onChange={(e) => setThruName(e.target.value)} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={thruPosition} onChange={(e) => setThruPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>From:</label>
-                            <input type="text" value={fromName} onChange={(e) => setFromName(e.target.value)} />
+                            <input type="text" value={fromName} onChange={(e) => setFromName(e.target.value)} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={fromPosition} onChange={(e) => setFromPosition(e.target.value)}></textarea>
                     </div>
@@ -337,7 +376,7 @@ function ADRForm() {
                         <div className="adr-form__subject-header">
                             <label>Subject:</label>
                             <span className="adr-form__subject-text">After Duty Report for the Period Covered</span>
-                            <input type="text" className="adr-form__subject-input" value={dateTime} onChange={(e) => setDateTime(e.target.value)} />
+                            <input type="text" className="adr-form__subject-input" value={dateTime} onChange={(e) => setDateTime(e.target.value)} placeholder="e.g. Jan 01 to Jan 02, 2025 (0800H to 0800H)" />
                         </div>
                     </div>
                 </div>
@@ -385,34 +424,40 @@ function ADRForm() {
                             CUSTOMIZE
                         </button>
                     </div>
+                    <div className="adr-form__customize-group">
+                        <label>C. Other Administrative Matters</label>
+                        <button className="adr-form__customize-btn" type="button" onClick={() => setShowAdminMattersModal(true)}>
+                            CUSTOMIZE
+                        </button>
+                    </div>
                 </div>
 
                 <div className="adr-form__signature-fields">
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Prepared By:</label>
-                            <input type="text" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} />
+                            <input type="text" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={preparedPosition} onChange={(e) => setPreparedPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Received By:</label>
-                            <input type="text" value={receivedBy} onChange={(e) => setReceivedBy(e.target.value)} />
+                            <input type="text" value={receivedBy} onChange={(e) => setReceivedBy(e.target.value)} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={receivedPosition} onChange={(e) => setReceivedPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Noted By:</label>
-                            <input type="text" value={notedBy} onChange={(e) => setNotedBy(e.target.value)} />
+                            <input type="text" value={notedBy} onChange={(e) => setNotedBy(e.target.value)} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={notedPosition} onChange={(e) => setNotedPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Approved:</label>
-                            <input type="text" value={approvedBy} onChange={(e) => setApprovedBy(e.target.value)} />
+                            <input type="text" value={approvedBy} onChange={(e) => setApprovedBy(e.target.value)} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={approvedPosition} onChange={(e) => setApprovedPosition(e.target.value)}></textarea>
                     </div>
@@ -511,7 +556,7 @@ function ADRForm() {
                                 </tbody>
                             </table>
                             <button className="adr-form__modal-add-row" type="button" onClick={addCommunicationRow}>
-                                Add Row
+                                +
                             </button>
                         </div>
                         <div className="adr-form__modal-footer">
@@ -589,7 +634,7 @@ function ADRForm() {
                                 </tbody>
                             </table>
                             <button className="adr-form__modal-add-row" type="button" onClick={addAttendanceItem}>
-                                Add Row
+                                +
                             </button>
                         </div>
                         <div className="adr-form__modal-footer">
@@ -667,7 +712,7 @@ function ADRForm() {
                                 </tbody>
                             </table>
                             <button className="adr-form__modal-add-row" type="button" onClick={addReportsItem}>
-                                Add Row
+                                +
                             </button>
                         </div>
                         <div className="adr-form__modal-footer">
@@ -761,7 +806,7 @@ function ADRForm() {
                                 </tbody>
                             </table>
                             <button className="adr-form__modal-add-row" type="button" onClick={addOtherItemsRow}>
-                                Add Row
+                                +
                             </button>
                         </div>
                         <div className="adr-form__modal-footer">
@@ -772,8 +817,91 @@ function ADRForm() {
                     </div>
                 </div>
             )}
+
+            {showAdminMattersModal && (
+                <div className="adr-form__modal adr-form__modal--active" onClick={() => setShowAdminMattersModal(false)}>
+                    <div className="adr-form__modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="adr-form__modal-header">
+                            <h2>C. Other Administrative Matters</h2>
+                            <button className="adr-form__modal-close" type="button" onClick={() => setShowAdminMattersModal(false)}>
+                                &times;
+                            </button>
+                        </div>
+                        <div className="adr-form__modal-body">
+                            <div className="adr-form__admin-matters-description">
+                                List down administrative concerns such as but not limited to: Duty driver on-call, vehicle activities,
+                                internet or other ICT equipment issues, parcel or documents received/delivered, untoward
+                                incidents that should be elevated to the management level.
+                            </div>
+
+                            <div className="adr-form__field" style={{ marginBottom: 0 }}>
+                                <label>C. Other Administrative Matters:</label>
+                                <textarea
+                                    className="adr-form__modal-input adr-form__modal-textarea"
+                                    rows="4"
+                                    placeholder="Enter each concern on a new line..."
+                                    value={adminMatters.map(m => m.concern).join('\n')}
+                                    onChange={(e) => {
+                                        const lines = e.target.value.split('\n');
+                                        setAdminMatters(lines.map((concern, index) => ({ id: index + 1, concern: concern || '' })));
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            const { selectionStart } = e.target;
+                                            const val = e.target.value;
+                                            const newVal = val.substring(0, selectionStart) + '\n' + val.substring(selectionStart);
+                                            const lines = newVal.split('\n');
+                                            setAdminMatters(lines.map((concern, index) => ({ id: index + 1, concern: concern || '' })));
+                                            setTimeout(() => {
+                                                e.target.setSelectionRange(selectionStart + 1, selectionStart + 1);
+                                            }, 0);
+                                        }
+                                    }}
+                                />
+                            </div>
+
+                            <div className="adr-form__field" style={{ marginBottom: 0 }}>
+                                <label>1. The following were endorsed to incoming Operations Duty Staff:</label>
+                                <textarea
+                                    className="adr-form__modal-input adr-form__modal-textarea"
+                                    rows="3"
+                                    placeholder="Enter each endorsed item on a new line (e.g. 2 units of mobile phones)..."
+                                    value={endorsedItems.map(e => e.endorsed).join('\n')}
+                                    onChange={(e) => {
+                                        const lines = e.target.value.split('\n');
+                                        setEndorsedItems(lines.map((endorsed, index) => ({ id: index + 1, endorsed: endorsed || '' })));
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            const { selectionStart } = e.target;
+                                            const val = e.target.value;
+                                            const newVal = val.substring(0, selectionStart) + '\n' + val.substring(selectionStart);
+                                            const lines = newVal.split('\n');
+                                            setEndorsedItems(lines.map((endorsed, index) => ({ id: index + 1, endorsed: endorsed || '' })));
+                                            setTimeout(() => {
+                                                e.target.setSelectionRange(selectionStart + 1, selectionStart + 1);
+                                            }, 0);
+                                        }
+                                    }}
+                                />
+                            </div>
+
+                            <div className="adr-form__info-static">
+                                2. For information of the OCD Officer-In-Charge.
+                            </div>
+                        </div>
+                        <div className="adr-form__modal-footer">
+                            <button className="adr-form__modal-confirm" type="button" onClick={() => setShowAdminMattersModal(false)}>
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
 
-export default ADRForm;
+export default ADRForm; 

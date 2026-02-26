@@ -839,6 +839,14 @@ body {
   font-size: 0.85rem;
   font-weight: 600;
 }
+.adr-form__field-group .adr-form__field input::-moz-placeholder {
+  color: #999;
+  font-weight: 400;
+}
+.adr-form__field-group .adr-form__field input::placeholder {
+  color: #999;
+  font-weight: 400;
+}
 .adr-form__field-group .adr-form__position-line {
   font-size: 0.8rem !important;
   padding: 0.1rem 0 !important;
@@ -885,13 +893,13 @@ body {
 }
 .adr-form__subject-input::-moz-placeholder {
   color: #999;
-  font-style: italic;
   font-weight: 400;
+  font-style: normal;
 }
 .adr-form__subject-input::placeholder {
   color: #999;
-  font-style: italic;
   font-weight: 400;
+  font-style: normal;
 }
 .adr-form__subject-input:focus {
   outline: none;
@@ -923,6 +931,14 @@ body {
   outline: none;
   transition: border-color 0.2s;
   background: #f7f7f7;
+}
+.adr-form__field input::-moz-placeholder, .adr-form__field textarea::-moz-placeholder, .adr-form__field select::-moz-placeholder {
+  color: #999;
+}
+.adr-form__field input::placeholder,
+.adr-form__field textarea::placeholder,
+.adr-form__field select::placeholder {
+  color: #999;
 }
 .adr-form__field input:focus,
 .adr-form__field textarea:focus,
@@ -1141,6 +1157,14 @@ body {
   min-height: 32px !important;
   font-weight: 600;
 }
+.adr-form__signature-fields input:not(.adr-form__position-line)::-moz-placeholder {
+  color: #999;
+  font-weight: 400;
+}
+.adr-form__signature-fields input:not(.adr-form__position-line)::placeholder {
+  color: #999;
+  font-weight: 400;
+}
 .adr-form__signature-item {
   display: flex;
   flex-direction: column;
@@ -1201,6 +1225,39 @@ body {
 .adr-form__customize-btn:hover {
   background: #290081;
   color: white;
+}
+.adr-form__admin-matters-description {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  background: rgba(41, 0, 129, 0.04);
+  border-left: 3px solid rgba(41, 0, 129, 0.35);
+  border-radius: 0 6px 6px 0;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.78rem;
+  color: #555;
+  font-style: italic;
+  line-height: 1.5;
+}
+.adr-form__admin-matters-description::before {
+  content: "ℹ";
+  flex-shrink: 0;
+  font-style: normal;
+  font-size: 0.85rem;
+  color: rgba(41, 0, 129, 0.6);
+  margin-top: 0.05rem;
+}
+.adr-form__info-static {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f5f5f5;
+  border-radius: 6px;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #555;
+  border: 1px solid #e8e8e8;
 }
 .adr-form__modal-textarea {
   min-height: 60px;
@@ -1358,9 +1415,12 @@ body {
   color: #333;
 }
 .adr-form__modal-body {
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem;
   overflow-y: auto;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 .adr-form__modal-hint {
   font-size: 0.8rem;
@@ -1455,18 +1515,26 @@ body {
   height: 16px;
 }
 .adr-form__modal-add-row {
-  padding: 0.5rem 1rem;
-  background: #18004C;
-  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: #ebebeb;
+  color: #444;
   border: none;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.18s, color 0.18s;
+  margin: 0.25rem auto 0;
 }
 .adr-form__modal-add-row:hover {
-  background: #E99745;
+  background: #290081;
+  color: white;
 }
 .adr-form__modal-footer {
   padding: 1rem 1.5rem;
@@ -3881,32 +3949,48 @@ body {
   font-style: italic;
   margin: 0.5rem 0;
 }
-.document-viewer__admin-list, .document-viewer__endorsed-list {
+.document-viewer__admin-list {
   margin: 0.5rem 0;
-  padding-left: 1.5rem;
+  padding-left: 1.2rem;
   font-size: 11pt;
+  display: block;
 }
-.document-viewer__admin-list li, .document-viewer__endorsed-list li {
+.document-viewer__admin-item {
   margin-bottom: 0.3rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35em;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
 }
-.document-viewer {
-  /* Endorsed list: show 1.1, 1.2, 1.3 (sub-numbering under "1. The following were endorsed...") */
+.document-viewer__admin-item::before {
+  content: "•";
+  flex-shrink: 0;
+  line-height: inherit;
 }
 .document-viewer__endorsed-list {
-  list-style: none;
-  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+  padding-left: 0;
+  font-size: 11pt;
+  display: block;
   counter-reset: endorsed;
 }
-.document-viewer__endorsed-list li {
+.document-viewer__endorsed-item {
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35em;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
   counter-increment: endorsed;
-  position: relative;
-  padding-left: 0.25rem;
 }
-.document-viewer__endorsed-list li::before {
-  content: "1." counter(endorsed) " ";
-  position: absolute;
-  left: -1.5rem;
-  font-weight: normal;
+.document-viewer__endorsed-item::before {
+  content: "1." counter(endorsed);
+  flex-shrink: 0;
+  white-space: nowrap;
+  line-height: inherit;
 }
 .document-viewer__endorsed {
   margin: 1rem 0;
@@ -6179,6 +6263,36 @@ body.document-modal-open .main-content {
 .settings__modal-field input:focus {
   outline: none;
   border-color: #290081;
+}
+
+.settings__modal-field select {
+  width: 100%;
+  padding: 8px 36px 8px 12px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: #111827;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-sizing: border-box;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23290081' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  -moz-appearance: none;
+       appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.settings__modal-field select:focus {
+  outline: none;
+  border-color: #290081;
+  box-shadow: 0 0 0 3px rgba(41, 0, 129, 0.1);
+}
+
+.settings__modal-field select:hover {
+  border-color: #9ca3af;
 }
 
 .settings__modal-actions {
