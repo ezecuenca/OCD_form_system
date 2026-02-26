@@ -5,6 +5,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
     const isAddMode = mode === 'add';
     const isViewMode = mode === 'view';
     const isEditMode = mode === 'edit';
+    const isPastTask = Boolean(initialTask?.isPast);
     const canRequestSwap =
         userRole === 2 ||
         userRole === 3 ||
@@ -16,6 +17,21 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
     const [task, setTask] = useState('');
     const [schedule, setSchedule] = useState('');
     const [errors, setErrors] = useState({}); // New state for inline errors
+
+    const todayDateString = () => {
+        const today = new Date();
+        return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    };
+
+    const isPastDate = (dateStr) => {
+        if (!dateStr) return false;
+        const [y, m, d] = dateStr.split('-');
+        const taskDate = new Date(y, m - 1, d);
+        const today = new Date();
+        taskDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+        return taskDate < today;
+    };
 
     useEffect(() => {
         if (!isOpen) return;
@@ -39,6 +55,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
         if (!profileId) newErrors.profileId = 'Select a staff member from the list';
         if (!task.trim()) newErrors.task = 'Task description is required';
         if (!schedule) newErrors.schedule = 'Date is required';
+        if (schedule && isPastDate(schedule)) newErrors.schedule = 'Date cannot be in the past';
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -148,6 +165,7 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
                             <input
                                 type="date"
                                 value={schedule}
+                                min={todayDateString()}
                                 readOnly={!isEditMode}
                                 style={isEditMode ? {} : { backgroundColor: '#f9f9f9', cursor: 'default' }}
                                 onChange={e => setSchedule(e.target.value)}
@@ -231,11 +249,16 @@ function TasksModal({ isOpen, onClose, selectedDate, initialTask = null, mode = 
 
                         {isViewMode && (
                             <>
-                                {(userRole === 2 || userRole === 3) && (
+                                {(userRole === 2 || userRole === 3) && !isPastTask && (
                                     <button type="button" className="btn btn--primary" onClick={() => onSwitchToEdit()}>Edit Task</button>
                                 )}
-                                {canRequestSwap && (
+                                {canRequestSwap && !isPastTask && (
                                     <button type="button" className="btn btn--secondary" onClick={() => onSwitchToSwap()}>Request Swap</button>
+                                )}
+                                {isPastTask && (
+                                    <span style={{ color: '#777', fontSize: '0.85rem' }}>
+                                        Past tasks cannot be edited or swapped.
+                                    </span>
                                 )}
                             </>
                         )}

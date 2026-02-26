@@ -191,6 +191,13 @@
         border-left-color: #4b7ee8;
     }
 
+    &__task--past {
+        background: #f2f2f2;
+        border-left-color: #b5b5b5;
+        opacity: 0.75;
+        cursor: not-allowed;
+    }
+
     &__task-name {
         font-size: 0.75rem;
         font-weight: 700;
@@ -236,6 +243,10 @@
 
     &__task--swapped &__task-name {
         color: #2f5eb8;
+    }
+
+    &__task--past &__task-name {
+        color: #8a8a8a;
     }
 
     &__task-description {

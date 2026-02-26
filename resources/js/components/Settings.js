@@ -105,6 +105,28 @@ function Settings() {
         return cutoff;
     };
 
+    const getPurgeCutoffDate = () => {
+        const cutoff = new Date();
+
+        switch (purgeAfterUnit) {
+            case 'days':
+                cutoff.setDate(cutoff.getDate() - purgeAfterValue);
+                break;
+            case 'months':
+                cutoff.setMonth(cutoff.getMonth() - purgeAfterValue);
+                break;
+            case 'years':
+                cutoff.setFullYear(cutoff.getFullYear() - purgeAfterValue);
+                break;
+            default:
+                cutoff.setDate(cutoff.getDate() - purgeAfterValue);
+        }
+
+        cutoff.setHours(23, 59, 59, 999);
+
+        return cutoff;
+    };
+
     // Format time left - shows hours/minutes if within same day
     const formatTimeLeft = () => {
         const { adr_days, swap_days, retention_value, retention_unit } = daysUntilArchive;
@@ -1441,6 +1463,42 @@ function Settings() {
                                     className="settings__retention-edit-icon"
                                 />
                             </div>
+                        </div>
+
+                        <div className="settings__retention-dates">
+                            <div>
+                                <span className="settings__retention-label-small">Current Date:</span>
+                                <span className="settings__retention-value">
+                                    {new Date().toLocaleString('en-US', {
+                                        month: 'long',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                        hour12: true,
+                                    })}
+                                </span>
+                            </div>
+                            <div>
+                                <span className="settings__retention-label-small">Cutoff Date:</span>
+                                <span className="settings__retention-value">
+                                    {getPurgeCutoffDate().toLocaleString('en-US', {
+                                        month: 'long',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                        hour12: true,
+                                    })}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="settings__retention-preview">
+                            <span className={purgeAfterUnit === 'days' && purgeAfterValue <= 7 ? 'warning' : ''}>
+                                {purgeAfterValue} {purgeAfterValue === 1 ? purgeAfterUnit.slice(0, -1) : purgeAfterUnit}
+                            </span>
+                            {' before deleting archived ADR Reports and Swapping Requests.'}
                         </div>
 
                         <div className="settings__retention-actions">

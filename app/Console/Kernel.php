@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('data-retention:auto-archive')->daily();
         $schedule->command('data-retention:purge-archived')->daily();
+        $schedule->command('tasks:purge-old')->daily();
     }
 
     /**

@@ -346,7 +346,7 @@ body {
   max-width: 320px;
   display: flex;
   align-items: center;
-  background: #f7f7f7;
+  background: white;
   border: 2px solid #290081;
   border-radius: 8px;
   padding: 0 0.85rem;
@@ -1858,6 +1858,12 @@ body {
   background: linear-gradient(135deg, #e9f2ff 0%, #f5f9ff 100%);
   border-left-color: #4b7ee8;
 }
+.schedule__task--past {
+  background: #f2f2f2;
+  border-left-color: #b5b5b5;
+  opacity: 0.75;
+  cursor: not-allowed;
+}
 .schedule__task-name {
   font-size: 0.75rem;
   font-weight: 700;
@@ -1898,6 +1904,9 @@ body {
 }
 .schedule__task--swapped .schedule__task-name {
   color: #2f5eb8;
+}
+.schedule__task--past .schedule__task-name {
+  color: #8a8a8a;
 }
 .schedule__task-description {
   font-size: 0.65rem;

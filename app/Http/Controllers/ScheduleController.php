@@ -155,6 +155,7 @@ class ScheduleController extends Controller
 
     /**
      * Delete a schedule.
+     * Associated swap requests will have their schedule references set to null automatically.
      */
     public function destroy(Request $request, $id)
     {

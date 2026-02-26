@@ -70914,7 +70914,7 @@ function ADRReports() {
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
         className: "adr-reports__pagination-info",
-        children: filteredReports.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'No data'
+        children: filteredReports.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'Page 1 of 1'
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
         onClick: goToNextPage,
         disabled: currentPage === totalPages || filteredReports.length === 0,
@@ -72247,11 +72247,17 @@ function ArchivedReports() {
       year: 'numeric'
     });
   };
+  var formatTaskName = function formatTaskName(taskName) {
+    if (!taskName) return '---';
+    return taskName;
+  };
   var getSwapRequestDescription = function getSwapRequestDescription(req) {
+    var fromTaskName = formatTaskName(req.taskName);
+    var toTaskName = formatTaskName(req.targetTaskName);
     if (req.targetTaskName) {
-      return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") \u21C4 \"").concat(req.targetTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
+      return "\"".concat(fromTaskName, "\" (").concat(formatDateOnly(req.fromDate), ") \u21C4 \"").concat(toTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
     }
-    return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") \u2192 (").concat(formatDateOnly(req.toDate), ")");
+    return "\"".concat(fromTaskName, "\" (").concat(formatDateOnly(req.fromDate), ") \u2192 (").concat(formatDateOnly(req.toDate), ")");
   };
   var handleRestoreSwapRequest = function handleRestoreSwapRequest(id) {
     pendingRestoreSwapIdRef.current = id;
@@ -72836,7 +72842,7 @@ function ArchivedReports() {
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
         className: "archived-reports__pagination-info",
-        children: activeTab === 'adr' ? filteredArchivedReports.length > 0 ? "Page ".concat(currentAdrPage, " of ").concat(totalAdrPages) : 'No data' : filteredArchivedSwapRequests.length > 0 ? "Page ".concat(currentSwapPage, " of ").concat(totalSwapPages) : 'No data'
+        children: activeTab === 'adr' ? filteredArchivedReports.length > 0 ? "Page ".concat(currentAdrPage, " of ").concat(totalAdrPages) : 'Page 1 of 1' : filteredArchivedSwapRequests.length > 0 ? "Page ".concat(currentSwapPage, " of ").concat(totalSwapPages) : 'Page 1 of 1'
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
         onClick: activeTab === 'adr' ? goToAdrNextPage : goToSwapNextPage,
         disabled: activeTab === 'adr' ? currentAdrPage === totalAdrPages || filteredArchivedReports.length === 0 : currentSwapPage === totalSwapPages || filteredArchivedSwapRequests.length === 0,
@@ -75304,6 +75310,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SuccessNotification__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./SuccessNotification */ "./resources/js/components/SuccessNotification.js");
 /* harmony import */ var _FailNotification__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./FailNotification */ "./resources/js/components/FailNotification.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -75688,10 +75700,28 @@ function Schedule() {
       year: 'numeric'
     });
   };
+  var isPastDate = function isPastDate(dateStr) {
+    if (!dateStr) return false;
+    var _dateStr$split3 = dateStr.split('-'),
+      _dateStr$split4 = _slicedToArray(_dateStr$split3, 3),
+      y = _dateStr$split4[0],
+      m = _dateStr$split4[1],
+      d = _dateStr$split4[2];
+    var taskDate = new Date(y, m - 1, d);
+    var today = new Date();
+    taskDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    return taskDate < today;
+  };
   var handleDayClick = function handleDayClick(day) {
     if (!day) return;
     if ((user === null || user === void 0 ? void 0 : user.role_id) !== 2 && (user === null || user === void 0 ? void 0 : user.role_id) !== 3) return;
     var dateStr = "".concat(currentDate.getFullYear(), "-").concat(String(currentDate.getMonth() + 1).padStart(2, '0'), "-").concat(String(day).padStart(2, '0'));
+    if (isPastDate(dateStr)) {
+      setFailMessage('You cannot add tasks to past dates.');
+      setShowFailNotification(true);
+      return;
+    }
     setSelectedDate(dateStr);
     setShowTaskForm(true);
   };
@@ -75702,15 +75732,23 @@ function Schedule() {
         while (1) switch (_context4.p = _context4.n) {
           case 0:
             _context4.p = 0;
+            if (!isPastDate(taskData.date)) {
+              _context4.n = 1;
+              break;
+            }
+            setFailMessage('You cannot add tasks to past dates.');
+            setShowFailNotification(true);
+            return _context4.a(2);
+          case 1:
             payload = {
               profile_id: Number(taskData.profileId),
               task_description: taskData.task,
               task_date: taskData.date,
               status: 'active'
             };
-            _context4.n = 1;
+            _context4.n = 2;
             return axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/schedules', payload);
-          case 1:
+          case 2:
             response = _context4.v;
             setTasks(function (prev) {
               return [].concat(_toConsumableArray(prev), [mapScheduleToTask(response.data)]);
@@ -75718,18 +75756,18 @@ function Schedule() {
             setShowTaskForm(false);
             setSuccessMessage('Task added successfully.');
             setShowSuccessNotification(true);
-            _context4.n = 3;
+            _context4.n = 4;
             break;
-          case 2:
-            _context4.p = 2;
+          case 3:
+            _context4.p = 3;
             _t4 = _context4.v;
             message = (_t4 === null || _t4 === void 0 || (_error$response = _t4.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || 'Could not save schedule. Please try again.';
             setFailMessage(message);
             setShowFailNotification(true);
-          case 3:
+          case 4:
             return _context4.a(2);
         }
-      }, _callee4, null, [[0, 2]]);
+      }, _callee4, null, [[0, 3]]);
     }));
     return function handleAddTask(_x) {
       return _ref4.apply(this, arguments);
@@ -75749,7 +75787,7 @@ function Schedule() {
             setConfirmMessage('Delete this task?');
             setConfirmAction(function () {
               return /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
-                var _error$response2, rawMessage, isForeignKeyError, message, _t5;
+                var _error$response2, message, _t5;
                 return _regenerator().w(function (_context5) {
                   while (1) switch (_context5.p = _context5.n) {
                     case 0:
@@ -75769,9 +75807,7 @@ function Schedule() {
                     case 2:
                       _context5.p = 2;
                       _t5 = _context5.v;
-                      rawMessage = (_t5 === null || _t5 === void 0 || (_error$response2 = _t5.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || '';
-                      isForeignKeyError = /foreign key|constraint/i.test(rawMessage);
-                      message = task.status === 'swap' || isForeignKeyError ? 'Cant delete swapped tasks.' : rawMessage || 'Could not delete task. Please try again.';
+                      message = (_t5 === null || _t5 === void 0 || (_error$response2 = _t5.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || 'Could not delete task. Please try again.';
                       setFailMessage(message);
                       setShowFailNotification(true);
                     case 3:
@@ -75795,8 +75831,11 @@ function Schedule() {
     };
   }();
   var handleTaskClick = function handleTaskClick(task) {
-    setSelectedTask(task);
-    setTaskToSwap(task);
+    var taskWithPast = _objectSpread(_objectSpread({}, task), {}, {
+      isPast: isPastDate(task.date)
+    });
+    setSelectedTask(taskWithPast);
+    setTaskToSwap(taskWithPast);
     setModalMode('view');
     setShowTaskForm(true);
   };
@@ -75822,6 +75861,11 @@ function Schedule() {
   };
   var handleSwapDayClick = function handleSwapDayClick(day) {
     if (!day || !taskToSwap || modalMode !== 'swap') return;
+    if (isPastDate(taskToSwap.date)) {
+      setFailMessage('Past tasks cannot be swapped.');
+      setShowFailNotification(true);
+      return;
+    }
     var targetDateStr = "".concat(currentDate.getFullYear(), "-").concat(String(currentDate.getMonth() + 1).padStart(2, '0'), "-").concat(String(day).padStart(2, '0'));
     submitSwapRequest({
       requester_schedule_id: taskToSwap.id,
@@ -75832,6 +75876,11 @@ function Schedule() {
     event.stopPropagation();
     if (!taskToSwap || modalMode !== 'swap') return;
     if (targetTask.id === taskToSwap.id) return;
+    if (isPastDate(taskToSwap.date) || isPastDate(targetTask.date)) {
+      setFailMessage('Past tasks cannot be swapped.');
+      setShowFailNotification(true);
+      return;
+    }
     submitSwapRequest({
       requester_schedule_id: taskToSwap.id,
       target_schedule_id: targetTask.id
@@ -75927,6 +75976,7 @@ function Schedule() {
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                 className: "schedule__day-tasks",
                 children: dayTasks.map(function (task, taskIndex) {
+                  var isPastTask = isPastDate(task.date);
                   var tooltipText = '';
                   if (task.status === 'swap' && task.swapInfo) {
                     var formatShortDate = function formatShortDate(dateStr) {
@@ -75949,7 +75999,7 @@ function Schedule() {
                     tooltipText = 'This task has been swapped';
                   }
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
-                    className: "schedule__task".concat(task.status === 'swap' ? ' schedule__task--swapped' : ''),
+                    className: "schedule__task".concat(task.status === 'swap' ? ' schedule__task--swapped' : '').concat(isPastTask ? ' schedule__task--past' : ''),
                     onClick: function onClick(event) {
                       if (modalMode === 'swap') {
                         handleSwapTaskClick(event, task);
@@ -76091,15 +76141,23 @@ function Schedule() {
             while (1) switch (_context7.p = _context7.n) {
               case 0:
                 _context7.p = 0;
+                if (!isPastDate(updateTask.date)) {
+                  _context7.n = 1;
+                  break;
+                }
+                setFailMessage('You cannot move tasks to past dates.');
+                setShowFailNotification(true);
+                return _context7.a(2);
+              case 1:
                 payload = {
                   profile_id: Number(updateTask.profileId),
                   task_description: updateTask.task,
                   task_date: updateTask.date,
                   status: updateTask.status || 'active'
                 };
-                _context7.n = 1;
+                _context7.n = 2;
                 return axios__WEBPACK_IMPORTED_MODULE_3___default().put("/api/schedules/".concat(updateTask.id), payload);
-              case 1:
+              case 2:
                 response = _context7.v;
                 setTasks(function (prev) {
                   return prev.map(function (t) {
@@ -76111,27 +76169,37 @@ function Schedule() {
                 setModalMode('add');
                 setSuccessMessage('Task updated successfully.');
                 setShowSuccessNotification(true);
-                _context7.n = 3;
+                _context7.n = 4;
                 break;
-              case 2:
-                _context7.p = 2;
+              case 3:
+                _context7.p = 3;
                 _t6 = _context7.v;
                 message = (_t6 === null || _t6 === void 0 || (_error$response4 = _t6.response) === null || _error$response4 === void 0 || (_error$response4 = _error$response4.data) === null || _error$response4 === void 0 ? void 0 : _error$response4.message) || 'Could not update schedule. Please try again.';
                 setFailMessage(message);
                 setShowFailNotification(true);
-              case 3:
+              case 4:
                 return _context7.a(2);
             }
-          }, _callee7, null, [[0, 2]]);
+          }, _callee7, null, [[0, 3]]);
         }));
         return function (_x3) {
           return _ref9.apply(this, arguments);
         };
       }()),
       onSwitchToEdit: function onSwitchToEdit() {
-        return setModalMode('edit');
+        if (selectedTask !== null && selectedTask !== void 0 && selectedTask.isPast) {
+          setFailMessage('Past tasks cannot be edited.');
+          setShowFailNotification(true);
+          return;
+        }
+        setModalMode('edit');
       },
       onSwitchToSwap: function onSwitchToSwap() {
+        if (selectedTask !== null && selectedTask !== void 0 && selectedTask.isPast) {
+          setFailMessage('Past tasks cannot be swapped.');
+          setShowFailNotification(true);
+          return;
+        }
         setModalMode('swap');
         setShowTaskForm(false);
       },
@@ -76436,6 +76504,24 @@ function Settings() {
     }
 
     // Set to end of the cutoff day (common for retention policies)
+    cutoff.setHours(23, 59, 59, 999);
+    return cutoff;
+  };
+  var getPurgeCutoffDate = function getPurgeCutoffDate() {
+    var cutoff = new Date();
+    switch (purgeAfterUnit) {
+      case 'days':
+        cutoff.setDate(cutoff.getDate() - purgeAfterValue);
+        break;
+      case 'months':
+        cutoff.setMonth(cutoff.getMonth() - purgeAfterValue);
+        break;
+      case 'years':
+        cutoff.setFullYear(cutoff.getFullYear() - purgeAfterValue);
+        break;
+      default:
+        cutoff.setDate(cutoff.getDate() - purgeAfterValue);
+    }
     cutoff.setHours(23, 59, 59, 999);
     return cutoff;
   };
@@ -78139,6 +78225,45 @@ function Settings() {
                 className: "settings__retention-edit-icon"
               })]
             })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            className: "settings__retention-dates",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                className: "settings__retention-label-small",
+                children: "Current Date:"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                className: "settings__retention-value",
+                children: new Date().toLocaleString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                className: "settings__retention-label-small",
+                children: "Cutoff Date:"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                className: "settings__retention-value",
+                children: getPurgeCutoffDate().toLocaleString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true
+                })
+              })]
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            className: "settings__retention-preview",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+              className: purgeAfterUnit === 'days' && purgeAfterValue <= 7 ? 'warning' : '',
+              children: [purgeAfterValue, " ", purgeAfterValue === 1 ? purgeAfterUnit.slice(0, -1) : purgeAfterUnit]
+            }), ' before deleting archived ADR Reports and Swapping Requests.']
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
             className: "settings__retention-actions",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
@@ -79216,11 +79341,17 @@ function SwapForm() {
       setCurrentPage(totalPages);
     }
   }, [swapRequests.length, currentPage, totalPages]);
+  function formatTaskName(taskName) {
+    if (!taskName) return '---';
+    return taskName;
+  }
   function getRequestDescription(req) {
+    var fromTaskName = formatTaskName(req.taskName);
+    var toTaskName = formatTaskName(req.targetTaskName);
     if (req.targetTaskName) {
-      return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") => \"").concat(req.targetTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
+      return "\"".concat(fromTaskName, "\" (").concat(formatDateOnly(req.fromDate), ") => \"").concat(toTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
     }
-    return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") => (").concat(formatDateOnly(req.toDate), ")");
+    return "\"".concat(fromTaskName, "\" (").concat(formatDateOnly(req.fromDate), ") => (").concat(formatDateOnly(req.toDate), ")");
   }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     className: "swap-form",
@@ -79546,7 +79677,7 @@ function SwapForm() {
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
         className: "swap-form__pagination-info",
-        children: filteredRequests.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'No data'
+        children: filteredRequests.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'Page 1 of 1'
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
         onClick: goToNextPage,
         disabled: currentPage === totalPages || filteredRequests.length === 0,
@@ -79905,6 +80036,7 @@ function TasksModal(_ref) {
   var isAddMode = mode === 'add';
   var isViewMode = mode === 'view';
   var isEditMode = mode === 'edit';
+  var isPastTask = Boolean(initialTask === null || initialTask === void 0 ? void 0 : initialTask.isPast);
   var canRequestSwap = userRole === 2 || userRole === 3 || userRole === 1 && String((initialTask === null || initialTask === void 0 ? void 0 : initialTask.profileId) || '') === String(currentProfileId || '');
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState2 = _slicedToArray(_useState, 2),
@@ -79931,6 +80063,23 @@ function TasksModal(_ref) {
     errors = _useState10[0],
     setErrors = _useState10[1]; // New state for inline errors
 
+  var todayDateString = function todayDateString() {
+    var today = new Date();
+    return "".concat(today.getFullYear(), "-").concat(String(today.getMonth() + 1).padStart(2, '0'), "-").concat(String(today.getDate()).padStart(2, '0'));
+  };
+  var isPastDate = function isPastDate(dateStr) {
+    if (!dateStr) return false;
+    var _dateStr$split = dateStr.split('-'),
+      _dateStr$split2 = _slicedToArray(_dateStr$split, 3),
+      y = _dateStr$split2[0],
+      m = _dateStr$split2[1],
+      d = _dateStr$split2[2];
+    var taskDate = new Date(y, m - 1, d);
+    var today = new Date();
+    taskDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    return taskDate < today;
+  };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (!isOpen) return;
     if (isAddMode) {
@@ -79951,6 +80100,7 @@ function TasksModal(_ref) {
     if (!profileId) newErrors.profileId = 'Select a staff member from the list';
     if (!task.trim()) newErrors.task = 'Task description is required';
     if (!schedule) newErrors.schedule = 'Date is required';
+    if (schedule && isPastDate(schedule)) newErrors.schedule = 'Date cannot be in the past';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -79982,11 +80132,11 @@ function TasksModal(_ref) {
   };
   var formatDate = function formatDate(dateStr) {
     if (!dateStr) return '—';
-    var _dateStr$split = dateStr.split('-'),
-      _dateStr$split2 = _slicedToArray(_dateStr$split, 3),
-      y = _dateStr$split2[0],
-      m = _dateStr$split2[1],
-      d = _dateStr$split2[2];
+    var _dateStr$split3 = dateStr.split('-'),
+      _dateStr$split4 = _slicedToArray(_dateStr$split3, 3),
+      y = _dateStr$split4[0],
+      m = _dateStr$split4[1],
+      d = _dateStr$split4[2];
     return new Date(y, m - 1, d).toLocaleDateString('en-US', {
       weekday: 'long',
       month: 'long',
@@ -80085,6 +80235,7 @@ function TasksModal(_ref) {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
               type: "date",
               value: schedule,
+              min: todayDateString(),
               readOnly: !isEditMode,
               style: isEditMode ? {} : {
                 backgroundColor: '#f9f9f9',
@@ -80205,20 +80356,26 @@ function TasksModal(_ref) {
               children: "Add Task"
             })
           }), isViewMode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
-            children: [(userRole === 2 || userRole === 3) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+            children: [(userRole === 2 || userRole === 3) && !isPastTask && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
               type: "button",
               className: "btn btn--primary",
               onClick: function onClick() {
                 return onSwitchToEdit();
               },
               children: "Edit Task"
-            }), canRequestSwap && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+            }), canRequestSwap && !isPastTask && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
               type: "button",
               className: "btn btn--secondary",
               onClick: function onClick() {
                 return onSwitchToSwap();
               },
               children: "Request Swap"
+            }), isPastTask && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+              style: {
+                color: '#777',
+                fontSize: '0.85rem'
+              },
+              children: "Past tasks cannot be edited or swapped."
             })]
           }), isEditMode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {

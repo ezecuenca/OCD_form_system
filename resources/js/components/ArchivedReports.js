@@ -180,11 +180,19 @@ function ArchivedReports() {
         });
     };
 
+    const formatTaskName = (taskName) => {
+        if (!taskName) return '---';
+        return taskName;
+    };
+
     const getSwapRequestDescription = (req) => {
+        const fromTaskName = formatTaskName(req.taskName);
+        const toTaskName = formatTaskName(req.targetTaskName);
+        
         if (req.targetTaskName) {
-            return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) ⇄ "${req.targetTaskName}" (${formatDateOnly(req.toDate)})`;
+            return `"${fromTaskName}" (${formatDateOnly(req.fromDate)}) ⇄ "${toTaskName}" (${formatDateOnly(req.toDate)})`;
         }
-        return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) → (${formatDateOnly(req.toDate)})`;
+        return `"${fromTaskName}" (${formatDateOnly(req.fromDate)}) → (${formatDateOnly(req.toDate)})`;
     };
 
     const handleRestoreSwapRequest = (id) => {
@@ -614,8 +622,8 @@ function ArchivedReports() {
                 </button>
                 <span className="archived-reports__pagination-info">
                     {activeTab === 'adr'
-                        ? (filteredArchivedReports.length > 0 ? `Page ${currentAdrPage} of ${totalAdrPages}` : 'No data')
-                        : (filteredArchivedSwapRequests.length > 0 ? `Page ${currentSwapPage} of ${totalSwapPages}` : 'No data')}
+                        ? (filteredArchivedReports.length > 0 ? `Page ${currentAdrPage} of ${totalAdrPages}` : 'Page 1 of 1')
+                        : (filteredArchivedSwapRequests.length > 0 ? `Page ${currentSwapPage} of ${totalSwapPages}` : 'Page 1 of 1')}
                 </span>
                 <button
                     onClick={activeTab === 'adr' ? goToAdrNextPage : goToSwapNextPage}

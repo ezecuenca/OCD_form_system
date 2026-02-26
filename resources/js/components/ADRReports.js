@@ -403,7 +403,7 @@ function ADRReports() {
                         <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <span className="adr-reports__pagination-info">{filteredReports.length > 0 ? `Page ${currentPage} of ${totalPages}` : 'No data'}</span>
+                <span className="adr-reports__pagination-info">{filteredReports.length > 0 ? `Page ${currentPage} of ${totalPages}` : 'Page 1 of 1'}</span>
                 <button onClick={goToNextPage} disabled={currentPage === totalPages || filteredReports.length === 0} title="Next page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
