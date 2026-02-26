@@ -72,6 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/adr-forms', [AdrFormController::class, 'index'])->name('api.adr-forms.index');
     Route::get('/adr-forms/{id}', [AdrFormController::class, 'show'])->name('api.adr-forms.show');
     Route::get('/adr/available-template', [AdrFormController::class, 'getAvailableTemplate'])->name('api.adr.available-template');
+    Route::get('/adr/latest-admin-matters', [AdrFormController::class, 'latestAdminMatters'])->name('api.adr.latest-admin-matters');
     Route::post('/adr-forms', [AdrFormController::class, 'store'])->name('api.adr-forms.store');
     Route::put('/adr-forms/{id}', [AdrFormController::class, 'update'])->name('api.adr-forms.update');
     Route::patch('/adr-forms/{id}/archive', [AdrFormController::class, 'archive'])->name('api.adr-forms.archive');

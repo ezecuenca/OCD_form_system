@@ -249,17 +249,22 @@ class AdrFormController extends Controller
         }
 
         $form->concerns()->delete();
-        foreach ($report['otherAdminRows'] ?? [] as $row) {
-            $form->concerns()->create([
-                'concern' => $row['concern'] ?? '',
-            ]);
+        $concernsData = $report['concerns'] ?? $report['otherAdminRows'] ?? [];
+        foreach ($concernsData as $row) {
+            $concern = $row['concern'] ?? '';
+            if (trim($concern) !== '') {
+                $form->concerns()->create(['concern' => $concern]);
+            }
         }
 
         $form->endorsed()->delete();
-        foreach ($report['endorsedItemsRows'] ?? [] as $row) {
-            $form->endorsed()->create([
-                'endorsed' => $row['item'] ?? '',
-            ]);
+        $endorsedData = $report['endorsed'] ?? $report['endorsedItemsRows'] ?? [];
+        foreach ($endorsedData as $row) {
+            // new format uses 'endorsed' key; old format uses 'item' key
+            $text = $row['endorsed'] ?? $row['item'] ?? '';
+            if (trim($text) !== '' && trim($text) !== '-') {
+                $form->endorsed()->create(['endorsed' => $text]);
+            }
         }
 
         $form->otherItems()->delete();
@@ -270,5 +275,64 @@ class AdrFormController extends Controller
                 'remarks' => $row['status'] ?? $row['remarks'] ?? '',
             ]);
         }
+    }
+
+    /**
+     * Return the latest form's Administrative Matters data for pre-filling a new form.
+     */
+    public function latestAdminMatters(Request $request)
+    {
+        $profileId = $this->getProfileId($request);
+        if ($profileId === null) {
+            return response()->json(null);
+        }
+
+        $form = AdrForm::where('profile_id', $profileId)
+            ->orderByDesc('created_at')
+            ->first();
+
+        if (!$form) {
+            return response()->json(null);
+        }
+
+        $data = $form->form_data ?? [];
+
+        // Communication rows
+        $communicationRows = $form->communications()->get()->map(fn ($r) => [
+            'id'         => $r->id,
+            'particulars' => $r->particulars ?? '',
+            'noOfItems'  => $r->number ?? 0,
+            'contact'    => $r->contact ?? '',
+            'status'     => $r->remarks ?? '',
+        ])->values()->toArray();
+
+        if (empty($communicationRows)) {
+            $communicationRows = $data['communicationRows'] ?? [];
+        }
+
+        // Other items rows
+        $otherItemsRows = $form->otherItems()->get()->map(fn ($r) => [
+            'id'         => $r->id,
+            'particulars' => $r->particulars ?? '',
+            'noOfItems'  => $r->number ?? 0,
+            'status'     => $r->remarks ?? '',
+        ])->values()->toArray();
+
+        if (empty($otherItemsRows)) {
+            $otherItemsRows = $data['otherItemsRows'] ?? [];
+        }
+
+        // Concerns (C. Other Administrative Matters)
+        $concerns = $form->concerns()->get(['id', 'concern'])->toArray();
+
+        // Endorsed items
+        $endorsed = $form->endorsed()->get(['id', 'endorsed'])->toArray();
+
+        return response()->json([
+            'communicationRows' => $communicationRows,
+            'otherItemsRows'    => $otherItemsRows,
+            'concerns'          => $concerns,
+            'endorsed'          => $endorsed,
+        ]);
     }
 }

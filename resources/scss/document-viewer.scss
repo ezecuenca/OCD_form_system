@@ -559,34 +559,52 @@
         margin: 0.5rem 0;
     }
     
-    &__admin-list,
-    &__endorsed-list {
+    &__admin-list {
         margin: 0.5rem 0;
-        padding-left: 1.5rem;
+        padding-left: 1.2rem;
         font-size: 11pt;
-        
-        li {
-            margin-bottom: 0.3rem;
+        display: block;
+    }
+
+    &__admin-item {
+        margin-bottom: 0.3rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.35em;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.4;
+
+        &::before {
+            content: "•";
+            flex-shrink: 0;
+            line-height: inherit;
         }
     }
-    
-    /* Endorsed list: show 1.1, 1.2, 1.3 (sub-numbering under "1. The following were endorsed...") */
+
     &__endorsed-list {
-        list-style: none;
-        padding-left: 1.5rem;
+        margin: 0.5rem 0;
+        padding-left: 0;
+        font-size: 11pt;
+        display: block;
         counter-reset: endorsed;
-        
-        li {
-            counter-increment: endorsed;
-            position: relative;
-            padding-left: 0.25rem;
-            
-            &::before {
-                content: "1." counter(endorsed) " ";
-                position: absolute;
-                left: -1.5rem;
-                font-weight: normal;
-            }
+    }
+
+    &__endorsed-item {
+        margin-bottom: 0.3rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.35em;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.4;
+        counter-increment: endorsed;
+
+        &::before {
+            content: "1." counter(endorsed);
+            flex-shrink: 0;
+            white-space: nowrap;
+            line-height: inherit;
         }
     }
     

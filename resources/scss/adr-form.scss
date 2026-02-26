@@ -184,6 +184,11 @@
             input {
                 font-size: 0.85rem;
                 font-weight: 600;
+
+                &::placeholder {
+                    color: #999;
+                    font-weight: 400;
+                }
             }
         }
 
@@ -236,8 +241,8 @@
         
         &::placeholder {
             color: #999;
-            font-style: italic;
             font-weight: 400;
+            font-style: normal;
         }
 
         &:focus {
@@ -274,6 +279,10 @@
             outline: none;
             transition: border-color 0.2s;
             background: #f7f7f7;
+
+            &::placeholder {
+                color: #999;
+            }
 
             &:focus {
                 outline: none;
@@ -527,6 +536,11 @@
             padding: 0.4rem 0.5rem !important;
             min-height: 32px !important;
             font-weight: 600;
+
+            &::placeholder {
+                color: #999;
+                font-weight: 400;
+            }
         }
     }
 
@@ -595,6 +609,42 @@
             background: $form-purple;
             color: white;
         }
+    }
+
+    &__admin-matters-description {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        background: rgba(41, 0, 129, 0.04);
+        border-left: 3px solid rgba(41, 0, 129, 0.35);
+        border-radius: 0 6px 6px 0;
+        padding: 0.6rem 0.85rem;
+        font-size: 0.78rem;
+        color: #555;
+        font-style: italic;
+        line-height: 1.5;
+
+        &::before {
+            content: "ℹ";
+            flex-shrink: 0;
+            font-style: normal;
+            font-size: 0.85rem;
+            color: rgba(41, 0, 129, 0.6);
+            margin-top: 0.05rem;
+        }
+    }
+
+    &__info-static {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #f5f5f5;
+        border-radius: 6px;
+        padding: 0.55rem 0.85rem;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: #555;
+        border: 1px solid #e8e8e8;
     }
 
     &__modal-textarea {
@@ -767,9 +817,12 @@
         }
 
         &-body {
-            padding: 1.5rem;
+            padding: 1.25rem 1.5rem;
             overflow-y: auto;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
         &-hint {
@@ -885,18 +938,26 @@
         }
 
         &-add-row {
-            padding: 0.5rem 1rem;
-            background: #18004C;
-            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            background: #ebebeb;
+            color: #444;
             border: none;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            font-weight: 400;
+            line-height: 1;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: background 0.18s, color 0.18s;
+            margin: 0.25rem auto 0;
 
             &:hover {
-                background: #E99745;
+                background: #290081;
+                color: white;
             }
         }
 

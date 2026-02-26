@@ -258,7 +258,7 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
         return () => observer.disconnect();
     }, [report]);
 
-    const handleExportWord = () => {
+    const handleExportWord = async () => {
         if (!report) return;
         if (exportInProgressRef.current) return;
         exportInProgressRef.current = true;
@@ -268,20 +268,46 @@ function DocumentViewModal({ isOpen, reportId, report: reportProp, onClose }) {
             ...report,
             alertStatus: report.alertStatus || report.status || 'WHITE ALERT'
         };
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/api/adr/export-docx';
-        form.target = '_self';
-        form.style.display = 'none';
-        form.setAttribute('accept-charset', 'UTF-8');
-        const input = document.createElement('input');
-        input.name = 'report';
-        input.type = 'hidden';
-        input.value = JSON.stringify(reportPayload);
-        form.appendChild(input);
-        document.body.appendChild(form);
-        form.submit();
-        form.remove();
+        try {
+            const csrfToken = getCsrfToken();
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            };
+            if (csrfToken) headers['X-XSRF-TOKEN'] = csrfToken;
+            const res = await fetch('/api/adr/export-docx', {
+                method: 'POST',
+                credentials: 'include',
+                headers,
+                body: JSON.stringify({ report: reportPayload })
+            });
+            if (!res.ok) {
+                const text = await res.text();
+                let msg = 'Export failed.';
+                try {
+                    const j = JSON.parse(text);
+                    if (j && j.error) msg = j.error;
+                } catch (_) {}
+                setExportError(msg);
+                setExportLoading(false);
+                exportInProgressRef.current = false;
+                return;
+            }
+            const data = await res.json();
+            if (data.downloadUrl) {
+                const a = document.createElement('a');
+                a.href = data.downloadUrl;
+                a.download = data.filename || 'ADR_Report.docx';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            } else {
+                setExportError('Unexpected response from server.');
+            }
+        } catch (e) {
+            setExportError(e.message || 'Export failed.');
+        }
         setExportLoading(false);
         exportInProgressRef.current = false;
     };
