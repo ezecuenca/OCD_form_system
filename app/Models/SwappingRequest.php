@@ -11,8 +11,14 @@ class SwappingRequest extends Model
 
     protected $fillable = [
         'requester_profile_id',
+        'requester_name_snapshot',
+        'requester_task_description_snapshot',
+        'requester_task_date_snapshot',
         'requester_schedule_id',
         'target_schedule_id',
+        'target_name_snapshot',
+        'target_task_description_snapshot',
+        'target_task_date_snapshot',
         'target_date',
         'original_requester_date',
         'original_target_date',
@@ -26,6 +32,8 @@ class SwappingRequest extends Model
     protected $casts = [
         'is_archived' => 'boolean',
         'archived_at' => 'datetime',
+        'requester_task_date_snapshot' => 'date:Y-m-d',
+        'target_task_date_snapshot' => 'date:Y-m-d',
         'target_date' => 'date:Y-m-d',
         'original_requester_date' => 'date:Y-m-d',
         'original_target_date' => 'date:Y-m-d',

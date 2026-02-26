@@ -69,24 +69,42 @@ class SwappingRequestController extends Controller
         if (!$taskName && $requesterSchedule?->profile?->user) {
             $taskName = $requesterSchedule->profile->user->username;
         }
+        if (!$taskName) {
+            $taskName = $request->requester_name_snapshot;
+        }
 
         $targetTaskName = $targetSchedule?->profile?->full_name;
         if (!$targetTaskName && $targetSchedule?->profile?->user) {
             $targetTaskName = $targetSchedule->profile->user->username;
         }
+        if (!$targetTaskName) {
+            $targetTaskName = $request->target_name_snapshot;
+        }
 
-        $fromDate = $requesterSchedule?->task_date?->format('Y-m-d');
-        $toDate = $targetSchedule?->task_date?->format('Y-m-d') ?? $request->target_date?->format('Y-m-d');
+        $taskDescription = $requesterSchedule?->task_description ?? $request->requester_task_description_snapshot;
 
-        if ($request->status === 'approved' && $requesterSchedule) {
+        $fromDate = $requesterSchedule?->task_date?->format('Y-m-d')
+            ?? $request->requester_task_date_snapshot?->format('Y-m-d');
+        $toDate = $targetSchedule?->task_date?->format('Y-m-d')
+            ?? $request->target_task_date_snapshot?->format('Y-m-d')
+            ?? $request->target_date?->format('Y-m-d');
+
+        if ($request->status === 'approved') {
             if ($targetSchedule) {
                 // Swap with another task
-                $fromDate = $targetSchedule->task_date?->format('Y-m-d');
-                $toDate = $requesterSchedule->task_date?->format('Y-m-d');
+                $fromDate = $targetSchedule->task_date?->format('Y-m-d')
+                    ?? $request->target_task_date_snapshot?->format('Y-m-d')
+                    ?? $request->original_target_date?->format('Y-m-d');
+                $toDate = $requesterSchedule->task_date?->format('Y-m-d')
+                    ?? $request->requester_task_date_snapshot?->format('Y-m-d')
+                    ?? $request->original_requester_date?->format('Y-m-d');
             } else {
                 // Swap to empty cell - use original dates
-                $fromDate = $request->original_requester_date?->format('Y-m-d');
-                $toDate = $request->original_target_date?->format('Y-m-d');
+                $fromDate = $request->original_requester_date?->format('Y-m-d')
+                    ?? $request->requester_task_date_snapshot?->format('Y-m-d');
+                $toDate = $request->original_target_date?->format('Y-m-d')
+                    ?? $request->target_task_date_snapshot?->format('Y-m-d')
+                    ?? $request->target_date?->format('Y-m-d');
             }
         }
 
@@ -104,7 +122,7 @@ class SwappingRequestController extends Controller
             'taskId' => $requesterSchedule?->id,
             'targetTaskId' => $targetSchedule?->id,
             'taskName' => $taskName,
-            'taskDescription' => $requesterSchedule?->task_description,
+            'taskDescription' => $taskDescription,
             'fromDate' => $fromDate,
             'toDate' => $toDate,
             'targetTaskName' => $targetTaskName,
@@ -158,19 +176,50 @@ class SwappingRequestController extends Controller
         // Get requester info
         $requesterProfile = $swapRequest->requesterSchedule?->profile;
         $requesterUser = $requesterProfile?->user;
-        $requesterName = $requesterProfile?->full_name ?? $requesterUser?->username ?? 'N/A';
+        $requesterName = $requesterProfile?->full_name
+            ?? $requesterUser?->username
+            ?? $swapRequest->requester_name_snapshot
+            ?? 'N/A';
         
         // Get target info
         $targetProfile = $swapRequest->targetSchedule?->profile;
         $targetUser = $targetProfile?->user;
-        $targetName = $targetProfile?->full_name ?? $targetUser?->username ?? 'N/A';
+        $targetName = $targetProfile?->full_name
+            ?? $targetUser?->username
+            ?? $swapRequest->target_name_snapshot
+            ?? 'N/A';
         
-        $requesterTask = $swapRequest->requesterSchedule?->task_description ?? 'N/A';
-        $targetTask = $swapRequest->targetSchedule?->task_description ?? 'N/A';
+        $requesterTask = $swapRequest->requesterSchedule?->task_description
+            ?? $swapRequest->requester_task_description_snapshot
+            ?? 'N/A';
+        $targetTask = $swapRequest->targetSchedule?->task_description
+            ?? $swapRequest->target_task_description_snapshot
+            ?? 'N/A';
         
-        $fromDate = $swapRequest->requesterSchedule?->task_date?->format('F j, Y') ?? 'N/A';
-        $toDate = $swapRequest->targetSchedule?->task_date?->format('F j, Y') ?? 
-                  ($swapRequest->target_date ? \Carbon\Carbon::parse($swapRequest->target_date)->format('F j, Y') : 'N/A');
+        $fromDate = $swapRequest->requesterSchedule?->task_date?->format('F j, Y')
+            ?? $swapRequest->requester_task_date_snapshot?->format('F j, Y')
+            ?? 'N/A';
+        $toDate = $swapRequest->targetSchedule?->task_date?->format('F j, Y')
+            ?? $swapRequest->target_task_date_snapshot?->format('F j, Y')
+            ?? ($swapRequest->target_date ? \Carbon\Carbon::parse($swapRequest->target_date)->format('F j, Y') : 'N/A');
+
+        if ($swapRequest->status === 'approved') {
+            if ($swapRequest->targetSchedule) {
+                $fromDate = $swapRequest->original_target_date?->format('F j, Y')
+                    ?? $swapRequest->target_task_date_snapshot?->format('F j, Y')
+                    ?? $toDate;
+                $toDate = $swapRequest->original_requester_date?->format('F j, Y')
+                    ?? $swapRequest->requester_task_date_snapshot?->format('F j, Y')
+                    ?? $fromDate;
+            } else {
+                $fromDate = $swapRequest->original_requester_date?->format('F j, Y')
+                    ?? $swapRequest->requester_task_date_snapshot?->format('F j, Y')
+                    ?? $fromDate;
+                $toDate = $swapRequest->original_target_date?->format('F j, Y')
+                    ?? $swapRequest->target_task_date_snapshot?->format('F j, Y')
+                    ?? $toDate;
+            }
+        }
         
         $currentDate = $swapRequest->created_at?->format('F j, Y') ?? 'N/A';
         $status = ucfirst($swapRequest->status);
@@ -234,10 +283,21 @@ class SwappingRequestController extends Controller
             }
         }
 
+        $requesterProfile = $requesterSchedule->profile;
+        $requesterName = $requesterProfile?->full_name ?? $requesterProfile?->user?->username;
+        $targetProfile = $targetSchedule?->profile;
+        $targetName = $targetProfile?->full_name ?? $targetProfile?->user?->username;
+
         $swapRequest = SwappingRequest::create([
             'requester_profile_id' => $profileId,
+            'requester_name_snapshot' => $requesterName,
+            'requester_task_description_snapshot' => $requesterSchedule->task_description,
+            'requester_task_date_snapshot' => $requesterSchedule->task_date,
             'requester_schedule_id' => $requesterSchedule->id,
             'target_schedule_id' => $targetSchedule?->id,
+            'target_name_snapshot' => $targetName,
+            'target_task_description_snapshot' => $targetSchedule?->task_description,
+            'target_task_date_snapshot' => $targetSchedule?->task_date ?? ($validated['target_date'] ?? null),
             'target_date' => $validated['target_date'] ?? null,
             'status' => 'pending',
             'approved_by' => null,
@@ -276,6 +336,11 @@ class SwappingRequestController extends Controller
                 return null;
             }
 
+            $requesterProfile = $requesterSchedule->profile;
+            $requesterName = $requesterProfile?->full_name ?? $requesterProfile?->user?->username;
+            $targetProfile = $targetSchedule?->profile;
+            $targetName = $targetProfile?->full_name ?? $targetProfile?->user?->username;
+
             $originalRequesterDate = $requesterSchedule->task_date;
             $originalTargetDate = $targetSchedule?->task_date ?? $swapRequest->target_date;
 
@@ -304,6 +369,12 @@ class SwappingRequestController extends Controller
                 'approved_by' => $approverProfileId,
                 'original_requester_date' => $originalRequesterDate,
                 'original_target_date' => $originalTargetDate,
+                'requester_name_snapshot' => $requesterName,
+                'requester_task_description_snapshot' => $requesterSchedule->task_description,
+                'requester_task_date_snapshot' => $originalRequesterDate,
+                'target_name_snapshot' => $targetName,
+                'target_task_description_snapshot' => $targetSchedule?->task_description,
+                'target_task_date_snapshot' => $originalTargetDate,
             ]);
 
             return $swapRequest->fresh(['requesterSchedule.profile.user', 'targetSchedule.profile.user']);
@@ -420,18 +491,30 @@ class SwappingRequestController extends Controller
             $requesterProfile = $requesterSchedule?->profile;
             $targetProfile = $targetSchedule?->profile;
 
-            $mainName = $requesterProfile?->full_name ?? $requesterProfile?->user?->username ?? 'N/A';
-            $subName = $targetProfile?->full_name ?? $targetProfile?->user?->username ?? 'N/A';
+            $mainName = $requesterProfile?->full_name
+                ?? $requesterProfile?->user?->username
+                ?? $swapRequest->requester_name_snapshot
+                ?? 'N/A';
+            $subName = $targetProfile?->full_name
+                ?? $targetProfile?->user?->username
+                ?? $swapRequest->target_name_snapshot
+                ?? 'N/A';
 
-            $mainTask = $requesterSchedule?->task_description ?? 'N/A';
-            $subTask = $targetSchedule?->task_description ?? 'N/A';
+            $mainTask = $requesterSchedule?->task_description
+                ?? $swapRequest->requester_task_description_snapshot
+                ?? 'N/A';
+            $subTask = $targetSchedule?->task_description
+                ?? $swapRequest->target_task_description_snapshot
+                ?? 'N/A';
 
             $formatDate = static function ($date): string {
                 return $date ? $date->format('F j, Y') : 'N/A';
             };
 
-            $originalMainDate = $requesterSchedule?->task_date;
-            $originalSubDate = $targetSchedule?->task_date ?? $swapRequest->target_date;
+            $originalMainDate = $requesterSchedule?->task_date ?? $swapRequest->requester_task_date_snapshot;
+            $originalSubDate = $targetSchedule?->task_date
+                ?? $swapRequest->target_task_date_snapshot
+                ?? $swapRequest->target_date;
 
             if ($swapRequest->status === 'approved') {
                 $originalMainDate = $swapRequest->original_requester_date ?? $originalMainDate;
@@ -439,14 +522,22 @@ class SwappingRequestController extends Controller
             }
 
             if ($swapRequest->status === 'approved') {
-                $newMainDate = $requesterSchedule?->task_date;
-                $newSubDate = $targetSchedule?->task_date;
+                $newMainDate = $requesterSchedule?->task_date
+                    ?? $swapRequest->original_target_date
+                    ?? $swapRequest->target_task_date_snapshot
+                    ?? $swapRequest->target_date;
+                $newSubDate = $targetSchedule?->task_date
+                    ?? $swapRequest->original_requester_date
+                    ?? $swapRequest->requester_task_date_snapshot;
             } else {
-                $newMainDate = $targetSchedule?->task_date ?? $swapRequest->target_date;
-                $newSubDate = $targetSchedule ? $requesterSchedule?->task_date : null;
+                $newMainDate = $targetSchedule?->task_date
+                    ?? $swapRequest->target_task_date_snapshot
+                    ?? $swapRequest->target_date;
+                $newSubDate = $targetSchedule ? ($requesterSchedule?->task_date ?? $swapRequest->requester_task_date_snapshot) : null;
             }
 
-            if (!$targetSchedule) {
+            $hasTargetPerson = $swapRequest->target_name_snapshot !== null || $swapRequest->target_schedule_id !== null;
+            if (!$hasTargetPerson) {
                 $subName = 'N/A';
                 $subTask = 'N/A';
                 $originalSubDate = null;

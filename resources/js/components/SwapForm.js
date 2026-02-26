@@ -242,11 +242,19 @@ function SwapForm() {
         }
     }, [swapRequests.length, currentPage, totalPages]);
 
+    function formatTaskName(taskName) {
+        if (!taskName) return '---';
+        return taskName;
+    }
+
     function getRequestDescription(req) {
+        const fromTaskName = formatTaskName(req.taskName);
+        const toTaskName = formatTaskName(req.targetTaskName);
+        
         if (req.targetTaskName) {
-            return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) => "${req.targetTaskName}" (${formatDateOnly(req.toDate)})`;
+            return `"${fromTaskName}" (${formatDateOnly(req.fromDate)}) => "${toTaskName}" (${formatDateOnly(req.toDate)})`;
         }
-        return `"${req.taskName}" (${formatDateOnly(req.fromDate)}) => (${formatDateOnly(req.toDate)})`;
+        return `"${fromTaskName}" (${formatDateOnly(req.fromDate)}) => (${formatDateOnly(req.toDate)})`;
     }
 
     return (
@@ -452,7 +460,7 @@ function SwapForm() {
                         <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
-                <span className="swap-form__pagination-info">{filteredRequests.length > 0 ? `Page ${currentPage} of ${totalPages}` : 'No data'}</span>
+                <span className="swap-form__pagination-info">{filteredRequests.length > 0 ? `Page ${currentPage} of ${totalPages}` : 'Page 1 of 1'}</span>
                 <button onClick={goToNextPage} disabled={currentPage === totalPages || filteredRequests.length === 0} title="Next page">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

@@ -70914,7 +70914,7 @@ function ADRReports() {
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
         className: "adr-reports__pagination-info",
-        children: filteredReports.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'No data'
+        children: filteredReports.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'Page 1 of 1'
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
         onClick: goToNextPage,
         disabled: currentPage === totalPages || filteredReports.length === 0,
@@ -72247,11 +72247,17 @@ function ArchivedReports() {
       year: 'numeric'
     });
   };
+  var formatTaskName = function formatTaskName(taskName) {
+    if (!taskName) return '---';
+    return taskName;
+  };
   var getSwapRequestDescription = function getSwapRequestDescription(req) {
+    var fromTaskName = formatTaskName(req.taskName);
+    var toTaskName = formatTaskName(req.targetTaskName);
     if (req.targetTaskName) {
-      return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") \u21C4 \"").concat(req.targetTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
+      return "\"".concat(fromTaskName, "\" (").concat(formatDateOnly(req.fromDate), ") \u21C4 \"").concat(toTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
     }
-    return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") \u2192 (").concat(formatDateOnly(req.toDate), ")");
+    return "\"".concat(fromTaskName, "\" (").concat(formatDateOnly(req.fromDate), ") \u2192 (").concat(formatDateOnly(req.toDate), ")");
   };
   var handleRestoreSwapRequest = function handleRestoreSwapRequest(id) {
     pendingRestoreSwapIdRef.current = id;
@@ -72836,7 +72842,7 @@ function ArchivedReports() {
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
         className: "archived-reports__pagination-info",
-        children: activeTab === 'adr' ? filteredArchivedReports.length > 0 ? "Page ".concat(currentAdrPage, " of ").concat(totalAdrPages) : 'No data' : filteredArchivedSwapRequests.length > 0 ? "Page ".concat(currentSwapPage, " of ").concat(totalSwapPages) : 'No data'
+        children: activeTab === 'adr' ? filteredArchivedReports.length > 0 ? "Page ".concat(currentAdrPage, " of ").concat(totalAdrPages) : 'Page 1 of 1' : filteredArchivedSwapRequests.length > 0 ? "Page ".concat(currentSwapPage, " of ").concat(totalSwapPages) : 'Page 1 of 1'
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
         onClick: activeTab === 'adr' ? goToAdrNextPage : goToSwapNextPage,
         disabled: activeTab === 'adr' ? currentAdrPage === totalAdrPages || filteredArchivedReports.length === 0 : currentSwapPage === totalSwapPages || filteredArchivedSwapRequests.length === 0,
@@ -79216,11 +79222,17 @@ function SwapForm() {
       setCurrentPage(totalPages);
     }
   }, [swapRequests.length, currentPage, totalPages]);
+  function formatTaskName(taskName) {
+    if (!taskName) return '---';
+    return taskName;
+  }
   function getRequestDescription(req) {
+    var fromTaskName = formatTaskName(req.taskName);
+    var toTaskName = formatTaskName(req.targetTaskName);
     if (req.targetTaskName) {
-      return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") => \"").concat(req.targetTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
+      return "\"".concat(fromTaskName, "\" (").concat(formatDateOnly(req.fromDate), ") => \"").concat(toTaskName, "\" (").concat(formatDateOnly(req.toDate), ")");
     }
-    return "\"".concat(req.taskName, "\" (").concat(formatDateOnly(req.fromDate), ") => (").concat(formatDateOnly(req.toDate), ")");
+    return "\"".concat(fromTaskName, "\" (").concat(formatDateOnly(req.fromDate), ") => (").concat(formatDateOnly(req.toDate), ")");
   }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     className: "swap-form",
@@ -79546,7 +79558,7 @@ function SwapForm() {
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
         className: "swap-form__pagination-info",
-        children: filteredRequests.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'No data'
+        children: filteredRequests.length > 0 ? "Page ".concat(currentPage, " of ").concat(totalPages) : 'Page 1 of 1'
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
         onClick: goToNextPage,
         disabled: currentPage === totalPages || filteredRequests.length === 0,
