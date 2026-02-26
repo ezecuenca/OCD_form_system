@@ -293,11 +293,7 @@ function Schedule() {
                 setSuccessMessage('Task deleted successfully.');
                 setShowSuccessNotification(true);
             } catch (error) {
-                const rawMessage = error?.response?.data?.message || '';
-                const isForeignKeyError = /foreign key|constraint/i.test(rawMessage);
-                const message = task.status === 'swap' || isForeignKeyError
-                    ? 'Cant delete swapped tasks.'
-                    : (rawMessage || 'Could not delete task. Please try again.');
+                const message = error?.response?.data?.message || 'Could not delete task. Please try again.';
                 setFailMessage(message);
                 setShowFailNotification(true);
             } finally {

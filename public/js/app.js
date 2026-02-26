@@ -75787,7 +75787,7 @@ function Schedule() {
             setConfirmMessage('Delete this task?');
             setConfirmAction(function () {
               return /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
-                var _error$response2, rawMessage, isForeignKeyError, message, _t5;
+                var _error$response2, message, _t5;
                 return _regenerator().w(function (_context5) {
                   while (1) switch (_context5.p = _context5.n) {
                     case 0:
@@ -75807,9 +75807,7 @@ function Schedule() {
                     case 2:
                       _context5.p = 2;
                       _t5 = _context5.v;
-                      rawMessage = (_t5 === null || _t5 === void 0 || (_error$response2 = _t5.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || '';
-                      isForeignKeyError = /foreign key|constraint/i.test(rawMessage);
-                      message = task.status === 'swap' || isForeignKeyError ? 'Cant delete swapped tasks.' : rawMessage || 'Could not delete task. Please try again.';
+                      message = (_t5 === null || _t5 === void 0 || (_error$response2 = _t5.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || 'Could not delete task. Please try again.';
                       setFailMessage(message);
                       setShowFailNotification(true);
                     case 3:
