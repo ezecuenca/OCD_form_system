@@ -233,18 +233,38 @@ function Schedule() {
         });
     };
 
+    const isPastDate = (dateStr) => {
+        if (!dateStr) return false;
+        const [y, m, d] = dateStr.split('-');
+        const taskDate = new Date(y, m - 1, d);
+        const today = new Date();
+        taskDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+        return taskDate < today;
+    };
+
     const handleDayClick = (day) => {
         if (!day) return;
         
         if (user?.role_id !== 2 && user?.role_id !== 3) return;
 
         const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        if (isPastDate(dateStr)) {
+            setFailMessage('You cannot add tasks to past dates.');
+            setShowFailNotification(true);
+            return;
+        }
         setSelectedDate(dateStr);
         setShowTaskForm(true);
     };
 
     const handleAddTask = async (taskData) => {
         try {
+            if (isPastDate(taskData.date)) {
+                setFailMessage('You cannot add tasks to past dates.');
+                setShowFailNotification(true);
+                return;
+            }
             const payload = {
                 profile_id: Number(taskData.profileId),
                 task_description: taskData.task,
@@ -288,8 +308,9 @@ function Schedule() {
     };
 
     const handleTaskClick = (task) => {
-        setSelectedTask(task);
-        setTaskToSwap(task);
+        const taskWithPast = { ...task, isPast: isPastDate(task.date) };
+        setSelectedTask(taskWithPast);
+        setTaskToSwap(taskWithPast);
         setModalMode('view');
         setShowTaskForm(true);
     };
@@ -317,6 +338,11 @@ function Schedule() {
 
     const handleSwapDayClick = (day) => {
         if (!day || !taskToSwap || modalMode !== 'swap') return;
+        if (isPastDate(taskToSwap.date)) {
+            setFailMessage('Past tasks cannot be swapped.');
+            setShowFailNotification(true);
+            return;
+        }
 
         const targetDateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
@@ -330,6 +356,11 @@ function Schedule() {
         event.stopPropagation();
         if (!taskToSwap || modalMode !== 'swap') return;
         if (targetTask.id === taskToSwap.id) return;
+        if (isPastDate(taskToSwap.date) || isPastDate(targetTask.date)) {
+            setFailMessage('Past tasks cannot be swapped.');
+            setShowFailNotification(true);
+            return;
+        }
 
         submitSwapRequest({
             requester_schedule_id: taskToSwap.id,
@@ -430,6 +461,7 @@ function Schedule() {
                                     <div className="schedule__day-number">{day}</div>
                                     <div className="schedule__day-tasks">
                                         {dayTasks.map((task, taskIndex) => {
+                                            const isPastTask = isPastDate(task.date);
                                             let tooltipText = '';
                                             if (task.status === 'swap' && task.swapInfo) {
                                                 const formatShortDate = (dateStr) => {
@@ -459,7 +491,7 @@ function Schedule() {
                                             return (
                                                 <div 
                                                     key={taskIndex} 
-                                                    className={`schedule__task${task.status === 'swap' ? ' schedule__task--swapped' : ''}`}
+                                                    className={`schedule__task${task.status === 'swap' ? ' schedule__task--swapped' : ''}${isPastTask ? ' schedule__task--past' : ''}`}
                                                     onClick={(event) => {
                                                         if (modalMode === 'swap') {
                                                             handleSwapTaskClick(event, task);
@@ -595,6 +627,11 @@ function Schedule() {
                 mode={modalMode}
                 onUpdateTask={async (updateTask) => {
                     try {
+                        if (isPastDate(updateTask.date)) {
+                            setFailMessage('You cannot move tasks to past dates.');
+                            setShowFailNotification(true);
+                            return;
+                        }
                         const payload = {
                             profile_id: Number(updateTask.profileId),
                             task_description: updateTask.task,
@@ -614,8 +651,20 @@ function Schedule() {
                         setShowFailNotification(true);
                     }
                 }}
-                onSwitchToEdit={() => setModalMode('edit')}
+                onSwitchToEdit={() => {
+                    if (selectedTask?.isPast) {
+                        setFailMessage('Past tasks cannot be edited.');
+                        setShowFailNotification(true);
+                        return;
+                    }
+                    setModalMode('edit');
+                }}
                 onSwitchToSwap={() => {
+                    if (selectedTask?.isPast) {
+                        setFailMessage('Past tasks cannot be swapped.');
+                        setShowFailNotification(true);
+                        return;
+                    }
                     setModalMode('swap');
                     setShowTaskForm(false);
                 }}
