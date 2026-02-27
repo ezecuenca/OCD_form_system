@@ -53,6 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/profile/image', [ProfileController::class, 'removeImage'])->name('api.profile.removeImage');
     Route::get('/profiles', [ProfileController::class, 'index'])->name('api.profiles.index');
     Route::put('/profiles/{id}', [ProfileController::class, 'updateById'])->name('api.profiles.update');
+    Route::delete('/profiles/{id}', [ProfileController::class, 'destroy'])->name('api.profiles.destroy');
 
     Route::get('/schedules', [ScheduleController::class, 'index'])->name('api.schedules.index');
     Route::post('/schedules', [ScheduleController::class, 'store'])->name('api.schedules.store');

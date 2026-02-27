@@ -778,6 +778,25 @@ function Settings() {
         setShowConfirmModal(true);
     };
 
+    const deleteAccount = (account) => {
+        if (!account?.profile_id) return;
+        setConfirmMessage(`Delete account "${account.name}"? This action cannot be undone.`);
+        setConfirmAction(() => () => {
+            axios.delete(`/api/profiles/${account.profile_id}`)
+                .then(() => {
+                    setAccounts((prev) => prev.filter((item) => item.profile_id !== account.profile_id));
+                    setSuccessMessage('Account deleted successfully.');
+                    setShowSuccessNotification(true);
+                    setShowConfirmModal(false);
+                })
+                .catch((err) => {
+                    alert(err?.response?.data?.message || 'Failed to delete account.');
+                    setShowConfirmModal(false);
+                });
+        });
+        setShowConfirmModal(true);
+    };
+
     const closeAccountModal = () => {
         setShowAccountModal(false);
         setEditingAccount(null);
@@ -958,9 +977,15 @@ function Settings() {
                                             </td>
                                             <td>{account.role}</td>
                                             <td className="settings__table-actions">
-                                                <button type="button" className="settings__icon-button" onClick={() => openEditAccount(account)}>
-                                                    <img src="/images/edit_icon.svg" alt="" aria-hidden="true" />
-                                                </button>
+                                                {account.is_active ? (
+                                                    <button type="button" className="settings__icon-button" onClick={() => openEditAccount(account)}>
+                                                        <img src="/images/edit_icon.svg" alt="" aria-hidden="true" />
+                                                    </button>
+                                                ) : (
+                                                    <button type="button" className="settings__icon-button" onClick={() => deleteAccount(account)} aria-label="Delete account">
+                                                        <img src="/images/delete_icon.svg" alt="" aria-hidden="true" />
+                                                    </button>
+                                                )}
                                                 <button
                                                     type="button"
                                                     className="settings__icon-button"
