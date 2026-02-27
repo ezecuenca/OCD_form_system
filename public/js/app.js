@@ -68903,11 +68903,18 @@ function ADRForm() {
         name: '',
         task: ''
       }]);
-      setReportsItems(editingReport.reportsItems || [{
+      setReportsItems((editingReport.reportsItems || [{
         id: 1,
         report: '',
         remarks: ''
-      }]);
+      }]).map(function (i) {
+        var _i$report, _i$remarks;
+        return {
+          id: i.id,
+          report: (_i$report = i.report) !== null && _i$report !== void 0 ? _i$report : '',
+          remarks: (_i$remarks = i.remarks) !== null && _i$remarks !== void 0 ? _i$remarks : ''
+        };
+      }));
       setCommunicationRows(editingReport.communicationRows || [{
         id: 1,
         particulars: '',
@@ -69086,6 +69093,16 @@ function ADRForm() {
     setApprovedPosition = _useState64[1];
   var handleReturn = function handleReturn() {
     navigate('/adr-reports');
+  };
+  var handleNameFieldKeyDown = function handleNameFieldKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      var group = e.target.closest('.adr-form__field-group, .adr-form__signature-item');
+      if (group) {
+        var positionInput = group.querySelector('textarea.adr-form__position-line');
+        if (positionInput) positionInput.focus();
+      }
+    }
   };
   var showNotification = function showNotification(message) {
     var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'error';
@@ -69371,8 +69388,9 @@ function ADRForm() {
               type: "text",
               value: forName,
               onChange: function onChange(e) {
-                return setForName(e.target.value);
+                return setForName(e.target.value.toUpperCase());
               },
+              onKeyDown: handleNameFieldKeyDown,
               placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
@@ -69394,8 +69412,9 @@ function ADRForm() {
               type: "text",
               value: thruName,
               onChange: function onChange(e) {
-                return setThruName(e.target.value);
+                return setThruName(e.target.value.toUpperCase());
               },
+              onKeyDown: handleNameFieldKeyDown,
               placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
@@ -69417,8 +69436,9 @@ function ADRForm() {
               type: "text",
               value: fromName,
               onChange: function onChange(e) {
-                return setFromName(e.target.value);
+                return setFromName(e.target.value.toUpperCase());
               },
+              onKeyDown: handleNameFieldKeyDown,
               placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
@@ -69559,8 +69579,9 @@ function ADRForm() {
               type: "text",
               value: preparedBy,
               onChange: function onChange(e) {
-                return setPreparedBy(e.target.value);
+                return setPreparedBy(e.target.value.toUpperCase());
               },
+              onKeyDown: handleNameFieldKeyDown,
               placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
@@ -69582,8 +69603,9 @@ function ADRForm() {
               type: "text",
               value: receivedBy,
               onChange: function onChange(e) {
-                return setReceivedBy(e.target.value);
+                return setReceivedBy(e.target.value.toUpperCase());
               },
+              onKeyDown: handleNameFieldKeyDown,
               placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
@@ -69605,8 +69627,9 @@ function ADRForm() {
               type: "text",
               value: notedBy,
               onChange: function onChange(e) {
-                return setNotedBy(e.target.value);
+                return setNotedBy(e.target.value.toUpperCase());
               },
+              onKeyDown: handleNameFieldKeyDown,
               placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
@@ -69628,8 +69651,9 @@ function ADRForm() {
               type: "text",
               value: approvedBy,
               onChange: function onChange(e) {
-                return setApprovedBy(e.target.value);
+                return setApprovedBy(e.target.value.toUpperCase());
               },
+              onKeyDown: handleNameFieldKeyDown,
               placeholder: "Enter full name"
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
@@ -69686,6 +69710,7 @@ function ADRForm() {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
               children: communicationRows.map(function (row) {
+                var _row$particulars, _row$contact, _row$status;
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
@@ -69693,7 +69718,7 @@ function ADRForm() {
                       type: "text",
                       className: "adr-form__modal-input",
                       placeholder: "Enter particulars",
-                      value: row.particulars,
+                      value: (_row$particulars = row.particulars) !== null && _row$particulars !== void 0 ? _row$particulars : '',
                       onChange: function onChange(e) {
                         return updateCommunicationRow(row.id, 'particulars', e.target.value);
                       }
@@ -69726,21 +69751,21 @@ function ADRForm() {
                       })]
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter contact/freq/channel",
-                      value: row.contact,
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea",
+                      placeholder: "Enter contact/freq/channel (multiple lines allowed)",
+                      rows: "2",
+                      value: (_row$contact = row.contact) !== null && _row$contact !== void 0 ? _row$contact : '',
                       onChange: function onChange(e) {
                         return updateCommunicationRow(row.id, 'contact', e.target.value);
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter status/remarks",
-                      value: row.status,
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea",
+                      placeholder: "Enter status/remarks (multiple lines allowed)",
+                      rows: "2",
+                      value: (_row$status = row.status) !== null && _row$status !== void 0 ? _row$status : '',
                       onChange: function onChange(e) {
                         return updateCommunicationRow(row.id, 'status', e.target.value);
                       }
@@ -69827,8 +69852,10 @@ function ADRForm() {
                   className: "adr-form__modal-table-number",
                   children: "#"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-name-col",
                   children: "Name"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-task-col",
                   children: "Task"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Actions"
@@ -69837,17 +69864,19 @@ function ADRForm() {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
               children: attendanceItems.map(function (item, index) {
+                var _item$name, _item$task;
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                     className: "adr-form__modal-table-number",
                     children: index + 1
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter name",
-                      value: item.name,
+                    className: "adr-form__modal-table-name-col",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea",
+                      placeholder: "Enter name (multiple names: one per line)",
+                      rows: "2",
+                      value: (_item$name = item.name) !== null && _item$name !== void 0 ? _item$name : '',
                       onChange: function onChange(e) {
                         setAttendanceItems(attendanceItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
@@ -69857,11 +69886,12 @@ function ADRForm() {
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-task-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
                       className: "adr-form__modal-input adr-form__modal-textarea",
                       placeholder: "Enter task",
                       rows: "2",
-                      value: item.task,
+                      value: (_item$task = item.task) !== null && _item$task !== void 0 ? _item$task : '',
                       onChange: function onChange(e) {
                         setAttendanceItems(attendanceItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
@@ -69952,8 +69982,10 @@ function ADRForm() {
                   className: "adr-form__modal-table-number",
                   children: "#"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-report-col",
                   children: "Reports and Advisories Released"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-remarks-col",
                   children: "Remarks"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
                   children: "Actions"
@@ -69962,17 +69994,19 @@ function ADRForm() {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
               children: reportsItems.map(function (item, index) {
+                var _item$report, _item$remarks;
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                     className: "adr-form__modal-table-number",
                     children: index + 1
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-report-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
                       className: "adr-form__modal-input adr-form__modal-textarea",
                       placeholder: "Enter reports and advisories released",
                       rows: "3",
-                      value: item.report,
+                      value: (_item$report = item.report) !== null && _item$report !== void 0 ? _item$report : '',
                       onChange: function onChange(e) {
                         setReportsItems(reportsItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
@@ -69982,11 +70016,12 @@ function ADRForm() {
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter remarks",
-                      value: item.remarks,
+                    className: "adr-form__modal-table-remarks-col",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea",
+                      placeholder: "Enter remarks (multiple lines allowed)",
+                      rows: "2",
+                      value: (_item$remarks = item.remarks) !== null && _item$remarks !== void 0 ? _item$remarks : '',
                       onChange: function onChange(e) {
                         setReportsItems(reportsItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
@@ -70086,6 +70121,7 @@ function ADRForm() {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
               children: otherItemsRows.map(function (row) {
+                var _row$particulars2, _row$status2;
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
@@ -70093,7 +70129,7 @@ function ADRForm() {
                       type: "text",
                       className: "adr-form__modal-input",
                       placeholder: "Enter particulars",
-                      value: row.particulars,
+                      value: (_row$particulars2 = row.particulars) !== null && _row$particulars2 !== void 0 ? _row$particulars2 : '',
                       onChange: function onChange(e) {
                         return updateOtherItemsRow(row.id, 'particulars', e.target.value);
                       }
@@ -70130,7 +70166,7 @@ function ADRForm() {
                       type: "text",
                       className: "adr-form__modal-input",
                       placeholder: "Enter status/remarks",
-                      value: row.status,
+                      value: (_row$status2 = row.status) !== null && _row$status2 !== void 0 ? _row$status2 : '',
                       onChange: function onChange(e) {
                         return updateOtherItemsRow(row.id, 'status', e.target.value);
                       }
@@ -70362,6 +70398,7 @@ function ADRReports() {
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     reports = _useFormContext.reports,
     reportsLoaded = _useFormContext.reportsLoaded,
+    loadReports = _useFormContext.loadReports,
     deleteReport = _useFormContext.deleteReport,
     archiveReport = _useFormContext.archiveReport,
     getReport = _useFormContext.getReport;
@@ -70428,6 +70465,9 @@ function ADRReports() {
   var itemsPerPage = 10;
   var yearDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var monthDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    loadReports();
+  }, [loadReports]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var handleClickOutside = function handleClickOutside(event) {
       if (yearDropdownRef.current && !yearDropdownRef.current.contains(event.target)) {
@@ -80726,25 +80766,24 @@ var FormProvider = function FormProvider(_ref) {
       setProfileImageUrlState(null);
     });
   }, []);
-
-  // Load reports from API when app mounts (authenticated user)
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var isMounted = true;
+  var loadReports = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
     axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/adr-forms', {
       withCredentials: true
     }).then(function (res) {
-      if (isMounted && Array.isArray(res.data)) {
+      if (Array.isArray(res.data)) {
         setReports(res.data);
       }
     })["catch"](function () {
-      if (isMounted) setReports([]);
+      setReports([]);
     })["finally"](function () {
-      if (isMounted) setReportsLoaded(true);
+      setReportsLoaded(true);
     });
-    return function () {
-      isMounted = false;
-    };
   }, []);
+
+  // Load reports from API when app mounts (authenticated user)
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    loadReports();
+  }, [loadReports]);
   var fetchReport = function fetchReport(id) {
     return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/adr-forms/".concat(id), {
       withCredentials: true
@@ -80926,6 +80965,7 @@ var FormProvider = function FormProvider(_ref) {
     value: {
       reports: reports,
       reportsLoaded: reportsLoaded,
+      loadReports: loadReports,
       addReport: addReport,
       updateReport: updateReport,
       getReport: getReport,

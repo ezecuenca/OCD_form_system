@@ -75,7 +75,11 @@ function ADRForm() {
             setDateTime(editingReport.dateTime || '');
             setStatus(editingReport.alertStatus || editingReport.status || 'WHITE ALERT');
             setAttendanceItems(editingReport.attendanceItems || [{ id: 1, name: '', task: '' }]);
-            setReportsItems(editingReport.reportsItems || [{ id: 1, report: '', remarks: '' }]);
+            setReportsItems((editingReport.reportsItems || [{ id: 1, report: '', remarks: '' }]).map(i => ({
+                id: i.id,
+                report: i.report ?? '',
+                remarks: i.remarks ?? ''
+            })));
             setCommunicationRows(editingReport.communicationRows || [{ id: 1, particulars: '', noOfItems: 0, contact: '', status: '' }]);
             setOtherItemsRows(editingReport.otherItemsRows || [{ id: 1, particulars: '', noOfItems: 0, status: '' }]);
             if (editingReport.concerns?.length) {
@@ -144,6 +148,17 @@ function ADRForm() {
 
     const handleReturn = () => {
         navigate('/adr-reports');
+    };
+
+    const handleNameFieldKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const group = e.target.closest('.adr-form__field-group, .adr-form__signature-item');
+            if (group) {
+                const positionInput = group.querySelector('textarea.adr-form__position-line');
+                if (positionInput) positionInput.focus();
+            }
+        }
     };
 
     const showNotification = (message, type = 'error') => {
@@ -354,21 +369,21 @@ function ADRForm() {
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>For:</label>
-                            <input type="text" value={forName} onChange={(e) => setForName(e.target.value)} placeholder="Enter full name" />
+                            <input type="text" value={forName} onChange={(e) => setForName(e.target.value.toUpperCase())} onKeyDown={handleNameFieldKeyDown} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={forPosition} onChange={(e) => setForPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>Thru:</label>
-                            <input type="text" value={thruName} onChange={(e) => setThruName(e.target.value)} placeholder="Enter full name" />
+                            <input type="text" value={thruName} onChange={(e) => setThruName(e.target.value.toUpperCase())} onKeyDown={handleNameFieldKeyDown} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={thruPosition} onChange={(e) => setThruPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__field-group">
                         <div className="adr-form__field">
                             <label>From:</label>
-                            <input type="text" value={fromName} onChange={(e) => setFromName(e.target.value)} placeholder="Enter full name" />
+                            <input type="text" value={fromName} onChange={(e) => setFromName(e.target.value.toUpperCase())} onKeyDown={handleNameFieldKeyDown} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={fromPosition} onChange={(e) => setFromPosition(e.target.value)}></textarea>
                     </div>
@@ -436,28 +451,28 @@ function ADRForm() {
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Prepared By:</label>
-                            <input type="text" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} placeholder="Enter full name" />
+                            <input type="text" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value.toUpperCase())} onKeyDown={handleNameFieldKeyDown} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={preparedPosition} onChange={(e) => setPreparedPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Received By:</label>
-                            <input type="text" value={receivedBy} onChange={(e) => setReceivedBy(e.target.value)} placeholder="Enter full name" />
+                            <input type="text" value={receivedBy} onChange={(e) => setReceivedBy(e.target.value.toUpperCase())} onKeyDown={handleNameFieldKeyDown} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={receivedPosition} onChange={(e) => setReceivedPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Noted By:</label>
-                            <input type="text" value={notedBy} onChange={(e) => setNotedBy(e.target.value)} placeholder="Enter full name" />
+                            <input type="text" value={notedBy} onChange={(e) => setNotedBy(e.target.value.toUpperCase())} onKeyDown={handleNameFieldKeyDown} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={notedPosition} onChange={(e) => setNotedPosition(e.target.value)}></textarea>
                     </div>
                     <div className="adr-form__signature-item">
                         <div className="adr-form__field">
                             <label>Approved:</label>
-                            <input type="text" value={approvedBy} onChange={(e) => setApprovedBy(e.target.value)} placeholder="Enter full name" />
+                            <input type="text" value={approvedBy} onChange={(e) => setApprovedBy(e.target.value.toUpperCase())} onKeyDown={handleNameFieldKeyDown} placeholder="Enter full name" />
                         </div>
                         <textarea className="adr-form__position-line" placeholder="(Position)" rows="2" value={approvedPosition} onChange={(e) => setApprovedPosition(e.target.value)}></textarea>
                     </div>
@@ -492,7 +507,7 @@ function ADRForm() {
                                                     type="text" 
                                                     className="adr-form__modal-input" 
                                                     placeholder="Enter particulars"
-                                                    value={row.particulars}
+                                                    value={row.particulars ?? ''}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'particulars', e.target.value)}
                                                 />
                                             </td>
@@ -522,20 +537,20 @@ function ADRForm() {
                                                 </div>
                                             </td>
                                             <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter contact/freq/channel"
-                                                    value={row.contact}
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea" 
+                                                    placeholder="Enter contact/freq/channel (multiple lines allowed)"
+                                                    rows="2"
+                                                    value={row.contact ?? ''}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'contact', e.target.value)}
                                                 />
                                             </td>
                                             <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter status/remarks"
-                                                    value={row.status}
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea" 
+                                                    placeholder="Enter status/remarks (multiple lines allowed)"
+                                                    rows="2"
+                                                    value={row.status ?? ''}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'status', e.target.value)}
                                                 />
                                             </td>
@@ -582,8 +597,8 @@ function ADRForm() {
                                 <thead>
                                     <tr>
                                         <th className="adr-form__modal-table-number">#</th>
-                                        <th>Name</th>
-                                        <th>Task</th>
+                                        <th className="adr-form__modal-table-name-col">Name</th>
+                                        <th className="adr-form__modal-table-task-col">Task</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -591,12 +606,12 @@ function ADRForm() {
                                     {attendanceItems.map((item, index) => (
                                         <tr className="adr-form__modal-table-row" key={item.id}>
                                             <td className="adr-form__modal-table-number">{index + 1}</td>
-                                            <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter name"
-                                                    value={item.name}
+                                            <td className="adr-form__modal-table-name-col">
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea" 
+                                                    placeholder="Enter name (multiple names: one per line)"
+                                                    rows="2"
+                                                    value={item.name ?? ''}
                                                     onChange={(e) => {
                                                         setAttendanceItems(attendanceItems.map(i => 
                                                             i.id === item.id ? { ...i, name: e.target.value } : i
@@ -604,12 +619,12 @@ function ADRForm() {
                                                     }}
                                                 />
                                             </td>
-                                            <td>
+                                            <td className="adr-form__modal-table-task-col">
                                                 <textarea 
                                                     className="adr-form__modal-input adr-form__modal-textarea" 
                                                     placeholder="Enter task"
                                                     rows="2"
-                                                    value={item.task}
+                                                    value={item.task ?? ''}
                                                     onChange={(e) => {
                                                         setAttendanceItems(attendanceItems.map(i => 
                                                             i.id === item.id ? { ...i, task: e.target.value } : i
@@ -660,8 +675,8 @@ function ADRForm() {
                                 <thead>
                                     <tr>
                                         <th className="adr-form__modal-table-number">#</th>
-                                        <th>Reports and Advisories Released</th>
-                                        <th>Remarks</th>
+                                        <th className="adr-form__modal-table-report-col">Reports and Advisories Released</th>
+                                        <th className="adr-form__modal-table-remarks-col">Remarks</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -669,12 +684,12 @@ function ADRForm() {
                                     {reportsItems.map((item, index) => (
                                         <tr className="adr-form__modal-table-row" key={item.id}>
                                             <td className="adr-form__modal-table-number">{index + 1}</td>
-                                            <td>
+                                            <td className="adr-form__modal-table-report-col">
                                                 <textarea 
                                                     className="adr-form__modal-input adr-form__modal-textarea" 
                                                     placeholder="Enter reports and advisories released"
                                                     rows="3"
-                                                    value={item.report}
+                                                    value={item.report ?? ''}
                                                     onChange={(e) => {
                                                         setReportsItems(reportsItems.map(i => 
                                                             i.id === item.id ? { ...i, report: e.target.value } : i
@@ -682,12 +697,12 @@ function ADRForm() {
                                                     }}
                                                 ></textarea>
                                             </td>
-                                            <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter remarks"
-                                                    value={item.remarks}
+                                            <td className="adr-form__modal-table-remarks-col">
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea" 
+                                                    placeholder="Enter remarks (multiple lines allowed)"
+                                                    rows="2"
+                                                    value={item.remarks ?? ''}
                                                     onChange={(e) => {
                                                         setReportsItems(reportsItems.map(i => 
                                                             i.id === item.id ? { ...i, remarks: e.target.value } : i
@@ -751,7 +766,7 @@ function ADRForm() {
                                                     type="text" 
                                                     className="adr-form__modal-input" 
                                                     placeholder="Enter particulars"
-                                                    value={row.particulars}
+                                                    value={row.particulars ?? ''}
                                                     onChange={(e) => updateOtherItemsRow(row.id, 'particulars', e.target.value)}
                                                 />
                                             </td>
@@ -785,7 +800,7 @@ function ADRForm() {
                                                     type="text" 
                                                     className="adr-form__modal-input" 
                                                     placeholder="Enter status/remarks"
-                                                    value={row.status}
+                                                    value={row.status ?? ''}
                                                     onChange={(e) => updateOtherItemsRow(row.id, 'status', e.target.value)}
                                                 />
                                             </td>
