@@ -1440,22 +1440,23 @@ body {
   color: #666;
 }
 .adr-form__modal-table-name-col {
-  width: 28%;
-  min-width: 140px;
+  width: 25%;
+  min-width: 160px;
 }
 .adr-form__modal-table-task-col {
-  width: 59%;
+  width: 62%;
 }
 .adr-form__modal-table-actions-col {
   width: 56px;
 }
 .adr-form__modal-table-report-col {
-  width: 59%;
-  min-width: 160px;
+  width: 62%;
+  min-width: 180px;
 }
 .adr-form__modal-table-remarks-col {
+  height: auto;
   width: 28%;
-  min-width: 120px;
+  min-width: 140px;
 }
 .adr-form__modal-table thead {
   background: #f5f5f5;

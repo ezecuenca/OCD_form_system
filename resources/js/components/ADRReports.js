@@ -8,7 +8,7 @@ import DocumentViewModal from './DocumentViewModal';
 function ADRReports() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { reports, reportsLoaded, deleteReport, archiveReport, getReport } = useFormContext();
+    const { reports, reportsLoaded, loadReports, deleteReport, archiveReport, getReport } = useFormContext();
     const [selectedReports, setSelectedReports] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
@@ -27,6 +27,10 @@ function ADRReports() {
     const itemsPerPage = 10;
     const yearDropdownRef = useRef(null);
     const monthDropdownRef = useRef(null);
+
+    useEffect(() => {
+        loadReports();
+    }, [loadReports]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {

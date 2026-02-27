@@ -65,23 +65,25 @@ export const FormProvider = ({ children }) => {
             });
     }, []);
 
-    // Load reports from API when app mounts (authenticated user)
-    useEffect(() => {
-        let isMounted = true;
+    const loadReports = useCallback(() => {
         axios.get('/api/adr-forms', { withCredentials: true })
             .then((res) => {
-                if (isMounted && Array.isArray(res.data)) {
+                if (Array.isArray(res.data)) {
                     setReports(res.data);
                 }
             })
             .catch(() => {
-                if (isMounted) setReports([]);
+                setReports([]);
             })
             .finally(() => {
-                if (isMounted) setReportsLoaded(true);
+                setReportsLoaded(true);
             });
-        return () => { isMounted = false; };
     }, []);
+
+    // Load reports from API when app mounts (authenticated user)
+    useEffect(() => {
+        loadReports();
+    }, [loadReports]);
 
     const fetchReport = (id) => {
         return axios.get(`/api/adr-forms/${id}`, { withCredentials: true })
@@ -152,6 +154,7 @@ export const FormProvider = ({ children }) => {
         <FormContext.Provider value={{
             reports,
             reportsLoaded,
+            loadReports,
             addReport,
             updateReport,
             getReport,
