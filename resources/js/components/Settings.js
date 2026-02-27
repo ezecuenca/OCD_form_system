@@ -932,7 +932,6 @@ function Settings() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th className="settings__table-check"><input type="checkbox" aria-label="Select all accounts" /></th>
                                     <th>User</th>
                                     <th>Status</th>
                                     <th>Role</th>
@@ -941,15 +940,14 @@ function Settings() {
                             </thead>
                             <tbody>
                                 {accountsLoading ? (
-                                    <tr><td colSpan="5" style={{ textAlign: 'center', padding: '2rem' }}>Loading...</td></tr>
+                                    <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem' }}>Loading...</td></tr>
                                 ) : accountsError ? (
-                                    <tr><td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#c00' }}>{accountsError}</td></tr>
+                                    <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem', color: '#c00' }}>{accountsError}</td></tr>
                                 ) : accounts.length === 0 ? (
-                                    <tr><td colSpan="5" style={{ textAlign: 'center', padding: '2rem' }}>No accounts yet.</td></tr>
+                                    <tr><td colSpan="4" style={{ textAlign: 'center', padding: '2rem' }}>No accounts yet.</td></tr>
                                 ) : (
                                     accounts.map((account) => (
                                         <tr key={account.id}>
-                                            <td className="settings__table-check"><input type="checkbox" aria-label={`Select ${account.name}`} /></td>
                                             <td>
                                                 <div className="settings__user-cell">
                                                     {account.image_path ? (
