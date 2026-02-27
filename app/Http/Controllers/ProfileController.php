@@ -226,6 +226,39 @@ class ProfileController extends Controller
         return response()->json($this->serializeProfile($profile));
     }
 
+    /**
+     * Delete a profile and its associated user (admin only).
+     */
+    public function destroy(Request $request, $id)
+    {
+        $actor = $request->user();
+        if (!$actor || !in_array($actor->role_id, [2, 3], true)) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
+
+        $profile = Profile::with('user')->find($id);
+        if (!$profile) {
+            return response()->json(['message' => 'Profile not found.'], 404);
+        }
+
+        DB::transaction(function () use ($profile) {
+            // Delete profile image if exists
+            if ($profile->image_path && file_exists(public_path($profile->image_path))) {
+                unlink(public_path($profile->image_path));
+            }
+
+            // Delete the user associated with the profile
+            if ($profile->user) {
+                $profile->user->delete();
+            }
+
+            // Delete the profile
+            $profile->delete();
+        });
+
+        return response()->json(['message' => 'Account deleted successfully.']);
+    }
+
     private function serializeProfile(Profile $profile): array
     {
         $user = $profile->user;

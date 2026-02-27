@@ -77316,6 +77316,29 @@ function Settings() {
     });
     setShowConfirmModal(true);
   };
+  var deleteAccount = function deleteAccount(account) {
+    if (!(account !== null && account !== void 0 && account.profile_id)) return;
+    setConfirmMessage("Delete account \"".concat(account.name, "\"? This action cannot be undone."));
+    setConfirmAction(function () {
+      return function () {
+        axios__WEBPACK_IMPORTED_MODULE_1___default()["delete"]("/api/profiles/".concat(account.profile_id)).then(function () {
+          setAccounts(function (prev) {
+            return prev.filter(function (item) {
+              return item.profile_id !== account.profile_id;
+            });
+          });
+          setSuccessMessage('Account deleted successfully.');
+          setShowSuccessNotification(true);
+          setShowConfirmModal(false);
+        })["catch"](function (err) {
+          var _err$response16;
+          alert((err === null || err === void 0 || (_err$response16 = err.response) === null || _err$response16 === void 0 || (_err$response16 = _err$response16.data) === null || _err$response16 === void 0 ? void 0 : _err$response16.message) || 'Failed to delete account.');
+          setShowConfirmModal(false);
+        });
+      };
+    });
+    setShowConfirmModal(true);
+  };
   var closeAccountModal = function closeAccountModal() {
     setShowAccountModal(false);
     setEditingAccount(null);
@@ -77334,8 +77357,8 @@ function Settings() {
       setShowSuccessNotification(true);
       closeAccountModal();
     })["catch"](function (err) {
-      var _err$response16;
-      alert((err === null || err === void 0 || (_err$response16 = err.response) === null || _err$response16 === void 0 || (_err$response16 = _err$response16.data) === null || _err$response16 === void 0 ? void 0 : _err$response16.message) || 'Failed to update account.');
+      var _err$response17;
+      alert((err === null || err === void 0 || (_err$response17 = err.response) === null || _err$response17 === void 0 || (_err$response17 = _err$response17.data) === null || _err$response17 === void 0 ? void 0 : _err$response17.message) || 'Failed to update account.');
     })["finally"](function () {
       return setAccountSaving(false);
     });
@@ -77344,7 +77367,7 @@ function Settings() {
   // Save retention settings
   var handleSetRetention = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-      var archiveResult, archiveRes, archivedTotal, _err$response17, _t3;
+      var archiveResult, archiveRes, archivedTotal, _err$response18, _t3;
       return _regenerator().w(function (_context2) {
         while (1) switch (_context2.p = _context2.n) {
           case 0:
@@ -77390,7 +77413,7 @@ function Settings() {
           case 4:
             _context2.p = 4;
             _t3 = _context2.v;
-            alert((_t3 === null || _t3 === void 0 || (_err$response17 = _t3.response) === null || _err$response17 === void 0 || (_err$response17 = _err$response17.data) === null || _err$response17 === void 0 ? void 0 : _err$response17.message) || 'Failed to update retention settings.');
+            alert((_t3 === null || _t3 === void 0 || (_err$response18 = _t3.response) === null || _err$response18 === void 0 || (_err$response18 = _err$response18.data) === null || _err$response18 === void 0 ? void 0 : _err$response18.message) || 'Failed to update retention settings.');
           case 5:
             return _context2.a(2);
         }
@@ -77402,7 +77425,7 @@ function Settings() {
   }();
   var handleSetPurge = /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-      var _err$response18, _t4;
+      var _err$response19, _t4;
       return _regenerator().w(function (_context3) {
         while (1) switch (_context3.p = _context3.n) {
           case 0:
@@ -77425,7 +77448,7 @@ function Settings() {
           case 2:
             _context3.p = 2;
             _t4 = _context3.v;
-            alert((_t4 === null || _t4 === void 0 || (_err$response18 = _t4.response) === null || _err$response18 === void 0 || (_err$response18 = _err$response18.data) === null || _err$response18 === void 0 ? void 0 : _err$response18.message) || 'Failed to update purge settings.');
+            alert((_t4 === null || _t4 === void 0 || (_err$response19 = _t4.response) === null || _err$response19 === void 0 || (_err$response19 = _err$response19.data) === null || _err$response19 === void 0 ? void 0 : _err$response19.message) || 'Failed to update purge settings.');
           case 3:
             return _context3.a(2);
         }
@@ -77437,7 +77460,7 @@ function Settings() {
   }();
   var handleToggleRetention = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(enabled) {
-      var _err$response19, _t5;
+      var _err$response20, _t5;
       return _regenerator().w(function (_context4) {
         while (1) switch (_context4.p = _context4.n) {
           case 0:
@@ -77459,7 +77482,7 @@ function Settings() {
           case 3:
             _context4.p = 3;
             _t5 = _context4.v;
-            alert((_t5 === null || _t5 === void 0 || (_err$response19 = _t5.response) === null || _err$response19 === void 0 || (_err$response19 = _err$response19.data) === null || _err$response19 === void 0 ? void 0 : _err$response19.message) || 'Failed to update auto-archive setting.');
+            alert((_t5 === null || _t5 === void 0 || (_err$response20 = _t5.response) === null || _err$response20 === void 0 || (_err$response20 = _err$response20.data) === null || _err$response20 === void 0 ? void 0 : _err$response20.message) || 'Failed to update auto-archive setting.');
           case 4:
             return _context4.a(2);
         }
@@ -77471,7 +77494,7 @@ function Settings() {
   }();
   var handleTogglePurge = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(enabled) {
-      var _err$response20, _t6;
+      var _err$response21, _t6;
       return _regenerator().w(function (_context5) {
         while (1) switch (_context5.p = _context5.n) {
           case 0:
@@ -77493,7 +77516,7 @@ function Settings() {
           case 3:
             _context5.p = 3;
             _t6 = _context5.v;
-            alert((_t6 === null || _t6 === void 0 || (_err$response20 = _t6.response) === null || _err$response20 === void 0 || (_err$response20 = _err$response20.data) === null || _err$response20 === void 0 ? void 0 : _err$response20.message) || 'Failed to update auto-purge setting.');
+            alert((_t6 === null || _t6 === void 0 || (_err$response21 = _t6.response) === null || _err$response21 === void 0 || (_err$response21 = _err$response21.data) === null || _err$response21 === void 0 ? void 0 : _err$response21.message) || 'Failed to update auto-purge setting.');
           case 4:
             return _context5.a(2);
         }
@@ -77600,7 +77623,7 @@ function Settings() {
                       children: account.role
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("td", {
                       className: "settings__table-actions",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+                      children: [account.is_active ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
                         type: "button",
                         className: "settings__icon-button",
                         onClick: function onClick() {
@@ -77608,6 +77631,18 @@ function Settings() {
                         },
                         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
                           src: "/images/edit_icon.svg",
+                          alt: "",
+                          "aria-hidden": "true"
+                        })
+                      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+                        type: "button",
+                        className: "settings__icon-button",
+                        onClick: function onClick() {
+                          return deleteAccount(account);
+                        },
+                        "aria-label": "Delete account",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+                          src: "/images/delete_icon.svg",
                           alt: "",
                           "aria-hidden": "true"
                         })
