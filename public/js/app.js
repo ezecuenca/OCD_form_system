@@ -77082,32 +77082,6 @@ function Settings() {
       })
     };
   };
-  var viewTemplate = function viewTemplate(filename, name) {
-    setTemplateToView({
-      filename: filename,
-      name: name || filename
-    });
-  };
-  var handleEditTemplate = function handleEditTemplate(tpl) {
-    setConfirmMessage("Edit template \"".concat(tpl.name, "\"?"));
-    setConfirmAction(function () {
-      return function () {
-        var newName = prompt('Enter new template name:', tpl.name);
-        if (newName && newName !== tpl.name) {
-          axios__WEBPACK_IMPORTED_MODULE_1___default().patch("/api/templates/".concat(tpl.id), {
-            name: newName
-          }).then(function () {
-            // Refresh templates if needed
-          })["catch"](function (err) {
-            var _err$response1;
-            setTemplatesError(((_err$response1 = err.response) === null || _err$response1 === void 0 || (_err$response1 = _err$response1.data) === null || _err$response1 === void 0 ? void 0 : _err$response1.message) || 'Failed to update template');
-          });
-        }
-        setShowConfirmModal(false);
-      };
-    });
-    setShowConfirmModal(true);
-  };
   var handleAddTemplateClick = function handleAddTemplateClick() {
     var _templateFileInputRef;
     (_templateFileInputRef = templateFileInputRef.current) === null || _templateFileInputRef === void 0 || _templateFileInputRef.click();
@@ -77145,8 +77119,8 @@ function Settings() {
       setSuccessMessage(replaced ? 'Template replaced.' : 'Template added.');
       setShowSuccessNotification(true);
     })["catch"](function (err) {
-      var _err$response10;
-      setTemplatesError((err === null || err === void 0 || (_err$response10 = err.response) === null || _err$response10 === void 0 || (_err$response10 = _err$response10.data) === null || _err$response10 === void 0 ? void 0 : _err$response10.message) || 'Failed to add template.');
+      var _err$response1;
+      setTemplatesError((err === null || err === void 0 || (_err$response1 = err.response) === null || _err$response1 === void 0 || (_err$response1 = _err$response1.data) === null || _err$response1 === void 0 ? void 0 : _err$response1.message) || 'Failed to add template.');
     })["finally"](function () {
       return setTemplateUploading(false);
     });
@@ -77198,8 +77172,8 @@ function Settings() {
       setSuccessMessage('Template set as in use.');
       setShowSuccessNotification(true);
     })["catch"](function (err) {
-      var _err$response11;
-      setTemplatesError((err === null || err === void 0 || (_err$response11 = err.response) === null || _err$response11 === void 0 || (_err$response11 = _err$response11.data) === null || _err$response11 === void 0 ? void 0 : _err$response11.message) || 'Failed to set template in use.');
+      var _err$response10;
+      setTemplatesError((err === null || err === void 0 || (_err$response10 = err.response) === null || _err$response10 === void 0 || (_err$response10 = _err$response10.data) === null || _err$response10 === void 0 ? void 0 : _err$response10.message) || 'Failed to set template in use.');
     });
   };
   var deleteTemplate = function deleteTemplate(tpl) {
@@ -77217,8 +77191,8 @@ function Settings() {
           setShowSuccessNotification(true);
           setShowConfirmModal(false);
         })["catch"](function (err) {
-          var _err$response12;
-          setTemplatesError((err === null || err === void 0 || (_err$response12 = err.response) === null || _err$response12 === void 0 || (_err$response12 = _err$response12.data) === null || _err$response12 === void 0 ? void 0 : _err$response12.message) || 'Failed to delete template.');
+          var _err$response11;
+          setTemplatesError((err === null || err === void 0 || (_err$response11 = err.response) === null || _err$response11 === void 0 || (_err$response11 = _err$response11.data) === null || _err$response11 === void 0 ? void 0 : _err$response11.message) || 'Failed to delete template.');
           setShowConfirmModal(false);
         });
       };
@@ -77259,8 +77233,8 @@ function Settings() {
           setShowSuccessNotification(true);
           setShowConfirmModal(false);
         })["catch"](function (err) {
-          var _err$response13;
-          setTemplatesError((err === null || err === void 0 || (_err$response13 = err.response) === null || _err$response13 === void 0 || (_err$response13 = _err$response13.data) === null || _err$response13 === void 0 ? void 0 : _err$response13.message) || 'Failed to delete some templates.');
+          var _err$response12;
+          setTemplatesError((err === null || err === void 0 || (_err$response12 = err.response) === null || _err$response12 === void 0 || (_err$response12 = _err$response12.data) === null || _err$response12 === void 0 ? void 0 : _err$response12.message) || 'Failed to delete some templates.');
           setShowConfirmModal(false);
         });
       };
@@ -77278,8 +77252,8 @@ function Settings() {
       setSuccessMessage('Section deleted successfully.');
       setShowSuccessNotification(true);
     })["catch"](function (err) {
-      var _err$response14;
-      alert((err === null || err === void 0 || (_err$response14 = err.response) === null || _err$response14 === void 0 || (_err$response14 = _err$response14.data) === null || _err$response14 === void 0 ? void 0 : _err$response14.message) || 'Failed to delete section.');
+      var _err$response13;
+      alert((err === null || err === void 0 || (_err$response13 = err.response) === null || _err$response13 === void 0 || (_err$response13 = _err$response13.data) === null || _err$response13 === void 0 ? void 0 : _err$response13.message) || 'Failed to delete section.');
     });
   };
   var openEditAccount = function openEditAccount(account) {
@@ -77308,8 +77282,8 @@ function Settings() {
           setShowSuccessNotification(true);
           setShowConfirmModal(false);
         })["catch"](function (err) {
-          var _err$response15;
-          alert((err === null || err === void 0 || (_err$response15 = err.response) === null || _err$response15 === void 0 || (_err$response15 = _err$response15.data) === null || _err$response15 === void 0 ? void 0 : _err$response15.message) || 'Failed to update account status.');
+          var _err$response14;
+          alert((err === null || err === void 0 || (_err$response14 = err.response) === null || _err$response14 === void 0 || (_err$response14 = _err$response14.data) === null || _err$response14 === void 0 ? void 0 : _err$response14.message) || 'Failed to update account status.');
           setShowConfirmModal(false);
         });
       };
@@ -77331,8 +77305,8 @@ function Settings() {
           setShowSuccessNotification(true);
           setShowConfirmModal(false);
         })["catch"](function (err) {
-          var _err$response16;
-          alert((err === null || err === void 0 || (_err$response16 = err.response) === null || _err$response16 === void 0 || (_err$response16 = _err$response16.data) === null || _err$response16 === void 0 ? void 0 : _err$response16.message) || 'Failed to delete account.');
+          var _err$response15;
+          alert((err === null || err === void 0 || (_err$response15 = err.response) === null || _err$response15 === void 0 || (_err$response15 = _err$response15.data) === null || _err$response15 === void 0 ? void 0 : _err$response15.message) || 'Failed to delete account.');
           setShowConfirmModal(false);
         });
       };
@@ -77357,8 +77331,8 @@ function Settings() {
       setShowSuccessNotification(true);
       closeAccountModal();
     })["catch"](function (err) {
-      var _err$response17;
-      alert((err === null || err === void 0 || (_err$response17 = err.response) === null || _err$response17 === void 0 || (_err$response17 = _err$response17.data) === null || _err$response17 === void 0 ? void 0 : _err$response17.message) || 'Failed to update account.');
+      var _err$response16;
+      alert((err === null || err === void 0 || (_err$response16 = err.response) === null || _err$response16 === void 0 || (_err$response16 = _err$response16.data) === null || _err$response16 === void 0 ? void 0 : _err$response16.message) || 'Failed to update account.');
     })["finally"](function () {
       return setAccountSaving(false);
     });
@@ -77367,7 +77341,7 @@ function Settings() {
   // Save retention settings
   var handleSetRetention = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-      var archiveResult, archiveRes, archivedTotal, _err$response18, _t3;
+      var archiveResult, archiveRes, archivedTotal, _err$response17, _t3;
       return _regenerator().w(function (_context2) {
         while (1) switch (_context2.p = _context2.n) {
           case 0:
@@ -77413,7 +77387,7 @@ function Settings() {
           case 4:
             _context2.p = 4;
             _t3 = _context2.v;
-            alert((_t3 === null || _t3 === void 0 || (_err$response18 = _t3.response) === null || _err$response18 === void 0 || (_err$response18 = _err$response18.data) === null || _err$response18 === void 0 ? void 0 : _err$response18.message) || 'Failed to update retention settings.');
+            alert((_t3 === null || _t3 === void 0 || (_err$response17 = _t3.response) === null || _err$response17 === void 0 || (_err$response17 = _err$response17.data) === null || _err$response17 === void 0 ? void 0 : _err$response17.message) || 'Failed to update retention settings.');
           case 5:
             return _context2.a(2);
         }
@@ -77425,7 +77399,7 @@ function Settings() {
   }();
   var handleSetPurge = /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-      var _err$response19, _t4;
+      var _err$response18, _t4;
       return _regenerator().w(function (_context3) {
         while (1) switch (_context3.p = _context3.n) {
           case 0:
@@ -77448,7 +77422,7 @@ function Settings() {
           case 2:
             _context3.p = 2;
             _t4 = _context3.v;
-            alert((_t4 === null || _t4 === void 0 || (_err$response19 = _t4.response) === null || _err$response19 === void 0 || (_err$response19 = _err$response19.data) === null || _err$response19 === void 0 ? void 0 : _err$response19.message) || 'Failed to update purge settings.');
+            alert((_t4 === null || _t4 === void 0 || (_err$response18 = _t4.response) === null || _err$response18 === void 0 || (_err$response18 = _err$response18.data) === null || _err$response18 === void 0 ? void 0 : _err$response18.message) || 'Failed to update purge settings.');
           case 3:
             return _context3.a(2);
         }
@@ -77460,7 +77434,7 @@ function Settings() {
   }();
   var handleToggleRetention = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(enabled) {
-      var _err$response20, _t5;
+      var _err$response19, _t5;
       return _regenerator().w(function (_context4) {
         while (1) switch (_context4.p = _context4.n) {
           case 0:
@@ -77482,7 +77456,7 @@ function Settings() {
           case 3:
             _context4.p = 3;
             _t5 = _context4.v;
-            alert((_t5 === null || _t5 === void 0 || (_err$response20 = _t5.response) === null || _err$response20 === void 0 || (_err$response20 = _err$response20.data) === null || _err$response20 === void 0 ? void 0 : _err$response20.message) || 'Failed to update auto-archive setting.');
+            alert((_t5 === null || _t5 === void 0 || (_err$response19 = _t5.response) === null || _err$response19 === void 0 || (_err$response19 = _err$response19.data) === null || _err$response19 === void 0 ? void 0 : _err$response19.message) || 'Failed to update auto-archive setting.');
           case 4:
             return _context4.a(2);
         }
@@ -77494,7 +77468,7 @@ function Settings() {
   }();
   var handleTogglePurge = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(enabled) {
-      var _err$response21, _t6;
+      var _err$response20, _t6;
       return _regenerator().w(function (_context5) {
         while (1) switch (_context5.p = _context5.n) {
           case 0:
@@ -77516,7 +77490,7 @@ function Settings() {
           case 3:
             _context5.p = 3;
             _t6 = _context5.v;
-            alert((_t6 === null || _t6 === void 0 || (_err$response21 = _t6.response) === null || _err$response21 === void 0 || (_err$response21 = _err$response21.data) === null || _err$response21 === void 0 ? void 0 : _err$response21.message) || 'Failed to update auto-purge setting.');
+            alert((_t6 === null || _t6 === void 0 || (_err$response20 = _t6.response) === null || _err$response20 === void 0 || (_err$response20 = _err$response20.data) === null || _err$response20 === void 0 ? void 0 : _err$response20.message) || 'Failed to update auto-purge setting.');
           case 4:
             return _context5.a(2);
         }
@@ -81018,12 +80992,8 @@ var FormProvider = function FormProvider(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   SWAP_REQUESTS_KEY: () => (/* binding */ SWAP_REQUESTS_KEY),
-/* harmony export */   archiveSwapRequest: () => (/* binding */ archiveSwapRequest),
-/* harmony export */   executeSwapRequest: () => (/* binding */ executeSwapRequest),
 /* harmony export */   getSwapRequests: () => (/* binding */ getSwapRequests),
-/* harmony export */   removeSwapRequest: () => (/* binding */ removeSwapRequest),
 /* harmony export */   restoreSwapRequest: () => (/* binding */ restoreSwapRequest),
-/* harmony export */   saveSwapRequest: () => (/* binding */ saveSwapRequest),
 /* harmony export */   updateSwapRequestStatus: () => (/* binding */ updateSwapRequestStatus)
 /* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
@@ -81045,17 +81015,6 @@ function getSwapRequests() {
     return [];
   }
 }
-function saveSwapRequest(request) {
-  var requests = getSwapRequests();
-  requests.unshift(request);
-  localStorage.setItem(SWAP_REQUESTS_KEY, JSON.stringify(requests));
-}
-function removeSwapRequest(id) {
-  var requests = getSwapRequests().filter(function (r) {
-    return r.id !== id;
-  });
-  localStorage.setItem(SWAP_REQUESTS_KEY, JSON.stringify(requests));
-}
 function updateSwapRequestStatus(id, status) {
   var extra = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   var requests = getSwapRequests().map(function (r) {
@@ -81065,57 +81024,11 @@ function updateSwapRequestStatus(id, status) {
   });
   localStorage.setItem(SWAP_REQUESTS_KEY, JSON.stringify(requests));
 }
-function archiveSwapRequest(id) {
-  var requests = getSwapRequests();
-  var req = requests.find(function (r) {
-    return r.id === id;
-  });
-  if (!req || req.status !== 'approved' && req.status !== 'denied') return false;
-  updateSwapRequestStatus(id, 'archived', {
-    archivedFromStatus: req.status
-  });
-  return true;
-}
 function restoreSwapRequest(id) {
   return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/swapping-requests/".concat(id, "/restore"))["catch"](function (error) {
     console.error('Error restoring swap request:', error);
     throw error;
   });
-}
-function executeSwapRequest(id) {
-  var requests = getSwapRequests();
-  var req = requests.find(function (r) {
-    return r.id === id;
-  });
-  if (!req || req.status !== 'pending') return false;
-  var savedTasks = localStorage.getItem(SCHEDULED_TASKS_KEY);
-  var tasks = savedTasks ? JSON.parse(savedTasks) : [];
-  var sourceTask = tasks.find(function (t) {
-    return t.name === req.taskName && t.task === req.taskDescription && t.date === req.fromDate;
-  });
-  if (!sourceTask) return false;
-  var targetTaskOnDate = tasks.find(function (t) {
-    return t.date === req.toDate;
-  });
-  var swappedAt = new Date().toISOString();
-  var newTasks = tasks.map(function (t) {
-    if (t === sourceTask) {
-      return _objectSpread(_objectSpread({}, t), {}, {
-        date: req.toDate,
-        swappedAt: swappedAt
-      });
-    }
-    if (targetTaskOnDate && t === targetTaskOnDate) {
-      return _objectSpread(_objectSpread({}, t), {}, {
-        date: req.fromDate,
-        swappedAt: swappedAt
-      });
-    }
-    return t;
-  });
-  localStorage.setItem(SCHEDULED_TASKS_KEY, JSON.stringify(newTasks));
-  updateSwapRequestStatus(id, 'approved');
-  return true;
 }
 
 /***/ },
