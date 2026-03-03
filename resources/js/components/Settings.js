@@ -571,28 +571,6 @@ function Settings() {
         };
     };
 
-    const viewTemplate = (filename, name) => {
-        setTemplateToView({ filename, name: name || filename });
-    };
-
-    const handleEditTemplate = (tpl) => {
-        setConfirmMessage(`Edit template "${tpl.name}"?`);
-        setConfirmAction(() => () => {
-            const newName = prompt('Enter new template name:', tpl.name);
-            if (newName && newName !== tpl.name) {
-                axios.patch(`/api/templates/${tpl.id}`, { name: newName })
-                    .then(() => {
-                        // Refresh templates if needed
-                    })
-                    .catch(err => {
-                        setTemplatesError(err.response?.data?.message || 'Failed to update template');
-                    });
-            }
-            setShowConfirmModal(false);
-        });
-        setShowConfirmModal(true);
-    };
-
     const handleAddTemplateClick = () => {
         templateFileInputRef.current?.click();
     };
