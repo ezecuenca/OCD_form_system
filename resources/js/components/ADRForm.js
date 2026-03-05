@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormContext } from '../context/FormContext';
 import SuccessNotification from './SuccessNotification';
 import axios from 'axios';
+
+const ADR_FORM_DRAFT_KEY = 'adr-form-draft';
 
 function ADRForm() {
     const [notification, setNotification] = useState(null);
@@ -32,9 +34,81 @@ function ADRForm() {
         fetchAvailableTemplate();
     }, []);
 
-    // Pre-fill Administrative Matters from the latest saved form (new form only)
+    // Pre-fill: restore draft if present, otherwise load latest saved form data (new form only)
     useEffect(() => {
         if (isEditing) return;
+        try {
+            const raw = localStorage.getItem(ADR_FORM_DRAFT_KEY);
+            const draft = raw ? JSON.parse(raw) : null;
+            if (draft && typeof draft === 'object') {
+                setDocumentName(draft.documentName ?? '');
+                setForName(draft.forName ?? '');
+                setForPosition(draft.forPosition ?? '');
+                setThruName(draft.thruName ?? '');
+                setThruPosition(draft.thruPosition ?? '');
+                setFromName(draft.fromName ?? '');
+                setFromPosition(draft.fromPosition ?? '');
+                setSubject(draft.subject ?? '');
+                setDateTime(draft.dateTime ?? '');
+                setStatus(draft.status ?? 'WHITE ALERT');
+                setPreparedBy(draft.preparedBy ?? '');
+                setPreparedPosition(draft.preparedPosition ?? '');
+                setReceivedBy(draft.receivedBy ?? '');
+                setReceivedPosition(draft.receivedPosition ?? '');
+                setNotedBy(draft.notedBy ?? '');
+                setNotedPosition(draft.notedPosition ?? '');
+                setApprovedBy(draft.approvedBy ?? '');
+                setApprovedPosition(draft.approvedPosition ?? '');
+                if (Array.isArray(draft.attendanceItems) && draft.attendanceItems.length > 0) {
+                    setAttendanceItems(draft.attendanceItems.map((item, i) => ({
+                        id: item.id ?? i + 1,
+                        name: item.name ?? '',
+                        task: item.task ?? ''
+                    })));
+                }
+                if (Array.isArray(draft.reportsItems) && draft.reportsItems.length > 0) {
+                    setReportsItems(draft.reportsItems.map((item, i) => ({
+                        id: item.id ?? i + 1,
+                        report: item.report ?? '',
+                        remarks: item.remarks ?? ''
+                    })));
+                }
+                if (Array.isArray(draft.communicationRows) && draft.communicationRows.length > 0) {
+                    setCommunicationRows(draft.communicationRows.map((r, i) => ({
+                        ...r,
+                        id: r.id ?? i + 1,
+                        particulars: r.particulars ?? '',
+                        noOfItems: r.noOfItems ?? r.number ?? 0,
+                        contact: r.contact ?? '',
+                        status: r.status ?? r.remarks ?? ''
+                    })));
+                }
+                if (Array.isArray(draft.otherItemsRows) && draft.otherItemsRows.length > 0) {
+                    setOtherItemsRows(draft.otherItemsRows.map((r, i) => ({
+                        ...r,
+                        id: r.id ?? i + 1,
+                        particulars: r.particulars ?? '',
+                        noOfItems: r.noOfItems ?? r.number ?? 0,
+                        status: r.status ?? r.remarks ?? ''
+                    })));
+                }
+                if (Array.isArray(draft.adminMatters) && draft.adminMatters.length > 0) {
+                    setAdminMatters(draft.adminMatters.map((m, i) => ({
+                        id: m.id ?? i + 1,
+                        concern: m.concern ?? ''
+                    })));
+                }
+                if (Array.isArray(draft.endorsedItems) && draft.endorsedItems.length > 0) {
+                    setEndorsedItems(draft.endorsedItems.map((e, i) => ({
+                        id: e.id ?? i + 1,
+                        endorsed: e.endorsed ?? ''
+                    })));
+                }
+                return;
+            }
+        } catch (_) {
+            // Invalid draft – fall through to fetch latest
+        }
         const fetchLatestAdminMatters = async () => {
             try {
                 const response = await axios.get('/api/adr/latest-admin-matters');
@@ -58,6 +132,13 @@ function ADRForm() {
                         id: i + 1,
                         name: item.name ?? '',
                         task: item.task ?? ''
+                    })));
+                }
+                if (data.reportsItems?.length) {
+                    setReportsItems(data.reportsItems.map((item, i) => ({
+                        id: i + 1,
+                        report: item.report ?? '',
+                        remarks: item.remarks ?? ''
                     })));
                 }
             } catch (error) {
@@ -153,6 +234,75 @@ function ADRForm() {
     const [approvedBy, setApprovedBy] = useState('');
     const [approvedPosition, setApprovedPosition] = useState('');
 
+    const draftSaveTimeoutRef = useRef(null);
+
+    // Persist form to localStorage (create mode only) so refresh/hot-reload does not lose data
+    useEffect(() => {
+        if (isEditing) return;
+        if (draftSaveTimeoutRef.current) clearTimeout(draftSaveTimeoutRef.current);
+        draftSaveTimeoutRef.current = setTimeout(() => {
+            try {
+                const draft = {
+                    documentName,
+                    forName,
+                    forPosition,
+                    thruName,
+                    thruPosition,
+                    fromName,
+                    fromPosition,
+                    subject,
+                    dateTime,
+                    status,
+                    attendanceItems,
+                    reportsItems,
+                    communicationRows,
+                    otherItemsRows,
+                    adminMatters,
+                    endorsedItems,
+                    preparedBy,
+                    preparedPosition,
+                    receivedBy,
+                    receivedPosition,
+                    notedBy,
+                    notedPosition,
+                    approvedBy,
+                    approvedPosition
+                };
+                localStorage.setItem(ADR_FORM_DRAFT_KEY, JSON.stringify(draft));
+            } catch (_) {}
+            draftSaveTimeoutRef.current = null;
+        }, 500);
+        return () => {
+            if (draftSaveTimeoutRef.current) clearTimeout(draftSaveTimeoutRef.current);
+        };
+    }, [
+        isEditing,
+        documentName,
+        forName,
+        forPosition,
+        thruName,
+        thruPosition,
+        fromName,
+        fromPosition,
+        subject,
+        dateTime,
+        status,
+        attendanceItems,
+        reportsItems,
+        communicationRows,
+        otherItemsRows,
+        adminMatters,
+        endorsedItems,
+        preparedBy,
+        preparedPosition,
+        receivedBy,
+        receivedPosition,
+        notedBy,
+        notedPosition,
+        approvedBy,
+        approvedPosition
+    ]);
+
     const handleReturn = () => {
         navigate('/adr-reports');
     };
@@ -220,6 +370,11 @@ function ADRForm() {
                 await addReport(payload.report);
             }
 
+            if (!isEditing) {
+                try {
+                    localStorage.removeItem(ADR_FORM_DRAFT_KEY);
+                } catch (_) {}
+            }
             setShowSuccessNotification(true);
             setTimeout(() => {
                 navigate('/adr-reports');
@@ -499,17 +654,17 @@ function ADRForm() {
                             <table className="adr-form__modal-table">
                                 <thead>
                                     <tr>
-                                        <th>Particulars</th>
-                                        <th>No. of Items</th>
-                                        <th>Contact No. / Freq / Channel</th>
-                                        <th>Status / Remarks</th>
-                                        <th>Actions</th>
+                                        <th className="adr-form__modal-table-comm-particulars-col">Particulars</th>
+                                        <th className="adr-form__modal-table-comm-no-col">No. of Items</th>
+                                        <th className="adr-form__modal-table-comm-contact-col">Contact No. / Freq / Channel</th>
+                                        <th className="adr-form__modal-table-comm-status-col">Status / Remarks</th>
+                                        <th className="adr-form__modal-table-actions-col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="adr-form__modal-table-body">
                                     {communicationRows.map((row) => (
                                         <tr className="adr-form__modal-table-row" key={row.id}>
-                                            <td>
+                                            <td className="adr-form__modal-table-comm-particulars-col">
                                                 <input 
                                                     type="text" 
                                                     className="adr-form__modal-input" 
@@ -518,7 +673,7 @@ function ADRForm() {
                                                     onChange={(e) => updateCommunicationRow(row.id, 'particulars', e.target.value)}
                                                 />
                                             </td>
-                                            <td>
+                                            <td className="adr-form__modal-table-comm-no-col">
                                                 <div className="adr-form__counter">
                                                     <button 
                                                         className="adr-form__counter-btn" 
@@ -543,25 +698,25 @@ function ADRForm() {
                                                     </button>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td className="adr-form__modal-table-comm-contact-col">
                                                 <textarea 
-                                                    className="adr-form__modal-input adr-form__modal-textarea" 
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--md" 
                                                     placeholder="Enter contact/freq/channel (multiple lines allowed)"
                                                     rows="2"
                                                     value={row.contact ?? ''}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'contact', e.target.value)}
                                                 />
                                             </td>
-                                            <td>
+                                            <td className="adr-form__modal-table-comm-status-col">
                                                 <textarea 
-                                                    className="adr-form__modal-input adr-form__modal-textarea" 
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--md" 
                                                     placeholder="Enter status/remarks (multiple lines allowed)"
                                                     rows="2"
                                                     value={row.status ?? ''}
                                                     onChange={(e) => updateCommunicationRow(row.id, 'status', e.target.value)}
                                                 />
                                             </td>
-                                            <td>
+                                            <td className="adr-form__modal-table-actions-col">
                                                 <button 
                                                     className="adr-form__modal-action-btn" 
                                                     type="button"
@@ -759,16 +914,16 @@ function ADRForm() {
                             <table className="adr-form__modal-table">
                                 <thead>
                                     <tr>
-                                        <th>Particulars</th>
-                                        <th>No. of Items</th>
-                                        <th>Status / Remarks</th>
-                                        <th>Actions</th>
+                                        <th className="adr-form__modal-table-other-particulars-col">Particulars</th>
+                                        <th className="adr-form__modal-table-other-no-col">No. of Items</th>
+                                        <th className="adr-form__modal-table-other-status-col">Status / Remarks</th>
+                                        <th className="adr-form__modal-table-actions-col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="adr-form__modal-table-body">
                                     {otherItemsRows.map((row) => (
                                         <tr className="adr-form__modal-table-row" key={row.id}>
-                                            <td>
+                                            <td className="adr-form__modal-table-other-particulars-col">
                                                 <input 
                                                     type="text" 
                                                     className="adr-form__modal-input" 
@@ -777,7 +932,7 @@ function ADRForm() {
                                                     onChange={(e) => updateOtherItemsRow(row.id, 'particulars', e.target.value)}
                                                 />
                                             </td>
-                                            <td>
+                                            <td className="adr-form__modal-table-other-no-col">
                                                 <div className="adr-form__counter">
                                                     <button 
                                                         className="adr-form__counter-btn" 
@@ -802,16 +957,16 @@ function ADRForm() {
                                                     </button>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <input 
-                                                    type="text" 
-                                                    className="adr-form__modal-input" 
-                                                    placeholder="Enter status/remarks"
+                                            <td className="adr-form__modal-table-other-status-col">
+                                                <textarea 
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--md" 
+                                                    placeholder="Enter status/remarks (multiple lines allowed)"
+                                                    rows="2"
                                                     value={row.status ?? ''}
                                                     onChange={(e) => updateOtherItemsRow(row.id, 'status', e.target.value)}
                                                 />
                                             </td>
-                                            <td>
+                                            <td className="adr-form__modal-table-actions-col">
                                                 <button 
                                                     className="adr-form__modal-action-btn" 
                                                     type="button"

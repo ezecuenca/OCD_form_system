@@ -68727,7 +68727,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -68737,6 +68736,7 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -68753,6 +68753,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
+var ADR_FORM_DRAFT_KEY = 'adr-form-draft';
 function ADRForm() {
   var _location$state;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
@@ -68815,12 +68816,101 @@ function ADRForm() {
     fetchAvailableTemplate();
   }, []);
 
-  // Pre-fill Administrative Matters from the latest saved form (new form only)
+  // Pre-fill: restore draft if present, otherwise load latest saved form data (new form only)
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (isEditing) return;
+    try {
+      var raw = localStorage.getItem(ADR_FORM_DRAFT_KEY);
+      var draft = raw ? JSON.parse(raw) : null;
+      if (draft && _typeof(draft) === 'object') {
+        var _draft$documentName, _draft$forName, _draft$forPosition, _draft$thruName, _draft$thruPosition, _draft$fromName, _draft$fromPosition, _draft$subject, _draft$dateTime, _draft$status, _draft$preparedBy, _draft$preparedPositi, _draft$receivedBy, _draft$receivedPositi, _draft$notedBy, _draft$notedPosition, _draft$approvedBy, _draft$approvedPositi;
+        setDocumentName((_draft$documentName = draft.documentName) !== null && _draft$documentName !== void 0 ? _draft$documentName : '');
+        setForName((_draft$forName = draft.forName) !== null && _draft$forName !== void 0 ? _draft$forName : '');
+        setForPosition((_draft$forPosition = draft.forPosition) !== null && _draft$forPosition !== void 0 ? _draft$forPosition : '');
+        setThruName((_draft$thruName = draft.thruName) !== null && _draft$thruName !== void 0 ? _draft$thruName : '');
+        setThruPosition((_draft$thruPosition = draft.thruPosition) !== null && _draft$thruPosition !== void 0 ? _draft$thruPosition : '');
+        setFromName((_draft$fromName = draft.fromName) !== null && _draft$fromName !== void 0 ? _draft$fromName : '');
+        setFromPosition((_draft$fromPosition = draft.fromPosition) !== null && _draft$fromPosition !== void 0 ? _draft$fromPosition : '');
+        setSubject((_draft$subject = draft.subject) !== null && _draft$subject !== void 0 ? _draft$subject : '');
+        setDateTime((_draft$dateTime = draft.dateTime) !== null && _draft$dateTime !== void 0 ? _draft$dateTime : '');
+        setStatus((_draft$status = draft.status) !== null && _draft$status !== void 0 ? _draft$status : 'WHITE ALERT');
+        setPreparedBy((_draft$preparedBy = draft.preparedBy) !== null && _draft$preparedBy !== void 0 ? _draft$preparedBy : '');
+        setPreparedPosition((_draft$preparedPositi = draft.preparedPosition) !== null && _draft$preparedPositi !== void 0 ? _draft$preparedPositi : '');
+        setReceivedBy((_draft$receivedBy = draft.receivedBy) !== null && _draft$receivedBy !== void 0 ? _draft$receivedBy : '');
+        setReceivedPosition((_draft$receivedPositi = draft.receivedPosition) !== null && _draft$receivedPositi !== void 0 ? _draft$receivedPositi : '');
+        setNotedBy((_draft$notedBy = draft.notedBy) !== null && _draft$notedBy !== void 0 ? _draft$notedBy : '');
+        setNotedPosition((_draft$notedPosition = draft.notedPosition) !== null && _draft$notedPosition !== void 0 ? _draft$notedPosition : '');
+        setApprovedBy((_draft$approvedBy = draft.approvedBy) !== null && _draft$approvedBy !== void 0 ? _draft$approvedBy : '');
+        setApprovedPosition((_draft$approvedPositi = draft.approvedPosition) !== null && _draft$approvedPositi !== void 0 ? _draft$approvedPositi : '');
+        if (Array.isArray(draft.attendanceItems) && draft.attendanceItems.length > 0) {
+          setAttendanceItems(draft.attendanceItems.map(function (item, i) {
+            var _item$id, _item$name, _item$task;
+            return {
+              id: (_item$id = item.id) !== null && _item$id !== void 0 ? _item$id : i + 1,
+              name: (_item$name = item.name) !== null && _item$name !== void 0 ? _item$name : '',
+              task: (_item$task = item.task) !== null && _item$task !== void 0 ? _item$task : ''
+            };
+          }));
+        }
+        if (Array.isArray(draft.reportsItems) && draft.reportsItems.length > 0) {
+          setReportsItems(draft.reportsItems.map(function (item, i) {
+            var _item$id2, _item$report, _item$remarks;
+            return {
+              id: (_item$id2 = item.id) !== null && _item$id2 !== void 0 ? _item$id2 : i + 1,
+              report: (_item$report = item.report) !== null && _item$report !== void 0 ? _item$report : '',
+              remarks: (_item$remarks = item.remarks) !== null && _item$remarks !== void 0 ? _item$remarks : ''
+            };
+          }));
+        }
+        if (Array.isArray(draft.communicationRows) && draft.communicationRows.length > 0) {
+          setCommunicationRows(draft.communicationRows.map(function (r, i) {
+            var _r$id, _r$particulars, _ref2, _r$noOfItems, _r$contact, _ref3, _r$status;
+            return _objectSpread(_objectSpread({}, r), {}, {
+              id: (_r$id = r.id) !== null && _r$id !== void 0 ? _r$id : i + 1,
+              particulars: (_r$particulars = r.particulars) !== null && _r$particulars !== void 0 ? _r$particulars : '',
+              noOfItems: (_ref2 = (_r$noOfItems = r.noOfItems) !== null && _r$noOfItems !== void 0 ? _r$noOfItems : r.number) !== null && _ref2 !== void 0 ? _ref2 : 0,
+              contact: (_r$contact = r.contact) !== null && _r$contact !== void 0 ? _r$contact : '',
+              status: (_ref3 = (_r$status = r.status) !== null && _r$status !== void 0 ? _r$status : r.remarks) !== null && _ref3 !== void 0 ? _ref3 : ''
+            });
+          }));
+        }
+        if (Array.isArray(draft.otherItemsRows) && draft.otherItemsRows.length > 0) {
+          setOtherItemsRows(draft.otherItemsRows.map(function (r, i) {
+            var _r$id2, _r$particulars2, _ref4, _r$noOfItems2, _ref5, _r$status2;
+            return _objectSpread(_objectSpread({}, r), {}, {
+              id: (_r$id2 = r.id) !== null && _r$id2 !== void 0 ? _r$id2 : i + 1,
+              particulars: (_r$particulars2 = r.particulars) !== null && _r$particulars2 !== void 0 ? _r$particulars2 : '',
+              noOfItems: (_ref4 = (_r$noOfItems2 = r.noOfItems) !== null && _r$noOfItems2 !== void 0 ? _r$noOfItems2 : r.number) !== null && _ref4 !== void 0 ? _ref4 : 0,
+              status: (_ref5 = (_r$status2 = r.status) !== null && _r$status2 !== void 0 ? _r$status2 : r.remarks) !== null && _ref5 !== void 0 ? _ref5 : ''
+            });
+          }));
+        }
+        if (Array.isArray(draft.adminMatters) && draft.adminMatters.length > 0) {
+          setAdminMatters(draft.adminMatters.map(function (m, i) {
+            var _m$id, _m$concern;
+            return {
+              id: (_m$id = m.id) !== null && _m$id !== void 0 ? _m$id : i + 1,
+              concern: (_m$concern = m.concern) !== null && _m$concern !== void 0 ? _m$concern : ''
+            };
+          }));
+        }
+        if (Array.isArray(draft.endorsedItems) && draft.endorsedItems.length > 0) {
+          setEndorsedItems(draft.endorsedItems.map(function (e, i) {
+            var _e$id, _e$endorsed;
+            return {
+              id: (_e$id = e.id) !== null && _e$id !== void 0 ? _e$id : i + 1,
+              endorsed: (_e$endorsed = e.endorsed) !== null && _e$endorsed !== void 0 ? _e$endorsed : ''
+            };
+          }));
+        }
+        return;
+      }
+    } catch (_) {
+      // Invalid draft – fall through to fetch latest
+    }
     var fetchLatestAdminMatters = /*#__PURE__*/function () {
-      var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-        var _data$communicationRo, _data$otherItemsRows, _data$concerns, _data$endorsed, _data$attendanceItems, response, data, _t2;
+      var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+        var _data$communicationRo, _data$otherItemsRows, _data$concerns, _data$endorsed, _data$attendanceItems, _data$reportsItems, response, data, _t2;
         return _regenerator().w(function (_context2) {
           while (1) switch (_context2.p = _context2.n) {
             case 0:
@@ -68868,11 +68958,21 @@ function ADRForm() {
               }
               if ((_data$attendanceItems = data.attendanceItems) !== null && _data$attendanceItems !== void 0 && _data$attendanceItems.length) {
                 setAttendanceItems(data.attendanceItems.map(function (item, i) {
-                  var _item$name, _item$task;
+                  var _item$name2, _item$task2;
                   return {
                     id: i + 1,
-                    name: (_item$name = item.name) !== null && _item$name !== void 0 ? _item$name : '',
-                    task: (_item$task = item.task) !== null && _item$task !== void 0 ? _item$task : ''
+                    name: (_item$name2 = item.name) !== null && _item$name2 !== void 0 ? _item$name2 : '',
+                    task: (_item$task2 = item.task) !== null && _item$task2 !== void 0 ? _item$task2 : ''
+                  };
+                }));
+              }
+              if ((_data$reportsItems = data.reportsItems) !== null && _data$reportsItems !== void 0 && _data$reportsItems.length) {
+                setReportsItems(data.reportsItems.map(function (item, i) {
+                  var _item$report2, _item$remarks2;
+                  return {
+                    id: i + 1,
+                    report: (_item$report2 = item.report) !== null && _item$report2 !== void 0 ? _item$report2 : '',
+                    remarks: (_item$remarks2 = item.remarks) !== null && _item$remarks2 !== void 0 ? _item$remarks2 : ''
                   };
                 }));
               }
@@ -68887,7 +68987,7 @@ function ADRForm() {
         }, _callee2, null, [[0, 3]]);
       }));
       return function fetchLatestAdminMatters() {
-        return _ref2.apply(this, arguments);
+        return _ref6.apply(this, arguments);
       };
     }();
     fetchLatestAdminMatters();
@@ -69101,6 +69201,48 @@ function ADRForm() {
     _useState64 = _slicedToArray(_useState63, 2),
     approvedPosition = _useState64[0],
     setApprovedPosition = _useState64[1];
+  var draftSaveTimeoutRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+
+  // Persist form to localStorage (create mode only) so refresh/hot-reload does not lose data
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (isEditing) return;
+    if (draftSaveTimeoutRef.current) clearTimeout(draftSaveTimeoutRef.current);
+    draftSaveTimeoutRef.current = setTimeout(function () {
+      try {
+        var draft = {
+          documentName: documentName,
+          forName: forName,
+          forPosition: forPosition,
+          thruName: thruName,
+          thruPosition: thruPosition,
+          fromName: fromName,
+          fromPosition: fromPosition,
+          subject: subject,
+          dateTime: dateTime,
+          status: status,
+          attendanceItems: attendanceItems,
+          reportsItems: reportsItems,
+          communicationRows: communicationRows,
+          otherItemsRows: otherItemsRows,
+          adminMatters: adminMatters,
+          endorsedItems: endorsedItems,
+          preparedBy: preparedBy,
+          preparedPosition: preparedPosition,
+          receivedBy: receivedBy,
+          receivedPosition: receivedPosition,
+          notedBy: notedBy,
+          notedPosition: notedPosition,
+          approvedBy: approvedBy,
+          approvedPosition: approvedPosition
+        };
+        localStorage.setItem(ADR_FORM_DRAFT_KEY, JSON.stringify(draft));
+      } catch (_) {}
+      draftSaveTimeoutRef.current = null;
+    }, 500);
+    return function () {
+      if (draftSaveTimeoutRef.current) clearTimeout(draftSaveTimeoutRef.current);
+    };
+  }, [isEditing, documentName, forName, forPosition, thruName, thruPosition, fromName, fromPosition, subject, dateTime, status, attendanceItems, reportsItems, communicationRows, otherItemsRows, adminMatters, endorsedItems, preparedBy, preparedPosition, receivedBy, receivedPosition, notedBy, notedPosition, approvedBy, approvedPosition]);
   var handleReturn = function handleReturn() {
     navigate('/adr-reports');
   };
@@ -69125,7 +69267,7 @@ function ADRForm() {
     }, 4000);
   };
   var handleConfirm = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
       var payload, _error$response, _t3;
       return _regenerator().w(function (_context3) {
         while (1) switch (_context3.p = _context3.n) {
@@ -69181,6 +69323,11 @@ function ADRForm() {
             _context3.n = 5;
             return addReport(payload.report);
           case 5:
+            if (!isEditing) {
+              try {
+                localStorage.removeItem(ADR_FORM_DRAFT_KEY);
+              } catch (_) {}
+            }
             setShowSuccessNotification(true);
             setTimeout(function () {
               navigate('/adr-reports');
@@ -69198,7 +69345,7 @@ function ADRForm() {
       }, _callee3, null, [[2, 6]]);
     }));
     return function handleConfirm() {
-      return _ref3.apply(this, arguments);
+      return _ref7.apply(this, arguments);
     };
   }();
 
@@ -69706,14 +69853,19 @@ function ADRForm() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-comm-particulars-col",
                   children: "Particulars"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-comm-no-col",
                   children: "No. of Items"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-comm-contact-col",
                   children: "Contact No. / Freq / Channel"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-comm-status-col",
                   children: "Status / Remarks"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-actions-col",
                   children: "Actions"
                 })]
               })
@@ -69724,6 +69876,7 @@ function ADRForm() {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-comm-particulars-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
                       type: "text",
                       className: "adr-form__modal-input",
@@ -69734,6 +69887,7 @@ function ADRForm() {
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-comm-no-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
                       className: "adr-form__counter",
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
@@ -69761,8 +69915,9 @@ function ADRForm() {
                       })]
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-comm-contact-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      className: "adr-form__modal-input adr-form__modal-textarea",
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--md",
                       placeholder: "Enter contact/freq/channel (multiple lines allowed)",
                       rows: "2",
                       value: (_row$contact = row.contact) !== null && _row$contact !== void 0 ? _row$contact : '',
@@ -69771,8 +69926,9 @@ function ADRForm() {
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-comm-status-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      className: "adr-form__modal-input adr-form__modal-textarea",
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--md",
                       placeholder: "Enter status/remarks (multiple lines allowed)",
                       rows: "2",
                       value: (_row$status = row.status) !== null && _row$status !== void 0 ? _row$status : '',
@@ -69781,6 +69937,7 @@ function ADRForm() {
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-actions-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                       className: "adr-form__modal-action-btn",
                       type: "button",
@@ -69874,7 +70031,7 @@ function ADRForm() {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
               children: attendanceItems.map(function (item, index) {
-                var _item$name2, _item$task2;
+                var _item$name3, _item$task3;
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
@@ -69886,7 +70043,7 @@ function ADRForm() {
                       className: "adr-form__modal-input adr-form__modal-textarea",
                       placeholder: "Enter name (multiple names: one per line)",
                       rows: "2",
-                      value: (_item$name2 = item.name) !== null && _item$name2 !== void 0 ? _item$name2 : '',
+                      value: (_item$name3 = item.name) !== null && _item$name3 !== void 0 ? _item$name3 : '',
                       onChange: function onChange(e) {
                         setAttendanceItems(attendanceItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
@@ -69901,7 +70058,7 @@ function ADRForm() {
                       className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--task",
                       placeholder: "Enter task (press Enter for new line or bullet points)",
                       rows: "5",
-                      value: (_item$task2 = item.task) !== null && _item$task2 !== void 0 ? _item$task2 : '',
+                      value: (_item$task3 = item.task) !== null && _item$task3 !== void 0 ? _item$task3 : '',
                       onChange: function onChange(e) {
                         setAttendanceItems(attendanceItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
@@ -70004,7 +70161,7 @@ function ADRForm() {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
               children: reportsItems.map(function (item, index) {
-                var _item$report, _item$remarks;
+                var _item$report3, _item$remarks3;
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
@@ -70016,7 +70173,7 @@ function ADRForm() {
                       className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--report",
                       placeholder: "Enter reports and advisories released",
                       rows: "5",
-                      value: (_item$report = item.report) !== null && _item$report !== void 0 ? _item$report : '',
+                      value: (_item$report3 = item.report) !== null && _item$report3 !== void 0 ? _item$report3 : '',
                       onChange: function onChange(e) {
                         setReportsItems(reportsItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
@@ -70031,7 +70188,7 @@ function ADRForm() {
                       className: "adr-form__modal-input adr-form__modal-textarea",
                       placeholder: "Enter remarks (multiple lines allowed)",
                       rows: "2",
-                      value: (_item$remarks = item.remarks) !== null && _item$remarks !== void 0 ? _item$remarks : '',
+                      value: (_item$remarks3 = item.remarks) !== null && _item$remarks3 !== void 0 ? _item$remarks3 : '',
                       onChange: function onChange(e) {
                         setReportsItems(reportsItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
@@ -70119,12 +70276,16 @@ function ADRForm() {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-other-particulars-col",
                   children: "Particulars"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-other-no-col",
                   children: "No. of Items"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-other-status-col",
                   children: "Status / Remarks"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+                  className: "adr-form__modal-table-actions-col",
                   children: "Actions"
                 })]
               })
@@ -70135,6 +70296,7 @@ function ADRForm() {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-other-particulars-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
                       type: "text",
                       className: "adr-form__modal-input",
@@ -70145,6 +70307,7 @@ function ADRForm() {
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-other-no-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
                       className: "adr-form__counter",
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
@@ -70172,16 +70335,18 @@ function ADRForm() {
                       })]
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
-                      type: "text",
-                      className: "adr-form__modal-input",
-                      placeholder: "Enter status/remarks",
+                    className: "adr-form__modal-table-other-status-col",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--md",
+                      placeholder: "Enter status/remarks (multiple lines allowed)",
+                      rows: "2",
                       value: (_row$status2 = row.status) !== null && _row$status2 !== void 0 ? _row$status2 : '',
                       onChange: function onChange(e) {
                         return updateOtherItemsRow(row.id, 'status', e.target.value);
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
+                    className: "adr-form__modal-table-actions-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                       className: "adr-form__modal-action-btn",
                       type: "button",

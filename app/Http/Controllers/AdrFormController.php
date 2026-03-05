@@ -338,12 +338,23 @@ class AdrFormController extends Controller
                 'task' => $r->task ?? '',
             ])->values()->toArray();
 
+        // Reports and Advisories items (for Reports and Remarks column persistence: pre-fill from latest form)
+        $advisoryRecords = $form->advisories()->orderBy('id')->get(['id', 'advisories', 'remarks']);
+        $reportsItems = $advisoryRecords->isEmpty()
+            ? ($data['reportsItems'] ?? [])
+            : $advisoryRecords->map(fn ($r, $i) => [
+                'id'      => $i + 1,
+                'report'  => $r->advisories ?? '',
+                'remarks' => $r->remarks ?? '',
+            ])->values()->toArray();
+
         return response()->json([
             'communicationRows'   => $communicationRows,
             'otherItemsRows'      => $otherItemsRows,
             'concerns'            => $concerns,
             'endorsed'            => $endorsed,
             'attendanceItems'     => $attendanceItems,
+            'reportsItems'        => $reportsItems,
         ]);
     }
 }
