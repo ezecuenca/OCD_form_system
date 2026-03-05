@@ -53,6 +53,13 @@ function ADRForm() {
                 if (data.endorsed?.length) {
                     setEndorsedItems(data.endorsed.map((r, i) => ({ id: i + 1, endorsed: r.endorsed || '' })));
                 }
+                if (data.attendanceItems?.length) {
+                    setAttendanceItems(data.attendanceItems.map((item, i) => ({
+                        id: i + 1,
+                        name: item.name ?? '',
+                        task: item.task ?? ''
+                    })));
+                }
             } catch (error) {
                 // No previous form or network error – start with empty defaults
             }
@@ -621,9 +628,9 @@ function ADRForm() {
                                             </td>
                                             <td className="adr-form__modal-table-task-col">
                                                 <textarea 
-                                                    className="adr-form__modal-input adr-form__modal-textarea" 
-                                                    placeholder="Enter task"
-                                                    rows="2"
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--task" 
+                                                    placeholder="Enter task (press Enter for new line or bullet points)"
+                                                    rows="5"
                                                     value={item.task ?? ''}
                                                     onChange={(e) => {
                                                         setAttendanceItems(attendanceItems.map(i => 
@@ -685,10 +692,10 @@ function ADRForm() {
                                         <tr className="adr-form__modal-table-row" key={item.id}>
                                             <td className="adr-form__modal-table-number">{index + 1}</td>
                                             <td className="adr-form__modal-table-report-col">
-                                                <textarea 
-                                                    className="adr-form__modal-input adr-form__modal-textarea" 
+                                                <textarea
+                                                    className="adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--report"
                                                     placeholder="Enter reports and advisories released"
-                                                    rows="3"
+                                                    rows="5"
                                                     value={item.report ?? ''}
                                                     onChange={(e) => {
                                                         setReportsItems(reportsItems.map(i => 

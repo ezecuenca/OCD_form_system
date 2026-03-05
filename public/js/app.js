@@ -68820,7 +68820,7 @@ function ADRForm() {
     if (isEditing) return;
     var fetchLatestAdminMatters = /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-        var _data$communicationRo, _data$otherItemsRows, _data$concerns, _data$endorsed, response, data, _t2;
+        var _data$communicationRo, _data$otherItemsRows, _data$concerns, _data$endorsed, _data$attendanceItems, response, data, _t2;
         return _regenerator().w(function (_context2) {
           while (1) switch (_context2.p = _context2.n) {
             case 0:
@@ -68863,6 +68863,16 @@ function ADRForm() {
                   return {
                     id: i + 1,
                     endorsed: r.endorsed || ''
+                  };
+                }));
+              }
+              if ((_data$attendanceItems = data.attendanceItems) !== null && _data$attendanceItems !== void 0 && _data$attendanceItems.length) {
+                setAttendanceItems(data.attendanceItems.map(function (item, i) {
+                  var _item$name, _item$task;
+                  return {
+                    id: i + 1,
+                    name: (_item$name = item.name) !== null && _item$name !== void 0 ? _item$name : '',
+                    task: (_item$task = item.task) !== null && _item$task !== void 0 ? _item$task : ''
                   };
                 }));
               }
@@ -69864,7 +69874,7 @@ function ADRForm() {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
               children: attendanceItems.map(function (item, index) {
-                var _item$name, _item$task;
+                var _item$name2, _item$task2;
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
@@ -69876,7 +69886,7 @@ function ADRForm() {
                       className: "adr-form__modal-input adr-form__modal-textarea",
                       placeholder: "Enter name (multiple names: one per line)",
                       rows: "2",
-                      value: (_item$name = item.name) !== null && _item$name !== void 0 ? _item$name : '',
+                      value: (_item$name2 = item.name) !== null && _item$name2 !== void 0 ? _item$name2 : '',
                       onChange: function onChange(e) {
                         setAttendanceItems(attendanceItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
@@ -69888,10 +69898,10 @@ function ADRForm() {
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                     className: "adr-form__modal-table-task-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      className: "adr-form__modal-input adr-form__modal-textarea",
-                      placeholder: "Enter task",
-                      rows: "2",
-                      value: (_item$task = item.task) !== null && _item$task !== void 0 ? _item$task : '',
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--task",
+                      placeholder: "Enter task (press Enter for new line or bullet points)",
+                      rows: "5",
+                      value: (_item$task2 = item.task) !== null && _item$task2 !== void 0 ? _item$task2 : '',
                       onChange: function onChange(e) {
                         setAttendanceItems(attendanceItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
@@ -70003,9 +70013,9 @@ function ADRForm() {
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
                     className: "adr-form__modal-table-report-col",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("textarea", {
-                      className: "adr-form__modal-input adr-form__modal-textarea",
+                      className: "adr-form__modal-input adr-form__modal-textarea adr-form__modal-textarea--report",
                       placeholder: "Enter reports and advisories released",
-                      rows: "3",
+                      rows: "5",
                       value: (_item$report = item.report) !== null && _item$report !== void 0 ? _item$report : '',
                       onChange: function onChange(e) {
                         setReportsItems(reportsItems.map(function (i) {

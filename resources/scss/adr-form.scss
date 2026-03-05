@@ -851,6 +851,10 @@
 
             &-task-col {
                 width: 62%;
+
+                .adr-form__modal-textarea--task {
+                    min-height: 150px;
+                }
             }
 
             &-actions-col {
@@ -860,6 +864,10 @@
             &-report-col {
                 width: 62%;
                 min-width: 180px;
+
+                .adr-form__modal-textarea--report {
+                    min-height: 150px;
+                }
             }
 
             &-remarks-col {

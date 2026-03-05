@@ -328,11 +328,22 @@ class AdrFormController extends Controller
         // Endorsed items
         $endorsed = $form->endorsed()->get(['id', 'endorsed'])->toArray();
 
+        // Attendance items (for Task column persistence: pre-fill tasks from latest form)
+        $attendanceRecords = $form->attendance()->orderBy('id')->get(['id', 'task']);
+        $attendanceItems = $attendanceRecords->isEmpty()
+            ? ($data['attendanceItems'] ?? [])
+            : $attendanceRecords->map(fn ($r, $i) => [
+                'id'   => $i + 1,
+                'name' => '',
+                'task' => $r->task ?? '',
+            ])->values()->toArray();
+
         return response()->json([
-            'communicationRows' => $communicationRows,
-            'otherItemsRows'    => $otherItemsRows,
-            'concerns'          => $concerns,
-            'endorsed'          => $endorsed,
+            'communicationRows'   => $communicationRows,
+            'otherItemsRows'      => $otherItemsRows,
+            'concerns'            => $concerns,
+            'endorsed'            => $endorsed,
+            'attendanceItems'     => $attendanceItems,
         ]);
     }
 }

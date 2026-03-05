@@ -1446,12 +1446,18 @@ body {
 .adr-form__modal-table-task-col {
   width: 62%;
 }
+.adr-form__modal-table-task-col .adr-form__modal-textarea--task {
+  min-height: 150px;
+}
 .adr-form__modal-table-actions-col {
   width: 56px;
 }
 .adr-form__modal-table-report-col {
   width: 62%;
   min-width: 180px;
+}
+.adr-form__modal-table-report-col .adr-form__modal-textarea--report {
+  min-height: 150px;
 }
 .adr-form__modal-table-remarks-col {
   height: auto;
