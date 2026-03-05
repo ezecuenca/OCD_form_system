@@ -663,6 +663,10 @@
             min-height: 44px;
         }
 
+        &--md {
+            min-height: 80px;
+        }
+
         &--remarks {
             min-height: 60px;
             max-height: 120px;
@@ -851,6 +855,10 @@
 
             &-task-col {
                 width: 62%;
+
+                .adr-form__modal-textarea--task {
+                    min-height: 150px;
+                }
             }
 
             &-actions-col {
@@ -860,12 +868,36 @@
             &-report-col {
                 width: 62%;
                 min-width: 180px;
+
+                .adr-form__modal-textarea--report {
+                    min-height: 150px;
+                }
             }
 
             &-remarks-col {
                 height: auto;
                 width: 28%;
                 min-width: 140px;
+            }
+
+            &-comm-particulars-col {
+                width: 20%;
+            }
+            &-comm-no-col {
+                width: 72px;
+            }
+            &-comm-contact-col,
+            &-comm-status-col {
+                width: 26%;
+            }
+            &-other-particulars-col {
+                width: 34%;
+            }
+            &-other-no-col {
+                width: 72px;
+            }
+            &-other-status-col {
+                width: 26%;
             }
 
             thead {

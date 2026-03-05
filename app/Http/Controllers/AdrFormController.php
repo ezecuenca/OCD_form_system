@@ -328,11 +328,33 @@ class AdrFormController extends Controller
         // Endorsed items
         $endorsed = $form->endorsed()->get(['id', 'endorsed'])->toArray();
 
+        // Attendance items (for Task column persistence: pre-fill tasks from latest form)
+        $attendanceRecords = $form->attendance()->orderBy('id')->get(['id', 'task']);
+        $attendanceItems = $attendanceRecords->isEmpty()
+            ? ($data['attendanceItems'] ?? [])
+            : $attendanceRecords->map(fn ($r, $i) => [
+                'id'   => $i + 1,
+                'name' => '',
+                'task' => $r->task ?? '',
+            ])->values()->toArray();
+
+        // Reports and Advisories items (for Reports and Remarks column persistence: pre-fill from latest form)
+        $advisoryRecords = $form->advisories()->orderBy('id')->get(['id', 'advisories', 'remarks']);
+        $reportsItems = $advisoryRecords->isEmpty()
+            ? ($data['reportsItems'] ?? [])
+            : $advisoryRecords->map(fn ($r, $i) => [
+                'id'      => $i + 1,
+                'report'  => $r->advisories ?? '',
+                'remarks' => $r->remarks ?? '',
+            ])->values()->toArray();
+
         return response()->json([
-            'communicationRows' => $communicationRows,
-            'otherItemsRows'    => $otherItemsRows,
-            'concerns'          => $concerns,
-            'endorsed'          => $endorsed,
+            'communicationRows'   => $communicationRows,
+            'otherItemsRows'      => $otherItemsRows,
+            'concerns'            => $concerns,
+            'endorsed'            => $endorsed,
+            'attendanceItems'     => $attendanceItems,
+            'reportsItems'        => $reportsItems,
         ]);
     }
 }

@@ -1273,6 +1273,9 @@ body {
 .adr-form__modal-textarea--sm {
   min-height: 44px;
 }
+.adr-form__modal-textarea--md {
+  min-height: 80px;
+}
 .adr-form__modal-textarea--remarks {
   min-height: 60px;
   max-height: 120px;
@@ -1446,6 +1449,9 @@ body {
 .adr-form__modal-table-task-col {
   width: 62%;
 }
+.adr-form__modal-table-task-col .adr-form__modal-textarea--task {
+  min-height: 150px;
+}
 .adr-form__modal-table-actions-col {
   width: 56px;
 }
@@ -1453,10 +1459,31 @@ body {
   width: 62%;
   min-width: 180px;
 }
+.adr-form__modal-table-report-col .adr-form__modal-textarea--report {
+  min-height: 150px;
+}
 .adr-form__modal-table-remarks-col {
   height: auto;
   width: 28%;
   min-width: 140px;
+}
+.adr-form__modal-table-comm-particulars-col {
+  width: 20%;
+}
+.adr-form__modal-table-comm-no-col {
+  width: 72px;
+}
+.adr-form__modal-table-comm-contact-col, .adr-form__modal-table-comm-status-col {
+  width: 26%;
+}
+.adr-form__modal-table-other-particulars-col {
+  width: 34%;
+}
+.adr-form__modal-table-other-no-col {
+  width: 72px;
+}
+.adr-form__modal-table-other-status-col {
+  width: 26%;
 }
 .adr-form__modal-table thead {
   background: #f5f5f5;
