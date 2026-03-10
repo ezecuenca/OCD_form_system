@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useFormContext } from '../context/FormContext';
 import { getSwapRequests, restoreSwapRequest } from '../utils/swapRequests';
 import ConfirmModal from './ConfirmModal';
+import SuccessNotification from './SuccessNotification';
 
 function ArchivedReports() {
     const navigate = useNavigate();
@@ -24,6 +25,8 @@ function ArchivedReports() {
     const [searchQuery, setSearchQuery] = useState('');
     const [currentAdrPage, setCurrentAdrPage] = useState(1);
     const [currentSwapPage, setCurrentSwapPage] = useState(1);
+    const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
     const itemsPerPage = 10;
     const yearDropdownRef = useRef(null);
     const monthDropdownRef = useRef(null);
@@ -84,6 +87,8 @@ function ArchivedReports() {
             selectedReports.forEach(id => restoreReport(id));
             setSelectedReports([]);
             setShowConfirmModal(false);
+            setSuccessMessage(`${selectedReports.length} report(s) restored successfully.`);
+            setShowSuccessNotification(true);
         });
         setShowConfirmModal(true);
     };
@@ -103,6 +108,8 @@ function ArchivedReports() {
                 const archived = data.filter(r => r.is_archived);
                 setArchivedSwapRequests(archived);
                 setSelectedSwapRequests([]);
+                setSuccessMessage(`${selectedSwapRequests.length} swap request(s) restored successfully.`);
+                setShowSuccessNotification(true);
             } catch (error) {
                 console.error('Error restoring swap requests:', error);
             }
@@ -116,6 +123,8 @@ function ArchivedReports() {
         setConfirmAction(() => () => {
             restoreReport(id);
             setShowConfirmModal(false);
+            setSuccessMessage('Report restored successfully.');
+            setShowSuccessNotification(true);
         });
         setShowConfirmModal(true);
     };
@@ -208,6 +217,8 @@ function ArchivedReports() {
                     const archived = data.filter(r => r.is_archived);
                     setArchivedSwapRequests(archived);
                     setSelectedSwapRequests(prev => prev.filter(requestId => requestId !== idToRestore));
+                    setSuccessMessage('Swap request restored successfully.');
+                    setShowSuccessNotification(true);
                 } catch (error) {
                     console.error('Error restoring swap request:', error);
                 }
@@ -335,6 +346,13 @@ function ArchivedReports() {
 
     return (
         <div className="archived-reports">
+            {showSuccessNotification && (
+                <SuccessNotification
+                    message={successMessage}
+                    isVisible={showSuccessNotification}
+                    onClose={() => setShowSuccessNotification(false)}
+                />
+            )}
             <div className="archived-reports__search-bar">
                 <div className="archived-reports__search-bar-input">
                     <img src={`${window.location.origin}/images/search_icon.svg`} alt="Search" />

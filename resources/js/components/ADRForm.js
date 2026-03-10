@@ -6,6 +6,158 @@ import axios from 'axios';
 
 const ADR_FORM_DRAFT_KEY = 'adr-form-draft';
 
+const DEFAULT_COMMUNICATION_ROWS = [
+    {
+        id: 1,
+        particulars: 'Hytera Digital Radio with charger',
+        noOfItems: 2,
+        contact: 'LCL-Caraga / INRG-Caraga',
+        status: 'Operational'
+    },
+    {
+        id: 2,
+        particulars: 'Samsung mobile phone',
+        noOfItems: 1,
+        contact: 'SMART',
+        status: 'Prepaid / No call-text promo'  
+    },
+    {
+        id: 3,
+        particulars: 'RedMi mobile phone',
+        noOfItems: 1,
+        contact: 'GLOBE',
+        status: 'Prepaid / No call-text promo'
+    },
+    {
+        id: 4,
+        particulars: 'TPlink Wifi (Temporary)',
+        noOfItems: 1,
+        contact: '-',
+        status: 'Stable connection'
+    },
+    {
+        id: 5,
+        particulars: 'VoIP Line for Intercom',
+        noOfItems: 2,
+        contact: '1215, 1216',
+        status: 'Stable connection'
+    },
+    {
+        id: 6,
+        particulars: 'VoIP Line Inter Region and Central Office Connectivity',
+        noOfItems: 2,
+        contact: '926, 927',
+        status: 'Stable connection'
+    }
+];
+
+// Default rows for 4.B Status of Other Items
+const DEFAULT_OTHER_ITEMS_ROWS = [
+    {
+        id: 1,
+        particulars: '55-inch TV monitors (Sony)',
+        noOfItems: 3,
+        status: 'Wall-mounted inside OMCR; 1 at VIP Conference Room'
+    },
+    {
+        id: 2,
+        particulars: '65-inch TV monitor (TCL)',
+        noOfItems: 1,
+        status: 'Wall-mounted inside OMCR'
+    },
+    {
+        id: 3,
+        particulars: '40-inch TV monitors',
+        noOfItems: 2,
+        status: '1 unit wall-mounted outside OMCR; 1 unit wall-mounted at the lobby'
+    },
+    {
+        id: 4,
+        particulars: 'Desktop computers',
+        noOfItems: 5,
+        status: 'Workstations'
+    },
+    {
+        id: 5,
+        particulars: 'Portable Water Filtration Set',
+        noOfItems: 2,
+        status: 'Functional; at storage room near OS'
+    },
+    {
+        id: 6,
+        particulars: 'Solar Panel Power Source for Water Filter',
+        noOfItems: 2,
+        status: 'Functional; at storage room near OS'
+    },
+    {
+        id: 7,
+        particulars: 'Nissan Calibre',
+        noOfItems: 1,
+        status: 'Parked safely at GCCC'
+    },
+    {
+        id: 8,
+        particulars: 'Mitsubishi Pick-up',
+        noOfItems: 1,
+        status: 'At the car repair shop'
+    },
+    {
+        id: 9,
+        particulars: 'Toyota Commuter Van',
+        noOfItems: 1,
+        status: 'Under custody of security guard'
+    },
+    {
+        id: 10,
+        particulars: 'Key - Nissan Calibre',
+        noOfItems: 1,
+        status: 'Under custody of security guard'
+    },
+    {
+        id: 11,
+        particulars: 'Key - Mitsubishi Pick-up',
+        noOfItems: 1,
+        status: 'Under custody of security guard'
+    },
+    {
+        id: 12,
+        particulars: 'Key - Toyota Commuter Van',
+        noOfItems: 1,
+        status: 'Under custody of security guard'
+    }
+];
+
+// Default for 2. Attendance (Task column)
+const DEFAULT_ATTENDANCE_TASK = `Checked incoming communications and weather advisories thru email, Viber and SMS;
+Monitored weather condition via PAGASA;
+Monitored weather condition via PHIVOLCS; and
+Disseminated weather advisories to C/PDRRMOs and RDRRMC Caraga
+Acknowledged answered and routed calls, emails, radio checks and other communications; and
+Checked incoming communications and weather advisories thru email, Viber, and SMS;
+Prepared Daily Regional Situational Summary Report (DRSSR); and
+Prepared RDRRMC After Duty Report`;
+
+const DEFAULT_ATTENDANCE_ITEMS = [
+    { id: 1, name: '', task: DEFAULT_ATTENDANCE_TASK }
+];
+
+// Default for 3. Reports and Advisories (Remarks column)
+const DEFAULT_REPORTS_REMARKS = 'Dissiminated to C/PDRMMOs and RDRRMC Caraga member agencies via Viber';
+const DEFAULT_REPORTS_ITEMS = [
+    { id: 1, report: '', remarks: DEFAULT_REPORTS_REMARKS }
+];
+const createDefaultReportsItems = () => DEFAULT_REPORTS_ITEMS.map(i => ({ ...i }));
+
+// Default lines for 4.C Other Administrative Matters
+const DEFAULT_ADMIN_MATTERS = [
+    { id: 1, concern: 'No untoward incident monitored' }
+];
+
+// Default lines for endorsed items under 4.C
+const DEFAULT_ENDORSED_ITEMS = [
+    { id: 1, endorsed: '2 units of mobile phones with charger' }
+];
+
 function ADRForm() {
     const [notification, setNotification] = useState(null);
     const [showSuccessNotification, setShowSuccessNotification] = useState(false);
@@ -13,11 +165,18 @@ function ADRForm() {
     const [templateId, setTemplateId] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
-    const { addReport, updateReport } = useFormContext();
+    const { addReport, updateReport, fetchReport } = useFormContext();
     
     // Check if we're in edit mode (coming from existing report)
     const editingReport = location.state?.report;
     const isEditing = !!editingReport;
+
+    // Clear draft for new forms (not editing)
+    if (!isEditing) {
+        try {
+            localStorage.removeItem(ADR_FORM_DRAFT_KEY);
+        } catch (_) {}
+    }
 
     // Fetch available template on component mount
     useEffect(() => {
@@ -60,18 +219,28 @@ function ADRForm() {
                 setApprovedBy(draft.approvedBy ?? '');
                 setApprovedPosition(draft.approvedPosition ?? '');
                 if (Array.isArray(draft.attendanceItems) && draft.attendanceItems.length > 0) {
-                    setAttendanceItems(draft.attendanceItems.map((item, i) => ({
+                    const mapped = draft.attendanceItems.map((item, i) => ({
                         id: item.id ?? i + 1,
                         name: item.name ?? '',
                         task: item.task ?? ''
-                    })));
+                    }));
+                    const hasContent = mapped.some(m => (m.task || '').trim() !== '');
+                    if (hasContent) {
+                        setAttendanceItems(mapped);
+                    }
                 }
                 if (Array.isArray(draft.reportsItems) && draft.reportsItems.length > 0) {
-                    setReportsItems(draft.reportsItems.map((item, i) => ({
+                    const mapped = draft.reportsItems.map((item, i) => ({
                         id: item.id ?? i + 1,
                         report: item.report ?? '',
                         remarks: item.remarks ?? ''
-                    })));
+                    }));
+                    const hasContent = mapped.some(m => (m.report || '').trim() !== '' || (m.remarks || '').trim() !== '');
+                    if (hasContent) {
+                        setReportsItems(mapped);
+                    } else {
+                        setReportsItems(createDefaultReportsItems());
+                    }
                 }
                 if (Array.isArray(draft.communicationRows) && draft.communicationRows.length > 0) {
                     setCommunicationRows(draft.communicationRows.map((r, i) => ({
@@ -93,16 +262,24 @@ function ADRForm() {
                     })));
                 }
                 if (Array.isArray(draft.adminMatters) && draft.adminMatters.length > 0) {
-                    setAdminMatters(draft.adminMatters.map((m, i) => ({
+                    const mapped = draft.adminMatters.map((m, i) => ({
                         id: m.id ?? i + 1,
                         concern: m.concern ?? ''
-                    })));
+                    }));
+                    const hasContent = mapped.some(m => (m.concern || '').trim() !== '');
+                    if (hasContent) {
+                        setAdminMatters(mapped);
+                    }
                 }
                 if (Array.isArray(draft.endorsedItems) && draft.endorsedItems.length > 0) {
-                    setEndorsedItems(draft.endorsedItems.map((e, i) => ({
+                    const mapped = draft.endorsedItems.map((e, i) => ({
                         id: e.id ?? i + 1,
                         endorsed: e.endorsed ?? ''
-                    })));
+                    }));
+                    const hasContent = mapped.some(e => (e.endorsed || '').trim() !== '');
+                    if (hasContent) {
+                        setEndorsedItems(mapped);
+                    }
                 }
                 return;
             }
@@ -128,18 +305,28 @@ function ADRForm() {
                     setEndorsedItems(data.endorsed.map((r, i) => ({ id: i + 1, endorsed: r.endorsed || '' })));
                 }
                 if (data.attendanceItems?.length) {
-                    setAttendanceItems(data.attendanceItems.map((item, i) => ({
+                    const mapped = data.attendanceItems.map((item, i) => ({
                         id: i + 1,
                         name: item.name ?? '',
                         task: item.task ?? ''
-                    })));
+                    }));
+                    const hasContent = mapped.some(m => (m.task || '').trim() !== '');
+                    if (hasContent) {
+                        setAttendanceItems(mapped);
+                    }
                 }
                 if (data.reportsItems?.length) {
-                    setReportsItems(data.reportsItems.map((item, i) => ({
+                    const mapped = data.reportsItems.map((item, i) => ({
                         id: i + 1,
                         report: item.report ?? '',
                         remarks: item.remarks ?? ''
-                    })));
+                    }));
+                    const hasContent = mapped.some(m => (m.report || '').trim() !== '' || (m.remarks || '').trim() !== '');
+                    if (hasContent) {
+                        setReportsItems(mapped);
+                    } else {
+                        setReportsItems(createDefaultReportsItems());
+                    }
                 }
             } catch (error) {
                 // No previous form or network error – start with empty defaults
@@ -148,44 +335,50 @@ function ADRForm() {
         fetchLatestAdminMatters();
     }, [isEditing]);
 
-    // Load report data when editing
+    // Load report data when editing (fetch full report if we only have summary from list)
     useEffect(() => {
-        if (editingReport) {
-            // Load all the form fields from the editing report
-            setDocumentName(editingReport.documentName || '');
-            setSubject(editingReport.subject || '');
-            setForName(editingReport.forName || '');
-            setForPosition(editingReport.forPosition || '');
-            setThruName(editingReport.thruName || '');
-            setThruPosition(editingReport.thruPosition || '');
-            setFromName(editingReport.fromName || '');
-            setFromPosition(editingReport.fromPosition || '');
-            setDateTime(editingReport.dateTime || '');
-            setStatus(editingReport.alertStatus || editingReport.status || 'WHITE ALERT');
-            setAttendanceItems(editingReport.attendanceItems || [{ id: 1, name: '', task: '' }]);
-            setReportsItems((editingReport.reportsItems || [{ id: 1, report: '', remarks: '' }]).map(i => ({
+        if (!editingReport) return;
+
+        const applyReportToForm = (report) => {
+            setDocumentName(report.documentName || '');
+            setSubject(report.subject || '');
+            setForName(report.forName || '');
+            setForPosition(report.forPosition || '');
+            setThruName(report.thruName || '');
+            setThruPosition(report.thruPosition || '');
+            setFromName(report.fromName || '');
+            setFromPosition(report.fromPosition || '');
+            setDateTime(report.dateTime || '');
+            setStatus(report.alertStatus || report.status || 'WHITE ALERT');
+            setAttendanceItems(report.attendanceItems || [{ id: 1, name: '', task: '' }]);
+            setReportsItems((report.reportsItems || [{ id: 1, report: '', remarks: '' }]).map(i => ({
                 id: i.id,
                 report: i.report ?? '',
                 remarks: i.remarks ?? ''
             })));
-            setCommunicationRows(editingReport.communicationRows || [{ id: 1, particulars: '', noOfItems: 0, contact: '', status: '' }]);
-            setOtherItemsRows(editingReport.otherItemsRows || [{ id: 1, particulars: '', noOfItems: 0, status: '' }]);
-            if (editingReport.concerns?.length) {
-                setAdminMatters(editingReport.concerns);
-            }
-            if (editingReport.endorsed?.length) {
-                setEndorsedItems(editingReport.endorsed);
-            }
-            setPreparedBy(editingReport.preparedBy || '');
-            setPreparedPosition(editingReport.preparedPosition || '');
-            setReceivedBy(editingReport.receivedBy || '');
-            setReceivedPosition(editingReport.receivedPosition || '');
-            setNotedBy(editingReport.notedBy || '');
-            setNotedPosition(editingReport.notedPosition || '');
-            setApprovedBy(editingReport.approvedBy || '');
-            setApprovedPosition(editingReport.approvedPosition || '');
+            setCommunicationRows(report.communicationRows || [{ id: 1, particulars: '', noOfItems: 0, contact: '', status: '' }]);
+            setOtherItemsRows(report.otherItemsRows || [{ id: 1, particulars: '', noOfItems: 0, status: '' }]);
+            if (report.concerns?.length) setAdminMatters(report.concerns);
+            if (report.endorsed?.length) setEndorsedItems(report.endorsed);
+            setPreparedBy(report.preparedBy || '');
+            setPreparedPosition(report.preparedPosition || '');
+            setReceivedBy(report.receivedBy || '');
+            setReceivedPosition(report.receivedPosition || '');
+            setNotedBy(report.notedBy || '');
+            setNotedPosition(report.notedPosition || '');
+            setApprovedBy(report.approvedBy || '');
+            setApprovedPosition(report.approvedPosition || '');
+        };
+
+        const hasFullData = editingReport.attendanceItems != null;
+        if (hasFullData) {
+            applyReportToForm(editingReport);
+        } else if (editingReport.id != null) {
+            fetchReport(editingReport.id).then(applyReportToForm).catch(() => applyReportToForm(editingReport));
+        } else {
+            applyReportToForm(editingReport);
         }
-    }, [editingReport]);
+    }, [editingReport, fetchReport]);
     
 
     const [documentName, setDocumentName] = useState('');
@@ -202,27 +395,27 @@ function ADRForm() {
     const [status, setStatus] = useState('WHITE ALERT');
     
 
-    const [attendanceItems, setAttendanceItems] = useState([{ id: 1, name: '', task: '' }]);
-    const [reportsItems, setReportsItems] = useState([{ id: 1, report: '', remarks: '' }]);
-    
-    
+    const [attendanceItems, setAttendanceItems] = useState(DEFAULT_ATTENDANCE_ITEMS);
+    const [reportsItems, setReportsItems] = useState(createDefaultReportsItems);
+    const [tempReportsItems, setTempReportsItems] = useState([]);
+    const [tempAttendanceItems, setTempAttendanceItems] = useState([]);
+    const [tempCommunicationRows, setTempCommunicationRows] = useState([]);
+    const [tempOtherItemsRows, setTempOtherItemsRows] = useState([]);
+
     const [showCommunicationModal, setShowCommunicationModal] = useState(false);
     const [showAttendanceModal, setShowAttendanceModal] = useState(false);
     const [showReportsModal, setShowReportsModal] = useState(false);
     const [showOtherItemsModal, setShowOtherItemsModal] = useState(false);
     const [showAdminMattersModal, setShowAdminMattersModal] = useState(false);
+    const [focusedCounterKey, setFocusedCounterKey] = useState(null);
 
     // C. Other Administrative Matters
-    const [adminMatters, setAdminMatters] = useState([{ id: 1, concern: '' }]);
-    const [endorsedItems, setEndorsedItems] = useState([{ id: 1, endorsed: '' }]);
+    const [adminMatters, setAdminMatters] = useState(DEFAULT_ADMIN_MATTERS);
+    const [endorsedItems, setEndorsedItems] = useState(DEFAULT_ENDORSED_ITEMS);
     
     // Communication and Other Items
-    const [communicationRows, setCommunicationRows] = useState([
-        { id: 1, particulars: '', noOfItems: 0, contact: '', status: '' }
-    ]);
-    const [otherItemsRows, setOtherItemsRows] = useState([
-        { id: 1, particulars: '', noOfItems: 0, status: '' }
-    ]);
+    const [communicationRows, setCommunicationRows] = useState(DEFAULT_COMMUNICATION_ROWS);
+    const [otherItemsRows, setOtherItemsRows] = useState(DEFAULT_OTHER_ITEMS_ROWS);
     
     // Signatures
     const [preparedBy, setPreparedBy] = useState('');
@@ -324,6 +517,12 @@ function ADRForm() {
     };
     
     const handleConfirm = async () => {
+        // Get the final values - use temp values if available, otherwise use main state
+        const finalAttendanceItems = tempAttendanceItems.length > 0 ? tempAttendanceItems : attendanceItems;
+        const finalReportsItems = tempReportsItems.length > 0 ? tempReportsItems : reportsItems;
+        const finalCommunicationRows = tempCommunicationRows.length > 0 ? tempCommunicationRows : communicationRows;
+        const finalOtherItemsRows = tempOtherItemsRows.length > 0 ? tempOtherItemsRows : otherItemsRows;
+
         if (!documentName.trim()) {
             setShowErrorNotification(true);
             return;
@@ -344,10 +543,10 @@ function ADRForm() {
                 fromPosition,
                 dateTime,
                 status,
-                attendanceItems,
-                reportsItems,
-                communicationRows,
-                otherItemsRows,
+                attendanceItems: finalAttendanceItems,
+                reportsItems: finalReportsItems,
+                communicationRows: finalCommunicationRows,
+                otherItemsRows: finalOtherItemsRows,
                 concerns: adminMatters,
                 endorsed: endorsedItems,
                 preparedBy,
@@ -360,6 +559,12 @@ function ADRForm() {
                 approvedPosition
             }
         };
+
+        // Clear temp states after getting values
+        setTempReportsItems([]);
+        setTempAttendanceItems([]);
+        setTempCommunicationRows([]);
+        setTempOtherItemsRows([]);
 
         try {
             if (isEditing && editingReport.id) {
@@ -408,13 +613,13 @@ function ADRForm() {
     };
 
     const addReportsItem = () => {
-        const newId = Math.max(...reportsItems.map(item => item.id), 0) + 1;
-        setReportsItems([...reportsItems, { id: newId, report: '', remarks: '' }]);
+        const newId = Math.max(...tempReportsItems.map(item => item.id), 0) + 1;
+        setTempReportsItems([...tempReportsItems, { id: newId, report: '', remarks: DEFAULT_REPORTS_REMARKS }]);
     };
 
     const removeReportsItem = (id) => {
-        if (reportsItems.length > 1) {
-            setReportsItems(reportsItems.filter(item => item.id !== id));
+        if (tempReportsItems.length > 1) {
+            setTempReportsItems(tempReportsItems.filter(item => item.id !== id));
         }
     };
 
@@ -571,7 +776,7 @@ function ADRForm() {
                     <label className="adr-form__section-label">3. Reports and Advisories:</label>
                     <div className="adr-form__customize-group">
                         <label>Reports and Advisories List</label>
-                        <button className="adr-form__customize-btn" type="button" onClick={() => setShowReportsModal(true)}>
+                        <button className="adr-form__customize-btn" type="button" onClick={() => { if (tempReportsItems.length === 0) { setTempReportsItems([...reportsItems]); } setShowReportsModal(true); }}>
                             CUSTOMIZE
                         </button>
                     </div>
@@ -581,7 +786,7 @@ function ADRForm() {
                     <label className="adr-form__section-label">2. Attendance:</label>
                     <div className="adr-form__customize-group">
                         <label>Attendance List</label>
-                        <button className="adr-form__customize-btn" type="button" onClick={() => setShowAttendanceModal(true)}>
+                        <button className="adr-form__customize-btn" type="button" onClick={() => { if (tempAttendanceItems.length === 0) { setTempAttendanceItems([...attendanceItems]); } setShowAttendanceModal(true); }}>
                             CUSTOMIZE
                         </button>
                     </div>
@@ -591,13 +796,13 @@ function ADRForm() {
                     <label className="adr-form__section-label">4. Administrative Matters:</label>
                     <div className="adr-form__customize-group">
                         <label>A. Status of Communication Lines</label>
-                        <button className="adr-form__customize-btn" type="button" onClick={() => setShowCommunicationModal(true)}>
+                        <button className="adr-form__customize-btn" type="button" onClick={() => { if (tempCommunicationRows.length === 0) { setTempCommunicationRows([...communicationRows]); } setShowCommunicationModal(true); }}>
                             CUSTOMIZE
                         </button>
                     </div>
                     <div className="adr-form__customize-group">
                         <label>B. Status of Other Items</label>
-                        <button className="adr-form__customize-btn" type="button" onClick={() => setShowOtherItemsModal(true)}>
+                        <button className="adr-form__customize-btn" type="button" onClick={() => { if (tempOtherItemsRows.length === 0) { setTempOtherItemsRows([...otherItemsRows]); } setShowOtherItemsModal(true); }}>
                             CUSTOMIZE
                         </button>
                     </div>
@@ -662,7 +867,7 @@ function ADRForm() {
                                     </tr>
                                 </thead>
                                 <tbody className="adr-form__modal-table-body">
-                                    {communicationRows.map((row) => (
+                                    {tempCommunicationRows.map((row) => (
                                         <tr className="adr-form__modal-table-row" key={row.id}>
                                             <td className="adr-form__modal-table-comm-particulars-col">
                                                 <input 
@@ -670,7 +875,7 @@ function ADRForm() {
                                                     className="adr-form__modal-input" 
                                                     placeholder="Enter particulars"
                                                     value={row.particulars ?? ''}
-                                                    onChange={(e) => updateCommunicationRow(row.id, 'particulars', e.target.value)}
+                                                    onChange={(e) => setTempCommunicationRows(tempCommunicationRows.map(r => r.id === row.id ? { ...r, particulars: e.target.value } : r))}
                                                 />
                                             </td>
                                             <td className="adr-form__modal-table-comm-no-col">
@@ -678,7 +883,7 @@ function ADRForm() {
                                                     <button 
                                                         className="adr-form__counter-btn" 
                                                         type="button"
-                                                        onClick={() => decrementCounter(row.id)}
+                                                        onClick={() => setTempCommunicationRows(tempCommunicationRows.map(r => r.id === row.id ? { ...r, noOfItems: Math.max(0, r.noOfItems - 1) } : r))}
                                                     >
                                                         −
                                                     </button>
@@ -687,12 +892,20 @@ function ADRForm() {
                                                         className="adr-form__counter-input" 
                                                         value={row.noOfItems} 
                                                         min="0"
-                                                        onChange={(e) => updateCommunicationRow(row.id, 'noOfItems', parseInt(e.target.value) || 0)}
+                                                        onChange={(e) => {
+                                                            const v = e.target.value;
+                                                            if (v === '') {
+                                                                setTempCommunicationRows(tempCommunicationRows.map(r => r.id === row.id ? { ...r, noOfItems: 0 } : r));
+                                                                return;
+                                                            }
+                                                            const n = parseInt(v, 10);
+                                                            if (!isNaN(n) && n >= 0) setTempCommunicationRows(tempCommunicationRows.map(r => r.id === row.id ? { ...r, noOfItems: n } : r));
+                                                        }}
                                                     />
                                                     <button 
                                                         className="adr-form__counter-btn" 
                                                         type="button"
-                                                        onClick={() => incrementCounter(row.id)}
+                                                        onClick={() => setTempCommunicationRows(tempCommunicationRows.map(r => r.id === row.id ? { ...r, noOfItems: r.noOfItems + 1 } : r))}
                                                     >
                                                         +
                                                     </button>
@@ -704,7 +917,7 @@ function ADRForm() {
                                                     placeholder="Enter contact/freq/channel (multiple lines allowed)"
                                                     rows="2"
                                                     value={row.contact ?? ''}
-                                                    onChange={(e) => updateCommunicationRow(row.id, 'contact', e.target.value)}
+                                                    onChange={(e) => setTempCommunicationRows(tempCommunicationRows.map(r => r.id === row.id ? { ...r, contact: e.target.value } : r))}
                                                 />
                                             </td>
                                             <td className="adr-form__modal-table-comm-status-col">
@@ -713,14 +926,14 @@ function ADRForm() {
                                                     placeholder="Enter status/remarks (multiple lines allowed)"
                                                     rows="2"
                                                     value={row.status ?? ''}
-                                                    onChange={(e) => updateCommunicationRow(row.id, 'status', e.target.value)}
+                                                    onChange={(e) => setTempCommunicationRows(tempCommunicationRows.map(r => r.id === row.id ? { ...r, status: e.target.value } : r))}
                                                 />
                                             </td>
                                             <td className="adr-form__modal-table-actions-col">
                                                 <button 
                                                     className="adr-form__modal-action-btn" 
                                                     type="button"
-                                                    onClick={() => removeCommunicationRow(row.id)}
+                                                    onClick={() => setTempCommunicationRows(tempCommunicationRows.filter(r => r.id !== row.id))}
                                                 >
                                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
                                                         <path d="M3 6H5H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -732,7 +945,7 @@ function ADRForm() {
                                     ))}
                                 </tbody>
                             </table>
-                            <button className="adr-form__modal-add-row" type="button" onClick={addCommunicationRow}>
+                            <button className="adr-form__modal-add-row" type="button" onClick={() => { const newId = Math.max(...tempCommunicationRows.map(row => row.id), 0) + 1; setTempCommunicationRows([...tempCommunicationRows, { id: newId, particulars: '', noOfItems: 0, contact: '', status: '' }]); }}>
                                 +
                             </button>
                         </div>
@@ -765,7 +978,7 @@ function ADRForm() {
                                     </tr>
                                 </thead>
                                 <tbody className="adr-form__modal-table-body">
-                                    {attendanceItems.map((item, index) => (
+                                    {tempAttendanceItems.map((item, index) => (
                                         <tr className="adr-form__modal-table-row" key={item.id}>
                                             <td className="adr-form__modal-table-number">{index + 1}</td>
                                             <td className="adr-form__modal-table-name-col">
@@ -775,7 +988,7 @@ function ADRForm() {
                                                     rows="2"
                                                     value={item.name ?? ''}
                                                     onChange={(e) => {
-                                                        setAttendanceItems(attendanceItems.map(i => 
+                                                        setTempAttendanceItems(tempAttendanceItems.map(i => 
                                                             i.id === item.id ? { ...i, name: e.target.value } : i
                                                         ));
                                                     }}
@@ -788,7 +1001,7 @@ function ADRForm() {
                                                     rows="5"
                                                     value={item.task ?? ''}
                                                     onChange={(e) => {
-                                                        setAttendanceItems(attendanceItems.map(i => 
+                                                        setTempAttendanceItems(tempAttendanceItems.map(i => 
                                                             i.id === item.id ? { ...i, task: e.target.value } : i
                                                         ));
                                                     }}
@@ -798,7 +1011,11 @@ function ADRForm() {
                                                 <button 
                                                     className="adr-form__modal-action-btn" 
                                                     type="button"
-                                                    onClick={() => removeAttendanceItem(item.id)}
+                                                    onClick={() => {
+                                                        if (tempAttendanceItems.length > 1) {
+                                                            setTempAttendanceItems(tempAttendanceItems.filter(i => i.id !== item.id));
+                                                        }
+                                                    }}
                                                 >
                                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
                                                         <path d="M3 6H5H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -810,7 +1027,7 @@ function ADRForm() {
                                     ))}
                                 </tbody>
                             </table>
-                            <button className="adr-form__modal-add-row" type="button" onClick={addAttendanceItem}>
+                            <button className="adr-form__modal-add-row" type="button" onClick={() => { const newId = Math.max(...tempAttendanceItems.map(item => item.id), 0) + 1; setTempAttendanceItems([...tempAttendanceItems, { id: newId, name: '', task: '' }]); }}>
                                 +
                             </button>
                         </div>
@@ -843,7 +1060,7 @@ function ADRForm() {
                                     </tr>
                                 </thead>
                                 <tbody className="adr-form__modal-table-body">
-                                    {reportsItems.map((item, index) => (
+                                    {tempReportsItems.map((item, index) => (
                                         <tr className="adr-form__modal-table-row" key={item.id}>
                                             <td className="adr-form__modal-table-number">{index + 1}</td>
                                             <td className="adr-form__modal-table-report-col">
@@ -853,7 +1070,7 @@ function ADRForm() {
                                                     rows="5"
                                                     value={item.report ?? ''}
                                                     onChange={(e) => {
-                                                        setReportsItems(reportsItems.map(i => 
+                                                        setTempReportsItems(tempReportsItems.map(i => 
                                                             i.id === item.id ? { ...i, report: e.target.value } : i
                                                         ));
                                                     }}
@@ -866,7 +1083,7 @@ function ADRForm() {
                                                     rows="2"
                                                     value={item.remarks ?? ''}
                                                     onChange={(e) => {
-                                                        setReportsItems(reportsItems.map(i => 
+                                                        setTempReportsItems(tempReportsItems.map(i => 
                                                             i.id === item.id ? { ...i, remarks: e.target.value } : i
                                                         ));
                                                     }}
@@ -944,9 +1161,19 @@ function ADRForm() {
                                                     <input 
                                                         type="number" 
                                                         className="adr-form__counter-input" 
-                                                        value={row.noOfItems} 
+                                                        value={row.noOfItems === 0 && focusedCounterKey === `other-${row.id}` ? '' : (row.noOfItems === 0 ? '0' : row.noOfItems)} 
                                                         min="0"
-                                                        onChange={(e) => updateOtherItemsRow(row.id, 'noOfItems', parseInt(e.target.value) || 0)}
+                                                        onFocus={() => setFocusedCounterKey(`other-${row.id}`)}
+                                                        onBlur={() => setFocusedCounterKey(null)}
+                                                        onChange={(e) => {
+                                                            const v = e.target.value;
+                                                            if (v === '') {
+                                                                updateOtherItemsRow(row.id, 'noOfItems', 0);
+                                                                return;
+                                                            }
+                                                            const n = parseInt(v, 10);
+                                                            if (!isNaN(n) && n >= 0) updateOtherItemsRow(row.id, 'noOfItems', n);
+                                                        }}
                                                     />
                                                     <button 
                                                         className="adr-form__counter-btn" 
