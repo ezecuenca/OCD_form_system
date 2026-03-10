@@ -68731,11 +68731,6 @@ function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArra
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
-function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
@@ -68747,6 +68742,11 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 
 
 
@@ -68754,6 +68754,139 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 var ADR_FORM_DRAFT_KEY = 'adr-form-draft';
+var DEFAULT_COMMUNICATION_ROWS = [{
+  id: 1,
+  particulars: 'Hytera Digital Radio with charger',
+  noOfItems: 2,
+  contact: 'LCL-Caraga / INRG-Caraga',
+  status: 'Operational'
+}, {
+  id: 2,
+  particulars: 'Samsung mobile phone',
+  noOfItems: 1,
+  contact: 'SMART',
+  status: 'Prepaid / No call-text promo'
+}, {
+  id: 3,
+  particulars: 'RedMi mobile phone',
+  noOfItems: 1,
+  contact: 'GLOBE',
+  status: 'Prepaid / No call-text promo'
+}, {
+  id: 4,
+  particulars: 'TPlink Wifi (Temporary)',
+  noOfItems: 1,
+  contact: '-',
+  status: 'Stable connection'
+}, {
+  id: 5,
+  particulars: 'VoIP Line for Intercom',
+  noOfItems: 2,
+  contact: '1215, 1216',
+  status: 'Stable connection'
+}, {
+  id: 6,
+  particulars: 'VoIP Line Inter Region and Central Office Connectivity',
+  noOfItems: 2,
+  contact: '926, 927',
+  status: 'Stable connection'
+}];
+
+// Default rows for 4.B Status of Other Items
+var DEFAULT_OTHER_ITEMS_ROWS = [{
+  id: 1,
+  particulars: '55-inch TV monitors (Sony)',
+  noOfItems: 3,
+  status: 'Wall-mounted inside OMCR; 1 at VIP Conference Room'
+}, {
+  id: 2,
+  particulars: '65-inch TV monitor (TCL)',
+  noOfItems: 1,
+  status: 'Wall-mounted inside OMCR'
+}, {
+  id: 3,
+  particulars: '40-inch TV monitors',
+  noOfItems: 2,
+  status: '1 unit wall-mounted outside OMCR; 1 unit wall-mounted at the lobby'
+}, {
+  id: 4,
+  particulars: 'Desktop computers',
+  noOfItems: 5,
+  status: 'Workstations'
+}, {
+  id: 5,
+  particulars: 'Portable Water Filtration Set',
+  noOfItems: 2,
+  status: 'Functional; at storage room near OS'
+}, {
+  id: 6,
+  particulars: 'Solar Panel Power Source for Water Filter',
+  noOfItems: 2,
+  status: 'Functional; at storage room near OS'
+}, {
+  id: 7,
+  particulars: 'Nissan Calibre',
+  noOfItems: 1,
+  status: 'Parked safely at GCCC'
+}, {
+  id: 8,
+  particulars: 'Mitsubishi Pick-up',
+  noOfItems: 1,
+  status: 'At the car repair shop'
+}, {
+  id: 9,
+  particulars: 'Toyota Commuter Van',
+  noOfItems: 1,
+  status: 'Under custody of security guard'
+}, {
+  id: 10,
+  particulars: 'Key - Nissan Calibre',
+  noOfItems: 1,
+  status: 'Under custody of security guard'
+}, {
+  id: 11,
+  particulars: 'Key - Mitsubishi Pick-up',
+  noOfItems: 1,
+  status: 'Under custody of security guard'
+}, {
+  id: 12,
+  particulars: 'Key - Toyota Commuter Van',
+  noOfItems: 1,
+  status: 'Under custody of security guard'
+}];
+
+// Default for 2. Attendance (Task column)
+var DEFAULT_ATTENDANCE_TASK = "Checked incoming communications and weather advisories thru email, Viber and SMS;\nMonitored weather condition via PAGASA;\nMonitored weather condition via PHIVOLCS; and\nDisseminated weather advisories to C/PDRRMOs and RDRRMC Caraga\nAcknowledged answered and routed calls, emails, radio checks and other communications; and\nChecked incoming communications and weather advisories thru email, Viber, and SMS;\nPrepared Daily Regional Situational Summary Report (DRSSR); and\nPrepared RDRRMC After Duty Report";
+var DEFAULT_ATTENDANCE_ITEMS = [{
+  id: 1,
+  name: '',
+  task: DEFAULT_ATTENDANCE_TASK
+}];
+
+// Default for 3. Reports and Advisories (Remarks column)
+var DEFAULT_REPORTS_REMARKS = 'Dissiminated to C/PDRMMOs and RDRRMC Caraga member agencies via Viber';
+var DEFAULT_REPORTS_ITEMS = [{
+  id: 1,
+  report: '',
+  remarks: DEFAULT_REPORTS_REMARKS
+}];
+var createDefaultReportsItems = function createDefaultReportsItems() {
+  return DEFAULT_REPORTS_ITEMS.map(function (i) {
+    return _objectSpread({}, i);
+  });
+};
+
+// Default lines for 4.C Other Administrative Matters
+var DEFAULT_ADMIN_MATTERS = [{
+  id: 1,
+  concern: 'No untoward incident monitored'
+}];
+
+// Default lines for endorsed items under 4.C
+var DEFAULT_ENDORSED_ITEMS = [{
+  id: 1,
+  endorsed: '2 units of mobile phones with charger'
+}];
 function ADRForm() {
   var _location$state;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
@@ -68776,11 +68909,19 @@ function ADRForm() {
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useLocation)();
   var _useFormContext = (0,_context_FormContext__WEBPACK_IMPORTED_MODULE_2__.useFormContext)(),
     addReport = _useFormContext.addReport,
-    updateReport = _useFormContext.updateReport;
+    updateReport = _useFormContext.updateReport,
+    fetchReport = _useFormContext.fetchReport;
 
   // Check if we're in edit mode (coming from existing report)
   var editingReport = (_location$state = location.state) === null || _location$state === void 0 ? void 0 : _location$state.report;
   var isEditing = !!editingReport;
+
+  // Clear draft for new forms (not editing)
+  if (!isEditing) {
+    try {
+      localStorage.removeItem(ADR_FORM_DRAFT_KEY);
+    } catch (_) {}
+  }
 
   // Fetch available template on component mount
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -68843,24 +68984,38 @@ function ADRForm() {
         setApprovedBy((_draft$approvedBy = draft.approvedBy) !== null && _draft$approvedBy !== void 0 ? _draft$approvedBy : '');
         setApprovedPosition((_draft$approvedPositi = draft.approvedPosition) !== null && _draft$approvedPositi !== void 0 ? _draft$approvedPositi : '');
         if (Array.isArray(draft.attendanceItems) && draft.attendanceItems.length > 0) {
-          setAttendanceItems(draft.attendanceItems.map(function (item, i) {
+          var mapped = draft.attendanceItems.map(function (item, i) {
             var _item$id, _item$name, _item$task;
             return {
               id: (_item$id = item.id) !== null && _item$id !== void 0 ? _item$id : i + 1,
               name: (_item$name = item.name) !== null && _item$name !== void 0 ? _item$name : '',
               task: (_item$task = item.task) !== null && _item$task !== void 0 ? _item$task : ''
             };
-          }));
+          });
+          var hasContent = mapped.some(function (m) {
+            return (m.task || '').trim() !== '';
+          });
+          if (hasContent) {
+            setAttendanceItems(mapped);
+          }
         }
         if (Array.isArray(draft.reportsItems) && draft.reportsItems.length > 0) {
-          setReportsItems(draft.reportsItems.map(function (item, i) {
+          var _mapped = draft.reportsItems.map(function (item, i) {
             var _item$id2, _item$report, _item$remarks;
             return {
               id: (_item$id2 = item.id) !== null && _item$id2 !== void 0 ? _item$id2 : i + 1,
               report: (_item$report = item.report) !== null && _item$report !== void 0 ? _item$report : '',
               remarks: (_item$remarks = item.remarks) !== null && _item$remarks !== void 0 ? _item$remarks : ''
             };
-          }));
+          });
+          var _hasContent = _mapped.some(function (m) {
+            return (m.report || '').trim() !== '' || (m.remarks || '').trim() !== '';
+          });
+          if (_hasContent) {
+            setReportsItems(_mapped);
+          } else {
+            setReportsItems(createDefaultReportsItems());
+          }
         }
         if (Array.isArray(draft.communicationRows) && draft.communicationRows.length > 0) {
           setCommunicationRows(draft.communicationRows.map(function (r, i) {
@@ -68886,22 +69041,34 @@ function ADRForm() {
           }));
         }
         if (Array.isArray(draft.adminMatters) && draft.adminMatters.length > 0) {
-          setAdminMatters(draft.adminMatters.map(function (m, i) {
+          var _mapped2 = draft.adminMatters.map(function (m, i) {
             var _m$id, _m$concern;
             return {
               id: (_m$id = m.id) !== null && _m$id !== void 0 ? _m$id : i + 1,
               concern: (_m$concern = m.concern) !== null && _m$concern !== void 0 ? _m$concern : ''
             };
-          }));
+          });
+          var _hasContent2 = _mapped2.some(function (m) {
+            return (m.concern || '').trim() !== '';
+          });
+          if (_hasContent2) {
+            setAdminMatters(_mapped2);
+          }
         }
         if (Array.isArray(draft.endorsedItems) && draft.endorsedItems.length > 0) {
-          setEndorsedItems(draft.endorsedItems.map(function (e, i) {
+          var _mapped3 = draft.endorsedItems.map(function (e, i) {
             var _e$id, _e$endorsed;
             return {
               id: (_e$id = e.id) !== null && _e$id !== void 0 ? _e$id : i + 1,
               endorsed: (_e$endorsed = e.endorsed) !== null && _e$endorsed !== void 0 ? _e$endorsed : ''
             };
-          }));
+          });
+          var _hasContent3 = _mapped3.some(function (e) {
+            return (e.endorsed || '').trim() !== '';
+          });
+          if (_hasContent3) {
+            setEndorsedItems(_mapped3);
+          }
         }
         return;
       }
@@ -68910,7 +69077,7 @@ function ADRForm() {
     }
     var fetchLatestAdminMatters = /*#__PURE__*/function () {
       var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-        var _data$communicationRo, _data$otherItemsRows, _data$concerns, _data$endorsed, _data$attendanceItems, _data$reportsItems, response, data, _t2;
+        var _data$communicationRo, _data$otherItemsRows, _data$concerns, _data$endorsed, _data$attendanceItems, _data$reportsItems, response, data, _mapped4, _hasContent4, _mapped5, _hasContent5, _t2;
         return _regenerator().w(function (_context2) {
           while (1) switch (_context2.p = _context2.n) {
             case 0:
@@ -68957,24 +69124,38 @@ function ADRForm() {
                 }));
               }
               if ((_data$attendanceItems = data.attendanceItems) !== null && _data$attendanceItems !== void 0 && _data$attendanceItems.length) {
-                setAttendanceItems(data.attendanceItems.map(function (item, i) {
+                _mapped4 = data.attendanceItems.map(function (item, i) {
                   var _item$name2, _item$task2;
                   return {
                     id: i + 1,
                     name: (_item$name2 = item.name) !== null && _item$name2 !== void 0 ? _item$name2 : '',
                     task: (_item$task2 = item.task) !== null && _item$task2 !== void 0 ? _item$task2 : ''
                   };
-                }));
+                });
+                _hasContent4 = _mapped4.some(function (m) {
+                  return (m.task || '').trim() !== '';
+                });
+                if (_hasContent4) {
+                  setAttendanceItems(_mapped4);
+                }
               }
               if ((_data$reportsItems = data.reportsItems) !== null && _data$reportsItems !== void 0 && _data$reportsItems.length) {
-                setReportsItems(data.reportsItems.map(function (item, i) {
+                _mapped5 = data.reportsItems.map(function (item, i) {
                   var _item$report2, _item$remarks2;
                   return {
                     id: i + 1,
                     report: (_item$report2 = item.report) !== null && _item$report2 !== void 0 ? _item$report2 : '',
                     remarks: (_item$remarks2 = item.remarks) !== null && _item$remarks2 !== void 0 ? _item$remarks2 : ''
                   };
-                }));
+                });
+                _hasContent5 = _mapped5.some(function (m) {
+                  return (m.report || '').trim() !== '' || (m.remarks || '').trim() !== '';
+                });
+                if (_hasContent5) {
+                  setReportsItems(_mapped5);
+                } else {
+                  setReportsItems(createDefaultReportsItems());
+                }
               }
               _context2.n = 4;
               break;
@@ -68993,27 +69174,27 @@ function ADRForm() {
     fetchLatestAdminMatters();
   }, [isEditing]);
 
-  // Load report data when editing
+  // Load report data when editing (fetch full report if we only have summary from list)
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (editingReport) {
-      var _editingReport$concer, _editingReport$endors;
-      // Load all the form fields from the editing report
-      setDocumentName(editingReport.documentName || '');
-      setSubject(editingReport.subject || '');
-      setForName(editingReport.forName || '');
-      setForPosition(editingReport.forPosition || '');
-      setThruName(editingReport.thruName || '');
-      setThruPosition(editingReport.thruPosition || '');
-      setFromName(editingReport.fromName || '');
-      setFromPosition(editingReport.fromPosition || '');
-      setDateTime(editingReport.dateTime || '');
-      setStatus(editingReport.alertStatus || editingReport.status || 'WHITE ALERT');
-      setAttendanceItems(editingReport.attendanceItems || [{
+    if (!editingReport) return;
+    var applyReportToForm = function applyReportToForm(report) {
+      var _report$concerns, _report$endorsed;
+      setDocumentName(report.documentName || '');
+      setSubject(report.subject || '');
+      setForName(report.forName || '');
+      setForPosition(report.forPosition || '');
+      setThruName(report.thruName || '');
+      setThruPosition(report.thruPosition || '');
+      setFromName(report.fromName || '');
+      setFromPosition(report.fromPosition || '');
+      setDateTime(report.dateTime || '');
+      setStatus(report.alertStatus || report.status || 'WHITE ALERT');
+      setAttendanceItems(report.attendanceItems || [{
         id: 1,
         name: '',
         task: ''
       }]);
-      setReportsItems((editingReport.reportsItems || [{
+      setReportsItems((report.reportsItems || [{
         id: 1,
         report: '',
         remarks: ''
@@ -69025,35 +69206,41 @@ function ADRForm() {
           remarks: (_i$remarks = i.remarks) !== null && _i$remarks !== void 0 ? _i$remarks : ''
         };
       }));
-      setCommunicationRows(editingReport.communicationRows || [{
+      setCommunicationRows(report.communicationRows || [{
         id: 1,
         particulars: '',
         noOfItems: 0,
         contact: '',
         status: ''
       }]);
-      setOtherItemsRows(editingReport.otherItemsRows || [{
+      setOtherItemsRows(report.otherItemsRows || [{
         id: 1,
         particulars: '',
         noOfItems: 0,
         status: ''
       }]);
-      if ((_editingReport$concer = editingReport.concerns) !== null && _editingReport$concer !== void 0 && _editingReport$concer.length) {
-        setAdminMatters(editingReport.concerns);
-      }
-      if ((_editingReport$endors = editingReport.endorsed) !== null && _editingReport$endors !== void 0 && _editingReport$endors.length) {
-        setEndorsedItems(editingReport.endorsed);
-      }
-      setPreparedBy(editingReport.preparedBy || '');
-      setPreparedPosition(editingReport.preparedPosition || '');
-      setReceivedBy(editingReport.receivedBy || '');
-      setReceivedPosition(editingReport.receivedPosition || '');
-      setNotedBy(editingReport.notedBy || '');
-      setNotedPosition(editingReport.notedPosition || '');
-      setApprovedBy(editingReport.approvedBy || '');
-      setApprovedPosition(editingReport.approvedPosition || '');
+      if ((_report$concerns = report.concerns) !== null && _report$concerns !== void 0 && _report$concerns.length) setAdminMatters(report.concerns);
+      if ((_report$endorsed = report.endorsed) !== null && _report$endorsed !== void 0 && _report$endorsed.length) setEndorsedItems(report.endorsed);
+      setPreparedBy(report.preparedBy || '');
+      setPreparedPosition(report.preparedPosition || '');
+      setReceivedBy(report.receivedBy || '');
+      setReceivedPosition(report.receivedPosition || '');
+      setNotedBy(report.notedBy || '');
+      setNotedPosition(report.notedPosition || '');
+      setApprovedBy(report.approvedBy || '');
+      setApprovedPosition(report.approvedPosition || '');
+    };
+    var hasFullData = editingReport.attendanceItems != null;
+    if (hasFullData) {
+      applyReportToForm(editingReport);
+    } else if (editingReport.id != null) {
+      fetchReport(editingReport.id).then(applyReportToForm)["catch"](function () {
+        return applyReportToForm(editingReport);
+      });
+    } else {
+      applyReportToForm(editingReport);
     }
-  }, [editingReport]);
+  }, [editingReport, fetchReport]);
   var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState0 = _slicedToArray(_useState9, 2),
     documentName = _useState0[0],
@@ -69094,113 +69281,108 @@ function ADRForm() {
     _useState26 = _slicedToArray(_useState25, 2),
     status = _useState26[0],
     setStatus = _useState26[1];
-  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
-      id: 1,
-      name: '',
-      task: ''
-    }]),
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(DEFAULT_ATTENDANCE_ITEMS),
     _useState28 = _slicedToArray(_useState27, 2),
     attendanceItems = _useState28[0],
     setAttendanceItems = _useState28[1];
-  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
-      id: 1,
-      report: '',
-      remarks: ''
-    }]),
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(createDefaultReportsItems),
     _useState30 = _slicedToArray(_useState29, 2),
     reportsItems = _useState30[0],
     setReportsItems = _useState30[1];
-  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState32 = _slicedToArray(_useState31, 2),
-    showCommunicationModal = _useState32[0],
-    setShowCommunicationModal = _useState32[1];
-  var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    tempReportsItems = _useState32[0],
+    setTempReportsItems = _useState32[1];
+  var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState34 = _slicedToArray(_useState33, 2),
-    showAttendanceModal = _useState34[0],
-    setShowAttendanceModal = _useState34[1];
-  var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    tempAttendanceItems = _useState34[0],
+    setTempAttendanceItems = _useState34[1];
+  var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState36 = _slicedToArray(_useState35, 2),
-    showReportsModal = _useState36[0],
-    setShowReportsModal = _useState36[1];
-  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    tempCommunicationRows = _useState36[0],
+    setTempCommunicationRows = _useState36[1];
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState38 = _slicedToArray(_useState37, 2),
-    showOtherItemsModal = _useState38[0],
-    setShowOtherItemsModal = _useState38[1];
+    tempOtherItemsRows = _useState38[0],
+    setTempOtherItemsRows = _useState38[1];
   var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState40 = _slicedToArray(_useState39, 2),
-    showAdminMattersModal = _useState40[0],
-    setShowAdminMattersModal = _useState40[1];
+    showCommunicationModal = _useState40[0],
+    setShowCommunicationModal = _useState40[1];
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState42 = _slicedToArray(_useState41, 2),
+    showAttendanceModal = _useState42[0],
+    setShowAttendanceModal = _useState42[1];
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState44 = _slicedToArray(_useState43, 2),
+    showReportsModal = _useState44[0],
+    setShowReportsModal = _useState44[1];
+  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState46 = _slicedToArray(_useState45, 2),
+    showOtherItemsModal = _useState46[0],
+    setShowOtherItemsModal = _useState46[1];
+  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState48 = _slicedToArray(_useState47, 2),
+    showAdminMattersModal = _useState48[0],
+    setShowAdminMattersModal = _useState48[1];
+  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState50 = _slicedToArray(_useState49, 2),
+    focusedCounterKey = _useState50[0],
+    setFocusedCounterKey = _useState50[1];
 
   // C. Other Administrative Matters
-  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
-      id: 1,
-      concern: ''
-    }]),
-    _useState42 = _slicedToArray(_useState41, 2),
-    adminMatters = _useState42[0],
-    setAdminMatters = _useState42[1];
-  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
-      id: 1,
-      endorsed: ''
-    }]),
-    _useState44 = _slicedToArray(_useState43, 2),
-    endorsedItems = _useState44[0],
-    setEndorsedItems = _useState44[1];
+  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(DEFAULT_ADMIN_MATTERS),
+    _useState52 = _slicedToArray(_useState51, 2),
+    adminMatters = _useState52[0],
+    setAdminMatters = _useState52[1];
+  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(DEFAULT_ENDORSED_ITEMS),
+    _useState54 = _slicedToArray(_useState53, 2),
+    endorsedItems = _useState54[0],
+    setEndorsedItems = _useState54[1];
 
   // Communication and Other Items
-  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
-      id: 1,
-      particulars: '',
-      noOfItems: 0,
-      contact: '',
-      status: ''
-    }]),
-    _useState46 = _slicedToArray(_useState45, 2),
-    communicationRows = _useState46[0],
-    setCommunicationRows = _useState46[1];
-  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
-      id: 1,
-      particulars: '',
-      noOfItems: 0,
-      status: ''
-    }]),
-    _useState48 = _slicedToArray(_useState47, 2),
-    otherItemsRows = _useState48[0],
-    setOtherItemsRows = _useState48[1];
+  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(DEFAULT_COMMUNICATION_ROWS),
+    _useState56 = _slicedToArray(_useState55, 2),
+    communicationRows = _useState56[0],
+    setCommunicationRows = _useState56[1];
+  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(DEFAULT_OTHER_ITEMS_ROWS),
+    _useState58 = _slicedToArray(_useState57, 2),
+    otherItemsRows = _useState58[0],
+    setOtherItemsRows = _useState58[1];
 
   // Signatures
-  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState50 = _slicedToArray(_useState49, 2),
-    preparedBy = _useState50[0],
-    setPreparedBy = _useState50[1];
-  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState52 = _slicedToArray(_useState51, 2),
-    preparedPosition = _useState52[0],
-    setPreparedPosition = _useState52[1];
-  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState54 = _slicedToArray(_useState53, 2),
-    receivedBy = _useState54[0],
-    setReceivedBy = _useState54[1];
-  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState56 = _slicedToArray(_useState55, 2),
-    receivedPosition = _useState56[0],
-    setReceivedPosition = _useState56[1];
-  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState58 = _slicedToArray(_useState57, 2),
-    notedBy = _useState58[0],
-    setNotedBy = _useState58[1];
   var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState60 = _slicedToArray(_useState59, 2),
-    notedPosition = _useState60[0],
-    setNotedPosition = _useState60[1];
+    preparedBy = _useState60[0],
+    setPreparedBy = _useState60[1];
   var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState62 = _slicedToArray(_useState61, 2),
-    approvedBy = _useState62[0],
-    setApprovedBy = _useState62[1];
+    preparedPosition = _useState62[0],
+    setPreparedPosition = _useState62[1];
   var _useState63 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState64 = _slicedToArray(_useState63, 2),
-    approvedPosition = _useState64[0],
-    setApprovedPosition = _useState64[1];
+    receivedBy = _useState64[0],
+    setReceivedBy = _useState64[1];
+  var _useState65 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState66 = _slicedToArray(_useState65, 2),
+    receivedPosition = _useState66[0],
+    setReceivedPosition = _useState66[1];
+  var _useState67 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState68 = _slicedToArray(_useState67, 2),
+    notedBy = _useState68[0],
+    setNotedBy = _useState68[1];
+  var _useState69 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState70 = _slicedToArray(_useState69, 2),
+    notedPosition = _useState70[0],
+    setNotedPosition = _useState70[1];
+  var _useState71 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState72 = _slicedToArray(_useState71, 2),
+    approvedBy = _useState72[0],
+    setApprovedBy = _useState72[1];
+  var _useState73 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState74 = _slicedToArray(_useState73, 2),
+    approvedPosition = _useState74[0],
+    setApprovedPosition = _useState74[1];
   var draftSaveTimeoutRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
 
   // Persist form to localStorage (create mode only) so refresh/hot-reload does not lose data
@@ -69268,10 +69450,15 @@ function ADRForm() {
   };
   var handleConfirm = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-      var payload, _error$response, _t3;
+      var finalAttendanceItems, finalReportsItems, finalCommunicationRows, finalOtherItemsRows, payload, _error$response, _t3;
       return _regenerator().w(function (_context3) {
         while (1) switch (_context3.p = _context3.n) {
           case 0:
+            // Get the final values - use temp values if available, otherwise use main state
+            finalAttendanceItems = tempAttendanceItems.length > 0 ? tempAttendanceItems : attendanceItems;
+            finalReportsItems = tempReportsItems.length > 0 ? tempReportsItems : reportsItems;
+            finalCommunicationRows = tempCommunicationRows.length > 0 ? tempCommunicationRows : communicationRows;
+            finalOtherItemsRows = tempOtherItemsRows.length > 0 ? tempOtherItemsRows : otherItemsRows;
             if (documentName.trim()) {
               _context3.n = 1;
               break;
@@ -69293,10 +69480,10 @@ function ADRForm() {
                 fromPosition: fromPosition,
                 dateTime: dateTime,
                 status: status,
-                attendanceItems: attendanceItems,
-                reportsItems: reportsItems,
-                communicationRows: communicationRows,
-                otherItemsRows: otherItemsRows,
+                attendanceItems: finalAttendanceItems,
+                reportsItems: finalReportsItems,
+                communicationRows: finalCommunicationRows,
+                otherItemsRows: finalOtherItemsRows,
                 concerns: adminMatters,
                 endorsed: endorsedItems,
                 preparedBy: preparedBy,
@@ -69308,7 +69495,11 @@ function ADRForm() {
                 approvedBy: approvedBy,
                 approvedPosition: approvedPosition
               }
-            };
+            }; // Clear temp states after getting values
+            setTempReportsItems([]);
+            setTempAttendanceItems([]);
+            setTempCommunicationRows([]);
+            setTempOtherItemsRows([]);
             _context3.p = 2;
             if (!(isEditing && editingReport.id)) {
               _context3.n = 4;
@@ -69371,18 +69562,18 @@ function ADRForm() {
     }
   };
   var addReportsItem = function addReportsItem() {
-    var newId = Math.max.apply(Math, _toConsumableArray(reportsItems.map(function (item) {
+    var newId = Math.max.apply(Math, _toConsumableArray(tempReportsItems.map(function (item) {
       return item.id;
     })).concat([0])) + 1;
-    setReportsItems([].concat(_toConsumableArray(reportsItems), [{
+    setTempReportsItems([].concat(_toConsumableArray(tempReportsItems), [{
       id: newId,
       report: '',
-      remarks: ''
+      remarks: DEFAULT_REPORTS_REMARKS
     }]));
   };
   var removeReportsItem = function removeReportsItem(id) {
-    if (reportsItems.length > 1) {
-      setReportsItems(reportsItems.filter(function (item) {
+    if (tempReportsItems.length > 1) {
+      setTempReportsItems(tempReportsItems.filter(function (item) {
         return item.id !== id;
       }));
     }
@@ -69659,7 +69850,10 @@ function ADRForm() {
             className: "adr-form__customize-btn",
             type: "button",
             onClick: function onClick() {
-              return setShowReportsModal(true);
+              if (tempReportsItems.length === 0) {
+                setTempReportsItems(_toConsumableArray(reportsItems));
+              }
+              setShowReportsModal(true);
             },
             children: "CUSTOMIZE"
           })]
@@ -69677,7 +69871,10 @@ function ADRForm() {
             className: "adr-form__customize-btn",
             type: "button",
             onClick: function onClick() {
-              return setShowAttendanceModal(true);
+              if (tempAttendanceItems.length === 0) {
+                setTempAttendanceItems(_toConsumableArray(attendanceItems));
+              }
+              setShowAttendanceModal(true);
             },
             children: "CUSTOMIZE"
           })]
@@ -69695,7 +69892,10 @@ function ADRForm() {
             className: "adr-form__customize-btn",
             type: "button",
             onClick: function onClick() {
-              return setShowCommunicationModal(true);
+              if (tempCommunicationRows.length === 0) {
+                setTempCommunicationRows(_toConsumableArray(communicationRows));
+              }
+              setShowCommunicationModal(true);
             },
             children: "CUSTOMIZE"
           })]
@@ -69707,7 +69907,10 @@ function ADRForm() {
             className: "adr-form__customize-btn",
             type: "button",
             onClick: function onClick() {
-              return setShowOtherItemsModal(true);
+              if (tempOtherItemsRows.length === 0) {
+                setTempOtherItemsRows(_toConsumableArray(otherItemsRows));
+              }
+              setShowOtherItemsModal(true);
             },
             children: "CUSTOMIZE"
           })]
@@ -69871,7 +70074,7 @@ function ADRForm() {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
-              children: communicationRows.map(function (row) {
+              children: tempCommunicationRows.map(function (row) {
                 var _row$particulars, _row$contact, _row$status;
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
@@ -69883,7 +70086,11 @@ function ADRForm() {
                       placeholder: "Enter particulars",
                       value: (_row$particulars = row.particulars) !== null && _row$particulars !== void 0 ? _row$particulars : '',
                       onChange: function onChange(e) {
-                        return updateCommunicationRow(row.id, 'particulars', e.target.value);
+                        return setTempCommunicationRows(tempCommunicationRows.map(function (r) {
+                          return r.id === row.id ? _objectSpread(_objectSpread({}, r), {}, {
+                            particulars: e.target.value
+                          }) : r;
+                        }));
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
@@ -69894,7 +70101,11 @@ function ADRForm() {
                         className: "adr-form__counter-btn",
                         type: "button",
                         onClick: function onClick() {
-                          return decrementCounter(row.id);
+                          return setTempCommunicationRows(tempCommunicationRows.map(function (r) {
+                            return r.id === row.id ? _objectSpread(_objectSpread({}, r), {}, {
+                              noOfItems: Math.max(0, r.noOfItems - 1)
+                            }) : r;
+                          }));
                         },
                         children: "\u2212"
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
@@ -69903,13 +70114,31 @@ function ADRForm() {
                         value: row.noOfItems,
                         min: "0",
                         onChange: function onChange(e) {
-                          return updateCommunicationRow(row.id, 'noOfItems', parseInt(e.target.value) || 0);
+                          var v = e.target.value;
+                          if (v === '') {
+                            setTempCommunicationRows(tempCommunicationRows.map(function (r) {
+                              return r.id === row.id ? _objectSpread(_objectSpread({}, r), {}, {
+                                noOfItems: 0
+                              }) : r;
+                            }));
+                            return;
+                          }
+                          var n = parseInt(v, 10);
+                          if (!isNaN(n) && n >= 0) setTempCommunicationRows(tempCommunicationRows.map(function (r) {
+                            return r.id === row.id ? _objectSpread(_objectSpread({}, r), {}, {
+                              noOfItems: n
+                            }) : r;
+                          }));
                         }
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                         className: "adr-form__counter-btn",
                         type: "button",
                         onClick: function onClick() {
-                          return incrementCounter(row.id);
+                          return setTempCommunicationRows(tempCommunicationRows.map(function (r) {
+                            return r.id === row.id ? _objectSpread(_objectSpread({}, r), {}, {
+                              noOfItems: r.noOfItems + 1
+                            }) : r;
+                          }));
                         },
                         children: "+"
                       })]
@@ -69922,7 +70151,11 @@ function ADRForm() {
                       rows: "2",
                       value: (_row$contact = row.contact) !== null && _row$contact !== void 0 ? _row$contact : '',
                       onChange: function onChange(e) {
-                        return updateCommunicationRow(row.id, 'contact', e.target.value);
+                        return setTempCommunicationRows(tempCommunicationRows.map(function (r) {
+                          return r.id === row.id ? _objectSpread(_objectSpread({}, r), {}, {
+                            contact: e.target.value
+                          }) : r;
+                        }));
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
@@ -69933,7 +70166,11 @@ function ADRForm() {
                       rows: "2",
                       value: (_row$status = row.status) !== null && _row$status !== void 0 ? _row$status : '',
                       onChange: function onChange(e) {
-                        return updateCommunicationRow(row.id, 'status', e.target.value);
+                        return setTempCommunicationRows(tempCommunicationRows.map(function (r) {
+                          return r.id === row.id ? _objectSpread(_objectSpread({}, r), {}, {
+                            status: e.target.value
+                          }) : r;
+                        }));
                       }
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("td", {
@@ -69942,7 +70179,9 @@ function ADRForm() {
                       className: "adr-form__modal-action-btn",
                       type: "button",
                       onClick: function onClick() {
-                        return removeCommunicationRow(row.id);
+                        return setTempCommunicationRows(tempCommunicationRows.filter(function (r) {
+                          return r.id !== row.id;
+                        }));
                       },
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
                         viewBox: "0 0 24 24",
@@ -69972,7 +70211,18 @@ function ADRForm() {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-add-row",
             type: "button",
-            onClick: addCommunicationRow,
+            onClick: function onClick() {
+              var newId = Math.max.apply(Math, _toConsumableArray(tempCommunicationRows.map(function (row) {
+                return row.id;
+              })).concat([0])) + 1;
+              setTempCommunicationRows([].concat(_toConsumableArray(tempCommunicationRows), [{
+                id: newId,
+                particulars: '',
+                noOfItems: 0,
+                contact: '',
+                status: ''
+              }]));
+            },
             children: "+"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
@@ -70030,7 +70280,7 @@ function ADRForm() {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
-              children: attendanceItems.map(function (item, index) {
+              children: tempAttendanceItems.map(function (item, index) {
                 var _item$name3, _item$task3;
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
@@ -70045,7 +70295,7 @@ function ADRForm() {
                       rows: "2",
                       value: (_item$name3 = item.name) !== null && _item$name3 !== void 0 ? _item$name3 : '',
                       onChange: function onChange(e) {
-                        setAttendanceItems(attendanceItems.map(function (i) {
+                        setTempAttendanceItems(tempAttendanceItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
                             name: e.target.value
                           }) : i;
@@ -70060,7 +70310,7 @@ function ADRForm() {
                       rows: "5",
                       value: (_item$task3 = item.task) !== null && _item$task3 !== void 0 ? _item$task3 : '',
                       onChange: function onChange(e) {
-                        setAttendanceItems(attendanceItems.map(function (i) {
+                        setTempAttendanceItems(tempAttendanceItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
                             task: e.target.value
                           }) : i;
@@ -70072,7 +70322,11 @@ function ADRForm() {
                       className: "adr-form__modal-action-btn",
                       type: "button",
                       onClick: function onClick() {
-                        return removeAttendanceItem(item.id);
+                        if (tempAttendanceItems.length > 1) {
+                          setTempAttendanceItems(tempAttendanceItems.filter(function (i) {
+                            return i.id !== item.id;
+                          }));
+                        }
                       },
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
                         viewBox: "0 0 24 24",
@@ -70102,7 +70356,16 @@ function ADRForm() {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
             className: "adr-form__modal-add-row",
             type: "button",
-            onClick: addAttendanceItem,
+            onClick: function onClick() {
+              var newId = Math.max.apply(Math, _toConsumableArray(tempAttendanceItems.map(function (item) {
+                return item.id;
+              })).concat([0])) + 1;
+              setTempAttendanceItems([].concat(_toConsumableArray(tempAttendanceItems), [{
+                id: newId,
+                name: '',
+                task: ''
+              }]));
+            },
             children: "+"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
@@ -70160,7 +70423,7 @@ function ADRForm() {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
               className: "adr-form__modal-table-body",
-              children: reportsItems.map(function (item, index) {
+              children: tempReportsItems.map(function (item, index) {
                 var _item$report3, _item$remarks3;
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
                   className: "adr-form__modal-table-row",
@@ -70175,7 +70438,7 @@ function ADRForm() {
                       rows: "5",
                       value: (_item$report3 = item.report) !== null && _item$report3 !== void 0 ? _item$report3 : '',
                       onChange: function onChange(e) {
-                        setReportsItems(reportsItems.map(function (i) {
+                        setTempReportsItems(tempReportsItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
                             report: e.target.value
                           }) : i;
@@ -70190,7 +70453,7 @@ function ADRForm() {
                       rows: "2",
                       value: (_item$remarks3 = item.remarks) !== null && _item$remarks3 !== void 0 ? _item$remarks3 : '',
                       onChange: function onChange(e) {
-                        setReportsItems(reportsItems.map(function (i) {
+                        setTempReportsItems(tempReportsItems.map(function (i) {
                           return i.id === item.id ? _objectSpread(_objectSpread({}, i), {}, {
                             remarks: e.target.value
                           }) : i;
@@ -70320,10 +70583,22 @@ function ADRForm() {
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
                         type: "number",
                         className: "adr-form__counter-input",
-                        value: row.noOfItems,
+                        value: row.noOfItems === 0 && focusedCounterKey === "other-".concat(row.id) ? '' : row.noOfItems === 0 ? '0' : row.noOfItems,
                         min: "0",
+                        onFocus: function onFocus() {
+                          return setFocusedCounterKey("other-".concat(row.id));
+                        },
+                        onBlur: function onBlur() {
+                          return setFocusedCounterKey(null);
+                        },
                         onChange: function onChange(e) {
-                          return updateOtherItemsRow(row.id, 'noOfItems', parseInt(e.target.value) || 0);
+                          var v = e.target.value;
+                          if (v === '') {
+                            updateOtherItemsRow(row.id, 'noOfItems', 0);
+                            return;
+                          }
+                          var n = parseInt(v, 10);
+                          if (!isNaN(n) && n >= 0) updateOtherItemsRow(row.id, 'noOfItems', n);
                         }
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
                         className: "adr-form__counter-btn",
@@ -70553,6 +70828,10 @@ function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArra
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -70698,22 +70977,54 @@ function ADRReports() {
     setSelectedReportId(id);
     setShowDocumentModal(true);
   };
-  var handleEditReport = function handleEditReport(id) {
-    var report = getReport(id);
-    if (report) {
-      navigate('/adr-reports/create', {
-        state: {
-          report: report
+  var handleEditReport = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(id) {
+      var report, hasFullData, _t;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
+          case 0:
+            report = getReport(id);
+            hasFullData = report && report.attendanceItems != null;
+            if (!(!hasFullData && id != null)) {
+              _context.n = 4;
+              break;
+            }
+            _context.p = 1;
+            _context.n = 2;
+            return fetchReport(id);
+          case 2:
+            report = _context.v;
+            _context.n = 4;
+            break;
+          case 3:
+            _context.p = 3;
+            _t = _context.v;
+            report = getReport(id) || report;
+          case 4:
+            if (report) {
+              navigate('/adr-reports/create', {
+                state: {
+                  report: report
+                }
+              });
+            }
+          case 5:
+            return _context.a(2);
         }
-      });
-    }
-  };
+      }, _callee, null, [[1, 3]]);
+    }));
+    return function handleEditReport(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
   var handleDeleteSingle = function handleDeleteSingle(id) {
     setConfirmMessage('Are you sure you want to archive (1) document?');
     setConfirmAction(function () {
       return function () {
         archiveReport(id);
         setShowConfirmModal(false);
+        setSuccessMessage('Report archived successfully.');
+        setShowSuccessNotification(true);
       };
     });
     setShowConfirmModal(true);
@@ -70742,6 +71053,8 @@ function ADRReports() {
         });
         setSelectedReports([]);
         setShowConfirmModal(false);
+        setSuccessMessage("".concat(selectedReports.length, " report(s) archived successfully."));
+        setShowSuccessNotification(true);
       };
     });
     setShowConfirmModal(true);
@@ -72113,8 +72426,16 @@ function RequireAuth(_ref) {
     var isMounted = true;
     axios__WEBPACK_IMPORTED_MODULE_3___default().get('/api/auth/me').then(function () {
       if (isMounted) setStatus('authed');
-    })["catch"](function () {
-      if (isMounted) setStatus('guest');
+    })["catch"](function (error) {
+      var _error$response;
+      var code = error === null || error === void 0 || (_error$response = error.response) === null || _error$response === void 0 ? void 0 : _error$response.status;
+      // Only treat explicit auth failures as logged-out;
+      // for rate-limit or network errors, keep user in place.
+      if (code === 401 || code === 419) {
+        if (isMounted) setStatus('guest');
+      } else {
+        if (isMounted) setStatus('error');
+      }
     });
     return function () {
       isMounted = false;
@@ -72123,6 +72444,11 @@ function RequireAuth(_ref) {
   if (status === 'loading') {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_LoadingScreen__WEBPACK_IMPORTED_MODULE_17__["default"], {
       message: "Loading your workspace..."
+    });
+  }
+  if (status === 'error') {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_LoadingScreen__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      message: "Connecting to the server..."
     });
   }
   if (status === 'guest') {
@@ -72182,7 +72508,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _context_FormContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/FormContext */ "./resources/js/context/FormContext.js");
 /* harmony import */ var _utils_swapRequests__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/swapRequests */ "./resources/js/utils/swapRequests.js");
 /* harmony import */ var _ConfirmModal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ConfirmModal */ "./resources/js/components/ConfirmModal.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _SuccessNotification__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./SuccessNotification */ "./resources/js/components/SuccessNotification.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -72197,6 +72524,7 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
 
 
 
@@ -72272,6 +72600,14 @@ function ArchivedReports() {
     _useState28 = _slicedToArray(_useState27, 2),
     currentSwapPage = _useState28[0],
     setCurrentSwapPage = _useState28[1];
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState30 = _slicedToArray(_useState29, 2),
+    showSuccessNotification = _useState30[0],
+    setShowSuccessNotification = _useState30[1];
+  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState32 = _slicedToArray(_useState31, 2),
+    successMessage = _useState32[0],
+    setSuccessMessage = _useState32[1];
   var itemsPerPage = 10;
   var yearDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var monthDropdownRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
@@ -72335,6 +72671,8 @@ function ArchivedReports() {
         });
         setSelectedReports([]);
         setShowConfirmModal(false);
+        setSuccessMessage("".concat(selectedReports.length, " report(s) restored successfully."));
+        setShowSuccessNotification(true);
       };
     });
     setShowConfirmModal(true);
@@ -72367,6 +72705,8 @@ function ArchivedReports() {
               });
               setArchivedSwapRequests(archived);
               setSelectedSwapRequests([]);
+              setSuccessMessage("".concat(selectedSwapRequests.length, " swap request(s) restored successfully."));
+              setShowSuccessNotification(true);
               _context.n = 4;
               break;
             case 3:
@@ -72389,6 +72729,8 @@ function ArchivedReports() {
       return function () {
         restoreReport(id);
         setShowConfirmModal(false);
+        setSuccessMessage('Report restored successfully.');
+        setShowSuccessNotification(true);
       };
     });
     setShowConfirmModal(true);
@@ -72506,6 +72848,8 @@ function ArchivedReports() {
                   return requestId !== idToRestore;
                 });
               });
+              setSuccessMessage('Swap request restored successfully.');
+              setShowSuccessNotification(true);
               _context2.n = 5;
               break;
             case 4:
@@ -72647,9 +72991,9 @@ function ArchivedReports() {
     }
   }, [filteredArchivedSwapRequests.length, currentSwapPage, totalSwapPages]);
   if (!reportsLoaded) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
       className: "archived-reports",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
         style: {
           padding: '2rem',
           textAlign: 'center'
@@ -72658,16 +73002,22 @@ function ArchivedReports() {
       })
     });
   }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     className: "archived-reports",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+    children: [showSuccessNotification && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_SuccessNotification__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      message: successMessage,
+      isVisible: showSuccessNotification,
+      onClose: function onClose() {
+        return setShowSuccessNotification(false);
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
       className: "archived-reports__search-bar",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
         className: "archived-reports__search-bar-input",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("img", {
           src: "".concat(window.location.origin, "/images/search_icon.svg"),
           alt: "Search"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
           type: "text",
           placeholder: "Search...",
           value: searchQuery,
@@ -72675,63 +73025,63 @@ function ArchivedReports() {
             return setSearchQuery(e.target.value);
           }
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
         className: "archived-reports__datetime",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("img", {
           src: "".concat(window.location.origin, "/images/date_time.svg"),
           alt: "Date Time",
           className: "archived-reports__datetime-icon"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
           className: "archived-reports__datetime-text",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
             className: "archived-reports__datetime-date",
             children: formatCurrentDateTime().date
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
             className: "archived-reports__datetime-time",
             children: formatCurrentDateTime().time
           })]
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
       className: "archived-reports__tabs",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
         className: "archived-reports__tab ".concat(activeTab === 'adr' ? 'archived-reports__tab--active' : ''),
         onClick: function onClick() {
           return setActiveTab('adr');
         },
         children: "ADR Reports"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
         className: "archived-reports__tab ".concat(activeTab === 'swapped' ? 'archived-reports__tab--active' : ''),
         onClick: function onClick() {
           return setActiveTab('swapped');
         },
         children: "Swapped Forms"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
       className: "archived-reports__controls",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
         className: "archived-reports__actions",
-        children: [activeTab === 'adr' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
+        children: [activeTab === 'adr' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
           onClick: handleRestore,
           disabled: selectedReports.length < 2,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("svg", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("svg", {
             width: "15",
             height: "15",
             viewBox: "0 0 21 18",
             fill: "none",
             xmlns: "http://www.w3.org/2000/svg",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("g", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("g", {
               clipPath: "url(#clip0_8_219)",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("path", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("path", {
                 fillRule: "evenodd",
                 clipRule: "evenodd",
                 d: "M14 9C14 7.9 13.1 7 12 7C10.9 7 10 7.9 10 9C10 10.1 10.9 11 12 11C13.1 11 14 10.1 14 9ZM12 0C7.03 0 3 4.03 3 9H0L4 13L8 9H5C5 5.13 8.13 2 12 2C15.87 2 19 5.13 19 9C19 12.87 15.87 16 12 16C10.49 16 9.09 15.51 7.94 14.7L6.52 16.14C8.04 17.3 9.94 18 12 18C16.97 18 21 13.97 21 9C21 4.03 16.97 0 12 0Z",
                 fill: "currentColor"
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("defs", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("clipPath", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("defs", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("clipPath", {
                 id: "clip0_8_219",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("rect", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("rect", {
                   width: "21",
                   height: "18",
                   fill: "white"
@@ -72739,27 +73089,27 @@ function ArchivedReports() {
               })
             })]
           }), "Restore"]
-        }), activeTab === 'swapped' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
+        }), activeTab === 'swapped' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
           onClick: handleRestoreSwapRequests,
           disabled: selectedSwapRequests.length < 2,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("svg", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("svg", {
             width: "15",
             height: "15",
             viewBox: "0 0 21 18",
             fill: "none",
             xmlns: "http://www.w3.org/2000/svg",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("g", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("g", {
               clipPath: "url(#clip0_8_219)",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("path", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("path", {
                 fillRule: "evenodd",
                 clipRule: "evenodd",
                 d: "M14 9C14 7.9 13.1 7 12 7C10.9 7 10 7.9 10 9C10 10.1 10.9 11 12 11C13.1 11 14 10.1 14 9ZM12 0C7.03 0 3 4.03 3 9H0L4 13L8 9H5C5 5.13 8.13 2 12 2C15.87 2 19 5.13 19 9C19 12.87 15.87 16 12 16C10.49 16 9.09 15.51 7.94 14.7L6.52 16.14C8.04 17.3 9.94 18 12 18C16.97 18 21 13.97 21 9C21 4.03 16.97 0 12 0Z",
                 fill: "currentColor"
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("defs", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("clipPath", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("defs", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("clipPath", {
                 id: "clip0_8_219",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("rect", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("rect", {
                   width: "21",
                   height: "18",
                   fill: "white"
@@ -72768,20 +73118,20 @@ function ArchivedReports() {
             })]
           }), "Restore"]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
         className: "archived-reports__filters",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
           className: "archived-reports__filter-dropdown",
           ref: yearDropdownRef,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
             onClick: function onClick() {
               return setShowYearDropdown(!showYearDropdown);
             },
-            children: [selectedYear, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
+            children: [selectedYear, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("path", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("path", {
                 d: "M6 9L12 15L18 9",
                 stroke: "currentColor",
                 strokeWidth: "2",
@@ -72789,10 +73139,10 @@ function ArchivedReports() {
                 strokeLinejoin: "round"
               })
             })]
-          }), showYearDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+          }), showYearDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
             className: "archived-reports__dropdown-menu",
             children: filteredYears.map(function (year) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                 className: "archived-reports__dropdown-item",
                 onClick: function onClick() {
                   return handleYearSelect(year);
@@ -72801,18 +73151,18 @@ function ArchivedReports() {
               }, year);
             })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
           className: "archived-reports__filter-dropdown",
           ref: monthDropdownRef,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("button", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
             onClick: function onClick() {
               return setShowMonthDropdown(!showMonthDropdown);
             },
-            children: [selectedMonth, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
+            children: [selectedMonth, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("svg", {
               viewBox: "0 0 24 24",
               fill: "none",
               xmlns: "http://www.w3.org/2000/svg",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("path", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("path", {
                 d: "M6 9L12 15L18 9",
                 stroke: "currentColor",
                 strokeWidth: "2",
@@ -72820,10 +73170,10 @@ function ArchivedReports() {
                 strokeLinejoin: "round"
               })
             })]
-          }), showMonthDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+          }), showMonthDropdown && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
             className: "archived-reports__dropdown-menu",
             children: months.map(function (month) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                 className: "archived-reports__dropdown-item",
                 onClick: function onClick() {
                   return handleMonthSelect(month);
@@ -72834,13 +73184,13 @@ function ArchivedReports() {
           })]
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
       className: "archived-reports__table",
-      children: activeTab === 'adr' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("table", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("thead", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+      children: activeTab === 'adr' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("table", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("thead", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("tr", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
                 type: "checkbox",
                 checked: selectedReports.length === paginatedArchivedReports.length && paginatedArchivedReports.length > 0,
                 onChange: function onChange(e) {
@@ -72853,17 +73203,17 @@ function ArchivedReports() {
                   }
                 }
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
               children: "Actions"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
               children: "Documents"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
               children: "Created at"
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tbody", {
-          children: filteredArchivedReports.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tr", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("tbody", {
+          children: filteredArchivedReports.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("tr", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
               colSpan: "4",
               style: {
                 textAlign: 'center',
@@ -72873,50 +73223,50 @@ function ArchivedReports() {
               children: archivedReports.length === 0 ? 'No archived reports yet.' : 'No reports match the current filters.'
             })
           }) : paginatedArchivedReports.map(function (report) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
                   type: "checkbox",
                   checked: selectedReports.includes(report.id),
                   onChange: function onChange() {
                     return handleSelectReport(report.id);
                   }
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
                 className: "archived-reports__table-actions",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
                   className: "archived-reports__action-buttons",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
                     className: "archived-reports__action-btn archived-reports__action-btn--view",
                     onClick: function onClick() {
                       return handleViewDocument(report.id);
                     },
                     title: "View",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("img", {
                       src: "".concat(window.location.origin, "/images/view_icon.svg"),
                       alt: "View"
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
                     className: "archived-reports__action-btn archived-reports__action-btn--restore",
                     onClick: function onClick() {
                       return handleRestoreSingle(report.id);
                     },
                     title: "Restore",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("img", {
                       src: "".concat(window.location.origin, "/images/restore_icon.svg"),
                       alt: "Restore"
                     })
                   })]
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
                 children: report.documentName || 'Untitled Document'
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
                   className: "archived-reports__table-datetime",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                     className: "date",
                     children: formatDate(report.createdAt).date
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                     className: "time",
                     children: formatDate(report.createdAt).time
                   })]
@@ -72925,11 +73275,11 @@ function ArchivedReports() {
             }, report.id);
           })
         })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("table", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("thead", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("table", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("thead", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("tr", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
                 type: "checkbox",
                 checked: selectedSwapRequests.length === paginatedArchivedSwapRequests.length && paginatedArchivedSwapRequests.length > 0,
                 onChange: function onChange(e) {
@@ -72942,19 +73292,19 @@ function ArchivedReports() {
                   }
                 }
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
               children: "Actions"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
               children: "Task / Request"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
               children: "Status"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
               children: "Created at"
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tbody", {
-          children: filteredArchivedSwapRequests.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tr", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("tbody", {
+          children: filteredArchivedSwapRequests.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("tr", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
               colSpan: "5",
               style: {
                 textAlign: 'center',
@@ -72964,38 +73314,38 @@ function ArchivedReports() {
               children: archivedSwapRequests.length === 0 ? 'No archived swap requests yet.' : 'No swap requests match the current filters.'
             })
           }) : paginatedArchivedSwapRequests.map(function (req) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
                   type: "checkbox",
                   checked: selectedSwapRequests.includes(req.id),
                   onChange: function onChange() {
                     return handleSelectSwapRequest(req.id);
                   }
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
                 className: "archived-reports__table-actions",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                   className: "archived-reports__action-buttons",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
                     className: "archived-reports__action-btn archived-reports__action-btn--restore",
                     onClick: function onClick() {
                       return handleRestoreSwapRequest(req.id);
                     },
                     title: "Restore",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("img", {
                       src: "".concat(window.location.origin, "/images/restore_icon.svg"),
                       alt: "Restore"
                     })
                   })
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                   className: "archived-reports__table-document",
                   children: getSwapRequestDescription(req)
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
                   style: {
                     padding: '4px 8px',
                     borderRadius: '4px',
@@ -73005,13 +73355,13 @@ function ArchivedReports() {
                   },
                   children: req.status ? req.status.charAt(0).toUpperCase() + req.status.slice(1) : '—'
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
                   className: "archived-reports__table-datetime",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                     className: "date",
                     children: formatDate(req.createdAt).date
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                     className: "time",
                     children: formatDate(req.createdAt).time
                   })]
@@ -73021,17 +73371,17 @@ function ArchivedReports() {
           })
         })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
       className: "archived-reports__pagination",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
         onClick: activeTab === 'adr' ? goToAdrFirstPage : goToSwapFirstPage,
         disabled: activeTab === 'adr' ? currentAdrPage === 1 : currentSwapPage === 1,
         title: "First page",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("path", {
             d: "M11 17L6 12L11 7M18 17L13 12L18 7",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -73039,15 +73389,15 @@ function ArchivedReports() {
             strokeLinejoin: "round"
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
         onClick: activeTab === 'adr' ? goToAdrPrevPage : goToSwapPrevPage,
         disabled: activeTab === 'adr' ? currentAdrPage === 1 : currentSwapPage === 1,
         title: "Previous page",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("path", {
             d: "M15 18L9 12L15 6",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -73055,18 +73405,18 @@ function ArchivedReports() {
             strokeLinejoin: "round"
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
         className: "archived-reports__pagination-info",
         children: activeTab === 'adr' ? filteredArchivedReports.length > 0 ? "Page ".concat(currentAdrPage, " of ").concat(totalAdrPages) : 'Page 1 of 1' : filteredArchivedSwapRequests.length > 0 ? "Page ".concat(currentSwapPage, " of ").concat(totalSwapPages) : 'Page 1 of 1'
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
         onClick: activeTab === 'adr' ? goToAdrNextPage : goToSwapNextPage,
         disabled: activeTab === 'adr' ? currentAdrPage === totalAdrPages || filteredArchivedReports.length === 0 : currentSwapPage === totalSwapPages || filteredArchivedSwapRequests.length === 0,
         title: "Next page",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("path", {
             d: "M9 18L15 12L9 6",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -73074,15 +73424,15 @@ function ArchivedReports() {
             strokeLinejoin: "round"
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
         onClick: activeTab === 'adr' ? goToAdrLastPage : goToSwapLastPage,
         disabled: activeTab === 'adr' ? currentAdrPage === totalAdrPages || filteredArchivedReports.length === 0 : currentSwapPage === totalSwapPages || filteredArchivedSwapRequests.length === 0,
         title: "Last page",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("svg", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("svg", {
           viewBox: "0 0 24 24",
           fill: "none",
           xmlns: "http://www.w3.org/2000/svg",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("path", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("path", {
             d: "M13 17L18 12L13 7M6 17L11 12L6 7",
             stroke: "currentColor",
             strokeWidth: "2",
@@ -73091,7 +73441,7 @@ function ArchivedReports() {
           })
         })
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_ConfirmModal__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_ConfirmModal__WEBPACK_IMPORTED_MODULE_5__["default"], {
       isOpen: showConfirmModal,
       message: confirmMessage,
       onConfirm: confirmAction,

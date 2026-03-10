@@ -252,9 +252,7 @@ class AdrFormController extends Controller
         $concernsData = $report['concerns'] ?? $report['otherAdminRows'] ?? [];
         foreach ($concernsData as $row) {
             $concern = $row['concern'] ?? '';
-            if (trim($concern) !== '') {
-                $form->concerns()->create(['concern' => $concern]);
-            }
+            $form->concerns()->create(['concern' => $concern]);
         }
 
         $form->endorsed()->delete();
@@ -322,8 +320,14 @@ class AdrFormController extends Controller
             $otherItemsRows = $data['otherItemsRows'] ?? [];
         }
 
-        // Concerns (C. Other Administrative Matters)
-        $concerns = $form->concerns()->get(['id', 'concern'])->toArray();
+        // Concerns (C. Other Administrative Matters) – persist like attendance for pre-fill on new form
+        $concernsCollection = $form->concerns()->orderBy('id')->get(['id', 'concern']);
+        $concerns = $concernsCollection->isEmpty()
+            ? ($data['concerns'] ?? [])
+            : $concernsCollection->map(fn ($r, $i) => [
+                'id'      => $i + 1,
+                'concern' => $r->concern ?? '',
+            ])->values()->toArray();
 
         // Endorsed items
         $endorsed = $form->endorsed()->get(['id', 'endorsed'])->toArray();

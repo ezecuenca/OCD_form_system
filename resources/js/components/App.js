@@ -57,8 +57,15 @@ function RequireAuth({ children }) {
             .then(() => {
                 if (isMounted) setStatus('authed');
             })
-            .catch(() => {
-                if (isMounted) setStatus('guest');
+            .catch((error) => {
+                const code = error?.response?.status;
+                // Only treat explicit auth failures as logged-out;
+                // for rate-limit or network errors, keep user in place.
+                if (code === 401 || code === 419) {
+                    if (isMounted) setStatus('guest');
+                } else {
+                    if (isMounted) setStatus('error');
+                }
             });
 
         return () => {
@@ -68,6 +75,10 @@ function RequireAuth({ children }) {
 
     if (status === 'loading') {
         return <LoadingScreen message="Loading your workspace..." />;
+    }
+
+    if (status === 'error') {
+        return <LoadingScreen message="Connecting to the server..." />;
     }
 
     if (status === 'guest') {

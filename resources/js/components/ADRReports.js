@@ -83,8 +83,16 @@ function ADRReports() {
         setShowDocumentModal(true);
     };
     
-    const handleEditReport = (id) => {
-        const report = getReport(id);
+    const handleEditReport = async (id) => {
+        let report = getReport(id);
+        const hasFullData = report && report.attendanceItems != null;
+        if (!hasFullData && id != null) {
+            try {
+                report = await fetchReport(id);
+            } catch (_) {
+                report = getReport(id) || report;
+            }
+        }
         if (report) {
             navigate('/adr-reports/create', { state: { report } });
         }
@@ -95,6 +103,8 @@ function ADRReports() {
         setConfirmAction(() => () => {
             archiveReport(id);
             setShowConfirmModal(false);
+            setSuccessMessage('Report archived successfully.');
+            setShowSuccessNotification(true);
         });
         setShowConfirmModal(true);
     };
@@ -120,6 +130,8 @@ function ADRReports() {
             selectedReports.forEach(id => archiveReport(id));
             setSelectedReports([]);
             setShowConfirmModal(false);
+            setSuccessMessage(`${selectedReports.length} report(s) archived successfully.`);
+            setShowSuccessNotification(true);
         });
         setShowConfirmModal(true);
     };
